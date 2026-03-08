@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "How to Build an AI Adoption Roadmap: From Zero to Every Employee in 90 Days"
 date: "2026-01-01"
 description: "A practical 90-day AI adoption roadmap to enable every employee with AI. Step-by-step guide for audit, pilot, expansion, and full rollout with proven frameworks."
 tags: ["Enterprise AI"]

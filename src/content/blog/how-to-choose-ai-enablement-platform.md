@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "How to Choose an AI Enablement Platform: The 2026 Evaluation Framework"
 date: "2026-02-28"
 description: "Not all AI platforms are enablement platforms. Use this evaluation framework with 8 critical criteria, comparison tables, and a scoring rubric to choose the right AI enablement solution."
 tags: ["Enterprise AI"]

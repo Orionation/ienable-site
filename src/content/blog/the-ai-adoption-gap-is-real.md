@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "The AI Adoption Gap Is Real: Why 90% of Companies Fail at Agentic AI"
 date: "2026-02-28"
 description: "Only 10% of organizations achieve significant AI ROI. The problem isn't technology — it's the adoption gap. Here's how to close it."
 tags: ["Enterprise AI"]

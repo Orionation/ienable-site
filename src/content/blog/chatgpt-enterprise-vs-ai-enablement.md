@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "ChatGPT Enterprise vs. Dedicated AI Enablement: Which Approach Actually Works?"
 date: "2026-01-01"
 description: "ChatGPT Enterprise offers shared workspaces and GPTs, but lacks per-employee personalization and cross-department context. Compare with AI enablement platforms to find the right fit."
 tags: ["Enterprise AI"]

@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "How to Give Every Employee AI: A Practical Guide for Teams of 5 to 5,000"
 date: "2026-02-24"
 description: "A step-by-step guide to rolling out AI enablement across your entire organization — from the first 90-second scan to compound intelligence at scale."
 tags: ["Enterprise AI"]

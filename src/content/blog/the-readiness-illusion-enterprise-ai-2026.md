@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "The Readiness Illusion: 93% of Enterprises Aren't Ready for AI — And More Models Won't Save Them"
 date: "2026-03-06"
 description: "Only 7% of enterprises have data ready for AI. 47% believe agentic AI will fix their data quality problems. This is the Readiness Illusion — and it's costing enterprises billions."
 tags: ["Enterprise AI"]

@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "7 Best Glean Alternatives for AI Enablement in 2026"
 date: "2026-02-28"
 description: "Looking for Glean alternatives? Compare 7 enterprise AI platforms across features, pricing, deployment time, and AI enablement capabilities. Find the right fit for your company size."
 tags: ["Enterprise AI"]

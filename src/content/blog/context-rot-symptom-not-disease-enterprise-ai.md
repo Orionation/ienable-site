@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Context Rot Is a Symptom, Not a Disease: Why Enterprise AI Degrades Over Time"
 date: "2026-03-07"
 description: "Glean identified 'context rot' as AI performance degradation over time. They're right about the symptom. They're wrong about the cause. The disease isn't growing context windows — it's organizational knowledge that was never captured in the first place."
 tags: ["Enterprise AI"]

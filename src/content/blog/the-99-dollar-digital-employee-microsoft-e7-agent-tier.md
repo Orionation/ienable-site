@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "The $99 Digital Employee: Why Microsoft's New Agent Tier Won't Fix Enterprise AI"
 date: "2026-03-08"
 description: "Microsoft's reported E7 tier at $99/month gives AI agents identity, compliance, and security — but not organizational context. Analysis of the Agent Factory gap."
 tags: ["Enterprise AI"]

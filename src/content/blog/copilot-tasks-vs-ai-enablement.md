@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Copilot Tasks vs. AI Enablement: Why \"A To-Do List That Does Itself\" Isn't Enterprise-Ready"
 date: "2026-02-28"
 description: "Microsoft's Copilot Tasks promises AI that works for you — but enterprises need governance, not just automation. Compare Copilot Tasks to AI enablement platforms and learn what's actually enterprise-ready."
 tags: ["Enterprise AI"]

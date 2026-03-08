@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "AI Isn't Replacing Your Job — It's Giving You a Teammate Who Never Drops the Ball"
 date: "2026-02-24"
 description: "The AI replacement narrative is wrong. AI enablement doesn't eliminate jobs — it gives every employee a dedicated AI teammate that handles the 70% of work that isn't strategy."
 tags: ["Enterprise AI"]

@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "The Context Gradient: A Framework for Evaluating Any Enterprise AI Tool"
 date: "2026-03-08"
 description: "Why enterprise AI tools excel at meeting summaries but fail at strategic analysis. The Context Gradient framework maps AI features against organizational context requirements."
 tags: ["Enterprise AI"]

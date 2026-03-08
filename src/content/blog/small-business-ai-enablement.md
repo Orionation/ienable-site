@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Why Small Businesses Will Win the AI Race — And Enterprise Will Struggle to Catch Up"
 date: "2026-02-24"
 description: "Small businesses have structural advantages in AI adoption that enterprise can't replicate. Speed, simplicity, and unified decision-making will define the next decade's winners."
 tags: ["Enterprise AI"]

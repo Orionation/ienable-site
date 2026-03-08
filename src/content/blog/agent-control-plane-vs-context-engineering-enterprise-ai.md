@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Agent Control Plane vs Context Engineering: Why Governing AI Agents Isn't Enough"
 date: "2026-03-05"
 description: "Microsoft's Agent Control Plane governs what AI agents can do. But nobody governs what agents know. This is the Agent Governance Gap — and it's why 40% of agentic AI projects will be abandoned by 2028."
 tags: ["Enterprise AI"]

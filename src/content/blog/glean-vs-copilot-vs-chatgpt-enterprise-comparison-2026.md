@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Glean vs Microsoft Copilot vs ChatGPT Enterprise: Which AI Platform Actually Works in 2026?"
 date: "2026-03-05"
 description: "An honest comparison of Glean, Microsoft Copilot, and ChatGPT Enterprise with real utilization data, pricing analysis, and the question none of them answer: who owns your organizational context?"
 tags: ["Enterprise AI"]

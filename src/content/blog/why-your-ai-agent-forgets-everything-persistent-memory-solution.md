@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Why Your AI Agent Forgets Everything (And the Pattern That Fixes It)"
 date: "2026-03-08"
 description: "AI agents lose 65% of their effectiveness to context drift and memory loss. Every fix relies on the agent remembering to remember — which is the problem. The 'court stenographer' pattern separates the note-taker from the worker, solving persistent memory for AI agents without summarization or manual discipline."
 tags: ["Enterprise AI"]

@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "When AI Models Retire: The Enterprise Model Lifecycle Crisis Nobody's Talking About"
 date: "2026-03-05"
 description: "Google Gemini 3 Pro Preview retires March 9, 2026. 94% of IT leaders fear vendor lock-in. The Model Decay lifecycle explains why enterprises keep getting caught off guard by AI model retirements."
 tags: ["Enterprise AI"]

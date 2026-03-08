@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "The Week Enterprise AI Gets Real: What Enterprise Connect 2026 Won't Solve"
 date: "2026-03-07"
 description: "Enterprise Connect 2026 features 50+ AI announcements from Amazon, Dialpad, Infobip, and RingCentral. Every vendor solves agent actions and access. None address organizational context — the actual bottleneck behind 14% AI satisfaction rates."
 tags: ["Enterprise AI"]

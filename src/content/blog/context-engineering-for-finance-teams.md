@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Context Engineering for Finance Teams: Why Your AI Can't Pass an Audit"
 date: "2026-03-06"
 description: "Only 18% of finance teams are digitally advanced, yet 87% of CFOs face expanding expectations. Learn how context engineering bridges the gap between AI governance (COSO) and AI utility — making every AI-generated number auditable, defensible, and SOX-compliant."
 tags: ["Enterprise AI"]

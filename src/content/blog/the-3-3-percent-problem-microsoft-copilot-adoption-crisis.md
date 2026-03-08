@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "The 3.3% Problem: Inside Microsoft Copilot's Enterprise Adoption Crisis"
 date: "2026-03-01"
 description: ""
 tags: ["Enterprise AI"]

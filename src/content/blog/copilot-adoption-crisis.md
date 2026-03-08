@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "The Copilot Adoption Crisis: Why 97% of Enterprise AI Seats Stay Empty"
 date: "2026-03-01"
 description: ""
 tags: ["Enterprise AI"]

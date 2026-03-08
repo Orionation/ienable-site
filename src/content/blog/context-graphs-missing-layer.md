@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Context Graphs: The Missing Layer Between Your Data and Your AI Agents"
 date: "2026-02-28"
 description: "The W3C just formalized context graphs. Glean calls it the Enterprise Graph. Here's what context graphs mean for your business and why they're the key to AI that actually works."
 tags: ["Enterprise AI"]

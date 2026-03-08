@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "The Copilot Paradox: Microsoft's AI Revenue Is Growing While Users Are Leaving"
 date: "2026-03-04"
 description: "Microsoft Copilot revenue grew 16.7% YoY while user preference dropped from 18.8% to 11.5%. Seat utilization hits 10% at some companies. What this paradox reveals about enterprise AI."
 tags: ["Enterprise AI"]

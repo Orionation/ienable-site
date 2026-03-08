@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Context Engineering for Enterprise: The Complete Guide to Making AI Actually Work"
 date: "2026-03-01"
 description: ""
 tags: ["Enterprise AI"]

@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "AI Enabler vs. AI Copilot vs. AI Agent: What's the Difference and Why It Matters"
 date: "2026-02-24"
 description: "Chatbots, copilots, agents, enablers — the AI taxonomy is confusing. Here's a clear breakdown of each category and why the distinction changes how you buy."
 tags: ["Enterprise AI"]

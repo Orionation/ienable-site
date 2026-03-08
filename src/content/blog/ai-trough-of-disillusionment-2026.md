@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "The AI Trough of Disillusionment Is Here—And It's the Best Thing That Could Happen to Your Business"
 date: "2026-03-02"
 description: "Enterprise AI spending hits $2 trillion in 2026 while 95% of pilots deliver zero ROI. Here's why the trough of disillusionment is an opportunity, not a threat—and how to navigate it."
 tags: ["Enterprise AI"]

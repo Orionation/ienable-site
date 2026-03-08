@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Context Engineering for HR Teams: How to Make AI Actually Transform Talent Management"
 date: "2026-03-03"
 description: "95% of HR AI pilots fail. Lawsuits against Workday and Eightfold AI are piling up. Context engineering is how HR teams deploy AI that's both effective and compliant."
 tags: ["Enterprise AI"]

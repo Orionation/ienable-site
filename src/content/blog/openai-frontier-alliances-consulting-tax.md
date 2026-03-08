@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "OpenAI's Frontier Alliances Program: The Hidden Consulting Tax on Enterprise AI"
 date: "2026-03-01"
 description: ""
 tags: ["Enterprise AI"]

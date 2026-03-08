@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "The $50 Billion Question: What Amazon's OpenAI Deal Really Means for Your Enterprise AI Strategy"
 date: "2026-03-02"
 description: "Amazon just invested $50 billion in OpenAI and locked exclusive distribution rights for Frontier on AWS. Here's what this means for your enterprise AI strategy — and the three questions every CIO should ask before Monday's board meeting."
 tags: ["Enterprise AI"]

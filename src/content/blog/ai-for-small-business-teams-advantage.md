@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "AI for Small Business Teams: Why Companies Under 50 Employees Have the Biggest AI Advantage"
 date: "2026-01-01"
 description: "Small teams adopt AI faster without bureaucracy. Discover why companies under 50 employees have an unfair advantage with AI enablement and how to leverage it."
 tags: ["Enterprise AI"]

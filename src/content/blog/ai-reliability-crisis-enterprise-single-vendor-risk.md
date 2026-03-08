@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "The AI Reliability Crisis: Why Single-Vendor Enterprise AI Is a Ticking Time Bomb"
 date: "2026-03-01"
 description: ""
 tags: ["Enterprise AI"]

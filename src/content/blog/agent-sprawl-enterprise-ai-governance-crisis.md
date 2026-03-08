@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Agent Sprawl Is the New Shadow IT: Why 50% of Enterprise AI Agents Are Running Ungoverned"
 date: "2026-03-02"
 description: "Enterprises average 12 AI agents today, but 50% run in isolated silos with no governance. Learn how agent sprawl threatens your AI strategy and the 4-layer framework to fix it."
 tags: ["Enterprise AI"]

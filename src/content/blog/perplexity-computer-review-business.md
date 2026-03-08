@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Perplexity Computer Review: 19 AI Models, Zero Governance"
 date: "2026-03-01"
 description: "Perplexity launched Computer — an AI agent orchestrating 19 models autonomously. Impressive tech, but is it enterprise-ready? Honest assessment for business buyers."
 tags: ["Enterprise AI"]
