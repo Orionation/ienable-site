@@ -1,8 +1,9 @@
 ---
-title: "iEnable Blog Content Calendar"
-date: "2026-01-01"
+title: "iEnable Blog Content Calendar — Internal"
+date: ""
 description: ""
-tags: ["Enterprise AI"]
-readTime: "5 min"
+tags: ["Article"]
+readTime: "5 min read"
 ---
+
 
