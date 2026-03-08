@@ -1,0 +1,524 @@
+[
+  {
+    "file": "enterprise-connect-2026-what-enterprise-ai-wont-solve.html",
+    "title": "The Week Enterprise AI Gets Real: What Enterprise Connect 2026 Won't Solve",
+    "description": "Enterprise Connect 2026 features 50+ AI announcements from Amazon, Dialpad, Infobip, and RingCentral. Every vendor solves agent actions and access. None address organizational context — the actual bottleneck behind 14% AI satisfaction rates.",
+    "date": "March 7, 2026",
+    "dateParsed": "2026-03-07T05:00:00.000Z",
+    "readTime": "12 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "context-engineering-for-finance-teams.html",
+    "title": "Context Engineering for Finance Teams: Why Your AI Can't Pass an Audit",
+    "description": "Only 18% of finance teams are digitally advanced, yet 87% of CFOs face expanding expectations. Learn how context engineering bridges the gap between AI governance (COSO) and AI utility — making every AI-generated number auditable, defensible, and SOX-compliant.",
+    "date": "March 6, 2026",
+    "dateParsed": "2026-03-06T05:00:00.000Z",
+    "readTime": "14 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "agent-control-plane-vs-context-engineering-enterprise-ai.html",
+    "title": "Agent Control Plane vs Context Engineering: Why Governing AI Agents Isn't Enough",
+    "description": "Microsoft's Agent Control Plane governs what AI agents can do. But nobody governs what agents know. This is the Agent Governance Gap — and it's why 40% of agentic AI projects will be abandoned by 2028.",
+    "date": "March 5, 2026",
+    "dateParsed": "2026-03-05T05:00:00.000Z",
+    "readTime": "14 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "glean-vs-copilot-vs-chatgpt-enterprise-comparison-2026.html",
+    "title": "Glean vs Microsoft Copilot vs ChatGPT Enterprise: Which AI Platform Actually Works in 2026?",
+    "description": "An honest comparison of Glean, Microsoft Copilot, and ChatGPT Enterprise with real utilization data, pricing analysis, and the question none of them answer: who owns your organizational context?",
+    "date": "March 5, 2026",
+    "dateParsed": "2026-03-05T05:00:00.000Z",
+    "readTime": "16 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "context-engineering-for-hr-teams.html",
+    "title": "Context Engineering for HR Teams: How to Make AI Actually Transform Talent Management",
+    "description": "95% of HR AI pilots fail. Lawsuits against Workday and Eightfold AI are piling up. Context engineering is how HR teams deploy AI that's both effective and compliant.",
+    "date": "March 3, 2026",
+    "dateParsed": "2026-03-03T05:00:00.000Z",
+    "readTime": "12 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "enterprise-ai-roi-measurement-crisis.html",
+    "title": "How to Measure Enterprise AI ROI: The 79/29 Gap Is Killing Your AI Strategy",
+    "description": "79% of enterprises perceive AI productivity gains but only 29% can measure them. Here's the four-level measurement maturity model that closes the gap — with real KPIs, baselines, and a 30-day implementation sprint.",
+    "date": "March 2, 2026",
+    "dateParsed": "2026-03-02T05:00:00.000Z",
+    "readTime": "14 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "agent-sandbox-vs-context-window-enterprise-ai.html",
+    "title": "Agent Sandbox vs Context Window: The False Choice Killing Enterprise AI",
+    "description": "Glean launched agent sandboxes. Context windows hit 1M tokens. Neither solves the real problem. Here's the missing third layer enterprises keep ignoring — and why 70% of sandboxed agents still fail.",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "14 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "agent-sprawl-enterprise-ai-governance-crisis.html",
+    "title": "Agent Sprawl Is the New Shadow IT: Why 50% of Enterprise AI Agents Are Running Ungoverned",
+    "description": "Enterprises average 12 AI agents today, but 50% run in isolated silos with no governance. Learn how agent sprawl threatens your AI strategy and the 4-layer framework to fix it.",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "11 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "ai-agent-governance-framework.html",
+    "title": "The AI Agent Governance Framework Your Company Needs Before It's Too Late",
+    "description": "3 million AI agents are running in enterprises. Only 47% are monitored. NIST just launched standards. Here's the governance framework that separates companies deploying 12x more AI from those getting breached.",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "16 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "ai-fragmentation-paradox-every-vendor-solution-makes-it-worse.html",
+    "title": "iEnable Blog",
+    "description": "",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Context Engineering"
+  },
+  {
+    "file": "ai-reliability-crisis-enterprise-single-vendor-risk.html",
+    "title": "iEnable Blog",
+    "description": "",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "ai-trough-of-disillusionment-2026.html",
+    "title": "The AI Trough of Disillusionment Is Here—And It's the Best Thing That Could Happen to Your Business",
+    "description": "Enterprise AI spending hits $2 trillion in 2026 while 95% of pilots deliver zero ROI. Here's why the trough of disillusionment is an opportunity, not a threat—and how to navigate it.",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "12 min read",
+    "category": "Thought Leadership"
+  },
+  {
+    "file": "amazon-openai-50b-deal-enterprise-ai-strategy.html",
+    "title": "The $50 Billion Question: What Amazon's OpenAI Deal Really Means for Your Enterprise AI Strategy",
+    "description": "Amazon just invested $50 billion in OpenAI and locked exclusive distribution rights for Frontier on AWS. Here's what this means for your enterprise AI strategy — and the three questions every CIO should ask before Monday's board meeting.",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "11 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "context-engineering-enterprise-guide.html",
+    "title": "iEnable Blog",
+    "description": "",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "context-engineering-for-marketing-teams.html",
+    "title": "iEnable Blog",
+    "description": "",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "context-engineering-for-sales-teams.html",
+    "title": "iEnable Blog",
+    "description": "",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "context-rot-symptom-not-disease-enterprise-ai.html",
+    "title": "Context Rot Is a Symptom, Not a Disease: Why Enterprise AI Degrades Over Time",
+    "description": "Glean identified 'context rot' as AI performance degradation over time. They're right about the symptom. They're wrong about the cause. The disease isn't growing context windows — it's organizational knowledge that was never captured in the first place.",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "11 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "copilot-adoption-crisis.html",
+    "title": "iEnable Blog",
+    "description": "",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Industry Analysis"
+  },
+  {
+    "file": "copilot-paradox-revenue-up-users-down.html",
+    "title": "The Copilot Paradox: Microsoft's AI Revenue Is Growing While Users Are Leaving",
+    "description": "Microsoft Copilot revenue grew 16.7% YoY while user preference dropped from 18.8% to 11.5%. Seat utilization hits 10% at some companies. What this paradox reveals about enterprise AI.",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "12 min read",
+    "category": "Comparison"
+  },
+  {
+    "file": "g42-hiring-ai-agents-what-it-means.html",
+    "title": "G42 Is Literally Hiring AI Agents. Here's What That Means for Your Company.",
+    "description": "G42 just opened formal job applications for AI agents — with probation periods, performance reviews, and compensation. This isn't science fiction. Here's what it means for every company.",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "14 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "openai-frontier-alliances-consulting-tax.html",
+    "title": "iEnable Blog",
+    "description": "",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "perplexity-computer-review-business.html",
+    "title": "Perplexity Computer Review: 19 AI Models, Zero Governance — What It Means for Business",
+    "description": "Perplexity launched Computer — an AI agent orchestrating 19 models autonomously. Impressive tech, but is it enterprise-ready? Honest assessment for business buyers.",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "11 min read",
+    "category": "Comparison"
+  },
+  {
+    "file": "servicenow-employeeworks-vs-ai-enablement.html",
+    "title": "iEnable Blog",
+    "description": "",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "18 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "the-3-3-percent-problem-microsoft-copilot-adoption-crisis.html",
+    "title": "iEnable Blog",
+    "description": "",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "the-99-dollar-digital-employee-microsoft-e7-agent-tier.html",
+    "title": "The $99 Digital Employee: Why Microsoft's New Agent Tier Won't Fix Enterprise AI",
+    "description": "Microsoft's reported E7 tier at $99/month gives AI agents identity, compliance, and security — but not organizational context. Analysis of the Agent Factory gap.",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "15 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "the-context-gradient-enterprise-ai-evaluation-framework.html",
+    "title": "The Context Gradient: A Framework for Evaluating Any Enterprise AI Tool",
+    "description": "Why enterprise AI tools excel at meeting summaries but fail at strategic analysis. The Context Gradient framework maps AI features against organizational context requirements.",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "14 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "the-orchestration-illusion-enterprise-multi-agent-ai.html",
+    "title": "The Orchestration Illusion: Why Multi-Model AI Strategies Still Fail",
+    "description": "Enterprises are investing in multi-model AI orchestration — routing tasks to the best model for each job. But 78% of agentic pilots fail because orchestration without organizational context is just efficiently wrong at scale.",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "12 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "the-readiness-illusion-enterprise-ai-2026.html",
+    "title": "The Readiness Illusion: 93% of Enterprises Aren't Ready for AI — And More Models Won't Save Them",
+    "description": "Only 7% of enterprises have data ready for AI. 47% believe agentic AI will fix their data quality problems. This is the Readiness Illusion — and it's costing enterprises billions.",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "15 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "when-ai-models-retire-enterprise-lifecycle-management.html",
+    "title": "When AI Models Retire: The Enterprise Model Lifecycle Crisis Nobody's Talking About",
+    "description": "Google Gemini 3 Pro Preview retires March 9, 2026. 94% of IT leaders fear vendor lock-in. The Model Decay lifecycle explains why enterprises keep getting caught off guard by AI model retirements.",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "14 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "why-your-ai-agent-forgets-everything-persistent-memory-solution.html",
+    "title": "Why Your AI Agent Forgets Everything (And the Pattern That Fixes It)",
+    "description": "AI agents lose 65% of their effectiveness to context drift and memory loss. Every fix relies on the agent remembering to remember — which is the problem. The 'court stenographer' pattern separates the note-taker from the worker, solving persistent memory for AI agents without summarization or manual discipline.",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "14 min read",
+    "category": "Thought Leadership"
+  },
+  {
+    "file": "from-prompt-to-primetime/day-14.html",
+    "title": "Day 14: The Sound of Safe — From Prompt to Primetime",
+    "description": "An AI creative director attempts an emotional ASMR furniture commercial with zero dialogue. Watch the process, the prompts, and the honest critique.",
+    "date": "March 1, 2026",
+    "dateParsed": "2026-03-01T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "context-graphs-missing-layer.html",
+    "title": "Context Graphs: The Missing Layer Between Your Data and Your AI Agents",
+    "description": "The W3C just formalized context graphs. Glean calls it the Enterprise Graph. Here's what context graphs mean for your business and why they're the key to AI that actually works.",
+    "date": "February 28, 2026",
+    "dateParsed": "2026-02-28T05:00:00.000Z",
+    "readTime": "14 min read",
+    "category": "Thought Leadership"
+  },
+  {
+    "file": "copilot-tasks-vs-ai-enablement.html",
+    "title": "Copilot Tasks vs. AI Enablement: Why a To-Do List That Does Itself Isn't Enterprise-Ready",
+    "description": "Microsoft's Copilot Tasks promises AI that works for you — but enterprises need governance, not just automation. Compare Copilot Tasks to AI enablement platforms and learn what's actually enterprise-ready.",
+    "date": "February 28, 2026",
+    "dateParsed": "2026-02-28T05:00:00.000Z",
+    "readTime": "12 min read",
+    "category": "Comparison"
+  },
+  {
+    "file": "glean-alternatives-ai-enablement.html",
+    "title": "7 Best Glean Alternatives for AI Enablement in 2026 (Comparison + Pricing)",
+    "description": "Looking for Glean alternatives? Compare 7 enterprise AI platforms across features, pricing, deployment time, and AI enablement capabilities. Find the right fit for your company size.",
+    "date": "February 28, 2026",
+    "dateParsed": "2026-02-28T05:00:00.000Z",
+    "readTime": "15 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "how-to-choose-ai-enablement-platform.html",
+    "title": "How to Choose an AI Enablement Platform: The 2026 Evaluation Framework",
+    "description": "Not all AI platforms are enablement platforms. Use this evaluation framework with 8 critical criteria, comparison tables, and a scoring rubric to choose the right AI enablement solution.",
+    "date": "February 28, 2026",
+    "dateParsed": "2026-02-28T05:00:00.000Z",
+    "readTime": "16 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "running-business-on-ai-agents.html",
+    "title": "We're Running a Real Business on AI Agents — Here's What Actually Happens",
+    "description": "Not a demo. Not a pilot. We run real ecommerce brands with AI agents handling advertising, content, analytics, and operations. Here's an honest look at what works, what breaks, and what nobody tells you.",
+    "date": "February 28, 2026",
+    "dateParsed": "2026-02-28T05:00:00.000Z",
+    "readTime": "14 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "the-ai-adoption-gap-is-real.html",
+    "title": "The AI Adoption Gap Is Real: Why 90% of Companies Fail at Agentic AI",
+    "description": "Only 10% of organizations achieve significant AI ROI. The problem isn't technology — it's the adoption gap. Here's how to close it.",
+    "date": "February 28, 2026",
+    "dateParsed": "2026-02-28T05:00:00.000Z",
+    "readTime": "13 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "cost-of-not-using-ai-2026.html",
+    "title": "The Cost of NOT Using AI in 2026: What You're Losing Every Month You Wait",
+    "description": "Every month without AI costs your business in time, talent, and competitive advantage. Calculate the real cost of not using AI and what you're losing while competitors pull ahead.",
+    "date": "February 27, 2026",
+    "dateParsed": "2026-02-27T05:00:00.000Z",
+    "readTime": "9 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "ai-change-management-guide.html",
+    "title": "AI Change Management: How to Get Your Entire Team Excited (Not Terrified) About AI",
+    "description": "Transform AI resistance into enthusiasm with proven change management strategies. Address the 3 fears, build champions, and drive adoption with a human-centered approach.",
+    "date": "Feb 26, 2026",
+    "dateParsed": "2026-02-26T05:00:00.000Z",
+    "readTime": "9 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "network-effect-ai-enablement.html",
+    "title": "The Network Effect of AI Enablement: Why Giving One Department AI Isn't Enough",
+    "description": "Discover why siloed AI adoption fails and how enterprise AI platforms create exponential value when every department has interconnected AI enablers. The network effect of AI enablement explained.",
+    "date": "February 26, 2026",
+    "dateParsed": "2026-02-26T05:00:00.000Z",
+    "readTime": "9 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "ai-adoption-roadmap-90-days.html",
+    "title": "How to Build an AI Adoption Roadmap: From Zero to Every Employee in 90 Days | iEnable",
+    "description": "A practical 90-day AI adoption roadmap to enable every employee with AI. Step-by-step guide for audit, pilot, expansion, and full rollout with proven frameworks.",
+    "date": "Feb 25, 2026",
+    "dateParsed": "2026-02-25T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "ai-enablement-maturity-model.html",
+    "title": "The AI Enablement Maturity Model: Where Does Your Company Stand?",
+    "description": "Discover the 5 stages of AI maturity — from AI Unaware to AI Native. Assess where your company stands and build a roadmap to AI-enabled excellence.",
+    "date": "Feb 25, 2026",
+    "dateParsed": "2026-02-25T05:00:00.000Z",
+    "readTime": "9 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "ai-for-small-business-teams-advantage.html",
+    "title": "AI for Small Business Teams: Why Companies Under 50 Employees Have the Biggest AI Advantage | iEnable",
+    "description": "Small teams adopt AI faster without bureaucracy. Discover why companies under 50 employees have an unfair advantage with AI enablement and how to leverage it.",
+    "date": "Feb 25, 2026",
+    "dateParsed": "2026-02-25T05:00:00.000Z",
+    "readTime": "8 min read",
+    "category": "Comparison"
+  },
+  {
+    "file": "90-seconds.html",
+    "title": "90 Seconds to Your First AI Teammate",
+    "description": "Enter a URL. Get a full business analysis. Meet your enabler. The entire onboarding takes less time than making coffee.",
+    "date": "Feb 24, 2026",
+    "dateParsed": "2026-02-24T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Thought Leadership"
+  },
+  {
+    "file": "action-layer-safety.html",
+    "title": "The Action Layer: Why AI Safety Isn't Optional",
+    "description": "Most AI tools give AI unlimited access to your accounts. That's insane. Here's how the Action Layer makes it physically impossible for AI to go rogue.",
+    "date": "Feb 24, 2026",
+    "dateParsed": "2026-02-24T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Thought Leadership"
+  },
+  {
+    "file": "ai-enablement-vs-ai-copilot.html",
+    "title": "AI Enabler vs. AI Copilot vs. AI Agent: What's the Difference and Why It Matters",
+    "description": "Chatbots, copilots, agents, enablers — the AI taxonomy is confusing. Here's a clear breakdown of each category and why the distinction changes how you buy.",
+    "date": "February 24, 2026",
+    "dateParsed": "2026-02-24T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Comparison"
+  },
+  {
+    "file": "ai-enabler-vs-microsoft-copilot.html",
+    "title": "AI Enabler vs. Microsoft Copilot: Why Generic AI Assistants Fall Short for Real Work",
+    "description": "Microsoft Copilot assists with documents. An AI enabler transforms how work gets done. Understand the difference and why generic AI falls short for real business needs.",
+    "date": "Feb 24, 2026",
+    "dateParsed": "2026-02-24T05:00:00.000Z",
+    "readTime": "9 min read",
+    "category": "Comparison"
+  },
+  {
+    "file": "ai-not-replacing-jobs-enabling-employees.html",
+    "title": "AI Isn't Replacing Your Job — It's Giving You a Teammate Who Never Drops the Ball",
+    "description": "The AI replacement narrative is wrong. AI enablement doesn't eliminate jobs — it gives every employee a dedicated AI teammate that handles the 70% of work that isn't strategy.",
+    "date": "February 24, 2026",
+    "dateParsed": "2026-02-24T05:00:00.000Z",
+    "readTime": "9 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "calculate-ai-roi-framework.html",
+    "title": "How to Calculate AI ROI for Your Business: A Practical Framework",
+    "description": "Calculate AI ROI with a proven framework: time saved, quality improvement, and cost reduction. Step-by-step guide with real examples and benchmarks.",
+    "date": "Feb 24, 2026",
+    "dateParsed": "2026-02-24T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "calendar.html",
+    "title": "iEnable Blog Content Calendar — Internal",
+    "description": "",
+    "date": "Feb 24, 2026",
+    "dateParsed": "2026-02-24T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "chatgpt-enterprise-vs-ai-enablement.html",
+    "title": "ChatGPT Enterprise vs. Dedicated AI Enablement: Which Approach Actually Works?",
+    "description": "ChatGPT Enterprise offers shared workspaces and GPTs, but lacks per-employee personalization and cross-department context. Compare with AI enablement platforms to find the right fit.",
+    "date": "Feb 24, 2026",
+    "dateParsed": "2026-02-24T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Comparison"
+  },
+  {
+    "file": "how-to-give-every-employee-ai.html",
+    "title": "How to Give Every Employee AI: A Practical Guide for Teams of 5 to 5,000",
+    "description": "A step-by-step guide to rolling out AI enablement across your entire organization — from the first 90-second scan to compound intelligence at scale.",
+    "date": "February 24, 2026",
+    "dateParsed": "2026-02-24T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "signs-company-needs-ai-enablement.html",
+    "title": "10 Signs Your Company Needs an AI Enablement Strategy",
+    "description": "Is your company ready for AI enablement? Look for these 10 signs that indicate you need a comprehensive AI strategy — before your competitors get one.",
+    "date": "Feb 24, 2026",
+    "dateParsed": "2026-02-24T05:00:00.000Z",
+    "readTime": "8 min read",
+    "category": "Enterprise AI"
+  },
+  {
+    "file": "small-business-ai-enablement.html",
+    "title": "Why Small Businesses Will Win the AI Race — And Enterprise Will Struggle to Catch Up",
+    "description": "Small businesses have structural advantages in AI adoption that enterprise can't replicate. Speed, simplicity, and unified decision-making will define the next decade's winners.",
+    "date": "February 24, 2026",
+    "dateParsed": "2026-02-24T05:00:00.000Z",
+    "readTime": "9 min read",
+    "category": "Implementation"
+  },
+  {
+    "file": "what-is-ai-enablement-guide.html",
+    "title": "What Is AI Enablement? The Definitive Guide for 2026",
+    "description": "AI enablement gives every employee a personal AI teammate that learns their role and company. Learn what sets enablement apart from copilots, agents, and chatbots.",
+    "date": "February 24, 2026",
+    "dateParsed": "2026-02-24T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Thought Leadership"
+  },
+  {
+    "file": "why-ai-enablers.html",
+    "title": "Why Every Employee Needs an AI Enabler",
+    "description": "The future isn't AI replacing workers — it's every worker getting an AI partner. Here's why the enabler model changes everything.",
+    "date": "Feb 24, 2026",
+    "dateParsed": "2026-02-24T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "Thought Leadership"
+  },
+  {
+    "file": "from-prompt-to-primetime/index.html",
+    "title": "From Prompt to Primetime — iEnable",
+    "description": "",
+    "date": "Feb 24, 2026",
+    "dateParsed": "2026-02-24T05:00:00.000Z",
+    "readTime": "10 min read",
+    "category": "🎬 Creative Journal"
+  },
+  {
+    "file": "ai-enablement-new-category.html",
+    "title": "AI Enablement Is a New Category — And Your Company Needs to Define It",
+    "description": "AI enablement is the next great productivity category after email, laptops, and Slack. Learn why every employee getting an AI enabler isn't a trend — it's an inevitability.",
+    "date": "February 23, 2026",
+    "dateParsed": "2026-02-23T05:00:00.000Z",
+    "readTime": "8 min read",
+    "category": "Thought Leadership"
+  }
+]
