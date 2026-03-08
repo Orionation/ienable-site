@@ -9,11 +9,12 @@ export async function GET(context: any) {
     description: 'Insights on AI enablement, employee AI adoption, and the future of work.',
     site: context.site,
     items: posts
+      .filter((post) => post.data.title && post.data.date)
       .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
       .map((post) => ({
         title: post.data.title,
-        pubDate: new Date(post.data.date),
-        description: post.data.description,
+        pubDate: new Date(post.data.date || '2026-03-01'),
+        description: post.data.description || post.data.title,
         link: `/blog/${post.slug}.html`,
       })),
     customData: `<language>en-us</language>`,
