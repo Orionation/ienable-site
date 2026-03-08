@@ -1,0 +1,203 @@
+{
+  "last_updated": "2026-03-01T12:46:18.658233",
+  "start_capital": 5000,
+  "pdt_enforced": true,
+  "iterations": [
+    {
+      "version": "V17",
+      "strategy": "Narrow Wing ICs (2%) + 25% TP",
+      "status": "BASELINE",
+      "years_profitable": "4/5",
+      "best_year": "2025: +204%",
+      "worst_year": "2022: -38%",
+      "years": {
+        "2020": {
+          "final": 9220.03,
+          "return_pct": 84.4,
+          "win_rate": 86.49,
+          "max_dd": 68.41,
+          "trades": 148,
+          "avg_weekly": 2.107,
+          "pdt_blocks": 0,
+          "emergency_exits": 5
+        },
+        "2022": {
+          "final": 3101.09,
+          "return_pct": -37.98,
+          "win_rate": 71.35,
+          "max_dd": 92.35,
+          "trades": 178,
+          "avg_weekly": 6.452,
+          "pdt_blocks": 0,
+          "emergency_exits": 13
+        },
+        "2023": {
+          "final": 5568.07,
+          "return_pct": 11.36,
+          "win_rate": 79.52,
+          "max_dd": 21.62,
+          "trades": 166,
+          "avg_weekly": 0.3645,
+          "pdt_blocks": 0,
+          "emergency_exits": 0
+        },
+        "2024": {
+          "final": 7236.53,
+          "return_pct": 44.73,
+          "win_rate": 75.76,
+          "max_dd": 44.14,
+          "trades": 165,
+          "avg_weekly": 1.078,
+          "pdt_blocks": 0,
+          "emergency_exits": 6
+        },
+        "2025": {
+          "final": 15215.76,
+          "return_pct": 204.32,
+          "win_rate": 87.56,
+          "max_dd": 52.54,
+          "trades": 225,
+          "avg_weekly": 2.6892,
+          "pdt_blocks": 0,
+          "emergency_exits": 6
+        }
+      }
+    },
+    {
+      "version": "V18c",
+      "strategy": "Wider Wing ICs (4%) Defense Test",
+      "status": "REJECTED",
+      "years_profitable": "2/5",
+      "best_year": "2025: +216%",
+      "worst_year": "2022: -95%",
+      "rejection_reason": "Worse performance in 3/5 years. Wider wings reduce premium without providing adequate protection.",
+      "years": {
+        "2020": {
+          "final": 408.44,
+          "return_pct": -91.83,
+          "win_rate": 64.71,
+          "max_dd": 104.64,
+          "trades": 34,
+          "avg_weekly": -13.4269,
+          "emergency_exits": 6
+        },
+        "2022": {
+          "final": 228.28,
+          "return_pct": -95.43,
+          "win_rate": 36.84,
+          "max_dd": 98.24,
+          "trades": 19,
+          "avg_weekly": -1.7283,
+          "emergency_exits": 7
+        },
+        "2023": {
+          "final": 8286.72,
+          "return_pct": 65.73,
+          "win_rate": 83.83,
+          "max_dd": 38.98,
+          "trades": 167,
+          "avg_weekly": 1.2635,
+          "emergency_exits": 0
+        },
+        "2024": {
+          "final": 3884.56,
+          "return_pct": -22.31,
+          "win_rate": 75.19,
+          "max_dd": 87.01,
+          "trades": 133,
+          "avg_weekly": 1.1346,
+          "emergency_exits": 5
+        },
+        "2025": {
+          "final": 15781.19,
+          "return_pct": 215.62,
+          "win_rate": 90.83,
+          "max_dd": 81.47,
+          "trades": 218,
+          "avg_weekly": 3.4878,
+          "emergency_exits": 5
+        }
+      }
+    },
+    {
+      "id": "v18b",
+      "name": "Position Sizing Defense",
+      "avg_return": 52.1,
+      "worst_year": -98.4,
+      "best_year": 228.0,
+      "verdict": "REJECTED",
+      "date_tested": "2026-03-01"
+    },
+    {
+      "version": "V18d",
+      "strategy": "Trend Filter Defense (SPY 50/200 MA)",
+      "status": "TESTING - 2022 Crash Defense",
+      "years_profitable": "3/5",
+      "best_year": "2025: +42%",
+      "worst_year": "2023: -21%",
+      "filter_note": "Only trades when SPY 50 DMA > 200 DMA. Death cross = 100% cash.",
+      "years": {
+        "2020": {
+          "final": 6616.76,
+          "return_pct": 32.34,
+          "win_rate": 83.78,
+          "max_dd": 30.53,
+          "trades": 37,
+          "avg_weekly": 0.798,
+          "pdt_blocks": 0,
+          "emergency_exits": 0,
+          "trend_filter_blocks": 0,
+          "trend_filter_cash_days": 0
+        },
+        "2022": {
+          "final": 5000,
+          "return_pct": 0.0,
+          "win_rate": 0.0,
+          "max_dd": 0,
+          "trades": 0,
+          "avg_weekly": 0.0,
+          "pdt_blocks": 0,
+          "emergency_exits": 0,
+          "trend_filter_blocks": 0,
+          "trend_filter_cash_days": 52
+        },
+        "2023": {
+          "final": 3971.58,
+          "return_pct": -20.57,
+          "win_rate": 61.54,
+          "max_dd": 26.83,
+          "trades": 13,
+          "avg_weekly": -0.3902,
+          "pdt_blocks": 0,
+          "emergency_exits": 0,
+          "trend_filter_blocks": 0,
+          "trend_filter_cash_days": 0
+        },
+        "2024": {
+          "final": 6339.26,
+          "return_pct": 26.79,
+          "win_rate": 72.73,
+          "max_dd": 15.95,
+          "trades": 44,
+          "avg_weekly": 0.4746,
+          "pdt_blocks": 0,
+          "emergency_exits": 0,
+          "trend_filter_blocks": 0,
+          "trend_filter_cash_days": 0
+        },
+        "2025": {
+          "final": 7081.42,
+          "return_pct": 41.63,
+          "win_rate": 89.8,
+          "max_dd": 19.21,
+          "trades": 49,
+          "avg_weekly": 0.7152,
+          "pdt_blocks": 0,
+          "emergency_exits": 0,
+          "trend_filter_blocks": 0,
+          "trend_filter_cash_days": 0
+        }
+      }
+    }
+  ]
+}

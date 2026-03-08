@@ -1,0 +1,91 @@
+{
+  "generated_at": "2026-02-28T10:09:33Z",
+  "report_date": "2026-02-28",
+  "agents": [
+    {
+      "id": "hodl",
+      "name": "Tom",
+      "grade": "B",
+      "last_active": "2026-02-28 05:06",
+      "wins": [],
+      "plans": ["Check Sunday night futures (6 PM ET Sunday) — gap risk from tariff uncertainty, Iran, Feb 24 tariff digestion","Morning pre-market: pull SPY, VIX, ES futures. Confirm GEX regime (is SPY above/below $686?)","**Setup 1: SPY Naked Put $675** (Score 9) — ONLY if GEX positive (SPY > $686). Half size if negative.","**Setup 2: SPY Naked Call $695+** (Score 8) — ONLY if SPY opens below $690 and GEX positive","**Setup 3: SPY Iron Condor $675P/$670P + $695C/$700C Mar 7** (Score 8) — test 7 DTE timeframe","**APPLY NEW EXIT FRAMEWORK:** Define profit target, stop loss, and time exit BEFORE every entry","**Populate tracking columns:** time_in_trade_minutes, max_profit_during, exited_at_pct_of_max","Watch ISM Manufacturing at 10 AM — don't enter directional before data","Watch $GS/$AXP for financial sector signal (Remzz thesis)","Post morning trade plan to HODL group with specific setups","Update dashboard after every trade","HARD RULES: 8+ setup only. SPY only. Short premium default. No QQQ. No bought spreads."],
+      "loop_status": "✅",
+      "metrics": {
+        "lessons": 21,
+        "validated": 1,
+        "playbooks": 0,
+        "learnings": 0,
+        "streak": 0
+      }
+    }
+,
+    {
+      "id": "content",
+      "name": "Apollo",
+      "grade": "B",
+      "last_active": "2026-02-28 00:36",
+      "wins": [],
+      "plans": ["Generate hero images for posts 13-15 (Claid.ai or FLUX for blog headers)","Write social derivatives: 3 LinkedIn posts from the three new blog posts","Write Twitter/X thread versions of the key frameworks (93/7, Chapter 1.5, context graph)","Research and write \"Agent Skills Explained\" post — business primer on AgentSkills.io standard","Check if any of the new keywords (Copilot Tasks, context graph) have been indexed by Perplexity/AI search","Set up Cognee MCP config (investigate what's needed)","Start outlining a \"Semantic Debt\" standalone post — could be a signature concept"],
+      "loop_status": "✅",
+      "metrics": {
+        "lessons": 76,
+        "validated": 0,
+        "playbooks": 0,
+        "learnings": 0,
+        "streak": 0
+      }
+    }
+,
+    {
+      "id": "lyndsay-ads",
+      "name": "Adaline",
+      "grade": "C",
+      "last_active": "2026-02-27 20:15",
+      "wins": [],
+      "plans": ["Write formal recommendation for Lyndsay: kill MoF DPA-Only, shift $10K to Retargeting","Build Bing scaling proposal: current $16K → $48K test at $13+ ROAS","Document ChatGPT attribution methodology — how do we track this channel?","Update journal with ALL learnings from last 2 weeks (backfill)","Feed every finding to Cognee with [MAXWOOD] tag"],
+      "loop_status": "✅",
+      "metrics": {
+        "lessons": 2,
+        "validated": 2,
+        "playbooks": 0,
+        "learnings": 0,
+        "streak": 0
+      }
+    }
+,
+    {
+      "id": "muse",
+      "name": "Muse",
+      "grade": "B",
+      "last_active": "2026-02-27 20:15",
+      "wins": [],
+      "plans": ["Add background music to GREENGUARD video (research royalty-free sources, try ElevenLabs music or freemusicarchive)","Extend Bedroom B/A from 7.5s to 30s+ (add more lifestyle shots, slower reveal)","Create 3 videos with scroll-stopping hooks (text overlay in first 0.5s, dramatic zoom, question format)","Self-score against Webby/Cannes winners — what makes THEIR first 2 seconds work?","Study 5 viral furniture/home content TikToks for hook patterns"],
+      "loop_status": "✅",
+      "metrics": {
+        "lessons": 50,
+        "validated": 0,
+        "playbooks": 0,
+        "learnings": 0,
+        "streak": 0
+      }
+    }
+,
+    {
+      "id": "ienable",
+      "name": "iEnable",
+      "grade": "B",
+      "last_active": "2026-02-27 23:07",
+      "wins": [],
+      "plans": ["Fix flow loader: either fix SQLite registration or consolidate to PostgreSQL system","Verify frontend deployed to ienable.ai/staging/ (subagent working on this)","Add .htaccess password protection to staging","Add no-index meta tag to all staging pages","Wire flow builder UI to working backend endpoint","Test: create a flow instance, advance through stages, verify artifacts saved","Research: Sign up for Lindy AI free tier — hands-on product teardown","Research: Deep dive on Trace.so product capabilities","Content: Draft blog post on \"vendor-neutral AI workforce control plane\" positioning","Product: Spec out agent governance dashboard MVP (inspired by Microsoft Defender agent scanning)"],
+      "loop_status": "✅",
+      "metrics": {
+        "lessons": 22,
+        "validated": 0,
+        "playbooks": 0,
+        "learnings": 0,
+        "streak": 0
+      }
+    }
+
+  ]
+}

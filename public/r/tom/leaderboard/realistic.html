@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Tom's Realistic Backtesting Lab</title>
+<style>
+  :root {
+    --bg:#0f172a;--card:#1e293b;--border:#334155;
+    --text:#f1f5f9;--muted:#94a3b8;--green:#22c55e;
+    --red:#ef4444;--amber:#f59e0b;--gold:#fbbf24;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'SF Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh;padding:12px;-webkit-font-smoothing:antialiased;}
+  .header{text-align:center;padding:16px 0;}
+  .header h1{font-size:22px;font-weight:800;}
+  .header .sub{font-size:11px;color:var(--muted);margin-top:4px;}
+  .header .goal{display:inline-block;margin-top:8px;padding:6px 14px;background:linear-gradient(90deg,var(--gold),var(--amber));color:#0f172a;border-radius:20px;font-size:13px;font-weight:800;}
+  .constraints{font-size:10px;color:var(--muted);text-align:center;padding:4px 0 12px;line-height:1.6;}
+  .constraints span{background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;margin:0 2px;}
+
+  .hero{background:linear-gradient(135deg,#1a2744,#1e293b);border:1px solid var(--gold);border-radius:14px;padding:16px;margin:12px 0;text-align:center;}
+  .hero h2{font-size:14px;color:var(--gold);text-transform:uppercase;letter-spacing:0.05em;}
+  .hero .big{font-size:32px;font-weight:900;color:var(--green);margin:8px 0;}
+  .hero .detail{font-size:12px;color:var(--muted);line-height:1.6;}
+  .hero .detail strong{color:var(--text);}
+
+  .strats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0;}
+  .strat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;}
+  .strat .name{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;}
+  .strat .val{font-size:18px;font-weight:800;margin:4px 0;}
+  .strat .val.g{color:var(--green);}
+  .strat .val.gd{color:var(--gold);}
+  .strat .sub2{font-size:10px;color:var(--muted);}
+  @media(max-width:500px){.strats{grid-template-columns:1fr;}}
+
+  .board{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:12px 0;}
+  .board h2{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;padding:12px 14px 8px;}
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  table{min-width:700px;border-collapse:collapse;font-size:11px;white-space:nowrap;width:100%;}
+  th{text-align:left;padding:6px 8px;font-size:9px;text-transform:uppercase;letter-spacing:0.04em;color:var(--muted);border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--card);}
+  td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.04);}
+  tr.top td{background:rgba(251,191,36,0.08);}
+  .pill{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;}
+  .pill.g{background:rgba(34,197,94,0.15);color:var(--green);}
+  .pill.r{background:rgba(239,68,68,0.15);color:var(--red);}
+  .pill.gd{background:rgba(251,191,36,0.15);color:var(--gold);}
+  .cap{font-weight:700;font-size:12px;}
+  .cap.g{color:var(--green);}
+  .cap.r{color:var(--red);}
+  .sname{max-width:220px;overflow:hidden;text-overflow:ellipsis;color:var(--muted);font-size:11px;}
+
+  .status{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;margin:12px 0;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:p 1.5s infinite;}
+  @keyframes p{0%,100%{opacity:1;}50%{opacity:0.4;}}
+  .status strong{color:var(--text);}
+  .links{text-align:center;padding:16px;font-size:12px;}
+  .links a{color:var(--muted);text-decoration:none;margin:0 8px;}
+  .links a:hover{color:var(--text);}
+  .loading{text-align:center;padding:40px;color:var(--muted);font-size:14px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🏦 Tom's Realistic Backtesting Lab</h1>
+  <div class="sub">$5K → $1M Challenge · Real Constraints · 2024 & 2025 Data</div>
+  <div class="goal">🎯 $1,000,000 IN ONE YEAR</div>
+</div>
+<div class="constraints">
+  <span>Bid-ask 5-15%</span> <span>PDT rule &lt;$25K</span> <span>T+1 settlement</span> <span>No lookahead</span> <span>30% max risk</span> <span>50 max contracts</span>
+</div>
+
+<div id="hero" class="hero"><div class="loading">Loading results...</div></div>
+<div id="strats" class="strats" style="display:none;"></div>
+<div id="status" class="status"><div class="dot"></div><div>Loading...</div></div>
+<div id="board" class="board"><h2>🏆 Top 25 Configs (by worst-year return)</h2><div id="tw" class="tscroll"></div></div>
+
+<div class="links">
+  <a href="/r/tom/leaderboard/">2025 Lab</a> · <a href="/r/tom/leaderboard/2024.html">2024 Lab</a> · <a href="/r/tom/">Report Card</a>
+</div>
+
+<script>
+const URL='/r/tom/leaderboard-realistic.json';
+let lastText='';
+
+function fmt(n){
+  if(n==null||n===undefined)return '—';
+  if(n>=1000000)return '$'+( n/1000000).toFixed(1)+'M';
+  if(n>=1000)return '$'+(n/1000).toFixed(1)+'K';
+  if(n<0)return '-$'+Math.abs(n).toLocaleString();
+  return '$'+Math.round(n).toLocaleString();
+}
+
+async function load(){
+  try{
+    const r=await fetch(URL+'?t='+Date.now());
+    if(!r.ok)return;
+    const t=await r.text();
+    if(t===lastText)return;
+    lastText=t;
+    render(JSON.parse(t));
+  }catch(e){
+    document.getElementById('hero').innerHTML='<div class="loading">Error loading data. Retrying...</div>';
+  }
+}
+
+function render(data){
+  const its=data.iterations||[];
+  if(!its.length){
+    document.getElementById('hero').innerHTML='<div class="loading">No results yet. Tom is running...</div>';
+    return;
+  }
+
+  // Find best by min_return (worst year) — most consistent
+  const best=its.reduce((a,b)=>(b.min_return||0)>(a.min_return||0)?b:a, its[0]);
+
+  // Hero
+  const f24=best.final_2024, f25=best.final_2025;
+  const bd=best.strategy_breakdown||{};
+  document.getElementById('hero').innerHTML=`
+    <h2>${best.name||best.n}</h2>
+    <div class="big">${fmt(Math.min(f24||0,f25||0))} worst year · ${fmt(Math.max(f24||0,f25||0))} best year</div>
+    <div class="detail">
+      <strong>2024:</strong> $5K → ${fmt(f24)} (+${(best.return_2024||0).toLocaleString()}%) · ${best.trades_2024||'?'} trades · ${(best.wr_2024||0).toFixed(0)}% win · ${(best.dd_2024||0).toFixed(0)}% max DD<br>
+      <strong>2025:</strong> $5K → ${fmt(f25)} (+${(best.return_2025||0).toLocaleString()}%) · ${best.trades_2025||'?'} trades · ${(best.wr_2025||0).toFixed(0)}% win · ${(best.dd_2025||0).toFixed(0)}% max DD
+      ${bd['2024']?'<br><br><strong>Strategy breakdown (2024):</strong> '+Object.entries(bd['2024']).map(([k,v])=>k+': '+v).join(' · '):''}
+      ${bd['2025']?'<br><strong>Strategy breakdown (2025):</strong> '+Object.entries(bd['2025']).map(([k,v])=>k+': '+v).join(' · '):''}
+    </div>
+  `;
+
+  // Strategy cards for best
+  const stratDiv=document.getElementById('strats');
+  if(bd['2024']||bd['2025']){
+    stratDiv.style.display='grid';
+    const keys=Object.keys(bd['2024']||bd['2025']||{});
+    stratDiv.innerHTML=keys.map(k=>{
+      const v24=bd['2024']?bd['2024'][k]:'—';
+      const v25=bd['2025']?bd['2025'][k]:'—';
+      return `<div class="strat">
+        <div class="name">${k.replace(/_/g,' ')}</div>
+        <div class="val gd">${v24}</div>
+        <div class="sub2">2024</div>
+        <div class="val g" style="font-size:14px;margin-top:4px;">${v25}</div>
+        <div class="sub2">2025</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Status
+  document.getElementById('status').innerHTML=`
+    <div class="dot"></div>
+    <div><strong>${its.length} configs tested</strong> · Best worst-year: <strong style="color:var(--gold)">${fmt(best.min_return?best.min_return*50+5000:Math.min(f24||0,f25||0))}</strong> · Updated: ${data.updated||'?'}</div>
+  `;
+
+  // Table — sort by min_return (consistency across both years)
+  const sorted=[...its].sort((a,b)=>(b.min_return||Math.min(b.return_2024||0,b.return_2025||0))-(a.min_return||Math.min(a.return_2024||0,a.return_2025||0))).slice(0,25);
+  
+  document.getElementById('tw').innerHTML=`<table>
+    <tr><th>#</th><th>Config</th><th>2024 Final</th><th>2024 Ret</th><th>2024 Win</th><th>2024 DD</th><th>2025 Final</th><th>2025 Ret</th><th>2025 Win</th><th>2025 DD</th><th>Trades</th></tr>
+    ${sorted.map((it,i)=>{
+      const isTop=i===0;
+      const f24=it.final_2024, f25=it.final_2025;
+      const m24=f24>=1000000, m25=f25>=1000000;
+      return `<tr class="${isTop?'top':''}">
+        <td style="font-weight:800">${it.n}</td>
+        <td class="sname" title="${it.name||''}">${it.name||it.n}</td>
+        <td class="cap ${f24>=5000?'g':'r'}">${fmt(f24)}${m24?' 🏆':''}</td>
+        <td><span class="pill ${(it.return_2024||0)>100?'gd':(it.return_2024||0)>0?'g':'r'}">${it.return_2024?'+'+Math.round(it.return_2024).toLocaleString()+'%':'—'}</span></td>
+        <td>${it.wr_2024?(it.wr_2024).toFixed(0)+'%':'—'}</td>
+        <td>${it.dd_2024?(it.dd_2024).toFixed(0)+'%':'—'}</td>
+        <td class="cap ${f25>=5000?'g':'r'}">${fmt(f25)}${m25?' 🏆':''}</td>
+        <td><span class="pill ${(it.return_2025||0)>100?'gd':(it.return_2025||0)>0?'g':'r'}">${it.return_2025?'+'+Math.round(it.return_2025).toLocaleString()+'%':'—'}</span></td>
+        <td>${it.wr_2025?(it.wr_2025).toFixed(0)+'%':'—'}</td>
+        <td>${it.dd_2025?(it.dd_2025).toFixed(0)+'%':'—'}</td>
+        <td>${(it.trades_2024||0)+(it.trades_2025||0)||'—'}</td>
+      </tr>`;
+    }).join('')}
+  </table>`;
+}
+
+load();
+setInterval(load,15000);
+</script>
+</body>
+</html>

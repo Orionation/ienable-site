@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iEnable Manifesto</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8f7f4;
+  --card: #ffffff;
+  --text: #1a1a2e;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --accent: #2f3b50;
+  --accent-light: #e8edf5;
+  --green: #22c55e;
+  --green-bg: #f0fdf4;
+  --brown: #88614b;
+  --blue: #3b82f6;
+  --purple: #8b5cf6;
+  --amber: #f59e0b;
+  --teal: #0d9488;
+  --toc-width: 220px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== AMBIENT ===== */
+.ambient {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none; z-index: 0; overflow: hidden;
+}
+.orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(100px); opacity: 0.15;
+  animation: drift 25s ease-in-out infinite;
+}
+.orb:nth-child(1) { width: 600px; height: 600px; background: linear-gradient(135deg, #2f3b50, #3b82f6); top: -200px; right: -150px; }
+.orb:nth-child(2) { width: 500px; height: 500px; background: linear-gradient(135deg, #88614b, #f59e0b); bottom: -150px; left: -150px; animation-delay: -10s; }
+.orb:nth-child(3) { width: 350px; height: 350px; background: linear-gradient(135deg, #22c55e, #0d9488); top: 40%; left: 50%; animation-delay: -18s; opacity: 0.1; }
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -30px) scale(1.05); }
+  66% { transform: translate(-20px, 40px) scale(0.95); }
+}
+.particles { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 0; }
+.particle { position: absolute; width: 3px; height: 3px; background: var(--accent); border-radius: 50%; opacity: 0; animation: rise 10s ease-in-out infinite; }
+@keyframes rise {
+  0% { opacity: 0; transform: translateY(100vh) scale(0); }
+  10% { opacity: 0.3; }
+  90% { opacity: 0.05; }
+  100% { opacity: 0; transform: translateY(-50px) scale(1); }
+}
+
+/* ===== TOC SIDEBAR ===== */
+.toc-sidebar {
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: var(--toc-width); z-index: 50;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(16px);
+  border-left: 1px solid #e5e7eb;
+  padding: 24px 0;
+  overflow-y: auto;
+  display: flex; flex-direction: column;
+}
+.toc-header {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+  text-transform: uppercase; color: var(--text-muted);
+  padding: 0 20px 16px; border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 8px;
+}
+.toc-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 20px; cursor: pointer;
+  font-size: 12.5px; line-height: 1.4;
+  color: var(--text-muted); font-weight: 500;
+  transition: all 0.3s; border-left: 3px solid transparent;
+  text-decoration: none;
+}
+.toc-item:hover { color: var(--text-secondary); background: rgba(0,0,0,0.02); }
+.toc-item.active { color: var(--accent); font-weight: 600; border-left-color: var(--accent); background: var(--accent-light); }
+.toc-item.read { color: var(--text-muted); }
+.toc-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #d1d5db; flex-shrink: 0; margin-top: 5px;
+  transition: all 0.3s;
+}
+.toc-item.active .toc-dot { background: var(--accent); box-shadow: 0 0 6px rgba(47,59,80,0.4); }
+.toc-item.read .toc-dot { background: var(--green); }
+
+/* Mobile TOC toggle */
+.toc-toggle {
+  display: none; position: fixed; top: 12px; right: 12px; z-index: 60;
+  width: 40px; height: 40px; border-radius: 10px;
+  background: rgba(255,255,255,0.95); border: 1px solid #e5e7eb;
+  cursor: pointer; align-items: center; justify-content: center;
+  font-size: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+@media (max-width: 768px) {
+  .toc-sidebar { transform: translateX(100%); transition: transform 0.3s; }
+  .toc-sidebar.open { transform: translateX(0); box-shadow: -4px 0 20px rgba(0,0,0,0.1); }
+  .toc-toggle { display: flex; }
+  .content { margin-left: 0 !important; margin-right: 0 !important; max-width: 100% !important; padding: 40px 16px 120px; }
+  .hero h1 { font-size: 32px; }
+  .version-pill { padding: 10px 18px; font-size: 13px; }
+}
+
+/* ===== PLAYER BAR ===== */
+.player-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(24px);
+  border-top: 1px solid #e5e7eb;
+  padding: 14px 28px;
+  z-index: 100;
+  display: flex; align-items: center; gap: 16px;
+  box-shadow: 0 -4px 30px rgba(0,0,0,0.07);
+}
+.play-btn {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--accent); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(47,59,80,0.3);
+  position: relative; overflow: hidden;
+}
+.play-btn::after {
+  content: ''; position: absolute;
+  top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transition: left 0.5s;
+}
+.play-btn:hover { transform: scale(1.05); }
+.play-btn:hover::after { left: 100%; }
+.play-btn svg { width: 22px; height: 22px; fill: white; position: relative; z-index: 1; }
+.play-btn.playing { background: var(--brown); }
+.visualizer { display: flex; align-items: center; gap: 2px; height: 28px; }
+.viz-bar { width: 3px; background: var(--accent); border-radius: 100px; height: 6px; transition: height 0.1s ease; }
+.visualizer.active .viz-bar { animation: viz 0.7s ease-in-out infinite; }
+@keyframes viz {
+  0%, 100% { height: 4px; opacity: 0.4; }
+  50% { height: 24px; opacity: 1; }
+}
+.player-meta { min-width: 0; }
+.player-title { font-size: 13px; font-weight: 600; color: var(--text); }
+.player-section { font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.progress-wrap { flex: 1; display: flex; align-items: center; gap: 12px; }
+.progress-track { flex: 1; height: 5px; background: #e5e7eb; border-radius: 100px; cursor: pointer; position: relative; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--brown)); border-radius: 100px; width: 0%; transition: width 0.25s linear; }
+.time-label { font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; white-space: nowrap; font-weight: 500; }
+.player-controls { display: flex; gap: 8px; align-items: center; }
+.ctrl-btn {
+  padding: 5px 14px; border: 1px solid #e5e7eb; border-radius: 100px;
+  font-size: 12px; font-weight: 600; background: white; color: var(--text);
+  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s;
+}
+.ctrl-btn:hover { background: var(--accent-light); }
+.version-btns { display: flex; gap: 4px; }
+.ver-btn {
+  padding: 5px 12px; border: 1px solid #e5e7eb; border-radius: 100px;
+  font-size: 11px; font-weight: 600; background: white; color: var(--text-muted);
+  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s;
+}
+.ver-btn:hover { color: var(--text); background: var(--accent-light); }
+.ver-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+/* ===== CONTENT ===== */
+.content {
+  position: relative; z-index: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 60px 24px 120px;
+}
+
+/* Hero */
+.hero { text-align: center; margin-bottom: 80px; padding-top: 20px; }
+.hero .badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 20px; background: var(--card); border-radius: 100px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  font-size: 12px; font-weight: 700; color: var(--accent);
+  letter-spacing: 1px; margin-bottom: 28px; text-transform: uppercase;
+}
+.hero .badge .dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.7); } }
+.hero h1 { font-family: 'DM Serif Display', serif; font-size: 56px; font-weight: 400; line-height: 1.15; color: var(--text); margin-bottom: 16px; }
+.hero h1 em { font-style: italic; color: var(--brown); }
+.hero .subtitle { font-size: 18px; color: var(--text-secondary); font-weight: 300; line-height: 1.7; max-width: 480px; margin: 0 auto 32px; }
+
+/* Top controls */
+.top-controls { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-bottom: 8px; }
+.version-pills { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.version-pill {
+  padding: 12px 28px; border: 2px solid #e5e7eb; border-radius: 100px;
+  font-size: 15px; font-weight: 600; background: white; color: var(--text-secondary);
+  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.25s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.version-pill:hover { border-color: var(--accent); color: var(--text); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,0.08); }
+.version-pill.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 4px 14px rgba(47,59,80,0.3); }
+.voice-pills { display: flex; gap: 6px; }
+.voice-pill {
+  padding: 8px 20px; border: 1.5px solid #e5e7eb; border-radius: 100px;
+  font-size: 13px; font-weight: 600; background: white; color: var(--text-muted);
+  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s;
+}
+.voice-pill:hover { color: var(--text); border-color: var(--accent); }
+.voice-pill.active { background: var(--brown); color: white; border-color: var(--brown); }
+
+
+/* Version-specific content */
+.version-content { display: none; }
+.version-content.active { display: block; }
+/* ===== SECTIONS ===== */
+.section { margin-bottom: 56px; position: relative; }
+.section-inner { opacity: 1; transition: opacity 0.8s ease; }
+.section.active .section-inner { opacity: 1; }
+.section.read .section-inner { opacity: 0.7; }
+.section.upcoming .section-inner { opacity: 1; }
+.section h2 {
+  font-family: 'DM Serif Display', serif; font-size: 30px; font-weight: 400;
+  color: var(--text); margin-bottom: 24px; padding-bottom: 14px;
+  border-bottom: 2px solid #f0eeeb; position: relative;
+}
+.section.active h2::after {
+  content: ''; position: absolute; bottom: -2px; left: 0;
+  width: 60px; height: 2px; background: var(--accent);
+  animation: headlineIn 0.6s ease-out forwards;
+}
+@keyframes headlineIn { from { width: 0; } to { width: 60px; } }
+.para {
+  font-size: 17px; line-height: 1.85; color: var(--text);
+  margin-bottom: 18px; padding: 10px 16px;
+  border-radius: 12px; border-left: 3px solid transparent;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); position: relative;
+}
+.para.active { background: linear-gradient(135deg, rgba(47,59,80,0.035), rgba(136,97,75,0.03)); border-left-color: var(--accent); }
+.para.read { opacity: 0.75; }
+
+/* Visual moments */
+.visual-moment { margin: 32px 0; opacity: 0; transform: translateY(20px) scale(0.95); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none; }
+.visual-moment.visible { opacity: 1; transform: translateY(0) scale(1); }
+.timeline-visual { display: flex; align-items: center; justify-content: center; gap: 0; padding: 24px 0; }
+.timeline-node { text-align: center; padding: 12px 16px; position: relative; }
+.timeline-node .year { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+.timeline-node .label { font-size: 13px; font-weight: 600; color: var(--text); }
+.timeline-node .icon { font-size: 28px; margin-bottom: 6px; display: block; }
+.timeline-line { width: 40px; height: 2px; background: #e5e7eb; position: relative; }
+.timeline-line::after { content: '→'; position: absolute; top: -10px; right: -4px; color: var(--text-muted); font-size: 14px; }
+.timeline-node.highlight { background: var(--accent-light); border-radius: 12px; }
+.timeline-node.highlight .label { color: var(--accent); }
+.stat-callout { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; padding: 20px 0; }
+.stat-card { background: var(--card); border: 1px solid #e5e7eb; border-radius: 14px; padding: 20px 24px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.04); min-width: 140px; }
+.stat-card .stat-value { font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--accent); line-height: 1; }
+.stat-card .stat-label { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px; }
+.flow-visual { display: flex; align-items: center; justify-content: center; gap: 0; padding: 20px 0; flex-wrap: wrap; }
+.flow-stage { padding: 8px 16px; background: var(--card); border: 1px solid #e5e7eb; border-radius: 10px; font-size: 12px; font-weight: 600; color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+.flow-arrow { color: var(--text-muted); font-size: 16px; padding: 0 6px; }
+.flow-stage.active-stage { background: var(--accent); color: white; border-color: var(--accent); }
+.compound-bars { display: flex; flex-direction: column; gap: 10px; padding: 20px 0; }
+.compound-row { display: flex; align-items: center; gap: 12px; }
+.compound-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); width: 90px; text-align: right; }
+.compound-track { flex: 1; height: 10px; background: #f3f4f6; border-radius: 100px; overflow: hidden; }
+.compound-fill { height: 100%; border-radius: 100px; width: 0%; transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
+.compound-fill.m1 { background: linear-gradient(90deg, var(--blue), #60a5fa); }
+.compound-fill.m3 { background: linear-gradient(90deg, var(--purple), #a78bfa); }
+.compound-fill.m6 { background: linear-gradient(90deg, var(--amber), #fbbf24); }
+.compound-fill.m12 { background: linear-gradient(90deg, var(--green), #4ade80); }
+.compound-pct { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; color: var(--text); width: 36px; }
+.quote-callout { text-align: center; padding: 32px 24px; position: relative; }
+.quote-callout .quote-text { font-family: 'DM Serif Display', serif; font-size: 28px; font-style: italic; color: var(--accent); line-height: 1.4; }
+.quote-callout .quote-sub { font-size: 13px; color: var(--text-muted); margin-top: 12px; font-weight: 500; }
+.divider { text-align: center; margin: 40px 0; color: #d1d5db; font-size: 20px; letter-spacing: 16px; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .hero h1 { font-size: 36px; }
+  .player-bar { padding: 10px 14px; gap: 10px; flex-wrap: wrap; }
+  .progress-wrap { order: 10; width: 100%; }
+  .version-btns { display: none; }
+  .play-btn { width: 44px; height: 44px; }
+  .timeline-visual { flex-wrap: wrap; gap: 4px; }
+  .timeline-line { width: 20px; }
+  .version-pill { padding: 10px 20px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<div class="ambient"><div class="orb"></div><div class="orb"></div><div class="orb"></div></div>
+<div class="particles" id="particles"></div>
+
+<!-- TOC Toggle (mobile) -->
+<button class="toc-toggle" id="tocToggle" onclick="document.getElementById('tocSidebar').classList.toggle('open')">☰</button>
+
+<!-- TOC Sidebar -->
+<nav class="toc-sidebar" id="tocSidebar">
+  <div class="toc-header">Contents</div>
+  <div id="tocItems"></div>
+</nav>
+
+<!-- Audio elements: 3 versions × 2 genders -->
+<audio id="audio-60sec-male" preload="auto"><source src="manifesto-60sec-male.mp3" type="audio/mpeg"></audio>
+<audio id="audio-60sec-female" preload="auto"><source src="manifesto-60sec-female.mp3" type="audio/mpeg"></audio>
+<audio id="audio-4min-male" preload="auto"><source src="manifesto-4min-male.mp3" type="audio/mpeg"></audio>
+<audio id="audio-4min-female" preload="auto"><source src="manifesto-4min-female.mp3" type="audio/mpeg"></audio>
+<audio id="audio-full-male" preload="auto"><source src="manifesto-full-male.mp3" type="audio/mpeg"></audio>
+<audio id="audio-full-female" preload="auto"><source src="manifesto-full-female.mp3" type="audio/mpeg"></audio>
+
+<div class="content">
+  <div class="hero">
+    <div class="badge"><div class="dot"></div> iENABLE MANIFESTO</div>
+    <h1>Everyone's About to Get <em>an Enabler</em></h1>
+    <p class="subtitle">The story of what we're building and why it matters.<br>Press play and listen.</p>
+    <div class="top-controls">
+      <div class="version-pills">
+        <button class="version-pill active" data-ver="60sec">60 seconds</button>
+        <button class="version-pill" data-ver="4min">4 minutes</button>
+        <button class="version-pill" data-ver="full">Full Story (10 min)</button>
+      </div>
+      <div class="voice-pills">
+        <button class="voice-pill active" data-gender="male">Male Voice</button>
+        <button class="voice-pill" data-gender="female">Female Voice</button>
+      </div>
+    </div>
+  </div>
+  <div id="sections-60sec" class="version-content active"></div>
+    <div id="sections-4min" class="version-content"></div>
+    <div id="sections-full" class="version-content"></div>
+</div>
+
+<!-- Player Bar -->
+<div class="player-bar">
+  <button class="play-btn" id="playBtn" onclick="togglePlay()">
+    <svg id="playIcon" viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg>
+    <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>
+  </button>
+  <div class="visualizer" id="visualizer">
+    <div class="viz-bar" style="animation-delay:0s"></div>
+    <div class="viz-bar" style="animation-delay:0.08s"></div>
+    <div class="viz-bar" style="animation-delay:0.16s"></div>
+    <div class="viz-bar" style="animation-delay:0.24s"></div>
+    <div class="viz-bar" style="animation-delay:0.12s"></div>
+    <div class="viz-bar" style="animation-delay:0.2s"></div>
+    <div class="viz-bar" style="animation-delay:0.04s"></div>
+  </div>
+  <div class="player-meta">
+    <div class="player-title" id="playerTitle">iEnable Manifesto</div>
+    <div class="player-section" id="currentSection">Press play to begin</div>
+  </div>
+  <div class="progress-wrap">
+    <span class="time-label" id="timeCurrent">0:00</span>
+    <div class="progress-track" id="progressTrack">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <span class="time-label" id="timeTotal">—</span>
+  </div>
+  <div class="player-controls">
+    <div class="version-btns">
+      <button class="ver-btn active" data-ver="60sec">60s</button>
+      <button class="ver-btn" data-ver="4min">4 min</button>
+      <button class="ver-btn" data-ver="full">Full</button>
+    </div>
+    <button class="ctrl-btn" id="speedBtn" onclick="cycleSpeed()">1×</button>
+  </div>
+</div>
+
+<script>
+// ===== PARTICLES =====
+const particlesEl = document.getElementById('particles');
+for (let i = 0; i < 20; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.left = Math.random() * 100 + '%';
+  p.style.animationDelay = Math.random() * 10 + 's';
+  p.style.animationDuration = (8 + Math.random() * 8) + 's';
+  particlesEl.appendChild(p);
+}
+
+// ===== CUES (full version, scaled ×1.05) =====
+const cuesFull = [
+  { section: 0, para: 0, time: 0.0, text: "Everyone's about to get an enabler." },
+  { section: 1, para: -1, time: 2.9, isTitle: true },
+  { section: 1, para: 1, time: 5.5, text: "In the 1990s, every employee got an email address. It didn't replace anyone. It made everyone faster. Suddenly the person in accounting could communicate in seconds instead of days. The sales rep could follow up with 50 clients instead of 5. Nobody lost their job because of email — but the companies that adopted it first absolutely crushed the ones that didn't." },
+  { section: 1, para: 2, time: 28.6, text: "We're at that moment again." },
+  { section: 1, para: 3, time: 30.4, text: "Not with email. With intelligence. Every person in your company is about to get a dedicated AI assistant — an eager, tireless enabler who knows your business, learns your processes, and handles the work your team never has time to finish." },
+  { section: 1, para: 4, time: 45.4, text: "Not a chatbot. Not a search bar. A coworker.", visual: "timeline" },
+  { section: 2, para: -1, time: 48.5, isTitle: true },
+  { section: 2, para: 5, time: 50.4, text: "Your team isn't failing. They're drowning." },
+  { section: 2, para: 6, time: 53.5, text: "Your marketing director has 47 browser tabs open and hasn't looked at ad performance in three weeks. Your operations lead knows the return policy page is missing but hasn't had time to write it. Your CEO saw a competitor launch a Pinterest campaign and thought \"we should do that\" — six months ago." },
+  { section: 2, para: 7, time: 71.7, text: "These aren't bad employees. These are talented people buried under the grunt work that comes with running a growing business: updating spreadsheets, writing briefs nobody reads, QA-ing the same recurring issues, pulling reports, chasing down missing tracking pixels, researching competitors, building campaign decks, reviewing product listings one by one by one." },
+  { section: 2, para: 8, time: 95.0, text: "The actual creative, strategic, human work — the work that grows the business — keeps getting pushed to \"next week.\" And next week never comes because there's always another fire." },
+  { section: 2, para: 9, time: 95.6, text: "Sound familiar?" },
+  { section: 3, para: -1, time: 106.9, isTitle: true },
+  { section: 3, para: 10, time: 109.8, text: "Put in your website. That's it." },
+  { section: 3, para: 11, time: 112.0, text: "In under two minutes, iEnable crawls your site, identifies your tech stack, detects what's missing, finds your brand assets, maps your integrations, and generates a prioritized list of opportunities your team hasn't had time to chase." },
+  { section: 3, para: 12, time: 126.2, text: "But here's where it gets interesting." },
+  { section: 3, para: 13, time: 128.6, text: "iEnable doesn't just hand you a report and say \"good luck.\" It doesn't tell you your Meta Pixel is missing and walk away. It chases it down. It writes the implementation plan. It drafts the brief. It puts the task in the pipeline with an execution plan already attached, ready for your team to approve." },
+  { section: 3, para: 14, time: 146.0, text: "Then it pairs every person on your team with their own AI enabler — a dedicated specialist who knows your business, learns your workflows, and operates inside your existing processes. Not against them. Inside them." },
+  { section: 3, para: 15, time: 160.8, text: "Your ads director runs campaigns across five channels. She gets an AI specialist who monitors every campaign 24/7, catches the budget waste she doesn't have time to audit, and surfaces a $240K revenue opportunity in its first two hours. She approves the changes. She gets the credit. She's the hero." },
+  { section: 3, para: 16, time: 180.8, text: "Every person becomes a superhero with a tireless sidekick.", visual: "stats" },
+  { section: 4, para: -1, time: 184.5, isTitle: true },
+  { section: 4, para: 17, time: 188.6, text: "Remember the best intern you ever had? The one who actually anticipated what you needed? Who showed up early, stayed late, and made you look brilliant in front of your boss?" },
+  { section: 4, para: 18, time: 197.8, text: "That's what an iEnable specialist is. Hungry. Eager. Thorough. They don't just flag problems — they arrive with solutions. They don't wait to be told — they research, draft, and propose. They don't need coffee breaks, don't call in sick, and they never forget what you told them last Tuesday." },
+  { section: 4, para: 19, time: 215.0, text: "But here's the key: they don't make decisions. Your people do." },
+  { section: 4, para: 20, time: 218.5, text: "The AI enabler does the research, builds the brief, creates the prototype, runs the QA check, pulls the competitive analysis, drafts the campaign — and then puts it on your team member's desk with a big green \"Approve\" button. The human reviews it, tweaks it, approves it or sends it back. The human is the strategist. The AI is the engine." },
+  { section: 4, para: 21, time: 241.8, text: "Just like a great intern doesn't replace the senior director — they make the senior director ten times more effective." },
+  { section: 5, para: -1, time: 248.6, isTitle: true },
+  { section: 5, para: 22, time: 250.7, text: "Here's something we learned building this: the hardest part of any project isn't the execution. It's knowing what you want." },
+  { section: 5, para: 23, time: 258.1, text: "Ask someone to write a creative brief from scratch and they'll stare at a blank page for an hour. But sit down with them and ask the right questions — \"Who's this for? What do they care about? What does success look like? Show me something you've seen that feels right?\" — and suddenly the vision pours out." },
+  { section: 5, para: 24, time: 258.1, text: "That's how iEnable briefs work. They're not forms with empty fields. They're structured conversations designed to pull the creativity out of your team. Your marketing director doesn't fill out a \"Campaign Request Form.\" She has a guided conversation with her AI enabler. The enabler asks the right questions, gathers visual references, and assembles a complete creative brief — the kind that used to take a full day and now takes fifteen minutes." },
+  { section: 5, para: 25, time: 300.5, text: "Then the enabler takes that brief and runs. Research. Prototype. Draft. QA. The human reviews, reacts, refines. \"More like this, less like that.\" The enabler iterates. The human approves. Work ships." },
+  { section: 5, para: 26, time: 313.8, text: "The creative loop — messy, visual, iterative, taste-driven — stays human. The execution loop — structured, precise, testable, repetitive — gets handled. That's the division of labor that actually works.", visual: "quote" },
+  { section: 6, para: -1, time: 327.8, isTitle: true },
+  { section: 6, para: 27, time: 329.9, text: "Let's be honest about what buries your team." },
+  { section: 6, para: 28, time: 332.7, text: "Updating spreadsheets. Your enabler keeps them current automatically. Revenue numbers, inventory counts, campaign metrics — always fresh, always formatted, always ready for the Monday meeting." },
+  { section: 6, para: 29, time: 344.3, text: "Writing briefs. Your enabler turns a 10-minute conversation into a polished brief with goals, references, timelines, and acceptance criteria. No more blank pages." },
+  { section: 6, para: 30, time: 355.2, text: "QA and review cycles. Your enabler checks every deliverable against your own standards before it hits your desk. Catches the typo, verifies the numbers, flags the inconsistency." },
+  { section: 6, para: 31, time: 366.2, text: "Competitive research. Your enabler monitors competitors continuously. Not once a quarter when someone remembers. Every day." },
+  { section: 6, para: 32, time: 375.2, text: "Campaign creation. Your enabler drafts ad copy in your brand voice, using your colors, your images, your tone. Not generic AI slop — work that sounds like your company because it learned from everything you've ever published." },
+  { section: 6, para: 33, time: 388.9, text: "The stuff that drains your team's energy becomes the stuff that runs itself. And the stuff your team is actually great at — the strategic thinking, the creative judgment, the relationship building, the leadership — they finally have time to do it." },
+  { section: 7, para: -1, time: 404.1, isTitle: true },
+  { section: 7, para: 34, time: 407.4, text: "Every company works differently. Your approval process isn't the same as your competitor's. The way a task moves from idea to shipped product is unique to your organization — and it should stay that way." },
+  { section: 7, para: 35, time: 418.1, text: "The Flow Builder lets you design exactly how work moves through your company. Not a rigid template you have to conform to — a visual pipeline that mirrors how your team already operates.", visual: "flow" },
+  { section: 7, para: 36, time: 429.1, text: "Think Trello meets Zapier, but the cards move themselves. Your team sees work flowing through stages. They don't see or touch the AI logic underneath. They just see tasks arriving, work getting done, and approvals waiting for their decision." },
+  { section: 7, para: 37, time: 444.1, text: "The enablers learn your flows over time. If your QA stage consistently catches the same bugs, the system suggests adding a specialist. If your approval stage is bottlenecked, it suggests splitting the review. The flows aren't static — they evolve with your business." },
+  { section: 7, para: 38, time: 461.3, text: "Real work doesn't happen in silos. A product launch touches marketing, operations, customer service, and finance. iEnable lets departments collaborate on shared tasks while keeping sensitive information where it belongs." },
+  { section: 7, para: 39, time: 475.3, text: "Permissions are granular and intuitive. You set who sees what, who edits what, and who approves what. Your AI enablers respect these boundaries automatically. The work flows across departments. The boundaries stay intact." },
+  { section: 8, para: -1, time: 490.4, isTitle: true },
+  { section: 8, para: 40, time: 492.7, text: "Most business intelligence is a snapshot. Someone pulls a report, it's accurate for about six hours, and then it sits in a folder nobody opens again." },
+  { section: 8, para: 41, time: 502.1, text: "iEnable's Report Hub is different because it's alive. Reports update automatically. The Monday morning dashboard is already there, current as of right now, with insights your enablers surfaced overnight.", visual: "compound" },
+  { section: 8, para: 42, time: 514.2, text: "But the real power is compounding knowledge. After one month, your enablers know your brand voice. After three months, they know your seasonal patterns. After six months, they know which campaigns work for your audience and which don't. After a year, they have institutional knowledge that would take a new hire months to develop." },
+  { section: 8, para: 43, time: 534.5, text: "When an employee leaves, their enabler's knowledge stays. When a new person joins, their enabler already knows the company. Day one productivity isn't a fantasy — it's the default." },
+  { section: 8, para: 44, time: 547.4, text: "The longer you use iEnable, the smarter it gets. The smarter it gets, the more valuable it becomes. And the harder it is to imagine going back to how things worked before." },
+  { section: 8, para: 45, time: 557.9, text: "Here's how it works." },
+  { section: 8, para: 46, time: 559.8, text: "Step one: Enter your website. Watch as iEnable discovers everything about your company in under two minutes." },
+  { section: 8, para: 47, time: 566.8, text: "Step two: See what you're missing. A clear, prioritized view of your biggest opportunities. Each one already has an execution plan." },
+  { section: 8, para: 48, time: 576.5, text: "Step three: Your team gets superpowers. Every team member gets paired with an AI enabler who already knows your business." },
+  { section: 8, para: 49, time: 584.4, text: "Step four: Watch the work flow. Tasks move through your pipeline. Your team approves — the AI never ships anything without a human sign-off." },
+  { section: 8, para: 50, time: 593.4, text: "Step five: It gets smarter every day. Re-crawls, monitors, tracks competitors, and surfaces new opportunities. Every single week." },
+  { section: 9, para: -1, time: 602.4, isTitle: true },
+  { section: 9, para: 51, time: 604.9, text: "In the 90s, the companies that adopted email early didn't just communicate faster — they operated differently. The laggards caught up eventually, but the early movers had already captured the market.", visual: "timeline2" },
+  { section: 9, para: 52, time: 616.4, text: "In the 2000s, it was websites. In the 2010s, it was mobile. In the 2020s, it was cloud infrastructure." },
+  { section: 9, para: 53, time: 624.1, text: "In 2026, it's this: every employee gets an AI enabler." },
+  { section: 9, para: 54, time: 629.4, text: "The companies that adopt this first will operate at a fundamentally different speed. And their employees? They'll finally get to do the work they were actually hired to do." },
+  { section: 10, para: -1, time: 639.5, isTitle: true },
+  { section: 10, para: 55, time: 641.2, text: "The name says it all." },
+  { section: 10, para: 56, time: 642.4, text: "The \"i\" stands for intelligence. \"Enable\" means to give power to." },
+  { section: 10, para: 57, time: 646.7, text: "We don't disable humans. We don't displace humans. We don't diminish humans." },
+  { section: 10, para: 58, time: 651.5, text: "We enable them." },
+  { section: 10, para: 59, time: 653.2, text: "iEnable. Your team, enabled." }
+];
+
+const cues60sec = [
+  { section: 0, para: -1, time: 0.0, isTitle: true },
+  { section: 0, para: 0, time: 1.6 },
+  { section: 0, para: 1, time: 12.2 },
+  { section: 0, para: 2, time: 14.4 },
+  { section: 0, para: 3, time: 26.7 },
+  { section: 0, para: 4, time: 44.8 },
+  { section: 0, para: 5, time: 55.9 },
+  { section: 0, para: 6, time: 60.6 },
+];
+
+const cues4min = [
+  { section: 0, para: -1, time: 0.0, isTitle: true },
+  { section: 0, para: 0, time: 1.8 },
+  { section: 0, para: 1, time: 17.3 },
+  { section: 0, para: 2, time: 21.3 },
+  { section: 0, para: 3, time: 33.9 },
+  { section: 1, para: -1, time: 36.1, isTitle: true },
+  { section: 1, para: 4, time: 38.4 },
+  { section: 1, para: 5, time: 52.5 },
+  { section: 1, para: 6, time: 70.2 },
+  { section: 2, para: -1, time: 72.0, isTitle: true },
+  { section: 2, para: 7, time: 73.9 },
+  { section: 2, para: 8, time: 96.1 },
+  { section: 3, para: -1, time: 113.5, isTitle: true },
+  { section: 3, para: 9, time: 115.9 },
+  { section: 3, para: 10, time: 131.2 },
+  { section: 4, para: -1, time: 136.4, isTitle: true },
+  { section: 4, para: 11, time: 138.6 },
+  { section: 4, para: 12, time: 142.3 },
+  { section: 5, para: -1, time: 164.8, isTitle: true },
+  { section: 5, para: 13, time: 166.1 },
+  { section: 6, para: -1, time: 184.4, isTitle: true },
+  { section: 6, para: 14, time: 187.0 },
+  { section: 7, para: -1, time: 199.3, isTitle: true },
+  { section: 7, para: 15, time: 201.4 },
+  { section: 7, para: 16, time: 224.0 },
+  { section: 8, para: -1, time: 229.3, isTitle: true },
+  { section: 8, para: 17, time: 232.0 },
+  { section: 8, para: 18, time: 243.6 },
+  { section: 9, para: -1, time: 252.3, isTitle: true },
+  { section: 9, para: 19, time: 253.8 },
+  { section: 9, para: 20, time: 258.0 },
+  { section: 9, para: 21, time: 261.6 },
+];
+
+const allCues = { full: cuesFull, '4min': cues4min, '60sec': cues60sec };
+
+const sectionTitles = ["Opening", "The Moment We're In", "The Problem Nobody Talks About", "What iEnable Actually Does", "These Aren't Robots. They're the Interns Everyone Dreams Of", "Briefs, Not Forms", "What People Hate — And What They'll Love", "The Flow Builder — Your Business, Your Way", "Intelligence That Compounds", "The Companies That Move First Win", "One Last Thing"];
+
+// ===== TOC =====
+const tocContainer = document.getElementById('tocItems');
+const toc60sec = ["The Pitch"];
+const toc4min = ["The Moment We're In", "The Problem Nobody Talks About", "What iEnable Actually Does", "The Best Intern You Ever Had", "Briefs, Not Forms", "The Flow Builder", "Collaboration Without Silos", "Intelligence That Compounds", "The Companies That Move First Win", "One Last Thing", "Closing"];
+const tocFull = sectionTitles;
+const tocMap = { '60sec': toc60sec, '4min': toc4min, 'full': tocFull };
+
+function renderTOC(version) {
+  tocContainer.innerHTML = '';
+  const titles = tocMap[version] || tocFull;
+  titles.forEach((title, i) => {
+    const item = document.createElement('div');
+    item.className = 'toc-item';
+    item.dataset.section = i;
+    item.innerHTML = `<span class="toc-dot"></span><span>${title}</span>`;
+    item.addEventListener('click', () => {
+      const cues = allCues[currentVersion];
+      const cue = cues.find(c => c.section === i);
+      if (cue) {
+        audio.currentTime = cue.time;
+        if (!isPlaying) play();
+      }
+      document.getElementById('tocSidebar').classList.remove('open');
+    });
+    tocContainer.appendChild(item);
+  });
+}
+renderTOC('60sec');
+
+// ===== VISUAL MOMENT GENERATORS =====
+function makeTimeline() {
+  return `<div class="visual-moment" data-visual="timeline">
+    <div class="timeline-visual">
+      <div class="timeline-node"><span class="icon">📧</span><span class="year">1990s</span><span class="label">Email</span></div>
+      <div class="timeline-line"></div>
+      <div class="timeline-node"><span class="icon">🌐</span><span class="year">2000s</span><span class="label">Websites</span></div>
+      <div class="timeline-line"></div>
+      <div class="timeline-node"><span class="icon">📱</span><span class="year">2010s</span><span class="label">Mobile</span></div>
+      <div class="timeline-line"></div>
+      <div class="timeline-node"><span class="icon">☁️</span><span class="year">2020s</span><span class="label">Cloud</span></div>
+      <div class="timeline-line"></div>
+      <div class="timeline-node highlight"><span class="icon">🧠</span><span class="year">2026</span><span class="label">AI Enablers</span></div>
+    </div>
+  </div>`;
+}
+function makeStats() {
+  return `<div class="visual-moment" data-visual="stats">
+    <div class="stat-callout">
+      <div class="stat-card"><div class="stat-value">$240K</div><div class="stat-label">Revenue Found</div></div>
+      <div class="stat-card"><div class="stat-value">2 hrs</div><div class="stat-label">Time to Find It</div></div>
+      <div class="stat-card"><div class="stat-value">24/7</div><div class="stat-label">Always Watching</div></div>
+    </div>
+  </div>`;
+}
+function makeQuote() {
+  return `<div class="visual-moment" data-visual="quote">
+    <div class="quote-callout">
+      <div class="quote-text">"The creative loop stays human.<br>The execution loop gets handled."</div>
+      <div class="quote-sub">The division of labor that actually works</div>
+    </div>
+  </div>`;
+}
+function makeFlow() {
+  return `<div class="visual-moment" data-visual="flow">
+    <div class="flow-visual">
+      <div class="flow-stage">📝 Brief</div><span class="flow-arrow">→</span>
+      <div class="flow-stage">🔍 Research</div><span class="flow-arrow">→</span>
+      <div class="flow-stage active-stage">⚡ Draft</div><span class="flow-arrow">→</span>
+      <div class="flow-stage">✅ Review</div><span class="flow-arrow">→</span>
+      <div class="flow-stage">👤 Approve</div><span class="flow-arrow">→</span>
+      <div class="flow-stage">🚀 Ship</div>
+    </div>
+  </div>`;
+}
+function makeCompound() {
+  return `<div class="visual-moment" data-visual="compound">
+    <div class="compound-bars">
+      <div class="compound-row"><span class="compound-label">1 month</span><div class="compound-track"><div class="compound-fill m1" id="cf1"></div></div><span class="compound-pct" id="cp1">0%</span></div>
+      <div class="compound-row"><span class="compound-label">3 months</span><div class="compound-track"><div class="compound-fill m3" id="cf3"></div></div><span class="compound-pct" id="cp3">0%</span></div>
+      <div class="compound-row"><span class="compound-label">6 months</span><div class="compound-track"><div class="compound-fill m6" id="cf6"></div></div><span class="compound-pct" id="cp6">0%</span></div>
+      <div class="compound-row"><span class="compound-label">1 year</span><div class="compound-track"><div class="compound-fill m12" id="cf12"></div></div><span class="compound-pct" id="cp12">0%</span></div>
+    </div>
+  </div>`;
+}
+const visualGenerators = { timeline: makeTimeline, timeline2: makeTimeline, stats: makeStats, quote: makeQuote, flow: makeFlow, compound: makeCompound };
+
+// ===== VERSION-SPECIFIC CONTENT =====
+const paras60sec = [
+    "In the 90s, every employee got an email address. It didn\'t replace anyone — it made everyone faster. The companies that adopted it first crushed the ones that didn\'t.",
+    "We\'re at that moment again.",
+    "iEnable gives every person on your team a dedicated AI enabler. Not a chatbot — a coworker who knows your business, learns your processes, and handles the work your team never has time to finish.",
+    "Put in your website. In two minutes, we discover your business, find what\'s missing, and generate tasks with execution plans already attached. Then we pair every team member with a specialist who does the research, writes the briefs, runs the QA, and drafts the campaigns — while your people make the decisions.",
+    "The enablers learn your flows, respect your permissions, and get smarter every week. The knowledge compounds. Your team gets faster. Your competitors fall behind.",
+    "We don\'t replace your team. We make them unstoppable.",
+    "iEnable. Your team, enabled.",
+];
+
+const paras4min = [
+    "In the 1990s, every employee got an email address. It didn\'t replace anyone. It made everyone faster. Nobody lost their job because of email — but the companies that adopted it first absolutely crushed the ones that didn\'t.",
+    "We\'re at that moment again. Not with email. With intelligence.",
+    "Every person in your company is about to get a dedicated AI enabler — an eager, tireless specialist who knows your business, learns your processes, and handles the work your team never has time to finish.",
+    "Not a chatbot. A coworker.",
+    "Your team isn\'t failing. They\'re drowning. Your marketing director has 47 browser tabs open and hasn\'t looked at ad performance in three weeks. Your operations lead knows the return policy page is missing but hasn\'t had time to write it.",
+    "These are talented people buried under grunt work: updating spreadsheets, writing briefs, chasing down missing tracking pixels, QA-ing the same issues, pulling reports. The creative, strategic, human work — the work that actually grows the business — keeps getting pushed to next week.",
+    "iEnable fixes that.",
+    "Put in your website. In under two minutes, we crawl your site, identify your tech stack, detect what\'s missing, and generate a prioritized list of opportunities. But we don\'t just hand you a report. We chase every finding down. We write the implementation plan. We draft the brief. We put the task in the pipeline with an execution plan already attached, ready for your team to approve.",
+    "Then we pair every person on your team with their own AI enabler. Your ads director gets a specialist who monitors every campaign 24/7 and surfaces a $240K revenue opportunity in its first two hours. She approves the changes. She gets the credit. She\'s the hero.",
+    "Think of the best intern you ever had. The one who anticipated what you needed and made you look brilliant. That\'s what an iEnable specialist is. Hungry. Eager. Thorough. They don\'t just flag problems — they arrive with solutions already built.",
+    "But here\'s the key: they don\'t make decisions. Your people do. Briefs, Not Forms.",
+    "The enabler does the homework. The human makes the call.",
+    "Briefs aren\'t blank forms — they\'re structured conversations designed to pull creativity out of your team. The enabler asks the right questions, gathers references, and assembles a complete brief in fifteen minutes. Then it runs: research, prototype, draft, QA. The human reviews, refines, approves. Work ships.",
+    "The Flow Builder lets you design exactly how work moves through your company. Visual pipelines that mirror how your team already operates. Think Trello meets Zapier, but the cards move themselves. Your enablers never skip a step, never bypass an approval, and never ship without sign-off.",
+    "Departments collaborate while permissions keep sensitive data siloed. Marketing sees the campaign timeline but not Finance\'s numbers. The work flows across teams. The boundaries stay intact.",
+    "And the real power is compounding knowledge. After one month, your enablers know your brand voice. After six months, they know your seasonal patterns. After a year, they have institutional knowledge that would take a new hire months to develop. When an employee leaves, the knowledge stays. When someone new joins, their enabler already knows the company.",
+    "The longer you use it, the smarter it gets. The harder it is to imagine going back.",
+    "In the 2000s it was websites. In the 2010s, mobile. In the 2020s, cloud. In 2026, it\'s this: every employee gets an AI enabler.",
+    "The companies that move first will operate at a fundamentally different speed. And their employees will finally get to do the work they were actually hired to do.",
+    "The \"i\" stands for intelligence. \"Enable\" means to give power to.",
+    "We don\'t replace your team. We enable them.",
+    "iEnable. Your team, enabled.",
+];
+
+// Render FULL version (all sections with cues)
+const sectionsFullEl = document.getElementById('sections-full');
+sectionTitles.forEach((title, si) => {
+  const div = document.createElement('div');
+  div.className = 'section';
+  div.id = 'section-full-' + si;
+  const inner = document.createElement('div');
+  inner.className = 'section-inner';
+  let h = `<h2>${title}</h2>`;
+  const sectionCues = cuesFull.filter(c => c.section === si && !c.isTitle);
+  sectionCues.forEach(cue => {
+    h += `<p class="para" id="p-${cue.section}-${cue.para}">${cue.text}</p>`;
+    if (cue.visual && visualGenerators[cue.visual]) h += visualGenerators[cue.visual]();
+  });
+  if (si < sectionTitles.length - 1) h += '<div class="divider">· · ·</div>';
+  inner.innerHTML = h;
+  div.appendChild(inner);
+  sectionsFullEl.appendChild(div);
+});
+
+// Render 60sec version (simple paragraphs)
+const sections60El = document.getElementById('sections-60sec');
+const sec60Inner = document.createElement('div');
+sec60Inner.className = 'section active';
+let h60 = '<h2>The Pitch</h2>';
+paras60sec.forEach((text, i) => {
+  h60 += `<p class="para" id="p60-${i}">${text}</p>`;
+});
+sec60Inner.innerHTML = '<div class="section-inner">' + h60 + '</div>';
+sections60El.appendChild(sec60Inner);
+
+// Render 4min version (grouped paragraphs)
+const sections4El = document.getElementById('sections-4min');
+const sec4Inner = document.createElement('div');
+sec4Inner.className = 'section active';
+let h4 = '<h2>The Summary</h2>';
+paras4min.forEach((text, i) => {
+  h4 += `<p class="para" id="p4-${i}">${text}</p>`;
+  if (i === 2 || i === 5 || i === 8) h4 += '<div class="divider">· · ·</div>';
+});
+sec4Inner.innerHTML = '<div class="section-inner">' + h4 + '</div>';
+sections4El.appendChild(sec4Inner);
+
+// ===== AUDIO ENGINE =====
+let currentVersion = '60sec';
+let currentGender = 'male';
+let audio = document.getElementById('audio-60sec-male');
+let isPlaying = false;
+let speeds = [1, 1.15, 1.3, 0.85];
+let speedIdx = 0;
+let activeCueIdx = -1;
+
+function getAudioId() { return 'audio-' + currentVersion + '-' + currentGender; }
+
+function switchAudio(newVersion, newGender) {
+  const wasPlaying = isPlaying;
+  const oldTime = audio.currentTime;
+  const oldDuration = audio.duration || 1;
+  if (isPlaying) pause();
+
+  if (newVersion) currentVersion = newVersion;
+  if (newGender) currentGender = newGender;
+  
+  const newAudio = document.getElementById(getAudioId());
+  // Reset to start when switching versions, proportional seek when switching voice only
+  if (newVersion) {
+    newAudio.currentTime = 0;
+    resetHighlights();
+  } else if (newAudio.duration && oldDuration) {
+    newAudio.currentTime = (oldTime / oldDuration) * newAudio.duration;
+  }
+  audio = newAudio;
+  activeCueIdx = -1;
+  
+  // Sync all button states
+  document.querySelectorAll('.version-pill').forEach(b => b.classList.toggle('active', b.dataset.ver === currentVersion));
+  document.querySelectorAll('.ver-btn').forEach(b => b.classList.toggle('active', b.dataset.ver === currentVersion));
+  document.querySelectorAll('.voice-pill').forEach(b => b.classList.toggle('active', b.dataset.gender === currentGender));
+  
+  // Show/hide version content
+  document.querySelectorAll('.version-content').forEach(el => el.classList.remove('active'));
+  document.getElementById('sections-' + currentVersion).classList.add('active');
+  renderTOC(currentVersion);
+  
+  if (wasPlaying) play();
+}
+
+// Version buttons (top pills)
+document.querySelectorAll('.version-pill').forEach(btn => {
+  btn.addEventListener('click', () => switchAudio(btn.dataset.ver, null));
+});
+
+// Version buttons (bottom bar)
+document.querySelectorAll('.ver-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchAudio(btn.dataset.ver, null));
+});
+
+// Voice gender toggle
+document.querySelectorAll('.voice-pill').forEach(btn => {
+  btn.addEventListener('click', () => switchAudio(null, btn.dataset.gender));
+});
+
+function togglePlay() { isPlaying ? pause() : play(); }
+
+function play() {
+  isPlaying = true;
+  isListening = true;
+  audio.playbackRate = speeds[speedIdx];
+  audio.play();
+  document.getElementById('playIcon').style.display = 'none';
+  document.getElementById('pauseIcon').style.display = 'block';
+  document.getElementById('playBtn').classList.add('playing');
+  document.getElementById('visualizer').classList.add('active');
+}
+
+function pause() {
+  isPlaying = false;
+  audio.pause();
+  document.getElementById('playIcon').style.display = 'block';
+  document.getElementById('pauseIcon').style.display = 'none';
+  document.getElementById('playBtn').classList.remove('playing');
+  document.getElementById('visualizer').classList.remove('active');
+}
+
+function cycleSpeed() {
+  speedIdx = (speedIdx + 1) % speeds.length;
+  audio.playbackRate = speeds[speedIdx];
+  document.getElementById('speedBtn').textContent = speeds[speedIdx] + '×';
+}
+
+document.getElementById('progressTrack').addEventListener('click', (e) => {
+  const rect = e.currentTarget.getBoundingClientRect();
+  audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+});
+
+function formatTime(s) {
+  if (!s || isNaN(s)) return '—';
+  return Math.floor(s/60) + ':' + Math.floor(s%60).toString().padStart(2,'0');
+}
+
+function resetHighlights() {
+  document.querySelectorAll('.section').forEach(el => { el.classList.remove('active', 'read'); el.classList.add('upcoming'); });
+  document.querySelectorAll('.para').forEach(el => el.classList.remove('active', 'read'));
+  document.querySelectorAll('.visual-moment').forEach(el => el.classList.remove('visible'));
+  document.getElementById('progressFill').style.width = '0%';
+}
+
+// ===== SYNC LOOP =====
+let isListening = false;
+
+function syncLoop() {
+  if (!audio.duration) { requestAnimationFrame(syncLoop); return; }
+  const t = audio.currentTime;
+  const cues = allCues[currentVersion];
+
+  document.getElementById('progressFill').style.width = (t / audio.duration * 100) + '%';
+  document.getElementById('timeCurrent').textContent = formatTime(t);
+  document.getElementById('timeTotal').textContent = formatTime(audio.duration);
+
+  if (!isListening) { requestAnimationFrame(syncLoop); return; }
+
+  let newCueIdx = -1;
+  for (let i = cues.length - 1; i >= 0; i--) {
+    if (t >= cues[i].time) { newCueIdx = i; break; }
+  }
+
+  if (newCueIdx !== activeCueIdx && newCueIdx >= 0) {
+    activeCueIdx = newCueIdx;
+    const cue = cues[activeCueIdx];
+
+    document.getElementById('currentSection').textContent = sectionTitles[cue.section];
+
+    // TOC highlight
+    document.querySelectorAll('.toc-item').forEach((el, i) => {
+      el.classList.remove('active', 'read');
+      if (i < cue.section) el.classList.add('read');
+      else if (i === cue.section) el.classList.add('active');
+    });
+
+    // Section highlight
+    document.querySelectorAll('.section').forEach((el, i) => {
+      el.classList.remove('active', 'read', 'upcoming');
+      if (i < cue.section) el.classList.add('read');
+      else if (i === cue.section) el.classList.add('active');
+      else el.classList.add('upcoming');
+    });
+
+    // Paragraph highlight
+    document.querySelectorAll('.para').forEach(el => el.classList.remove('active'));
+    cues.forEach((c, i) => {
+      if (i < activeCueIdx && !c.isTitle) {
+        const el = currentVersion === '60sec' ? document.getElementById(`p60-${c.para}`) :
+                   currentVersion === '4min' ? document.getElementById(`p4-${c.para}`) :
+                   document.getElementById(`p-${c.section}-${c.para}`);
+        if (el) el.classList.add('read');
+      }
+    });
+
+    if (!cue.isTitle) {
+      const activeP = currentVersion === '60sec' ? document.getElementById(`p60-${cue.para}`) :
+                         currentVersion === '4min' ? document.getElementById(`p4-${cue.para}`) :
+                         document.getElementById(`p-${cue.section}-${cue.para}`);
+      if (activeP) {
+        activeP.classList.remove('read');
+        activeP.classList.add('active');
+        activeP.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    } else {
+      // Title cue - scroll to section heading
+      const secEl = document.querySelector(`#section-full-${cue.section} h2, #sections-60sec h2, #sections-4min h2`);
+      if (secEl) secEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    if (cue.visual) {
+      const vis = activeP?.nextElementSibling;
+      if (vis && vis.classList.contains('visual-moment')) {
+        setTimeout(() => vis.classList.add('visible'), 300);
+        if (cue.visual === 'compound') {
+          setTimeout(() => {
+            document.getElementById('cf1').style.width = '25%'; document.getElementById('cp1').textContent = '25%';
+            document.getElementById('cf3').style.width = '50%'; document.getElementById('cp3').textContent = '50%';
+            document.getElementById('cf6').style.width = '75%'; document.getElementById('cp6').textContent = '75%';
+            document.getElementById('cf12').style.width = '95%'; document.getElementById('cp12').textContent = '95%';
+          }, 500);
+        }
+      }
+    }
+  }
+  requestAnimationFrame(syncLoop);
+}
+requestAnimationFrame(syncLoop);
+
+// End handlers for all 6 audio elements
+['60sec-male','60sec-female','4min-male','4min-female','full-male','full-female'].forEach(id => {
+  document.getElementById('audio-' + id).addEventListener('ended', () => {
+    pause();
+    document.getElementById('currentSection').textContent = 'Your team, enabled. ✦';
+  });
+});
+</script>
+</body>
+</html>

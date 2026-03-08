@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muse — Plank+Beam Content Gallery</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --card-bg: #141414;
+    --text: #e8e4df;
+    --text-muted: #8a8580;
+    --accent: #c9a96e;
+    --accent-dim: #967a4a;
+    --border: #2a2520;
+    --score-high: #4ade80;
+    --score-mid: #fbbf24;
+    --score-low: #f87171;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 4rem;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .header h1 {
+    font-size: 2.4rem;
+    font-weight: 200;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .header .subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+  }
+  .header .meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+    opacity: 0.6;
+  }
+
+  /* Stats bar */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1rem 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-value {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Section headers */
+  .section-header {
+    text-align: center;
+    padding: 2rem 1rem 1rem;
+  }
+  .section-header h2 {
+    font-size: 1.2rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .section-header p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+  }
+
+  /* Video grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-dim);
+  }
+  .card.flagship {
+    border-color: var(--accent);
+  }
+  .card.flagship .badge {
+    display: inline-block;
+  }
+
+  .video-wrap {
+    position: relative;
+    background: #000;
+    aspect-ratio: 9/16;
+    max-height: 500px;
+    overflow: hidden;
+  }
+  .video-wrap video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .video-wrap .poster-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    transition: opacity 0.3s;
+  }
+  .video-wrap .poster-img.hidden { opacity: 0; pointer-events: none; }
+
+  .play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: rgba(201, 169, 110, 0.85);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    pointer-events: none;
+  }
+  .play-btn::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 0 10px 18px;
+    border-color: transparent transparent transparent #fff;
+    margin-left: 3px;
+  }
+
+  .card-body {
+    padding: 1rem 1.2rem 1.2rem;
+  }
+  .card-title {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .badge {
+    display: none;
+    font-size: 0.6rem;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .card-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 0.8rem;
+  }
+  .card-meta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+  .card-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .score {
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+  .score.high { color: var(--score-high); }
+  .score.mid { color: var(--score-mid); }
+  .score.low { color: var(--score-low); }
+
+  /* Assessment */
+  .assessment {
+    max-width: 800px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .assessment h3 {
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .assessment p, .assessment li {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .assessment ul {
+    margin: 0.5rem 0 1rem 1.2rem;
+  }
+  .assessment .verdict {
+    color: var(--text);
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+  .assessment .gap-item {
+    margin-bottom: 0.8rem;
+  }
+  .assessment strong { color: var(--text); }
+
+  .footer {
+    text-align: center;
+    padding: 3rem 1rem 1rem;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    opacity: 0.4;
+  }
+
+  @media (max-width: 720px) {
+    .grid { grid-template-columns: 1fr; padding: 1rem; }
+    .header h1 { font-size: 1.8rem; }
+    .stats { gap: 1rem; }
+    .video-wrap { max-height: 70vh; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Muse</h1>
+  <div class="subtitle">Plank+Beam Content Library — AI-Generated Creative</div>
+  <div class="meta">Creative Director: Muse (AI Agent) · Last updated: March 3, 2026</div>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-value">11</div>
+    <div class="stat-label">Videos</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">856 MB</div>
+    <div class="stat-label">Total Assets</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">0</div>
+    <div class="stat-label">Published</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">8.4</div>
+    <div class="stat-label">Top Score</div>
+  </div>
+</div>
+
+<!-- FLAGSHIP REELS (Mar 2-3) -->
+<div class="section-header">
+  <h2>🏆 Flagship Reels — March 2-3, 2026</h2>
+  <p>Latest & highest quality. Three complete Instagram Reels with layered audio, color grading, text overlays.</p>
+</div>
+<div class="grid">
+
+  <div class="card flagship">
+    <div class="video-wrap">
+      <video src="videos/reel1-sound-of-safe.mp4" preload="none" playsinline controls></video>
+      <img class="poster-img" src="covers/reel1-cover.jpg" alt="Reel 1 cover" onclick="playVideo(this)">
+      <div class="play-btn"></div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">"The Sound of Safe" <span class="badge">Flagship</span></div>
+      <div class="card-desc">ASMR emotional storytelling. Opens "What does safe sound like?" → parent's hand on wood frame → child sleeping → parent in doorway → morning reveal. GREENGUARD Gold payoff. 11-track audio mix.</div>
+      <div class="card-meta">
+        <span>⏱ 20.8s</span>
+        <span>📐 1080×1920</span>
+        <span>🎵 11-track mix</span>
+        <span>📅 Mar 2</span>
+        <span>Self-score: <span class="score high">8.4/10</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card flagship">
+    <div class="video-wrap">
+      <video src="videos/reel2-feel-this.mp4" preload="none" playsinline controls></video>
+      <img class="poster-img" src="covers/reel2-cover.jpg" alt="Reel 2 cover" onclick="playVideo(this)">
+      <div class="play-btn"></div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">"Feel This" <span class="badge">Flagship</span></div>
+      <div class="card-desc">Pure sensory ASMR — zero music until logo. "Feel this." on black → macro fingertips on wood grain → knuckle knock → drawer slide → full bed reveal. Silence-as-hook strategy.</div>
+      <div class="card-meta">
+        <span>⏱ 16.5s</span>
+        <span>📐 1080×1920</span>
+        <span>🎵 7-track mix</span>
+        <span>📅 Mar 2</span>
+        <span>Self-score: <span class="score high">8.2/10</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card flagship">
+    <div class="video-wrap">
+      <video src="videos/reel3-morning-light.mp4" preload="none" playsinline controls></video>
+      <img class="poster-img" src="covers/reel3-morning-light-cover.jpg" alt="Reel 3 cover" onclick="playVideo(this)">
+      <div class="play-btn"></div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">"Morning Light" <span class="badge">Flagship</span></div>
+      <div class="card-desc">Aspirational lifestyle — light through canopy beams → billowing curtain → waking up → wide room reveal. Warm golden grade throughout, lifted shadows, highlight bloom.</div>
+      <div class="card-meta">
+        <span>⏱ 21.0s</span>
+        <span>📐 1080×1920</span>
+        <span>🎵 6-track mix</span>
+        <span>📅 Mar 2</span>
+        <span>Self-score: <span class="score mid">7.8/10</span></span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CONCEPT & EXTENDED (Mar 1) -->
+<div class="section-header">
+  <h2>Sound of Safe Concept & Extended ASMR — March 1</h2>
+  <p>Earlier Sound of Safe version with hook cut + extended ASMR feel-this format.</p>
+</div>
+<div class="grid">
+
+  <div class="card">
+    <div class="video-wrap">
+      <video src="videos/sound-of-safe-concept.mp4" preload="none" playsinline controls></video>
+      <img class="poster-img" src="covers/sound-of-safe-concept-cover.jpg" alt="SoS Concept cover" onclick="playVideo(this)">
+      <div class="play-btn"></div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Sound of Safe — Concept Version</div>
+      <div class="card-desc">First iteration of the Sound of Safe concept. 12-track audio, 5 clips, text overlays, color grading. This version led to the flagship Reel 1.</div>
+      <div class="card-meta">
+        <span>⏱ ~22s</span>
+        <span>📐 9:16</span>
+        <span>📅 Mar 1</span>
+        <span>Self-score: <span class="score high">8.0/10</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="video-wrap">
+      <video src="videos/asmr-extended-graded.mp4" preload="none" playsinline controls></video>
+      <img class="poster-img" src="covers/asmr-extended-graded-cover.jpg" alt="ASMR Extended cover" onclick="playVideo(this)">
+      <div class="play-btn"></div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Extended ASMR "Feel This" (Graded)</div>
+      <div class="card-desc">Extended ASMR format — 9-track audio, 4 clips, 5 text overlays. Color graded. The precursor to Reel 2.</div>
+      <div class="card-meta">
+        <span>⏱ 17.8s</span>
+        <span>📐 9:16</span>
+        <span>📅 Mar 1</span>
+        <span>Self-score: <span class="score high">8.0/10</span></span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- HOOK VIDEOS (Feb 28) -->
+<div class="section-header">
+  <h2>Hook Videos — February 28</h2>
+  <p>Scroll-stopping hook format tests. ~11s each. Bold claims, ASMR sensory, safety questions.</p>
+</div>
+<div class="grid">
+
+  <div class="card">
+    <div class="video-wrap">
+      <video src="videos/hook1-safe-air.mp4" preload="none" playsinline controls></video>
+      <img class="poster-img" src="covers/hook1-safe-air-cover.jpg" alt="Hook 1 cover" onclick="playVideo(this)">
+      <div class="play-btn"></div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Hook 1: "Is the air in Your Nursery Safe?"</div>
+      <div class="card-desc">Safety question hook → GREENGUARD Gold certification → sleeping child. Parenting instinct angle.</div>
+      <div class="card-meta">
+        <span>⏱ 11.4s</span>
+        <span>📅 Feb 28</span>
+        <span>Self-score: <span class="score mid">7.0/10</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="video-wrap">
+      <video src="videos/hook2-bold-claim.mp4" preload="none" playsinline controls></video>
+      <img class="poster-img" src="covers/hook2-bold-claim-cover.jpg" alt="Hook 2 cover" onclick="playVideo(this)">
+      <div class="play-btn"></div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Hook 2: "Bold Claim"</div>
+      <div class="card-desc">Confrontational material claim → wood texture reveal → quality proof. "Most furniture is fake wood. This isn't."</div>
+      <div class="card-meta">
+        <span>⏱ 11.4s</span>
+        <span>📅 Feb 28</span>
+        <span>Self-score: <span class="score mid">7.0/10</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="video-wrap">
+      <video src="videos/hook3-feel-this.mp4" preload="none" playsinline controls></video>
+      <img class="poster-img" src="covers/hook3-feel-this-cover.jpg" alt="Hook 3 cover" onclick="playVideo(this)">
+      <div class="play-btn"></div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Hook 3: "Feel This"</div>
+      <div class="card-desc">ASMR sensory hook — hand running over wood grain, tactile focus. The hook that evolved into Reel 2.</div>
+      <div class="card-meta">
+        <span>⏱ 11.4s</span>
+        <span>📅 Feb 28</span>
+        <span>Self-score: <span class="score high">8.0/10</span></span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- EARLIER WORK (Feb 27-28) -->
+<div class="section-header">
+  <h2>Earlier Work — February 27-28</h2>
+  <p>GREENGUARD emotional story, bedroom transformations, ASMR wood grain. The foundation pieces.</p>
+</div>
+<div class="grid">
+
+  <div class="card">
+    <div class="video-wrap">
+      <video src="videos/greenguard-emotional.mp4" preload="none" playsinline controls></video>
+      <img class="poster-img" src="covers/greenguard-emotional-cover.jpg" alt="GREENGUARD cover" onclick="playVideo(this)">
+      <div class="play-btn"></div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">GREENGUARD Emotional Story (Graded)</div>
+      <div class="card-desc">Emotional safety narrative — nursery dawn, child near furniture, GREENGUARD Gold certification story. V3 with music and color grade.</div>
+      <div class="card-meta">
+        <span>⏱ 27.3s</span>
+        <span>📅 Feb 28</span>
+        <span>Self-score: <span class="score mid">7.0/10</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="video-wrap">
+      <video src="videos/bedroom-transformation.mp4" preload="none" playsinline controls></video>
+      <img class="poster-img" src="covers/bedroom-transformation-cover.jpg" alt="B/A cover" onclick="playVideo(this)">
+      <div class="play-btn"></div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Bedroom Before/After Transformation</div>
+      <div class="card-desc">Empty room → furnished bedroom reveal. Extended version with voiceover, text overlays, and CTA. Ken Burns + Luma transitions.</div>
+      <div class="card-meta">
+        <span>⏱ 25.6s</span>
+        <span>📅 Feb 28</span>
+        <span>Self-score: <span class="score mid">7.0/10</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="video-wrap">
+      <video src="videos/asmr-wood-grain.mp4" preload="none" playsinline controls></video>
+      <img class="poster-img" src="covers/asmr-wood-grain-cover.jpg" alt="ASMR cover" onclick="playVideo(this)">
+      <div class="play-btn"></div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">ASMR Wood Grain (Earliest)</div>
+      <div class="card-desc">First ASMR experiment. Wood grain close-up with whisper voiceover. The concept that sparked the entire ASMR direction.</div>
+      <div class="card-meta">
+        <span>⏱ 9.4s</span>
+        <span>📅 Feb 27</span>
+        <span>Self-score: <span class="score mid">6.0/10</span></span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- HONEST ASSESSMENT -->
+<div class="assessment">
+  <h3>🔬 Honest Quality Assessment</h3>
+
+  <div class="gap-item">
+    <p class="verdict">Bottom line: Strong creative concepts held back by AI-generation artifacts. Good prototypes — not yet publishable for a premium brand, and far from award level.</p>
+  </div>
+
+  <div class="gap-item">
+    <strong>What's genuinely good:</strong>
+    <ul>
+      <li><strong>Creative strategy is sharp.</strong> "Sound of Safe" is a legitimately clever concept — selling safety through sound rather than features. This idea could win an award if executed with real footage.</li>
+      <li><strong>Audio production is professional.</strong> 11-track mixes, layered foley, proper VO — the sound design is the strongest element and genuinely elevates the work.</li>
+      <li><strong>Content pipeline is real.</strong> 11 finished videos, 21 raw clips, 9 foley sounds, asset library — Muse built an actual production workflow, not just one-offs.</li>
+      <li><strong>Learning velocity is impressive.</strong> Quality went from 4/10 (Feb 27) to 8.4/10 self-score (Mar 2) in 4 days. Real iteration happening.</li>
+    </ul>
+  </div>
+
+  <div class="gap-item">
+    <strong>What's honestly wrong:</strong>
+    <ul>
+      <li><strong>AI artifacts are visible.</strong> Hand anatomy, skin texture, wood grain tiling, furniture geometry inconsistencies. These are detectable by attentive viewers and fatal for a premium brand.</li>
+      <li><strong>Human elements look uncanny.</strong> Child sleeping, parent in doorway, person waking up — AI-generated humans in lifestyle content are the weakest link. Reel 3's people are 2-3/10 production-ready.</li>
+      <li><strong>Self-scores are inflated by ~2-3 points.</strong> The 8.4/10 self-score for Reel 1 is realistically a 5-6/10 for premium brand use. The gap comes from judging effort + concept rather than final pixel quality.</li>
+      <li><strong>Zero published = zero validation.</strong> 856MB of content with 0 real-world engagement data. All quality assessments are theoretical.</li>
+    </ul>
+  </div>
+
+  <div class="gap-item">
+    <strong>Gap to Cannes/Webby quality:</strong>
+    <ul>
+      <li><strong>Concept gap: SMALL.</strong> "Sound of Safe" is genuinely award-worthy as an idea. Silence-as-hook, emotional safety storytelling — this is the kind of thing Cannes rewards.</li>
+      <li><strong>Execution gap: MASSIVE.</strong> Award-winning content requires flawless craft — real photography, real talent, real product, real environments. No Cannes/Webby winner has used visibly AI-generated humans in lifestyle content.</li>
+      <li><strong>What would close it:</strong> 1 day of real shooting (photographer + stylist + 2 models + actual P+B furniture) → feed real footage into same concept/audio framework Muse built → that combination could genuinely compete.</li>
+    </ul>
+  </div>
+
+  <div class="gap-item">
+    <strong>Recommended path forward:</strong>
+    <ul>
+      <li>Use Muse's best concepts (Sound of Safe, Feel This) as creative briefs for real production</li>
+      <li>Keep the audio/sound design pipeline — it's production-ready NOW</li>
+      <li>Shoot real macro footage of actual P+B products for texture/ASMR clips</li>
+      <li>Replace AI humans with real models or focus on product-only (hands + furniture) shots</li>
+      <li>Publish the best 2-3 pieces AS IS to get real engagement data — perfect is the enemy of good for social testing</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  Generated by Orion · March 3, 2026 · Content by Muse (AI Creative Director for Plank+Beam)
+</div>
+
+<script>
+function playVideo(poster) {
+  const video = poster.previousElementSibling;
+  poster.classList.add('hidden');
+  poster.nextElementSibling.style.display = 'none';
+  video.play();
+}
+document.querySelectorAll('video').forEach(v => {
+  v.addEventListener('ended', () => {
+    const poster = v.nextElementSibling;
+    if (poster && poster.classList.contains('poster-img')) {
+      poster.classList.remove('hidden');
+      poster.nextElementSibling.style.display = '';
+    }
+  });
+});
+</script>
+</body>
+</html>

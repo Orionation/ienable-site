@@ -1,0 +1,249 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort((a, b) => 
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+const tags = [...new Set(posts.flatMap(p => p.data.tags))];
+---
+
+<Base 
+  title="Blog — iEnable | AI Enablement for Every Employee" 
+  description="Insights on AI enablement, employee AI adoption, and the future of work. Learn how every employee gets an AI enabler with iEnable."
+>
+  <style>
+    .hero {
+      padding: 10rem 2rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(79, 127, 255, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, var(--dark-text), var(--dark-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--dark-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .controls {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    
+    .search-box {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto 2rem;
+      padding: 0.85rem 1.25rem;
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 12px;
+      color: var(--dark-text);
+      font-size: 0.95rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: all 0.2s;
+    }
+    
+    .search-box:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+    
+    .filter-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    
+    .filter-tag {
+      padding: 0.5rem 1rem;
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--dark-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .filter-tag:hover, .filter-tag.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    
+    .posts-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem 5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .post-card {
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: block;
+    }
+    
+    .post-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    .post-card-tag {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--green);
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+    }
+    
+    .post-card h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+    
+    .post-card p {
+      font-size: 0.9rem;
+      color: var(--dark-muted);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    
+    .post-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.8rem;
+      color: var(--dark-subtle);
+    }
+    
+    @media (max-width: 768px) {
+      .posts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  
+  <div class="hero">
+    <h1>Blog</h1>
+    <p>Insights on AI enablement, employee AI adoption, and the future of work.</p>
+  </div>
+  
+  <div class="controls">
+    <input 
+      type="text" 
+      id="search" 
+      class="search-box" 
+      placeholder="Search posts..."
+    />
+    
+    <div class="filter-tags">
+      <button class="filter-tag active" data-tag="all">All Posts</button>
+      {tags.map(tag => (
+        <button class="filter-tag" data-tag={tag}>{tag}</button>
+      ))}
+    </div>
+  </div>
+  
+  <div class="posts-grid" id="posts-grid">
+    {posts.map(post => (
+      <a href={`/blog/${post.slug}.html`} class="post-card" data-tags={post.data.tags.join(',')}>
+        <span class="post-card-tag">{post.data.tags[0]}</span>
+        <h2>{post.data.title}</h2>
+        <p>{post.data.description}</p>
+        <div class="post-card-meta">
+          <span>{new Date(post.data.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+          <span>·</span>
+          <span>{post.data.readTime}</span>
+        </div>
+      </a>
+    ))}
+  </div>
+  
+  <script>
+    // Search functionality
+    const searchBox = document.getElementById('search') as HTMLInputElement;
+    const postsGrid = document.getElementById('posts-grid');
+    const filterTags = document.querySelectorAll('.filter-tag');
+    let currentTag = 'all';
+    
+    function filterPosts() {
+      const query = searchBox.value.toLowerCase();
+      const cards = postsGrid?.querySelectorAll('.post-card');
+      
+      cards?.forEach((card) => {
+        const title = card.querySelector('h2')?.textContent?.toLowerCase() || '';
+        const desc = card.querySelector('p')?.textContent?.toLowerCase() || '';
+        const tags = (card as HTMLElement).dataset.tags || '';
+        
+        const matchesSearch = title.includes(query) || desc.includes(query);
+        const matchesTag = currentTag === 'all' || tags.includes(currentTag);
+        
+        if (matchesSearch && matchesTag) {
+          (card as HTMLElement).style.display = 'block';
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+    }
+    
+    searchBox?.addEventListener('input', filterPosts);
+    
+    filterTags.forEach(tag => {
+      tag.addEventListener('click', () => {
+        filterTags.forEach(t => t.classList.remove('active'));
+        tag.classList.add('active');
+        currentTag = (tag as HTMLElement).dataset.tag || 'all';
+        filterPosts();
+      });
+    });
+  </script>
+</Base>

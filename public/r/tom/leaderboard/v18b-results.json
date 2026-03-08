@@ -1,0 +1,41 @@
+{
+  "iteration": "v18b",
+  "name": "Position Sizing Defense",
+  "hypothesis": "VIX-based position sizing: >25=25%, >30=10%, >35=cash",
+  "strategy_changes": "Modified psz() to scale position size by VIX level",
+  "years": {
+    "2020": {
+      "return_pct": 73.2,
+      "final": 8658.81,
+      "max_dd": 64.4,
+      "vix_reductions": 86
+    },
+    "2022": {
+      "return_pct": -98.4,
+      "final": 80.65,
+      "max_dd": 129.4,
+      "vix_reductions": 44
+    },
+    "2023": {
+      "return_pct": 13.3,
+      "final": 5663.91,
+      "max_dd": 21.3,
+      "vix_reductions": 2
+    },
+    "2024": {
+      "return_pct": 44.4,
+      "final": 7221.55,
+      "max_dd": 45.2,
+      "vix_reductions": 5
+    },
+    "2025": {
+      "return_pct": 228.0,
+      "final": 16397.3,
+      "max_dd": 45.0,
+      "vix_reductions": 15
+    }
+  },
+  "avg_return": 52.1,
+  "verdict": "REJECTED",
+  "reason": "2022 still killed account (-98.4%). Position sizing helps in normal vol but useless in sustained drawdown. VIX reductions fired 44 times in 2022 but couldn't prevent death spiral. Problem is not position SIZE but position EXISTENCE in prolonged bear markets."
+}

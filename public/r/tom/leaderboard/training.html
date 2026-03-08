@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Tom's Training Progress</title>
+<style>
+  :root {
+    --bg:#0f172a;--card:#1e293b;--border:#334155;
+    --text:#f1f5f9;--muted:#94a3b8;--green:#22c55e;
+    --red:#ef4444;--amber:#f59e0b;--gold:#fbbf24;--blue:#3b82f6;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'SF Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh;padding:12px;-webkit-font-smoothing:antialiased;}
+  .header{text-align:center;padding:16px 0 8px;}
+  .header h1{font-size:22px;font-weight:800;}
+  .header .sub{font-size:11px;color:var(--muted);margin-top:4px;}
+
+  .progress-bar{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin:12px 0;text-align:center;}
+  .progress-bar .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;}
+  .progress-bar .bar-outer{background:rgba(255,255,255,0.06);border-radius:8px;height:24px;margin:8px 0;overflow:hidden;position:relative;}
+  .progress-bar .bar-inner{height:100%;border-radius:8px;transition:width 0.5s;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;}
+  .progress-bar .big{font-size:28px;font-weight:900;margin:4px 0;}
+
+  .phases{display:grid;gap:8px;margin:12px 0;}
+  .phase{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;gap:12px;align-items:flex-start;}
+  .phase.pass{border-color:var(--green);}
+  .phase.fail{border-color:var(--red);}
+  .phase.running{border-color:var(--amber);animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{border-color:var(--amber);}50%{border-color:rgba(245,158,11,0.3);}}
+  .phase .icon{font-size:20px;min-width:28px;text-align:center;padding-top:2px;}
+  .phase .info{flex:1;}
+  .phase .title{font-size:13px;font-weight:700;}
+  .phase .desc{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5;}
+  .phase .result{font-size:11px;margin-top:6px;padding:6px 10px;background:rgba(255,255,255,0.04);border-radius:6px;line-height:1.5;}
+  .phase .result strong{color:var(--text);}
+  .phase .tests{margin-top:6px;font-size:10px;color:var(--muted);}
+  .phase .tests .t{display:flex;gap:6px;padding:2px 0;}
+  .phase .tests .t .s{min-width:16px;}
+
+  .rule{background:linear-gradient(135deg,rgba(239,68,68,0.1),rgba(239,68,68,0.05));border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:12px;margin:12px 0;text-align:center;font-size:12px;}
+  .rule strong{color:var(--red);}
+
+  .grad{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin:12px 0;}
+  .grad h2{font-size:12px;color:var(--gold);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;}
+  .grad .item{display:flex;gap:8px;padding:4px 0;font-size:12px;align-items:center;}
+  .grad .item .check{min-width:20px;text-align:center;}
+
+  .links{text-align:center;padding:16px;font-size:12px;}
+  .links a{color:var(--muted);text-decoration:none;margin:0 8px;}
+  .links a:hover{color:var(--text);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🎓 Tom's Training Progress</h1>
+  <div class="sub">Proving the strategy before real money</div>
+</div>
+
+<div class="rule">⚠️ <strong>HARD RULE:</strong> Never more than 30% of account at risk at any time. No exceptions.</div>
+
+<div id="pbar" class="progress-bar">
+  <div class="label">Overall Progress</div>
+  <div class="big" id="pct">0%</div>
+  <div class="bar-outer"><div class="bar-inner" id="bar" style="width:0%;background:var(--amber);">0/10</div></div>
+</div>
+
+<div class="phases" id="phases"></div>
+
+<div class="grad" id="grad">
+  <h2>🏆 Graduation Criteria</h2>
+  <div id="grad-items"></div>
+</div>
+
+<div class="links">
+  <a href="/r/tom/leaderboard/">Backtesting Lab</a> · <a href="/r/tom/leaderboard/realistic.html">Realistic Results</a> · <a href="/r/tom/">Report Card</a>
+</div>
+
+<script>
+const DATA_URL='/r/tom/training-progress.json';
+
+const PHASES = [
+  {id:'phase1', phase:'Phase 1', title:'Out-of-Sample Testing', desc:'Run on 2020, 2022, 2023 — years he never trained on.',
+   tests:['1.1 Bear Market 2022 (SPY -20%)','1.2 AI Boom 2023 (SPY +24%)','1.3 COVID Crash 2020 (VIX 82)'],
+   grad:true, gradText:'Survives 2022 bear market'},
+  {id:'phase2', phase:'Phase 2', title:'Walk-Forward Validation', desc:'Train on year N, test on N+1. Stable parameters = real edge.',
+   tests:['2.1 Train 2022 → Test 2023','2.2 Train 2023 → Test 2024','2.3 Train 2024 → Test 2025'],
+   grad:true, gradText:'Walk-forward stable'},
+  {id:'phase3', phase:'Phase 3', title:'Monte Carlo Simulation', desc:'Shuffle trade order 10,000 times. Is the outcome robust or lucky?',
+   tests:['3.1 10K shuffled paths — median, 5th/95th percentile'],
+   grad:true, gradText:'Monte Carlo median >$50K'},
+  {id:'phase4', phase:'Phase 4', title:'Regime Stress Tests', desc:'Flash crash, VIX 65, stock halt, broker outage, earnings disaster.',
+   tests:['4.1 Flash crash SPY -5%','4.2 VIX spike 65+','4.3 Stock halt 3 days','4.4 Broker outage 24h','4.5 Earnings -30% gap']},
+  {id:'phase5', phase:'Phase 5', title:'Back-Ratio Loss Zone Audit', desc:'Prove the 100% win rate is real or find the losses.',
+   tests:['5.1 100 synthetic +3-8% moves','5.2 Worst-case trade in backtest','5.3 Wider bid-ask 15%'],
+   grad:true, gradText:'Back-ratio losses honestly documented'},
+  {id:'phase6', phase:'Phase 6', title:'Sizing & Risk Audit', desc:'Prove 30% cap is NEVER exceeded. Full trade log audit.',
+   tests:['6.1 Max single position %','6.2 Max total open risk %','6.3 Max concurrent positions','6.4 Trades skipped (risk cap)','6.5 T+1 settlement'],
+   grad:true, gradText:'30% cap proven, never exceeded'},
+  {id:'phase7', phase:'Phase 7', title:'Friction Reality Check', desc:'Commissions, partial fills, assignment risk, taxes, margin.',
+   tests:['7.1 Commission impact','7.2 Partial fills','7.3 Assignment risk','7.4 Real strikes exist?','7.5 Tax impact 37%','7.6 Margin requirements']},
+  {id:'phase8', phase:'Phase 8', title:'Benchmark Comparison', desc:'Beat buy-and-hold QQQ, LEAPS, and simple momentum.',
+   tests:['8.1 vs QQQ hold','8.2 vs QQQ LEAPS','8.3 vs top 5 momentum hold','8.4 vs monthly rotation'],
+   grad:true, gradText:'Beats all benchmarks risk-adjusted'},
+  {id:'phase9', phase:'Phase 9', title:'Paper Trading (30 days)', desc:'Live market, fake money. The ultimate test — no historical data.',
+   tests:['9.1 Scanner on live data','9.2 Full trade log','9.3 Paper vs backtest comparison','9.4 Signal-to-execution lag'],
+   grad:true, gradText:'Paper trading 30 days profitable'},
+  {id:'phase10', phase:'Phase 10', title:'Kill Switch & Edge Cases', desc:'Delayed data, stale VIX, untradeable picks, intraday crash.',
+   tests:['10.1 Scanner delayed 1hr','10.2 Stale VIX','10.3 Untradeable top pick','10.4 -20% intraday']}
+];
+
+const GRAD_ITEMS = PHASES.filter(p=>p.grad).map(p=>({id:p.id, text:p.gradText}));
+
+let lastHash='';
+async function load(){
+  try{
+    const r=await fetch(DATA_URL+'?t='+Date.now());
+    if(!r.ok){render({}); return;}
+    const t=await r.text();
+    if(t===lastHash)return;
+    lastHash=t;
+    render(JSON.parse(t));
+  }catch(e){render({});}
+}
+
+function render(data){
+  const results=data.phases||{};
+  let passed=0, total=PHASES.length;
+
+  let html='';
+  PHASES.forEach(p=>{
+    const r=results[p.id]||{};
+    const status=r.status||'pending'; // pending, running, pass, fail
+    const icon = status==='pass'?'✅':status==='fail'?'❌':status==='running'?'🔄':'⬜';
+    if(status==='pass')passed++;
+
+    let testsHtml='';
+    if(p.tests){
+      testsHtml='<div class="tests">'+p.tests.map(t=>{
+        const tid=t.split(' ')[0];
+        const tr=r.tests?r.tests[tid]||{}:{};
+        const ts=tr.status||'pending';
+        const si=ts==='pass'?'✅':ts==='fail'?'❌':ts==='running'?'⏳':'○';
+        return `<div class="t"><span class="s">${si}</span><span>${t}${tr.note?' — <strong>'+tr.note+'</strong>':''}</span></div>`;
+      }).join('')+'</div>';
+    }
+
+    html+=`<div class="phase ${status}">
+      <div class="icon">${icon}</div>
+      <div class="info">
+        <div class="title">${p.phase}: ${p.title}</div>
+        <div class="desc">${p.desc}</div>
+        ${r.result?'<div class="result">'+r.result+'</div>':''}
+        ${testsHtml}
+      </div>
+    </div>`;
+  });
+  document.getElementById('phases').innerHTML=html;
+
+  // Progress bar
+  const pct=Math.round(passed/total*100);
+  document.getElementById('pct').textContent=pct+'%';
+  document.getElementById('bar').style.width=pct+'%';
+  document.getElementById('bar').textContent=passed+'/'+total;
+  document.getElementById('bar').style.background=pct>=70?'var(--green)':pct>=40?'var(--amber)':'var(--blue)';
+
+  // Graduation
+  let gradHtml='';
+  GRAD_ITEMS.forEach(g=>{
+    const r=results[g.id]||{};
+    const done=r.status==='pass';
+    gradHtml+=`<div class="item"><span class="check">${done?'✅':'⬜'}</span><span>${g.text}</span></div>`;
+  });
+  document.getElementById('grad-items').innerHTML=gradHtml;
+}
+
+load();
+setInterval(load,15000);
+</script>
+</body>
+</html>

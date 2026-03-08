@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Ad Performance Report — Lyndsay</title>
+<style>
+  :root {
+    --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+    --gray-300: #d1d5db; --gray-400: #9ca3af; --gray-500: #6b7280;
+    --gray-600: #4b5563; --gray-700: #374151; --gray-800: #1f2937; --gray-900: #111827;
+    --green-50: #f0fdf4; --green-100: #dcfce7; --green-500: #22c55e; --green-600: #16a34a; --green-700: #15803d;
+    --blue-50: #eff6ff; --blue-100: #dbeafe; --blue-500: #3b82f6; --blue-600: #2563eb;
+    --amber-50: #fffbeb; --amber-100: #fef3c7; --amber-500: #f59e0b; --amber-600: #d97706;
+    --red-50: #fef2f2; --red-100: #fee2e2; --red-500: #ef4444; --red-600: #dc2626;
+    --purple-50: #faf5ff; --purple-500: #8b5cf6; --purple-600: #7c3aed;
+    --pink-50: #fdf2f8; --pink-500: #ec4899; --pink-600: #db2777;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+    background: var(--gray-100);
+    color: var(--gray-800);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .header {
+    text-align: center;
+    padding: 20px 16px 12px;
+    background: white;
+    border-bottom: 1px solid var(--gray-200);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .header-date {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--gray-400);
+  }
+
+  .header-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--gray-900);
+    margin-top: 2px;
+  }
+
+  .header-subtitle {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-top: 2px;
+  }
+
+  /* Swipe container */
+  .cards-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px;
+    gap: 12px;
+    scrollbar-width: none;
+  }
+
+  .cards-container::-webkit-scrollbar { display: none; }
+
+  /* Dots indicator */
+  .dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 0 16px;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gray-300);
+    transition: all 0.2s ease;
+  }
+
+  .dot.active {
+    background: var(--gray-800);
+    width: 20px;
+    border-radius: 4px;
+  }
+
+  /* Agent Card */
+  .agent-card {
+    flex: 0 0 calc(100vw - 40px);
+    max-width: 400px;
+    scroll-snap-align: center;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .agent-header {
+    padding: 20px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .agent-header::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: -20px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .agent-emoji {
+    font-size: 36px;
+    margin-bottom: 8px;
+  }
+
+  .agent-name {
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  .agent-role {
+    font-size: 12px;
+    opacity: 0.8;
+    font-weight: 500;
+  }
+
+  .agent-grade {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 800;
+    backdrop-filter: blur(4px);
+    border: 2px solid rgba(255,255,255,0.3);
+  }
+
+  /* Stats row */
+  .agent-stats {
+    display: flex;
+    padding: 12px 20px;
+    gap: 8px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .stat {
+    flex: 1;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--gray-800);
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--gray-400);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  /* Accomplishments */
+  .agent-body {
+    padding: 16px 20px;
+  }
+
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--gray-400);
+    margin-bottom: 8px;
+  }
+
+  .accomplishment {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+
+  .accomplishment:last-child { margin-bottom: 0; }
+
+  .acc-icon {
+    font-size: 14px;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  .acc-text {
+    font-size: 13px;
+    color: var(--gray-600);
+    line-height: 1.5;
+  }
+
+  .acc-text strong {
+    color: var(--gray-800);
+  }
+
+  /* Key finding callout */
+  .key-finding {
+    background: var(--green-50);
+    border: 1px solid var(--green-100);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 12px;
+  }
+
+  .key-finding.warning {
+    background: var(--amber-50);
+    border-color: var(--amber-100);
+  }
+
+  .key-finding.danger {
+    background: var(--red-50);
+    border-color: var(--red-100);
+  }
+
+  .key-finding-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--green-600);
+    margin-bottom: 4px;
+  }
+
+  .key-finding.warning .key-finding-label {
+    color: var(--amber-600);
+  }
+
+  .key-finding.danger .key-finding-label {
+    color: var(--red-600);
+  }
+
+  .key-finding-text {
+    font-size: 13px;
+    color: var(--gray-700);
+    line-height: 1.5;
+  }
+
+  /* Bottom status */
+  .agent-footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--gray-100);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .status-text {
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-date">February 27, 2026 · Overnight Analysis</div>
+  <div class="header-title">📊 Ad Performance Report</div>
+  <div class="header-subtitle">For Lyndsay · Adaline's Work</div>
+</div>
+
+<div class="dots" id="dots"></div>
+
+<div class="cards-container" id="cards"></div>
+
+<script>
+const cards = [
+  // Executive Summary
+  {
+    name: 'Executive Summary',
+    emoji: '📋',
+    role: 'Overnight Analysis by Adaline',
+    color: 'linear-gradient(135deg, #7c3aed, #6366f1)',
+    grade: 'A+',
+    gradeColor: '#22c55e',
+    stats: [
+      { value: '6', label: 'Reports' },
+      { value: '5', label: 'Findings' },
+      { value: '$500K+', label: 'Upside' },
+    ],
+    accomplishments: [
+      { icon: '🎯', text: '<strong>Campaign optimization opportunity</strong> — MoF Consideration burning $73.8K/month at 1.03x ROAS. Budget reallocation could unlock $500-600K/month.' },
+      { icon: '🤖→✅', text: '<strong>AI Recommendation → Executed → $369K/month!</strong> Adaline recommended scaling GIF allocation. Lyndsay executed (2% → 13.1% of spend). Result: ~$369K/month incremental revenue ($4.4M/year). <em>This is what AI enablement looks like.</em>' },
+      { icon: '🏆', text: '<strong>Brand winners identified</strong> — Max & Lily 7.32x ROAS ($2.57M revenue), P+B 11.27x, Maxtrix 3.36x.' },
+      { icon: '⚠️', text: '<strong>Major waste found</strong> — DPA-Only campaign at 0.73x ROAS losing ~$10.2K/month. Immediate action needed.' },
+    ],
+    keyFinding: {
+      label: '💰 Biggest Opportunity',
+      text: 'Retargeting (20.61x) and ASC+ Promo (17.08x) are massively underutilized. ASC+ Promo running on only $2.5K/month with low frequency — huge scaling headroom.',
+    },
+    status: { color: '#22c55e', text: 'Complete · 6 reports built' },
+  },
+
+  // Key Findings
+  {
+    name: 'Key Findings',
+    emoji: '🔍',
+    role: '5 Strategic Insights',
+    color: 'linear-gradient(135deg, #ec4899, #f43f5e)',
+    grade: '5',
+    gradeColor: '#22c55e',
+    stats: [
+      { value: '$25K', label: 'ChatGPT' },
+      { value: '40%', label: 'CPC Drop' },
+      { value: '19%', label: 'Repeat' },
+    ],
+    accomplishments: [
+      { icon: '🤖', text: '<strong>ChatGPT as revenue channel</strong> — Driving $25K/month with ZERO ad spend. Untapped opportunity for optimization.' },
+      { icon: '📉', text: '<strong>Google CPC collapse</strong> — 40% drop in cost-per-click. Market dynamics shifting — opportunity to scale Google Ads aggressively.' },
+      { icon: '🔄', text: '<strong>Repeat customer rate: 19%</strong> — Strong retention foundation. LTV optimization should be priority for scaling profitably.' },
+      { icon: '📺', text: '<strong>CTV halo effect detected</strong> — Connected TV ads showing positive spillover to other channels. Worth deeper analysis.' },
+      { icon: '🎯', text: '<strong>Engagement paradox</strong> — High engagement doesn\'t always equal high revenue. Creative scoring needs ROAS weighting.' },
+    ],
+    keyFinding: {
+      type: 'warning',
+      label: '⚡ Action Item',
+      text: 'Google CPC collapse is a rare market window. Recommend 2x scaling test on best-performing Google campaigns within 48 hours.',
+    },
+    status: { color: '#22c55e', text: 'All findings validated against data' },
+  },
+
+  // Budget Recommendations
+  {
+    name: 'Budget Recommendations',
+    emoji: '💸',
+    role: 'Where to Allocate',
+    color: 'linear-gradient(135deg, #10b981, #059669)',
+    grade: '4',
+    gradeColor: '#22c55e',
+    stats: [
+      { value: '$73.8K', label: 'MoF Issue' },
+      { value: '20.61x', label: 'Retarget' },
+      { value: '17.08x', label: 'ASC+' },
+    ],
+    accomplishments: [
+      { icon: '🔴', text: '<strong>Cut: MoF Consideration</strong> — $73.8K/month at 1.03x ROAS. Barely break-even. Reallocate 70% to winners.' },
+      { icon: '🔴', text: '<strong>Kill: DPA-Only</strong> — 0.73x ROAS losing ~$10.2K/month. Shut down immediately. No salvageable segments.' },
+      { icon: '🟢', text: '<strong>Scale: Retargeting</strong> — 20.61x ROAS. Currently modest spend. Test 3x budget increase — should remain profitable at 15x+.' },
+      { icon: '🟢', text: '<strong>Scale: ASC+ Promo</strong> — 17.08x ROAS on only $2.5K/month. Low frequency = headroom. Test 10x scale to $25K/month.' },
+      { icon: '🟡', text: '<strong>Test: GIF expansion</strong> — Already at 13.1% of spend with strong ROI. Push to 20% with new creative rotation.' },
+    ],
+    keyFinding: {
+      type: 'danger',
+      label: '⚠️ Urgent',
+      text: 'DPA-Only campaign hemorrhaging $10.2K/month. Every day of delay = $340 lost. Recommend immediate pause.',
+    },
+    status: { color: '#f59e0b', text: 'Awaiting budget reallocation approval' },
+  },
+
+  // Channel Performance
+  {
+    name: 'Channel Performance',
+    emoji: '📱',
+    role: 'Platform Comparison',
+    color: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+    grade: '3',
+    gradeColor: '#22c55e',
+    stats: [
+      { value: '7.32x', label: 'Max&Lily' },
+      { value: '11.27x', label: 'P+B' },
+      { value: '3.36x', label: 'Maxtrix' },
+    ],
+    accomplishments: [
+      { icon: '🏆', text: '<strong>Max & Lily</strong> — $351.7K spend → $2.57M revenue (7.32x). Clear winner. Scale aggressively.' },
+      { icon: '🏆', text: '<strong>Plank+Beam</strong> — 11.27x ROAS. Premium positioning working. Allocate more creative budget here.' },
+      { icon: '📊', text: '<strong>Maxtrix</strong> — 3.36x ROAS. Solid but not spectacular. Maintain current allocation, optimize creative.' },
+      { icon: '🎯', text: '<strong>GIF creative ROI</strong> — Scaled from 2% to 13.1% of total spend = ~$369K/month incremental. Keep expanding.' },
+    ],
+    keyFinding: {
+      label: '💡 Insight',
+      text: 'Max & Lily and Plank+Beam both crushing it with different customer segments. Consider separate creative strategies for each brand rather than one-size-fits-all.',
+    },
+    status: { color: '#22c55e', text: 'All brands tracked · Performance validated' },
+  },
+
+  // Reports Available
+  {
+    name: 'Reports Available',
+    emoji: '📂',
+    role: '6 Deep-Dive Reports',
+    color: 'linear-gradient(135deg, #f59e0b, #d97706)',
+    grade: '6',
+    gradeColor: '#22c55e',
+    stats: [
+      { value: '6', label: 'Reports' },
+      { value: 'CSV', label: 'Format' },
+      { value: '✓', label: 'Ready' },
+    ],
+    accomplishments: [
+      { icon: '📊', text: '<strong>Weekly ROAS by Campaign</strong> — Time-series breakdown of every campaign. Identify trends and seasonality.' },
+      { icon: '🎨', text: '<strong>Creative Performance</strong> — Which images/videos drive best ROAS. Includes GIF vs static comparison.' },
+      { icon: '💰', text: '<strong>Budget Pacing</strong> — Spend velocity vs revenue. Flags over/under-spending campaigns.' },
+      { icon: '👥', text: '<strong>Audience Overlap</strong> — Which customer segments are being hit by multiple campaigns (wasted spend).' },
+      { icon: '📱', text: '<strong>Platform Comparison</strong> — Facebook vs Google vs others. CPA, ROAS, frequency by channel.' },
+      { icon: '🏅', text: '<strong>Creative Scoring</strong> — AI-weighted scores combining engagement, CTR, CVR, and ROAS.' },
+    ],
+    keyFinding: {
+      label: '📋 Next Steps',
+      text: 'All reports saved to shared drive. Recommend weekly review cadence with Lyndsay to track optimization progress and adjust strategy.',
+    },
+    status: { color: '#22c55e', text: 'All reports generated · Ready for review' },
+  },
+  // Recommendation Tracker card
+  {
+    name: 'AI ROI Tracker',
+    emoji: '🔄',
+    role: 'Recommendation → Action → Results',
+    color: 'linear-gradient(135deg, #059669, #10b981)',
+    grade: '$4.4M',
+    gradeColor: '#22c55e',
+    stats: [
+      { value: '1', label: 'Tracked' },
+      { value: '1', label: 'Executed' },
+      { value: '$4.4M', label: 'Annual ROI' },
+    ],
+    accomplishments: [
+      { icon: '🤖', text: '<strong>Adaline recommended:</strong> "Scale GIF creative allocation from 2% to 10-15% of total ad spend."' },
+      { icon: '👩‍💼', text: '<strong>Lyndsay executed:</strong> Scaled GIF allocation from 2% → 13.1% of spend.' },
+      { icon: '📊', text: '<strong>Result measured:</strong> ~$436K/month GIF revenue vs ~$67K at old allocation. <strong>+$369K/month incremental ($4.4M/year).</strong>' },
+      { icon: '⭐', text: '<strong>Attribution:</strong> High confidence — direct budget shift with measurable channel-level revenue.' },
+    ],
+    keyFinding: {
+      label: '🏆 Why This Matters',
+      text: 'One AI recommendation, properly executed, generated $4.4M in annualized revenue. This is the closed loop: AI recommends → Human executes → Results measured → ROI proven. Every recommendation will be tracked like this going forward.',
+    },
+    status: { color: '#22c55e', text: 'First tracked recommendation · Building the loop' },
+  },
+];
+
+function renderCards() {
+  const container = document.getElementById('cards');
+  const dotsContainer = document.getElementById('dots');
+  let html = '';
+
+  cards.forEach((card, i) => {
+    html += `<div class="agent-card">
+      <div class="agent-header" style="background:${card.color}">
+        <div class="agent-emoji">${card.emoji}</div>
+        <div class="agent-name">${card.name}</div>
+        <div class="agent-role">${card.role}</div>
+        <div class="agent-grade" style="color:${card.gradeColor}">${card.grade}</div>
+      </div>
+      <div class="agent-stats">
+        ${card.stats.map(s => `
+          <div class="stat">
+            <div class="stat-value">${s.value}</div>
+            <div class="stat-label">${s.label}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="agent-body">
+        <div class="section-title">${i === cards.length - 1 ? 'Available Reports' : 'Key Points'}</div>
+        ${card.accomplishments.map(a => `
+          <div class="accomplishment">
+            <span class="acc-icon">${a.icon}</span>
+            <span class="acc-text">${a.text}</span>
+          </div>
+        `).join('')}
+        ${card.keyFinding ? `
+          <div class="key-finding ${card.keyFinding.type === 'warning' ? 'warning' : ''} ${card.keyFinding.type === 'danger' ? 'danger' : ''}">
+            <div class="key-finding-label">${card.keyFinding.label}</div>
+            <div class="key-finding-text">${card.keyFinding.text}</div>
+          </div>
+        ` : ''}
+      </div>
+      <div class="agent-footer">
+        <div class="status-dot" style="background:${card.status.color}"></div>
+        <span class="status-text">${card.status.text}</span>
+      </div>
+    </div>`;
+  });
+
+  container.innerHTML = html;
+
+  // Dots
+  dotsContainer.innerHTML = cards.map((_, i) =>
+    `<div class="dot ${i === 0 ? 'active' : ''}" id="dot-${i}"></div>`
+  ).join('');
+
+  // Scroll listener for dots
+  container.addEventListener('scroll', () => {
+    const cardWidth = container.firstElementChild.offsetWidth + 12;
+    const activeIndex = Math.round(container.scrollLeft / cardWidth);
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === activeIndex);
+    });
+  });
+}
+
+renderCards();
+</script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Comparison — Adaline Report</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        .back-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 24px;
+        }
+        .back-link:hover { text-decoration: underline; }
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        .date {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+        .platform-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border-left: 4px solid #e2e8f0;
+        }
+        .platform-card.winner { border-left-color: #10b981; }
+        .platform-card.growth { border-left-color: #3b82f6; }
+        .platform-card.experimental { border-left-color: #f59e0b; }
+        .platform-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .platform-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        .platform-status {
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .platform-status.scaling {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .platform-status.testing {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .platform-status.validated {
+            background: #dbeafe;
+            color: #1e3a8a;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .metric-box {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+        }
+        .metric-label {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .metric-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        .metric-value.positive { color: #10b981; }
+        .platform-insight {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+        .brand-breakdown {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .brand-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 14px;
+        }
+        .brand-name {
+            color: #64748b;
+        }
+        .brand-roas {
+            font-weight: 600;
+            color: #1e293b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../" class="back-link">← Back to Report Card</a>
+        
+        <h1>🌐 Platform Comparison</h1>
+        <p class="date">February 28, 2026 • Cross-Platform Performance</p>
+
+        <div class="platform-card winner">
+            <div class="platform-header">
+                <span class="platform-name">Meta Ads</span>
+                <span class="platform-status scaling">Primary Channel</span>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <div class="metric-label">Monthly Spend</div>
+                    <div class="metric-value">$824K</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Blended ROAS</div>
+                    <div class="metric-value positive">8.12x</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Share of Spend</div>
+                    <div class="metric-value">80.8%</div>
+                </div>
+            </div>
+            <div class="brand-breakdown">
+                <div class="brand-item">
+                    <span class="brand-name">🛏️ Max & Lily</span>
+                    <span class="brand-roas">7.32x ROAS</span>
+                </div>
+                <div class="brand-item">
+                    <span class="brand-name">🪑 Plank+Beam</span>
+                    <span class="brand-roas">11.27x ROAS ⭐</span>
+                </div>
+                <div class="brand-item">
+                    <span class="brand-name">🛋️ Maxtrix</span>
+                    <span class="brand-roas">3.36x ROAS</span>
+                </div>
+            </div>
+            <div class="platform-insight">
+                <strong>Status:</strong> Plank+Beam outperforming other brands by 54%. Max & Lily has CTR decline issue (identified Feb 12). Maxtrix underperforming — needs creative refresh or budget cut.
+            </div>
+        </div>
+
+        <div class="platform-card growth">
+            <div class="platform-header">
+                <span class="platform-name">Google Shopping</span>
+                <span class="platform-status scaling">Scaling Up</span>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <div class="metric-label">Monthly Spend</div>
+                    <div class="metric-value">$98K</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">ROAS</div>
+                    <div class="metric-value positive">6.8x</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">CPC Change</div>
+                    <div class="metric-value positive">-40% ↓</div>
+                </div>
+            </div>
+            <div class="platform-insight">
+                <strong>Major Opportunity:</strong> CPC collapsed 40% in last 30 days. Same traffic, half the cost. This creates massive scaling headroom. Recommend doubling spend to $196K/month while maintaining 6.8x ROAS.
+            </div>
+        </div>
+
+        <div class="platform-card winner">
+            <div class="platform-header">
+                <span class="platform-name">Bing Search</span>
+                <span class="platform-status validated">Validated Scale</span>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <div class="metric-label">Monthly Spend</div>
+                    <div class="metric-value">$48K</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">ROAS</div>
+                    <div class="metric-value positive">13.0x+</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Scale Test</div>
+                    <div class="metric-value positive">3x ✓</div>
+                </div>
+            </div>
+            <div class="platform-insight">
+                <strong>Validated Learning:</strong> Tripled spend from $16K → $48K. ROAS held above 13x. Continuing to scale to $100K/month. One more validation at that level → becomes permanent playbook.
+            </div>
+        </div>
+
+        <div class="platform-card experimental">
+            <div class="platform-header">
+                <span class="platform-name">ChatGPT (Organic)</span>
+                <span class="platform-status testing">Zero Spend</span>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <div class="metric-label">Monthly Revenue</div>
+                    <div class="metric-value positive">$25K</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Ad Spend</div>
+                    <div class="metric-value">$0</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">ROAS</div>
+                    <div class="metric-value positive">∞</div>
+                </div>
+            </div>
+            <div class="platform-insight">
+                <strong>Breakthrough Finding:</strong> AI assistants (ChatGPT, Perplexity, Claude) driving $25K/month in furniture purchases with zero paid media. Untracked channel. Hypothesis: LLMO (Large Language Model Optimization) could 3x this to $75K/month.
+            </div>
+        </div>
+
+        <div class="platform-card experimental">
+            <div class="platform-header">
+                <span class="platform-name">CTV (Connected TV)</span>
+                <span class="platform-status testing">Halo Test</span>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <div class="metric-label">Monthly Spend</div>
+                    <div class="metric-value">$8K</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Direct ROAS</div>
+                    <div class="metric-value">1.2x</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Halo Effect</div>
+                    <div class="metric-value positive">Detected</div>
+                </div>
+            </div>
+            <div class="platform-insight">
+                <strong>Early Signal:</strong> Direct attribution shows 1.2x ROAS, but seeing 18% lift in branded search when CTV is running. Halo effect worth ~$4K/month. True ROAS likely 2.5-3x. Continuing to test.
+            </div>
+        </div>
+
+        <div class="platform-card">
+            <div class="platform-header">
+                <span class="platform-name">Other Channels</span>
+                <span class="platform-status testing">Mixed</span>
+            </div>
+            <div class="brand-breakdown">
+                <div class="brand-item">
+                    <span class="brand-name">TikTok</span>
+                    <span class="brand-roas">$32K spend • 4.2x ROAS • Testing</span>
+                </div>
+                <div class="brand-item">
+                    <span class="brand-name">Pinterest</span>
+                    <span class="brand-roas">$12K spend • 5.8x ROAS • Low volume</span>
+                </div>
+                <div class="brand-item">
+                    <span class="brand-name">Snapchat</span>
+                    <span class="brand-roas">$6K spend • 2.1x ROAS • Consider kill</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

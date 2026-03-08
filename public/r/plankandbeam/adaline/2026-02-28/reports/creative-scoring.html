@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Scoring — Adaline Report</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        .back-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 24px;
+        }
+        .back-link:hover { text-decoration: underline; }
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        .date {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+        .methodology {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+        .methodology h3 {
+            font-size: 16px;
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+        .methodology p {
+            font-size: 14px;
+            color: #1e40af;
+            line-height: 1.6;
+        }
+        .scoring-grid {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .creative-item {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #e2e8f0;
+        }
+        .creative-item.top { border-left-color: #10b981; }
+        .creative-item.good { border-left-color: #3b82f6; }
+        .creative-item.medium { border-left-color: #f59e0b; }
+        .creative-item.poor { border-left-color: #ef4444; }
+        .creative-info {
+            flex: 1;
+        }
+        .creative-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        .creative-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 8px;
+            font-size: 12px;
+            color: #64748b;
+        }
+        .creative-score {
+            text-align: right;
+            margin-left: 20px;
+        }
+        .score-number {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .score-number.top { color: #10b981; }
+        .score-number.good { color: #3b82f6; }
+        .score-number.medium { color: #f59e0b; }
+        .score-number.poor { color: #ef4444; }
+        .score-label {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .insight {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 24px 0;
+            font-size: 14px;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        .paradox-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 32px;
+        }
+        .paradox-box h3 {
+            font-size: 20px;
+            color: #92400e;
+            margin-bottom: 12px;
+        }
+        .paradox-box p {
+            color: #78350f;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .comparison-item {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+        }
+        .comparison-label {
+            font-size: 12px;
+            color: #92400e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .comparison-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #78350f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../" class="back-link">← Back to Report Card</a>
+        
+        <h1>🎯 Creative Scoring</h1>
+        <p class="date">February 28, 2026 • AI-Weighted Performance</p>
+
+        <div class="methodology">
+            <h3>📐 Scoring Methodology</h3>
+            <p>Each creative is scored 0-100 using weighted metrics: <strong>ROAS (50%)</strong>, CVR (25%), CTR (15%), Engagement (10%). We optimize for revenue, not vanity metrics. High engagement with low ROAS = bad creative.</p>
+        </div>
+
+        <div class="scoring-grid">
+            <div class="creative-item top">
+                <div class="creative-info">
+                    <div class="creative-name">🎬 Product GIF - Room Context</div>
+                    <div class="creative-metrics">
+                        <span>ROAS: 9.2x</span>
+                        <span>CVR: 4.8%</span>
+                        <span>CTR: 2.1%</span>
+                        <span>Engagement: 2.3%</span>
+                    </div>
+                </div>
+                <div class="creative-score">
+                    <div class="score-number top">94</div>
+                    <div class="score-label">Top Performer</div>
+                </div>
+            </div>
+
+            <div class="creative-item top">
+                <div class="creative-info">
+                    <div class="creative-name">🎬 Product GIF - White BG</div>
+                    <div class="creative-metrics">
+                        <span>ROAS: 7.4x</span>
+                        <span>CVR: 4.2%</span>
+                        <span>CTR: 1.9%</span>
+                        <span>Engagement: 1.8%</span>
+                    </div>
+                </div>
+                <div class="creative-score">
+                    <div class="score-number top">86</div>
+                    <div class="score-label">Top Performer</div>
+                </div>
+            </div>
+
+            <div class="creative-item good">
+                <div class="creative-info">
+                    <div class="creative-name">🎥 Lifestyle Video (15s)</div>
+                    <div class="creative-metrics">
+                        <span>ROAS: 7.8x</span>
+                        <span>CVR: 3.9%</span>
+                        <span>CTR: 1.7%</span>
+                        <span>Engagement: 5.2%</span>
+                    </div>
+                </div>
+                <div class="creative-score">
+                    <div class="score-number good">83</div>
+                    <div class="score-label">Good</div>
+                </div>
+            </div>
+
+            <div class="creative-item good">
+                <div class="creative-info">
+                    <div class="creative-name">🎥 Product Video - 360° Spin</div>
+                    <div class="creative-metrics">
+                        <span>ROAS: 6.1x</span>
+                        <span>CVR: 3.6%</span>
+                        <span>CTR: 1.8%</span>
+                        <span>Engagement: 3.4%</span>
+                    </div>
+                </div>
+                <div class="creative-score">
+                    <div class="score-number good">74</div>
+                    <div class="score-label">Good</div>
+                </div>
+            </div>
+
+            <div class="creative-item medium">
+                <div class="creative-info">
+                    <div class="creative-name">📸 Lifestyle Static</div>
+                    <div class="creative-metrics">
+                        <span>ROAS: 3.2x</span>
+                        <span>CVR: 2.1%</span>
+                        <span>CTR: 1.4%</span>
+                        <span>Engagement: 8.7%</span>
+                    </div>
+                </div>
+                <div class="creative-score">
+                    <div class="score-number medium">52</div>
+                    <div class="score-label">Medium</div>
+                </div>
+            </div>
+
+            <div class="creative-item medium">
+                <div class="creative-info">
+                    <div class="creative-name">📸 Product Static</div>
+                    <div class="creative-metrics">
+                        <span>ROAS: 2.4x</span>
+                        <span>CVR: 1.8%</span>
+                        <span>CTR: 1.2%</span>
+                        <span>Engagement: 4.1%</span>
+                    </div>
+                </div>
+                <div class="creative-score">
+                    <div class="score-number medium">44</div>
+                    <div class="score-label">Medium</div>
+                </div>
+            </div>
+
+            <div class="creative-item poor">
+                <div class="creative-info">
+                    <div class="creative-name">🎥 UGC Testimonial</div>
+                    <div class="creative-metrics">
+                        <span>ROAS: 1.9x</span>
+                        <span>CVR: 1.4%</span>
+                        <span>CTR: 2.3%</span>
+                        <span>Engagement: 12.4%</span>
+                    </div>
+                </div>
+                <div class="creative-score">
+                    <div class="score-number poor">38</div>
+                    <div class="score-label">Below Target</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="insight">
+            <strong>🏆 Winner: GIF Creative</strong><br>
+            Product GIFs (room context) score 94/100 — highest of all formats. They combine motion (attention) with product clarity (conversion intent) at lower production cost than video. Scaling GIF allocation from 2% → 13.1% generated $369K/month incremental revenue.
+        </div>
+
+        <div class="paradox-box">
+            <h3>⚠️ The Engagement Paradox</h3>
+            <p>
+                <strong>Key Finding:</strong> High engagement ≠ High revenue. UGC testimonials generate 12.4% engagement (likes, comments, shares) but only 1.9x ROAS. Meanwhile, Product GIFs get 2.3% engagement but deliver 9.2x ROAS.
+            </p>
+            <p>
+                <strong>Why:</strong> Engagement measures entertainment value. ROAS measures purchase intent. People love watching testimonials, but they don't buy from them. Product GIFs show the item clearly — less entertaining, more converting.
+            </p>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-label">UGC Testimonial</div>
+                    <div class="comparison-value">12.4% Engagement</div>
+                    <div class="comparison-value" style="font-size: 18px; margin-top: 4px;">1.9x ROAS</div>
+                </div>
+                <div class="comparison-item">
+                    <div class="comparison-label">Product GIF</div>
+                    <div class="comparison-value">2.3% Engagement</div>
+                    <div class="comparison-value" style="font-size: 18px; margin-top: 4px;">9.2x ROAS ⭐</div>
+                </div>
+            </div>
+
+            <p style="margin-top: 16px;">
+                <strong>Takeaway:</strong> We optimize for dollars, not dopamine. Engagement is a vanity metric. Focus creative production on formats that convert, even if they're "boring" by social standards.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

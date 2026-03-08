@@ -1,0 +1,9 @@
+---
+// Copy the existing manifesto page
+import { readFile } from 'fs/promises';
+
+const manifestoHtml = await readFile('manifesto/index.html', 'utf-8');
+
+// Just serve the existing HTML as-is
+---
+<Fragment set:html={manifestoHtml} />

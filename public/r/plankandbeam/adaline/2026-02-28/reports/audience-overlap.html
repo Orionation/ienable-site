@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audience Overlap — Adaline Report</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        .back-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 24px;
+        }
+        .back-link:hover { text-decoration: underline; }
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        .date {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .warning-box h2 {
+            font-size: 20px;
+            color: #92400e;
+            margin-bottom: 12px;
+        }
+        .warning-box p {
+            color: #78350f;
+            line-height: 1.6;
+        }
+        .overlap-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border-left: 4px solid #ef4444;
+        }
+        .overlap-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .overlap-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        .overlap-percent {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ef4444;
+        }
+        .overlap-detail {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 14px;
+            color: #64748b;
+        }
+        .recommendation-box {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+        .recommendation-box h3 {
+            font-size: 18px;
+            color: #1e3a8a;
+            margin-bottom: 12px;
+        }
+        .recommendation-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #dbeafe;
+        }
+        .recommendation-item:last-child {
+            border-bottom: none;
+        }
+        .insight {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+            font-size: 14px;
+            color: #1e293b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../" class="back-link">← Back to Report Card</a>
+        
+        <h1>👥 Audience Overlap</h1>
+        <p class="date">February 28, 2026</p>
+
+        <div class="warning-box">
+            <h2>⚠️ Significant Waste Detected</h2>
+            <p>Multiple campaigns are targeting the same audiences, creating auction competition against ourselves and inflating CPMs. We're bidding against our own campaigns.</p>
+        </div>
+
+        <div class="overlap-card">
+            <div class="overlap-header">
+                <span class="overlap-title">🎨 MoF Consideration ↔️ 🎯 Retargeting</span>
+                <span class="overlap-percent">47%</span>
+            </div>
+            <div class="overlap-detail">
+                <strong>Problem:</strong> MoF Consideration (1.03x ROAS) is hitting the same people as Retargeting (20.61x ROAS). We're wasting money showing ads to people who would convert via the cheaper, higher-ROAS retargeting campaign.
+            </div>
+            <div class="overlap-detail">
+                <strong>Impact:</strong> ~$34K/month wasted on duplicate reach. MoF is winning auctions over Retargeting in 47% of cases, delivering 20x worse ROAS.
+            </div>
+        </div>
+
+        <div class="overlap-card">
+            <div class="overlap-header">
+                <span class="overlap-title">❌ MoF DPA-Only ↔️ 🎨 MoF Consideration</span>
+                <span class="overlap-percent">68%</span>
+            </div>
+            <div class="overlap-detail">
+                <strong>Problem:</strong> DPA-Only (0.73x ROAS, losing money) has 68% overlap with MoF Consideration (1.03x ROAS). Two low-performing campaigns competing for the same eyeballs.
+            </div>
+            <div class="overlap-detail">
+                <strong>Impact:</strong> Bidding against ourselves in 68% of impressions. Inflating CPMs for both campaigns. DPA-Only should be killed regardless, but overlap makes it worse.
+            </div>
+        </div>
+
+        <div class="overlap-card">
+            <div class="overlap-header">
+                <span class="overlap-title">🚀 ASC+ Promo ↔️ 🎯 Retargeting</span>
+                <span class="overlap-percent">23%</span>
+            </div>
+            <div class="overlap-detail">
+                <strong>Status:</strong> Minor overlap. Both campaigns are high-ROAS (17.08x and 20.61x), so this isn't critical. However, could reduce waste by excluding ASC+ from retargeting audiences.
+            </div>
+            <div class="overlap-detail">
+                <strong>Impact:</strong> ~$6K/month potential savings. Low priority compared to MoF issues.
+            </div>
+        </div>
+
+        <div class="insight">
+            <strong>🚨 Root Cause:</strong> MoF campaigns (Consideration and DPA-Only) lack audience exclusions. They're broad campaigns hitting everyone, including people already in retargeting pools. This creates self-competition.
+        </div>
+
+        <div class="recommendation-box">
+            <h3>💡 Consolidation Strategy</h3>
+            <div class="recommendation-item">
+                <strong>1. Kill MoF DPA-Only immediately</strong><br>
+                0.73x ROAS, 68% overlap with MoF Consideration. No reason to keep it alive. Saves $10.2K/month.
+            </div>
+            <div class="recommendation-item">
+                <strong>2. Exclude retargeting audiences from MoF Consideration</strong><br>
+                Add audience exclusion: "Website visitors (last 30 days)". This prevents MoF from competing with Retargeting's 20.61x ROAS. Saves ~$34K/month.
+            </div>
+            <div class="recommendation-item">
+                <strong>3. Consolidate MoF spend into ASC+ and Retargeting</strong><br>
+                Shift saved budget ($44K total) to campaigns with proven 17-20x ROAS. Projected impact: +$750K/month revenue.
+            </div>
+            <div class="recommendation-item">
+                <strong>4. Weekly overlap monitoring</strong><br>
+                Check audience overlap reports every Monday. Flag any campaign with >30% overlap. Prevents future waste.
+            </div>
+        </div>
+
+        <div class="insight">
+            <strong>📊 Expected Outcome:</strong> Removing overlap saves $44K/month in wasted spend. Reallocating that to 17-20x ROAS campaigns yields $750K-880K/month incremental revenue. This is a single structural fix with massive compounding impact.
+        </div>
+    </div>
+</body>
+</html>

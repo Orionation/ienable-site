@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iEnable Competitive Landscape</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 100%);
+            color: #e8eaed;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 40px 60px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: #9ca3af;
+            font-weight: 400;
+        }
+
+        /* 2x2 Matrix */
+        .matrix-section {
+            margin-bottom: 60px;
+        }
+
+        .matrix-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 40px;
+        }
+
+        .axis-label {
+            position: absolute;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .axis-label.top {
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .axis-label.bottom {
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .axis-label.left {
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            transform-origin: center;
+        }
+
+        .axis-label.right {
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%) rotate(90deg);
+            transform-origin: center;
+        }
+
+        .quadrant-lines {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: calc(100% - 80px);
+            height: calc(100% - 80px);
+        }
+
+        .quadrant-lines::before,
+        .quadrant-lines::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .quadrant-lines::before {
+            width: 1px;
+            height: 100%;
+            left: 50%;
+            top: 0;
+        }
+
+        .quadrant-lines::after {
+            width: 100%;
+            height: 1px;
+            top: 50%;
+            left: 0;
+        }
+
+        .quadrant-label {
+            position: absolute;
+            top: 60px;
+            left: 60px;
+            font-size: 13px;
+            color: #00d4ff;
+            font-weight: 600;
+            background: rgba(0, 212, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .bubble:hover {
+            transform: scale(1.05);
+        }
+
+        .bubble.ienable {
+            width: 180px;
+            height: 180px;
+            top: 20%;
+            left: 20%;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 153, 255, 0.2));
+            border: 3px solid #00d4ff;
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.6), 0 0 80px rgba(0, 212, 255, 0.3);
+            font-size: 24px;
+        }
+
+        .bubble.frontier {
+            width: 160px;
+            height: 160px;
+            top: 20%;
+            right: 15%;
+            background: rgba(79, 70, 229, 0.1);
+            border-color: rgba(79, 70, 229, 0.5);
+        }
+
+        .bubble.copilot {
+            width: 140px;
+            height: 140px;
+            bottom: 25%;
+            right: 20%;
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .bubble.agentforce {
+            width: 130px;
+            height: 130px;
+            bottom: 20%;
+            right: 35%;
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        .bubble.nforce {
+            width: 120px;
+            height: 120px;
+            bottom: 25%;
+            left: 22%;
+            background: rgba(251, 146, 60, 0.1);
+            border-color: rgba(251, 146, 60, 0.5);
+        }
+
+        .star {
+            color: #fbbf24;
+            margin-left: 6px;
+            font-size: 28px;
+        }
+
+        /* Differentiator Cards */
+        .cards-section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #e8eaed;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 28px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .card-icon {
+            font-size: 36px;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #00d4ff;
+        }
+
+        .card-desc {
+            font-size: 14px;
+            color: #9ca3af;
+            line-height: 1.6;
+        }
+
+        /* Comparison Table */
+        .table-section {
+            margin-bottom: 40px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 18px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-table td {
+            padding: 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 15px;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .company-cell {
+            font-weight: 600;
+            color: #e8eaed;
+        }
+
+        .company-cell.ienable {
+            color: #00d4ff;
+        }
+
+        .check {
+            color: #10b981;
+            font-size: 20px;
+        }
+
+        .cross {
+            color: #ef4444;
+            font-size: 20px;
+        }
+
+        @media (max-width: 1200px) {
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .matrix-container {
+                height: 500px;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bubble {
+                font-size: 11px;
+            }
+
+            .bubble.ienable {
+                width: 140px;
+                height: 140px;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>iEnable Competitive Landscape</h1>
+            <p>Autonomous + Vertical = Uncontested Market Position</p>
+        </div>
+
+        <!-- Section 1: 2x2 Matrix -->
+        <div class="matrix-section">
+            <div class="matrix-container">
+                <div class="axis-label top">Autonomous</div>
+                <div class="axis-label bottom">Reactive</div>
+                <div class="axis-label left">Vertical</div>
+                <div class="axis-label right">Horizontal</div>
+
+                <div class="quadrant-lines"></div>
+                
+                <div class="quadrant-label">No competitor here yet</div>
+
+                <div class="bubble ienable">
+                    iEnable<span class="star">★</span>
+                </div>
+
+                <div class="bubble frontier">
+                    OpenAI<br>Frontier
+                </div>
+
+                <div class="bubble copilot">
+                    Microsoft<br>Copilot
+                </div>
+
+                <div class="bubble agentforce">
+                    Salesforce<br>Agentforce
+                </div>
+
+                <div class="bubble nforce">
+                    NForce.ai
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Key Differentiators -->
+        <div class="cards-section">
+            <h2 class="section-title">Key Differentiators</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🌙</div>
+                    <div class="card-title">Works While You Sleep</div>
+                    <div class="card-desc">Overnight autonomous work. $25K found at 3 AM.</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🔄</div>
+                    <div class="card-title">Closed-Loop ROI</div>
+                    <div class="card-desc">Recommend → Execute → Measure. $4.4M proven.</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">📱</div>
+                    <div class="card-title">Report Cards</div>
+                    <div class="card-desc">CEO gets mobile insights at 6 AM. Not dashboards.</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-title">Domain Expert</div>
+                    <div class="card-desc">Knows ROAS, TACOS, creative fatigue. Not generic.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Comparison Table -->
+        <div class="table-section">
+            <h2 class="section-title">Quick Comparison</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Platform</th>
+                        <th>Autonomous Work</th>
+                        <th>ROI Attribution</th>
+                        <th>Report Cards</th>
+                        <th>Domain Expertise</th>
+                        <th>Price Point</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="company-cell ienable">iEnable</td>
+                        <td><span class="check">✅</span></td>
+                        <td><span class="check">✅</span></td>
+                        <td><span class="check">✅</span></td>
+                        <td><span class="check">✅</span></td>
+                        <td>$500-2K/mo</td>
+                    </tr>
+                    <tr>
+                        <td class="company-cell">NForce.ai</td>
+                        <td><span class="cross">❌</span></td>
+                        <td><span class="cross">❌</span></td>
+                        <td><span class="cross">❌</span></td>
+                        <td><span class="cross">❌</span></td>
+                        <td>Unknown</td>
+                    </tr>
+                    <tr>
+                        <td class="company-cell">OpenAI Frontier</td>
+                        <td><span class="check">✅</span></td>
+                        <td><span class="cross">❌</span></td>
+                        <td><span class="cross">❌</span></td>
+                        <td><span class="cross">❌</span></td>
+                        <td>$100K+/yr</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
