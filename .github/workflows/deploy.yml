@@ -21,6 +21,11 @@ jobs:
       - name: Build Astro site
         run: npm run build
 
+      - name: Fix directory indexes
+        run: |
+          [ -f dist/blog.html ] && mv dist/blog.html dist/blog/index.html || true
+          [ -f dist/manifesto.html ] && mkdir -p dist/manifesto && mv dist/manifesto.html dist/manifesto/index.html || true
+
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
