@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iEnable | The AI That Actually Works</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        :root {
+            --bg: #000000;
+            --bg-subtle: #0A0A0A;
+            --surface: #111111;
+            --surface-hover: #1A1A1A;
+            --border: #222222;
+            --text: #FFFFFF;
+            --text-muted: #888888;
+            --accent: #7C3AED;
+            --accent-glow: rgba(124, 58, 237, 0.5);
+            --gradient: linear-gradient(135deg, #7C3AED 0%, #EC4899 50%, #F97316 100%);
+            --gradient-subtle: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(124, 58, 237, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 58, 237, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .bg-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: var(--accent-glow);
+            filter: blur(150px);
+            opacity: 0.3;
+            animation: float 20s infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .bg-glow-1 { top: -200px; left: -200px; }
+        .bg-glow-2 { bottom: -200px; right: -200px; animation-delay: -10s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(100px, 100px); }
+        }
+        
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 16px 24px;
+        }
+        
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 12px 24px;
+        }
+        
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            text-decoration: none;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-links {
+            display: none;
+            gap: 32px;
+            list-style: none;
+        }
+        
+        @media (min-width: 768px) {
+            .nav-links { display: flex; }
+        }
+        
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover { color: var(--text); }
+        
+        .nav-cta {
+            background: var(--gradient);
+            color: var(--text);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+        
+        /* Hero */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 24px 80px;
+        }
+        
+        .hero-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gradient-subtle);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            color: var(--text);
+            margin-bottom: 32px;
+            animation: fadeInUp 0.6s;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            line-height: 1.05;
+            font-weight: 800;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s 0.1s backwards;
+        }
+        
+        @media (min-width: 768px) {
+            .hero h1 { font-size: 72px; }
+        }
+        
+        @media (min-width: 1024px) {
+            .hero h1 { font-size: 84px; }
+        }
+        
+        .hero h1 span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-desc {
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.6s 0.2s backwards;
+        }
+        
+        @media (min-width: 768px) {
+            .hero-desc { font-size: 20px; }
+        }
+        
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            animation: fadeInUp 0.6s 0.3s backwards;
+        }
+        
+        .btn-primary {
+            background: var(--gradient);
+            color: var(--text);
+            padding: 16px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px var(--accent-glow);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            padding: 16px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--surface);
+            border-color: var(--text-muted);
+        }
+        
+        /* Product Demo */
+        .hero-demo {
+            margin-top: 80px;
+            animation: fadeInUp 0.6s 0.4s backwards;
+        }
+        
+        .demo-window {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+        }
+        
+        .demo-header {
+            background: var(--bg);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .demo-dots {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .demo-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border);
+        }
+        
+        .demo-dot.red { background: #FF5F56; }
+        .demo-dot.yellow { background: #FFBD2E; }
+        .demo-dot.green { background: #27C93F; }
+        
+        .demo-url {
+            flex: 1;
+            background: var(--surface);
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        .demo-content {
+            padding: 32px;
+        }
+        
+        .demo-grid {
+            display: grid;
+            gap: 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .demo-grid { grid-template-columns: 1fr 2fr; }
+        }
+        
+        .demo-sidebar {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .sidebar-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        
+        .specialist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .specialist-item:hover,
+        .specialist-item.active {
+            background: var(--surface);
+        }
+        
+        .specialist-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .specialist-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .specialist-status {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: #22C55E;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.9); }
+        }
+        
+        .demo-main {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 24px;
+        }
+        
+        .chat-message {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            animation: messageIn 0.3s;
+        }
+        
+        @keyframes messageIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .chat-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .chat-bubble {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .chat-bubble.ai {
+            border: 1px solid var(--border);
+        }
+        
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 8px 0;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
+        }
+        
+        /* Stats Section */
+        .stats {
+            position: relative;
+            z-index: 1;
+            padding: 100px 24px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .stats-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .stats-grid {
+            display: grid;
+            gap: 32px;
+            text-align: center;
+        }
+        
+        @media (min-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        
+        .stat-item {
+            padding: 32px;
+        }
+        
+        .stat-value {
+            font-size: 48px;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        /* What Is Section */
+        .what-is {
+            position: relative;
+            z-index: 1;
+            padding: 100px 24px;
+        }
+        
+        .what-is-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .section-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+        
+        .section-title {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .section-title { font-size: 48px; }
+        }
+        
+        .section-desc {
+            font-size: 18px;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+        
+        /* Features */
+        .features {
+            position: relative;
+            z-index: 1;
+            padding: 100px 24px;
+        }
+        
+        .features-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .features-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+        
+        .features-grid {
+            display: grid;
+            gap: 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .features-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--text-muted);
+        }
+        
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+        
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 24px;
+        }
+        
+        .feature-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .feature-desc {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+        
+        /* Social Proof */
+        .social-proof {
+            position: relative;
+            z-index: 1;
+            padding: 100px 24px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .social-proof-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            gap: 24px;
+            margin-top: 64px;
+        }
+        
+        @media (min-width: 768px) {
+            .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        .testimonial-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+        }
+        
+        .testimonial-rating {
+            color: #FBBF24;
+            font-size: 18px;
+            margin-bottom: 16px;
+            letter-spacing: 4px;
+        }
+        
+        .testimonial-text {
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .author-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+        
+        .author-name {
+            font-weight: 600;
+        }
+        
+        .author-role {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        /* CTA */
+        .cta-section {
+            position: relative;
+            z-index: 1;
+            padding: 120px 24px;
+            text-align: center;
+        }
+        
+        .cta-inner {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .cta-title {
+            font-size: 40px;
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .cta-title { font-size: 56px; }
+        }
+        
+        .cta-title span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .cta-desc {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+        
+        /* Footer */
+        .footer {
+            position: relative;
+            z-index: 1;
+            padding: 64px 24px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-grid {
+            display: grid;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+        
+        @media (min-width: 768px) {
+            .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
+        }
+        
+        .footer-brand .logo {
+            display: block;
+            margin-bottom: 16px;
+        }
+        
+        .footer-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+        
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        
+        .footer-links a:hover { color: var(--text); }
+        
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 32px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="#" class="logo">iEnable</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#docs">Docs</a></li>
+                <li><a href="#changelog">Changelog</a></li>
+            </ul>
+            <a href="#start" class="nav-cta">Start Free →</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-badge">
+                ⚡ Now with voice onboarding — setup in 5 minutes
+            </div>
+            <h1>AI that <span>executes</span>,<br>not just chats.</h1>
+            <p class="hero-desc">Stop building prompts. Start shipping results. iEnable deploys AI specialists that work in your tools, on your tasks, right now.</p>
+            <div class="hero-buttons">
+                <a href="#start" class="btn-primary">
+                    Get Started Free
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="#demo" class="btn-secondary">Watch Demo</a>
+            </div>
+            
+            <div class="hero-demo">
+                <div class="demo-window">
+                    <div class="demo-header">
+                        <div class="demo-dots">
+                            <span class="demo-dot red"></span>
+                            <span class="demo-dot yellow"></span>
+                            <span class="demo-dot green"></span>
+                        </div>
+                        <div class="demo-url">app.ienable.ai/dashboard</div>
+                    </div>
+                    <div class="demo-content">
+                        <div class="demo-grid">
+                            <div class="demo-sidebar">
+                                <div class="sidebar-title">AI Specialists</div>
+                                <div class="specialist-item active">
+                                    <div class="specialist-avatar">🎨</div>
+                                    <div>
+                                        <div class="specialist-name">Maya</div>
+                                        <div class="specialist-status">
+                                            <span class="status-dot"></span>
+                                            Working...
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="specialist-item">
+                                    <div class="specialist-avatar">💻</div>
+                                    <div>
+                                        <div class="specialist-name">Marcus</div>
+                                        <div class="specialist-status">
+                                            <span class="status-dot"></span>
+                                            Ready
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="specialist-item">
+                                    <div class="specialist-avatar">📞</div>
+                                    <div>
+                                        <div class="specialist-name">Sofia</div>
+                                        <div class="specialist-status">
+                                            <span class="status-dot"></span>
+                                            3 tasks
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="demo-main">
+                                <div class="chat-message">
+                                    <div class="chat-avatar">👤</div>
+                                    <div class="chat-bubble">Write a blog post about our Q4 launch</div>
+                                </div>
+                                <div class="chat-message">
+                                    <div class="chat-avatar">🎨</div>
+                                    <div class="chat-bubble ai">
+                                        On it! I'll research your recent announcements, analyze competitor posts, and draft something engaging. Give me 10 minutes.
+                                        <div class="typing-indicator">
+                                            <span class="typing-dot"></span>
+                                            <span class="typing-dot"></span>
+                                            <span class="typing-dot"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="stats-inner">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">2.4M</div>
+                    <div class="stat-label">Tasks executed this month</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">5min</div>
+                    <div class="stat-label">Average setup time</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">10x</div>
+                    <div class="stat-label">Productivity multiplier</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">98%</div>
+                    <div class="stat-label">Task success rate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What Is -->
+    <section class="what-is">
+        <div class="what-is-inner">
+            <div class="section-label">What is iEnable?</div>
+            <h2 class="section-title">AI specialists that actually do things</h2>
+            <p class="section-desc">Not another chatbot. Not another copilot. iEnable deploys autonomous AI workers that log into your tools, execute real tasks, and deliver real results — while you focus on what matters.</p>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="features-inner">
+            <div class="features-header">
+                <div class="section-label">Capabilities</div>
+                <h2 class="section-title">Built for speed</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎙️</div>
+                    <h3 class="feature-title">Voice Onboarding</h3>
+                    <p class="feature-desc">Just talk. Describe your business, your processes, your preferences. Our AI listens, learns, and configures itself. No forms. No docs. No friction.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3 class="feature-title">AI Specialists</h3>
+                    <p class="feature-desc">Maya handles marketing. Marcus ships code. Sofia closes tickets. Each specialist is pre-trained for their role and learns your specific way of working.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Live Dashboard</h3>
+                    <p class="feature-desc">See everything. Every task, every specialist, every result. Real-time visibility into your AI workforce with granular controls when you need them.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="social-proof">
+        <div class="social-proof-inner">
+            <div class="features-header">
+                <div class="section-label">Loved by builders</div>
+                <h2 class="section-title">Join 1,200+ teams shipping faster</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">★★★★★</div>
+                    <p class="testimonial-text">"We went from idea to deployed AI workforce in an afternoon. The voice onboarding is magic — I just talked about my business and it figured everything out."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JK</div>
+                        <div>
+                            <div class="author-name">Jamie Kim</div>
+                            <div class="author-role">Founder, Stealth Startup</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">★★★★★</div>
+                    <p class="testimonial-text">"Finally, AI that does the work instead of making me do more work. Maya writes better content than our last three hires combined."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">AR</div>
+                        <div>
+                            <div class="author-name">Alex Rivera</div>
+                            <div class="author-role">Head of Growth, Series B</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-inner">
+            <h2 class="cta-title">Ready to <span>ship faster</span>?</h2>
+            <p class="cta-desc">Start free. No credit card. Deploy your first AI specialist in 5 minutes.</p>
+            <a href="#start" class="btn-primary">
+                Get Started Free
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">iEnable</a>
+                    <p class="footer-desc">AI specialists that execute. Not another chatbot — a workforce that ships.</p>
+                </div>
+                <div>
+                    <div class="footer-title">Product</div>
+                    <ul class="footer-links">
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Changelog</a></li>
+                        <li><a href="#">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="footer-title">Developers</div>
+                    <ul class="footer-links">
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API Reference</a></li>
+                        <li><a href="#">Status</a></li>
+                        <li><a href="#">GitHub</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="footer-title">Company</div>
+                    <ul class="footer-links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Twitter</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 iEnable. Ship faster.</span>
+                <span>
+                    <a href="#" style="color: inherit;">Privacy</a> · 
+                    <a href="#" style="color: inherit;">Terms</a>
+                </span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

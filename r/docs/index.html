@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>iEnable Report Cards — System Documentation</title>
+<style>
+  :root {
+    --bg: #f8fafc; --card: #ffffff; --border: #e2e8f0;
+    --text: #1e293b; --muted: #64748b; --accent: #7c3aed;
+    --green: #10b981; --amber: #f59e0b; --red: #ef4444; --blue: #3b82f6;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Nav */
+  .top-bar {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: white; padding: 16px 20px; position: sticky; top: 0; z-index: 100;
+  }
+  .top-bar a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; }
+  .top-bar a:hover { color: white; }
+  .top-bar h1 { font-size: 18px; font-weight: 800; margin-top: 4px; }
+  .top-bar .subtitle { font-size: 12px; color: rgba(255,255,255,0.5); }
+
+  /* TOC */
+  .toc {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    margin: 20px; padding: 20px;
+  }
+  .toc h2 { font-size: 16px; margin-bottom: 12px; }
+  .toc a {
+    display: block; padding: 6px 0; color: var(--accent);
+    text-decoration: none; font-size: 14px; font-weight: 500;
+    border-bottom: 1px solid var(--border);
+  }
+  .toc a:last-child { border-bottom: none; }
+  .toc a:hover { color: #5b21b6; }
+  .toc .sub { padding-left: 16px; font-size: 13px; color: var(--muted); }
+
+  /* Sections */
+  .section {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    margin: 16px 20px; padding: 24px 20px; overflow-x: auto;
+  }
+  .section h2 {
+    font-size: 18px; font-weight: 800; margin-bottom: 4px;
+    padding-bottom: 8px; border-bottom: 2px solid var(--accent);
+  }
+  .section h3 { font-size: 15px; font-weight: 700; margin: 20px 0 8px; color: var(--accent); }
+  .section h4 { font-size: 14px; font-weight: 700; margin: 16px 0 6px; }
+  .section p { margin: 8px 0; font-size: 14px; }
+  .section ul, .section ol { margin: 8px 0 8px 20px; font-size: 14px; }
+  .section li { margin: 4px 0; }
+  .section strong { color: var(--text); }
+  .section em { color: var(--muted); }
+
+  /* Code */
+  code {
+    background: #f1f5f9; padding: 2px 6px; border-radius: 4px;
+    font-size: 12px; font-family: 'SF Mono', Monaco, monospace;
+  }
+  pre {
+    background: #0f172a; color: #e2e8f0; padding: 16px;
+    border-radius: 10px; overflow-x: auto; margin: 12px 0;
+    font-size: 12px; line-height: 1.5;
+  }
+  pre code { background: none; padding: 0; color: inherit; }
+
+  /* Callouts */
+  .callout {
+    border-radius: 10px; padding: 14px 16px; margin: 12px 0;
+    font-size: 13px; line-height: 1.5;
+  }
+  .callout.important { background: #fef3c7; border-left: 4px solid var(--amber); }
+  .callout.critical { background: #fee2e2; border-left: 4px solid var(--red); }
+  .callout.success { background: #d1fae5; border-left: 4px solid var(--green); }
+  .callout.info { background: #dbeafe; border-left: 4px solid var(--blue); }
+
+  /* Tables */
+  table {
+    width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px;
+  }
+  th {
+    background: #f8fafc; text-align: left; padding: 8px 10px;
+    font-weight: 700; border-bottom: 2px solid var(--border); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted);
+  }
+  td { padding: 8px 10px; border-bottom: 1px solid var(--border); }
+
+  /* Diagram */
+  .diagram {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    border-radius: 12px; padding: 24px; margin: 16px 0;
+    text-align: center; color: white;
+  }
+  .diagram-flow {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 8px; align-items: center;
+  }
+  .diagram-node {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px; padding: 10px 14px; font-size: 12px; font-weight: 600;
+    min-width: 100px;
+  }
+  .diagram-node.active { background: rgba(34,197,94,0.2); border-color: #22c55e; }
+  .diagram-arrow { font-size: 18px; color: rgba(255,255,255,0.4); }
+
+  /* Footer */
+  .doc-footer {
+    text-align: center; padding: 24px; color: var(--muted); font-size: 12px;
+  }
+
+  @media (max-width: 480px) {
+    .section { margin: 12px; padding: 16px; }
+    .toc { margin: 12px; }
+    pre { font-size: 11px; padding: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="/r/">← Back to Command Center</a>
+  <h1>📋 Report Cards — System Documentation</h1>
+  <div class="subtitle">Complete technical reference · Last updated Feb 28, 2026</div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <h2>📑 Contents</h2>
+  <a href="#overview">1. System Overview — What This Is</a>
+  <a href="#flywheel">2. The Flywheel — How Everything Connects</a>
+  <a href="#architecture">3. Architecture — Where Things Live</a>
+  <a href="#api">4. API Reference — Endpoints & Schema</a>
+  <a href="#report-card-schema">5. Report Card Schema — Every Field Explained</a>
+  <a href="#task-system">6. Task System — How Tasks Flow</a>
+  <a href="#agents">7. Agent Directory — Who Does What</a>
+  <a href="#cards-ui">8. Card UI — The Frontend Template</a>
+  <a href="#slides">9. Rich Slides (playbooks) — Multi-Card Reports</a>
+  <a href="#trajectory">10. Trajectory Card — The Journey</a>
+  <a href="#directory">11. Directory Card — Navigation</a>
+  <a href="#nightly-loop">12. Nightly Loop — How Agents Compound</a>
+  <a href="#crons">13. Cron Configuration — What Runs When</a>
+  <a href="#deployment">14. Deployment — How to Ship Changes</a>
+  <a href="#urls">15. URL Map — Every Deployed Page</a>
+  <a href="#data-flow">16. Data Flow — End to End</a>
+  <a href="#recovery">17. Recovery Guide — When Things Break</a>
+  <a href="#product-vision">18. Product Vision — Why This Matters</a>
+</div>
+
+<!-- 1. OVERVIEW -->
+<div class="section" id="overview">
+  <h2>1. Why This Exists</h2>
+  
+  <p>Jonathan asked Claude (via the Anthropic console) a simple question: <em>"What would you do with these agents tonight?"</em> Claude gave a thoughtful strategy for Tom and Adaline. Then Jonathan pasted it to me (Orion) and said: <strong>"Take his strategy and go harder/faster."</strong></p>
+
+  <p>Claude's response ended with the most important line of the entire project:</p>
+
+  <div class="callout important">
+    <strong>"These report cards ARE the product. This is what iEnable sells."</strong>
+  </div>
+
+  <p>That's the entire reason this system exists. We're not building dashboards for ourselves. We're building the product demo for iEnable — the thing that makes a CEO look at it and say "I need this for my company." When a potential customer sees Adaline's card showing $4.4M/year in proven ROI from a single AI recommendation, that's the sale.</p>
+
+  <h3>The Problem We Were Solving</h3>
+  <p>Before this system, our agents worked overnight and produced... markdown files. State reports. Learning databases. All trapped in local workspaces. Jonathan couldn't see what they were doing. Lyndsay (the ads director at Maxwood) couldn't see what Adaline found. The HODL group couldn't see Tom's research. The agents themselves couldn't see their own progress across sessions.</p>
+  
+  <p>The agents were learning but nobody could SEE them learning. And if you can't see it, you can't sell it. And if you can't sell it, iEnable is just another AI tool nobody uses.</p>
+
+  <h3>What Jonathan Kept Pushing For</h3>
+  <p>Throughout the build, Jonathan's corrections shaped every decision:</p>
+  <ul>
+    <li><strong>"Slow down. You are acting instead of thinking."</strong> — I was patching links to static pages when he wanted me to make the dynamic pages LOOK like the static ones. The static pages had real content that was carefully crafted. The dynamic pages were bland.</li>
+    <li><strong>"The static pages were for you to read and put that content into the database."</strong> — The static pages weren't the product. They were the SOURCE OF TRUTH. The data in them needed to live in the database so it could be served dynamically and updated every night.</li>
+    <li><strong>"Look at what we did for Apollo — his card says what keywords he is targeting and his timeline to #1 on Google. That is the flywheel."</strong> — Every card must show the JOURNEY, not just tonight's output. Finding → Task → Execution → Measurement → Learning → Better Finding.</li>
+    <li><strong>"The action plan and tasks should match."</strong> — If the card says "5 next steps" and the todo list shows different items, the system is lying. Plan items ARE tasks. Number them the same.</li>
+    <li><strong>"This is a directory for THAT agent, not a nav to other agents."</strong> — When I built the directory card showing all agents, Jonathan corrected: each agent's directory should show only THEIR reports, grouped by type, expandable.</li>
+    <li><strong>"Why would Tom's dashboard be dated? It is dynamic."</strong> — I was linking to a static dated page when the dynamic page is always current. Static pages are archives. Dynamic pages are the product.</li>
+    <li><strong>"Does this put Tom on a path to $1M?"</strong> — The ultimate test. Every card, every task, every number should answer: is this agent moving toward its north star? If the card doesn't make you FEEL the progress, it's not done.</li>
+  </ul>
+
+  <h3>Why the ROI Tracker Changes Everything</h3>
+  <p>Adaline recommended scaling GIF creative from 2% to 15% of ad spend. Lyndsay (the human) executed it — scaled to 13.1%. Result: +$369K/month ($4.4M/year). That's not a projection. That's measured. That's a closed loop: <strong>AI recommends → Human executes → Results measured → ROI proven.</strong></p>
+  
+  <p>When we show this to a potential iEnable customer, the conversation changes from "what can AI do?" to "how much money has it already made?" Every agent should have an ROI tracker card that answers that question.</p>
+
+  <h3>Why Compounding Matters</h3>
+  <p>Tom started with a hunch: "premium selling seems to work better than buying spreads." In 2 days, that became: 43 lessons → 6 hard rules from data → 3 validated learnings → 1 fully validated playbook (20/20 trades, 100% win rate across 8 market scenarios). That playbook now executes mechanically — Tom doesn't need to THINK about premium selling anymore, he just runs the playbook.</p>
+  
+  <p>That compounding is invisible if it's trapped in a SQLite database on a laptop. The cards make it VISIBLE. The trajectory card shows the phases. The proof points show the evidence. The customer sees an agent getting smarter every single day.</p>
+
+  <p>As Jonathan said: <em>"Every idle minute, the competition is catching up. This is winner-takes-all."</em></p>
+</div>
+
+<!-- 2. FLYWHEEL -->
+<div class="section" id="flywheel">
+  <h2>2. The Flywheel — Why It Has to Be a Loop</h2>
+
+  <div class="diagram">
+    <div class="diagram-flow">
+      <div class="diagram-node active">📋 Report Card</div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node">🎯 Tasks Created</div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node">🔄 Agent Executes</div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node">📊 Results Measured</div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node">📚 Learning Logged</div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node active">📋 Better Report Card</div>
+    </div>
+    <p style="margin-top:16px;font-size:12px;color:rgba(255,255,255,0.5);">Every cycle: findings become tasks → tasks produce results → results become learnings → learnings improve the next cycle</p>
+  </div>
+
+  <p>The reason this has to be a closed loop — not just a report or just a task list — is that AI agents have no persistent memory between sessions. Every time a cron fires and an agent wakes up, it's starting from scratch. The flywheel is how we solve that: the report card IS the agent's memory made visible. The tasks ARE the agent's intent made persistent. The learnings ARE the agent's intelligence made cumulative.</p>
+  
+  <p>Without the loop, an agent could discover that DPA-Only campaigns are bleeding $10K/month... and then forget it next session. With the loop, that finding becomes a task ("Kill DPA-Only"), the task gets tracked until someone executes it, the execution gets measured ("saved $10K/month"), and the measurement becomes a validated learning that feeds every future decision.</p>
+
+  <p><strong>The customer needs to SEE this loop.</strong> When someone looks at a card, they should feel: "This thing is getting smarter. It found something. Someone acted on it. There's proof it worked. And tonight it'll find more." That feeling is what sells iEnable.</p>
+
+  <h3>The Learning Ladder</h3>
+  <p>Knowledge compounds through levels. This matters because a "lesson" and a "playbook" are fundamentally different things:</p>
+  <ol>
+    <li><strong>Observation</strong> — Raw finding. "Naked puts seem to win more often." Cheap to produce, easy to forget. Stored in learning.db.</li>
+    <li><strong>Hypothesis</strong> — Pattern with a testable prediction. "Premium selling has >80% win rate." Committed to paper. Worth tracking.</li>
+    <li><strong>Validated</strong> — Prediction confirmed by real outcome. "92% win rate on 12 trades." THIS IS GOLD. This is the agent proving it was right.</li>
+    <li><strong>Playbook</strong> — 3+ validations → permanent SOP. "20/20 trades, 100% win rate. Execute mechanically." This is the agent producing INSTITUTIONAL KNOWLEDGE that compounds forever.</li>
+  </ol>
+
+  <div class="callout success">
+    <strong>Why Tom's Playbook Matters:</strong><br>
+    Tom went from observation → hypothesis → validated → playbook in 2 DAYS. That playbook is now a mechanical edge. He doesn't need to think about premium selling anymore — he just executes the rules. Every agent should be building playbooks like this. Adaline's "Bing scaling works at 3x spend" is close to playbook status. Muse's "background music adds 1-2 quality points" is validated. The cards need to show this progression because it's the PROOF that AI agents get better over time.
+  </div>
+
+  <h3>The ROI Loop — Why It's the Killer Feature</h3>
+  <p>Most AI tools show you what they CAN do. This shows what they DID do — with numbers. The pattern:</p>
+  <ol>
+    <li>AI Recommends: "Scale GIF creative from 2% to 15%"</li>
+    <li>Human Executes: Lyndsay scaled to 13.1%</li>
+    <li>Results Measured: +$369K/month ($4.4M/year)</li>
+    <li>Attribution Confirmed: High confidence — direct budget shift, channel-level measurement</li>
+  </ol>
+  <p>This is tracked in the ROI Tracker card. Every agent should have one. The question it answers: <strong>"What has this agent made or saved me?"</strong> If you can't answer that with a number, the agent hasn't proven its value yet.</p>
+  
+  <p>Jonathan's insight: Adaline's ROI tracker showing 2/2 recommendations executed with $4.4M proven impact is the single best sales tool for iEnable. A CEO sees that and the conversation is over — they want it.</p>
+</div>
+
+<!-- 3. ARCHITECTURE -->
+<div class="section" id="architecture">
+  <h2>3. Architecture — Where Things Live</h2>
+
+  <h3>Backend (API)</h3>
+  <table>
+    <tr><th>Component</th><th>Location</th></tr>
+    <tr><td>API Server</td><td><code>https://ienable-admin-app-hqtw2.ondigitalocean.app</code></td></tr>
+    <tr><td>Database</td><td>DigitalOcean managed PostgreSQL (via Prisma)</td></tr>
+    <tr><td>App ID</td><td><code>e0267d8e-4c84-4709-acea-1595d1510b2e</code></td></tr>
+  </table>
+
+  <h3>Frontend (Static HTML)</h3>
+  <table>
+    <tr><th>Component</th><th>Location</th></tr>
+    <tr><td>FTP Host</td><td><code>eborro.com</code> (user: orioneborro@eborro.com)</td></tr>
+    <tr><td>Web Root</td><td><code>public_html/ienable.ai/r/</code></td></tr>
+    <tr><td>Command Center</td><td><code>/r/index.html</code> — summary of all agents</td></tr>
+    <tr><td>Agent Cards Template</td><td><code>/r/{agent}/index.html</code> — same template for all agents</td></tr>
+    <tr><td>FTP Password</td><td><code>security find-generic-password -s ftp-eborro-pass -w</code></td></tr>
+  </table>
+
+  <h3>Local Source Files</h3>
+  <table>
+    <tr><th>File</th><th>Purpose</th></tr>
+    <tr><td><code>~/workspace/sites/agent-report/index.html</code></td><td>Agent card template (deployed to all /r/{agent}/)</td></tr>
+    <tr><td><code>~/workspace/sites/ienable-r/index.html</code></td><td>Command center page</td></tr>
+    <tr><td><code>~/workspace/sites/ienable-r/new-script.js</code></td><td>Command center JS (embedded into index.html at build)</td></tr>
+    <tr><td><code>~/workspace/sites/report-cards-docs/index.html</code></td><td>This documentation</td></tr>
+  </table>
+
+  <h3>Agent Workspaces</h3>
+  <table>
+    <tr><th>Agent</th><th>Workspace Path</th><th>learning.db</th></tr>
+    <tr><td>Adaline</td><td><code>~/.openclaw/agents/lyndsay-ads/workspace/</code></td><td>51 lessons</td></tr>
+    <tr><td>Tom</td><td><code>~/.openclaw/agents/hodl/workspace/</code></td><td>43 lessons</td></tr>
+    <tr><td>Muse</td><td><code>~/.openclaw/agents/muse/workspace/</code></td><td>76 lessons</td></tr>
+    <tr><td>Apollo</td><td><code>~/.openclaw/agents/apollo/workspace/</code> (or ienable)</td><td>8 lessons</td></tr>
+    <tr><td>iEnable</td><td><code>~/.openclaw/agents/ienable/workspace/</code></td><td>8 lessons</td></tr>
+  </table>
+
+  <div class="callout info">
+    <strong>Note:</strong> <code>~/workspace</code> refers to <code>/Users/orionsieling/.openclaw/workspace</code> throughout this document.
+  </div>
+</div>
+
+<!-- 4. API REFERENCE -->
+<div class="section" id="api">
+  <h2>4. API Reference</h2>
+  <p>Base URL: <code>https://ienable-admin-app-hqtw2.ondigitalocean.app/api/v1</code></p>
+
+  <h3>Report Cards</h3>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>GET</td><td><code>/report-cards/latest</code></td><td>Get latest report card per agent</td></tr>
+    <tr><td>GET</td><td><code>/report-cards?agent_name=Tom</code></td><td>Get all report cards for an agent (history)</td></tr>
+    <tr><td>POST</td><td><code>/report-cards</code></td><td>Create/update a report card</td></tr>
+  </table>
+
+  <div class="callout important">
+    <strong>⚠️ No PATCH/PUT/DELETE on report cards.</strong> To update, POST a new one for the same agent+date. The latest one wins in the /latest endpoint.
+  </div>
+
+  <h3>Agent Tasks</h3>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>GET</td><td><code>/agent-tasks/active</code></td><td>Get all active tasks (working + queued)</td></tr>
+    <tr><td>POST</td><td><code>/agent-tasks</code></td><td>Create a new task</td></tr>
+  </table>
+
+  <div class="callout critical">
+    <strong>⚠️ No UPDATE or DELETE on tasks.</strong> Tasks can be created but not modified via API. To change status or rename, you need to add update/delete endpoints to the backend. This is a known gap.
+  </div>
+
+  <h3>Agent Status</h3>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>GET</td><td><code>/agent-status</code></td><td>Get live status for all agents (working/sleeping)</td></tr>
+  </table>
+</div>
+
+<!-- 5. REPORT CARD SCHEMA -->
+<div class="section" id="report-card-schema">
+  <h2>5. Report Card Schema — Every Field</h2>
+
+  <h3>Required Fields</h3>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+    <tr><td><code>agent_name</code></td><td>string</td><td>"Tom", "Adaline", "Muse", "Apollo", "iEnable", "Orion"</td></tr>
+    <tr><td><code>company_id</code></td><td>string</td><td>"c-46c5d60a" (Maxwood)</td></tr>
+    <tr><td><code>date</code></td><td>string</td><td>"2026-02-28" — ISO date</td></tr>
+    <tr><td><code>grade</code></td><td>string</td><td>"A+", "A", "B+", etc.</td></tr>
+  </table>
+
+  <h3>Display Fields</h3>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+    <tr><td><code>grade_color</code></td><td>string</td><td>Hex color for grade badge. "#22c55e" for green.</td></tr>
+    <tr><td><code>emoji</code></td><td>string</td><td>Agent emoji: 🏦 📊 🎨 ✍️ ⚡ 🌟</td></tr>
+    <tr><td><code>role</code></td><td>string</td><td>Agent role subtitle</td></tr>
+    <tr><td><code>stats</code></td><td>JSON array</td><td><code>[{"value": "43", "label": "Lessons"}]</code> — shown as stat pills</td></tr>
+  </table>
+
+  <h3>Content Fields</h3>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+    <tr><td><code>accomplishments</code></td><td>JSON array</td><td><code>[{"icon": "🎯", "text": "&lt;strong&gt;Title&lt;/strong&gt; — Detail"}]</code></td></tr>
+    <tr><td><code>key_finding</code></td><td>JSON object</td><td><code>{"label": "💡 Key", "text": "..."}</code> — highlighted callout</td></tr>
+    <tr><td><code>tonight_plan</code></td><td>JSON array</td><td>Array of strings — numbered action plan items</td></tr>
+  </table>
+
+  <h3>Intelligence Fields (The Learning Ladder)</h3>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+    <tr><td><code>hard_rules</code></td><td>JSON array</td><td>Array of strings — rules derived from data</td></tr>
+    <tr><td><code>validated_learnings</code></td><td>JSON array</td><td>Array of strings — predictions confirmed by outcomes (GOLD)</td></tr>
+    <tr><td><code>active_hypotheses</code></td><td>JSON array</td><td>Array of strings — predictions awaiting validation</td></tr>
+    <tr><td><code>playbooks</code></td><td>JSON array</td><td><strong>DUAL PURPOSE:</strong> If items have <code>name/emoji/role/color/accomplishments</code> keys → rendered as rich slides. If items have <code>name/status/win_rate</code> → treated as playbook metadata. See <a href="#slides">Slides section</a>.</td></tr>
+    <tr><td><code>learning_db_count</code></td><td>integer</td><td>Total lessons in agent's learning.db</td></tr>
+  </table>
+
+  <h3>Trajectory Fields</h3>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+    <tr><td><code>trend</code></td><td>JSON object</td><td>Contains north_star, current, velocity, milestone_next, days_active, trajectory</td></tr>
+    <tr><td><code>trend.north_star</code></td><td>string</td><td>The big goal: "$1M trading profit"</td></tr>
+    <tr><td><code>trend.current</code></td><td>string</td><td>Where they are now</td></tr>
+    <tr><td><code>trend.velocity</code></td><td>string</td><td>Speed of progress</td></tr>
+    <tr><td><code>trend.milestone_next</code></td><td>string</td><td>The immediate target</td></tr>
+    <tr><td><code>trend.days_active</code></td><td>integer</td><td>Days the agent has been running</td></tr>
+    <tr><td><code>trend.trajectory</code></td><td>string</td><td>Phases separated by "Phase N: description". Use (DONE) and (NOW) markers.</td></tr>
+  </table>
+
+  <div class="callout important">
+    <strong>Trajectory Format:</strong><br>
+    <code>"Phase 1: Prove the edge (DONE). Phase 2: Scale with playbook (NOW). Phase 3: Add Polymarket. Phase 4: Compound to $1M."</code><br><br>
+    The frontend parses these by splitting on <code>Phase \d+:</code> and looks for <code>(DONE)</code> and <code>(NOW)</code> to determine styling (checkmark, green ring, or gray).
+  </div>
+
+  <h3>System Fields</h3>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+    <tr><td><code>loop_status</code></td><td>string</td><td>"active" or "paused"</td></tr>
+    <tr><td><code>loop_updated</code></td><td>string</td><td>Last date the loop ran</td></tr>
+  </table>
+</div>
+
+<!-- 6. TASK SYSTEM -->
+<div class="section" id="task-system">
+  <h2>6. Task System</h2>
+
+  <h3>Task Schema</h3>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+    <tr><td><code>agent</code></td><td>string</td><td>Lowercase agent name: "tom", "adaline", etc.</td></tr>
+    <tr><td><code>task_name</code></td><td>string</td><td>Short name shown in todo list</td></tr>
+    <tr><td><code>task_detail</code></td><td>string</td><td>Expanded detail shown when tapped</td></tr>
+    <tr><td><code>status</code></td><td>string</td><td>"queued", "working", "complete", "failed"</td></tr>
+    <tr><td><code>result_summary</code></td><td>string</td><td>What happened when complete</td></tr>
+    <tr><td><code>deliverables</code></td><td>JSON array</td><td>URLs or paths to output files</td></tr>
+    <tr><td><code>started_at</code></td><td>timestamp</td><td>When moved to working</td></tr>
+    <tr><td><code>completed_at</code></td><td>timestamp</td><td>When moved to complete</td></tr>
+  </table>
+
+  <h3>Task Numbering</h3>
+  <p>Tasks are automatically numbered to match the <code>tonight_plan</code> items in the report card. The frontend uses word overlap matching:</p>
+  <ol>
+    <li>For each plan item, find the task with the most matching words (minimum 2)</li>
+    <li>Assign that task the plan item's number (1, 2, 3...)</li>
+    <li>Unmatched tasks get numbers after the plan items (6, 7, 8...)</li>
+  </ol>
+
+  <div class="callout info">
+    <strong>Best Practice:</strong> When creating tasks, use words from the tonight_plan item so the numbering auto-matches. E.g., plan says "Begin Bing Phase 2 scaling" → task name "Bing Phase 2 scaling roadmap for Lyndsay".
+  </div>
+
+  <h3>Creating Tasks</h3>
+<pre><code>curl -s -X POST "$API/agent-tasks" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent": "adaline",
+    "task_name": "Kill DPA-Only campaign",
+    "task_detail": "0.73x ROAS losing $10.2K/month. Immediate pause.",
+    "status": "queued"
+  }'</code></pre>
+
+  <h3>Current Task Counts (as of Feb 28, 2026)</h3>
+  <table>
+    <tr><th>Agent</th><th>Total</th><th>Working</th><th>Queued</th></tr>
+    <tr><td>Adaline</td><td>16</td><td>3</td><td>13</td></tr>
+    <tr><td>Tom</td><td>11</td><td>1</td><td>10</td></tr>
+    <tr><td>Muse</td><td>11</td><td>0</td><td>11</td></tr>
+    <tr><td>Apollo</td><td>6</td><td>0</td><td>6</td></tr>
+    <tr><td>iEnable</td><td>6</td><td>0</td><td>6</td></tr>
+    <tr><td>Orion</td><td>7</td><td>4</td><td>3</td></tr>
+  </table>
+</div>
+
+<!-- 7. AGENTS -->
+<div class="section" id="agents">
+  <h2>7. Agent Directory</h2>
+
+  <table>
+    <tr><th>Agent</th><th>Emoji</th><th>Domain</th><th>North Star</th><th>Cron Agent ID</th></tr>
+    <tr><td><strong>Adaline</strong></td><td>📊</td><td>MAXWOOD</td><td>$1M+ incremental revenue found & executed</td><td>lyndsay-ads</td></tr>
+    <tr><td><strong>Tom</strong></td><td>🏦</td><td>HODL</td><td>$1M trading profit</td><td>hodl (session agent)</td></tr>
+    <tr><td><strong>Muse</strong></td><td>🎨</td><td>MAXWOOD</td><td>Viral / Webby-Cannes quality (8.5+ QA)</td><td>muse</td></tr>
+    <tr><td><strong>Apollo</strong></td><td>✍️</td><td>IENABLE</td><td>#1 on Google for AI enablement platform</td><td>apollo / ienable</td></tr>
+    <tr><td><strong>iEnable</strong></td><td>⚡</td><td>IENABLE</td><td>Best AI enablement platform</td><td>ienable</td></tr>
+    <tr><td><strong>Orion</strong></td><td>🌟</td><td>PERSONAL</td><td>Every agent compounding toward $1B</td><td>main session</td></tr>
+  </table>
+
+  <h3>Domain Separation (Cognee Tags)</h3>
+  <table>
+    <tr><th>Domain</th><th>Tag</th><th>Agents</th><th>Scope</th></tr>
+    <tr><td>MAXWOOD</td><td>[MAXWOOD]</td><td>Muse, Adaline</td><td>Maxwood Furniture, Plank+Beam, Max & Lily</td></tr>
+    <tr><td>IENABLE</td><td>[IENABLE]</td><td>Apollo, iEnable agent</td><td>iEnable platform</td></tr>
+    <tr><td>HODL</td><td>[HODL]</td><td>Tom</td><td>Trading, markets. Completely isolated.</td></tr>
+    <tr><td>PERSONAL</td><td>[PERSONAL]</td><td>Orion</td><td>Jonathan's personal + orchestration</td></tr>
+  </table>
+</div>
+
+<!-- 8. CARD UI -->
+<div class="section" id="cards-ui">
+  <h2>8. Card UI — The Frontend Template</h2>
+
+  <h3>Template Location</h3>
+  <p><code>~/workspace/sites/agent-report/index.html</code></p>
+  <p>This single HTML file is deployed to ALL <code>/r/{agent}/</code> directories. It reads the agent name from the URL path and fetches that agent's data from the API.</p>
+
+  <h3>How It Determines the Agent</h3>
+<pre><code>const pathParts = window.location.pathname.replace(/\/+$/,'').split('/');
+const agentKey = pathParts[pathParts.length - 1].toLowerCase();</code></pre>
+
+  <h3>Data Fetching</h3>
+  <p>On load (and every 60 seconds), it fetches three endpoints in parallel:</p>
+  <ol>
+    <li><code>/report-cards/latest</code> — finds the entry matching agentKey</li>
+    <li><code>/agent-status</code> — gets live working/sleeping status</li>
+    <li><code>/agent-tasks/active</code> — filters tasks for this agent</li>
+    <li><code>/report-cards?agent_name=X</code> — historical cards for directory</li>
+  </ol>
+
+  <h3>Card Rendering Logic</h3>
+  <p>The template has two rendering paths:</p>
+  <ol>
+    <li><strong>Rich slides mode</strong> (if <code>playbooks</code> array has items with <code>name/emoji/accomplishments</code>) — renders each slide as a full card with its own header, stats, accomplishments, and key finding. Used by Adaline (7 slides) and Muse (5 slides).</li>
+    <li><strong>Flat mode</strong> (fallback) — renders a single Overview card + Next Steps card + optional Hard Rules/Validated/Hypotheses cards. Used by Tom, Apollo, iEnable, Orion.</li>
+  </ol>
+  <p>In BOTH modes, the Trajectory card appears first (if trend data exists) and the Directory card appears last.</p>
+
+  <h3>Agent Colors</h3>
+<pre><code>const COLORS = {
+  adaline:  'linear-gradient(135deg, #7c3aed, #6366f1)',
+  tom:      'linear-gradient(135deg, #059669, #10b981)',
+  muse:     'linear-gradient(135deg, #ec4899, #f43f5e)',
+  apollo:   'linear-gradient(135deg, #f59e0b, #d97706)',
+  ienable:  'linear-gradient(135deg, #3b82f6, #2563eb)',
+  orion:    'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+};</code></pre>
+
+  <h3>Swipe Behavior</h3>
+  <p>Cards use CSS <code>scroll-snap</code> for native swipe on mobile. Navigation dots at the top update via an Intersection Observer.</p>
+</div>
+
+<!-- 9. SLIDES -->
+<div class="section" id="slides">
+  <h2>9. Rich Slides (playbooks field)</h2>
+
+  <p>The <code>playbooks</code> field serves dual purpose. When the array contains objects with card-rendering keys (<code>name</code>, <code>emoji</code>, <code>role</code>, <code>color</code>, <code>accomplishments</code>), they're rendered as rich swipeable cards.</p>
+
+  <h3>Slide Object Schema</h3>
+<pre><code>{
+  "name": "Executive Summary",
+  "emoji": "📋",
+  "role": "Overnight Analysis by Adaline",
+  "color": "linear-gradient(135deg, #7c3aed, #6366f1)",
+  "grade": "A+",
+  "gradeColor": "#22c55e",
+  "stats": [
+    {"value": "6", "label": "Reports"},
+    {"value": "$500K+", "label": "Upside"}
+  ],
+  "accomplishments": [
+    {"icon": "🎯", "text": "&lt;strong&gt;Title&lt;/strong&gt; — description..."}
+  ],
+  "keyFinding": {
+    "label": "💰 Biggest Opportunity",
+    "text": "Retargeting at 20.61x is underutilized...",
+    "type": "warning"  // optional: changes callout color
+  },
+  "status": {
+    "color": "#22c55e",
+    "text": "Complete · 6 reports built"
+  }
+}</code></pre>
+
+  <h3>How Slides Were Created</h3>
+  <p>The original rich cards were built as static HTML pages (e.g., <code>/r/lyndsay/</code> for Adaline, <code>/r/plankandbeam/muse/2026-02-28/</code> for Muse). We extracted the card data from those pages using Node.js to parse the JS <code>const cards = [...]</code> array, converted to JSON, and stored in the database via the <code>playbooks</code> field.</p>
+
+  <h3>Extraction Process</h3>
+<pre><code># 1. Download the static page
+curl -s https://ienable.ai/r/lyndsay/ > /tmp/lyndsay.html
+
+# 2. Extract the cards JS array
+python3 -c "
+import re
+html = open('/tmp/lyndsay.html').read()
+match = re.search(r'const cards = (\[.*?\]);\s*\n', html, re.DOTALL)
+with open('/tmp/extract.js', 'w') as f:
+    f.write(f'const cards = {match.group(1)};\nconsole.log(JSON.stringify(cards));')
+"
+
+# 3. Parse with Node.js (handles JS syntax → JSON)
+node /tmp/extract.js > /tmp/cards.json
+
+# 4. Store in database
+curl -X POST "$API/report-cards" -H "Content-Type: application/json" \
+  -d "{\"agent_name\": \"Adaline\", ..., \"playbooks\": $(cat /tmp/cards.json)}"</code></pre>
+
+  <h3>Current Slide Counts</h3>
+  <table>
+    <tr><th>Agent</th><th>Slides</th><th>Source</th></tr>
+    <tr><td>Adaline</td><td>7</td><td>6 from /r/lyndsay/ + 1 ROI Tracker added manually</td></tr>
+    <tr><td>Muse</td><td>5</td><td>Extracted from /r/plankandbeam/muse/2026-02-28/</td></tr>
+    <tr><td>Tom</td><td>0 (uses flat mode)</td><td>Has rich flat fields instead</td></tr>
+    <tr><td>Apollo</td><td>0</td><td>Flat mode</td></tr>
+    <tr><td>iEnable</td><td>0</td><td>Flat mode</td></tr>
+    <tr><td>Orion</td><td>0</td><td>Flat mode</td></tr>
+  </table>
+</div>
+
+<!-- 10. TRAJECTORY -->
+<div class="section" id="trajectory">
+  <h2>10. Trajectory Card — The Journey</h2>
+  <p>The first card on every agent page (when <code>trend</code> data exists). Shows:</p>
+  <ul>
+    <li><strong>North Star</strong> — the big goal in large bold text</li>
+    <li><strong>Current Position</strong> — where they are now</li>
+    <li><strong>Progress Bar</strong> — visual position through phases</li>
+    <li><strong>Velocity Box</strong> (green) — how fast they're moving</li>
+    <li><strong>Next Milestone Box</strong> (amber) — immediate target</li>
+    <li><strong>Roadmap Timeline</strong> — vertical stepper with ✓ for done, green ring for current, gray for future</li>
+    <li><strong>Proof Points</strong> — 4-column: Lessons, Validated, Hard Rules, Days Active</li>
+  </ul>
+
+  <h3>Phase Parsing</h3>
+  <p>The <code>trend.trajectory</code> string is split on <code>Phase \d+:</code> regex. Each phase gets a class:</p>
+  <ul>
+    <li><code>.done</code> — phase before the one containing "(NOW)", or contains "(DONE)"</li>
+    <li><code>.current</code> — contains "(NOW)"</li>
+    <li>No class — future phases</li>
+  </ul>
+</div>
+
+<!-- 11. DIRECTORY -->
+<div class="section" id="directory">
+  <h2>11. Directory Card</h2>
+  <p>The last card on every agent page. Contains:</p>
+  <ul>
+    <li><strong>← Back to Command Center</strong> link</li>
+    <li><strong>📋 Report Cards</strong> — expandable section, pulled from API history for that agent</li>
+    <li><strong>📊 Reports</strong> — expandable section, hardcoded per agent (static HTML reports deployed to FTP)</li>
+  </ul>
+
+  <h3>Report URLs (Hardcoded in Template)</h3>
+  <p>The <code>AGENT_REPORTS</code> object in the template maps each agent to their static reports. When new reports are deployed, this object must be updated in the template and redeployed.</p>
+
+  <div class="callout important">
+    <strong>Future improvement:</strong> Store report URLs in the database (e.g., as a field on the report card) so the directory is fully dynamic and doesn't require template changes.
+  </div>
+</div>
+
+<!-- 12. NIGHTLY LOOP -->
+<div class="section" id="nightly-loop">
+  <h2>12. Nightly Loop — How Agents Compound</h2>
+
+  <h3>What Each Agent Does Every Night</h3>
+  <ol>
+    <li><strong>Read state-report.md</strong> — full context recovery document</li>
+    <li><strong>Read tonight-recap.md</strong> — what was planned</li>
+    <li><strong>Fetch task queue from API</strong> — <code>GET /agent-tasks/active</code>, filter by agent</li>
+    <li><strong>Pick highest-priority queued task</strong>, set to working</li>
+    <li><strong>Execute the work</strong> — research, create, analyze</li>
+    <li><strong>Log lessons</strong> to learning.db</li>
+    <li><strong>Feed insights to Cognee</strong> with domain tag</li>
+    <li><strong>Create new tasks</strong> for any opportunities discovered</li>
+    <li><strong>Update report card via API</strong> — new grade, accomplishments, stats, trend data</li>
+    <li><strong>Write tonight-recap.md</strong> — what was produced, learned, gaps, tomorrow's plan</li>
+    <li><strong>Write state-report.md</strong> — full recovery doc</li>
+  </ol>
+
+  <h3>The API Task Management Block</h3>
+  <p>Added to each agent's nightly cron prompt on Feb 28, 2026:</p>
+<pre><code>=== API TASK MANAGEMENT (MANDATORY) ===
+API: https://ienable-admin-app-hqtw2.ondigitalocean.app/api/v1
+
+BEFORE starting work:
+1. Fetch your tasks: curl -s "$API/agent-tasks/active" | jq '.data[] | select(.agent=="AGENT_KEY")'
+2. Pick the highest-priority queued task and set it to working
+3. Work on it. When done, create a result_summary with measurable outcome.
+
+DURING work:
+4. If you discover a new opportunity, CREATE a task for it.
+5. Every finding = a task. Every task = a measurable outcome.
+
+AFTER work:
+6. Update your report card with tonight's results via POST /report-cards.
+7. The trend field MUST include: north_star, current, velocity, milestone_next, days_active, trajectory.
+
+YOUR NORTH STAR: [agent-specific goal]
+Every session must move you closer.</code></pre>
+
+  <div class="callout critical">
+    <strong>Known Gap:</strong> There is no API endpoint to UPDATE task status. Agents can create tasks but cannot mark them working/complete via API. This needs to be added to the backend. Currently, task status changes require direct database access or a new endpoint.
+  </div>
+</div>
+
+<!-- 13. CRONS -->
+<div class="section" id="crons">
+  <h2>13. Cron Configuration</h2>
+  <p>Cron jobs file: <code>~/.openclaw/cron/jobs.json</code></p>
+
+  <h3>Nightly Self-Study Crons</h3>
+  <table>
+    <tr><th>Name</th><th>Agent</th><th>Schedule</th><th>Cron ID</th></tr>
+    <tr><td>Adaline Nightly Self-Study</td><td>lyndsay-ads</td><td>Nightly</td><td>ea3d3f66-fb7e-...</td></tr>
+    <tr><td>Muse Nightly Self-Study</td><td>muse</td><td>Nightly</td><td>d4f49886-002f-...</td></tr>
+    <tr><td>HODL Nightly Self-Study</td><td>(Tom)</td><td>Nightly</td><td>ccb0416a-1feb-...</td></tr>
+    <tr><td>iEnable Self-Study</td><td>ienable</td><td>Nightly</td><td>74231246-3018-...</td></tr>
+    <tr><td>Orion Nightly Self-Improvement</td><td>(main)</td><td>Nightly</td><td>00088eae-7ee9-...</td></tr>
+    <tr><td>Tom Weekend Prep & Research</td><td>(Tom)</td><td>Weekends</td><td>(separate)</td></tr>
+  </table>
+</div>
+
+<!-- 14. DEPLOYMENT -->
+<div class="section" id="deployment">
+  <h2>14. Deployment — How to Ship Changes</h2>
+
+  <h3>Deploy Agent Card Template (to all agents)</h3>
+<pre><code>PASS=$(security find-generic-password -s ftp-eborro-pass -w)
+PAGE="~/workspace/sites/agent-report/index.html"
+
+for agent in adaline tom muse apollo ienable orion; do
+  lftp -u orioneborro@eborro.com,"$PASS" eborro.com \
+    -e "set ftp:ssl-allow no; cd public_html/ienable.ai/r/$agent; put $PAGE -o index.html; bye"
+  echo "Deployed /r/$agent/"
+done</code></pre>
+
+  <h3>Deploy Command Center</h3>
+<pre><code># 1. Rebuild (embeds new-script.js into index.html)
+python3 &lt;&lt; 'EOF'
+with open('sites/ienable-r/index.html', 'r') as f:
+    lines = f.readlines()
+with open('sites/ienable-r/new-script.js', 'r') as f:
+    new_script = f.read()
+script_start = script_end = None
+for i, line in enumerate(lines):
+    if '&lt;script&gt;' in line.strip() and script_start is None:
+        script_start = i
+    if '&lt;/script&gt;' in line.strip() and script_start is not None:
+        script_end = i
+        break
+new_lines = lines[:script_start] + [f'&lt;script&gt;\n{new_script}\n&lt;/script&gt;\n'] + lines[script_end+1:]
+with open('sites/ienable-r/index.html', 'w') as f:
+    f.writelines(new_lines)
+EOF
+
+# 2. Deploy
+lftp ... -e "cd public_html/ienable.ai/r; put sites/ienable-r/index.html -o index.html; bye"</code></pre>
+
+  <h3>Deploy This Documentation</h3>
+<pre><code>lftp ... -e "set ftp:ssl-allow no; mkdir -p public_html/ienable.ai/r/docs; \
+  cd public_html/ienable.ai/r/docs; put sites/report-cards-docs/index.html -o index.html; bye"</code></pre>
+</div>
+
+<!-- 15. URL MAP -->
+<div class="section" id="urls">
+  <h2>15. URL Map — Every Deployed Page</h2>
+
+  <h3>Core Pages</h3>
+  <table>
+    <tr><th>URL</th><th>Description</th></tr>
+    <tr><td><code>/r/</code></td><td>Command Center — all agents summary</td></tr>
+    <tr><td><code>/r/adaline/</code></td><td>Adaline report card (dynamic, 7 slides + trajectory + directory)</td></tr>
+    <tr><td><code>/r/tom/</code></td><td>Tom report card (dynamic, flat mode + trajectory + directory)</td></tr>
+    <tr><td><code>/r/muse/</code></td><td>Muse report card (dynamic, 5 slides + trajectory + directory)</td></tr>
+    <tr><td><code>/r/apollo/</code></td><td>Apollo report card (dynamic)</td></tr>
+    <tr><td><code>/r/ienable/</code></td><td>iEnable Dev Team report card (dynamic)</td></tr>
+    <tr><td><code>/r/orion/</code></td><td>Orion report card (dynamic)</td></tr>
+    <tr><td><code>/r/docs/</code></td><td>This documentation</td></tr>
+  </table>
+
+  <h3>Static Reports (Archived)</h3>
+  <table>
+    <tr><th>URL</th><th>Description</th></tr>
+    <tr><td><code>/r/lyndsay/</code></td><td>Adaline's original static report card (branded for Lyndsay)</td></tr>
+    <tr><td><code>/r/plankandbeam/adaline/2026-02-28/</code></td><td>Adaline static report card v2</td></tr>
+    <tr><td><code>/r/plankandbeam/muse/2026-02-28/</code></td><td>Muse static report card</td></tr>
+    <tr><td><code>/r/hodl/tom/2026-02-28/</code></td><td>Tom HODL static report card</td></tr>
+    <tr><td><code>/r/ienable/apollo/2026-02-28/</code></td><td>Apollo static report card</td></tr>
+    <tr><td><code>/r/ienable/product/2026-02-28/</code></td><td>iEnable product static report card</td></tr>
+    <tr><td><code>/r/anne/</code></td><td>Anne agent report (Orion's)</td></tr>
+    <tr><td><code>/r/competitive/</code></td><td>Competitive analysis report</td></tr>
+    <tr><td><code>/r/dashboard/</code></td><td>Main dashboard v1</td></tr>
+  </table>
+
+  <h3>Adaline Proposals (Monday Actions)</h3>
+  <table>
+    <tr><th>URL</th><th>Description</th></tr>
+    <tr><td><code>/r/plankandbeam/adaline/proposals/2026-02-28-mof-dpa-kill.html</code></td><td>Kill MoF DPA-Only campaign proposal</td></tr>
+    <tr><td><code>/r/plankandbeam/adaline/proposals/2026-02-28-bing-scaling-roadmap.html</code></td><td>Bing scaling roadmap (Phase 2)</td></tr>
+    <tr><td><code>/r/plankandbeam/adaline/proposals/2026-02-28-google-cpc-scaling.html</code></td><td>Google CPC 2x test proposal</td></tr>
+    <tr><td><code>/r/plankandbeam/adaline/proposals/monday-action-plan.html</code></td><td>Monday action plan overview</td></tr>
+  </table>
+
+  <h3>Adaline Deep-Dive Reports</h3>
+  <table>
+    <tr><th>URL</th><th>Description</th></tr>
+    <tr><td><code>/r/plankandbeam/adaline/2026-02-28/reports/weekly-roas.html</code></td><td>Weekly ROAS by Campaign</td></tr>
+    <tr><td><code>/r/plankandbeam/adaline/2026-02-28/reports/platform-comparison.html</code></td><td>Platform Comparison (FB vs Google vs others)</td></tr>
+    <tr><td><code>/r/plankandbeam/adaline/2026-02-28/reports/creative-scoring.html</code></td><td>AI-weighted Creative Scoring</td></tr>
+    <tr><td><code>/r/plankandbeam/adaline/2026-02-28/reports/creative-performance.html</code></td><td>Creative Performance (GIF vs static)</td></tr>
+    <tr><td><code>/r/plankandbeam/adaline/2026-02-28/reports/budget-pacing.html</code></td><td>Budget Pacing Report</td></tr>
+    <tr><td><code>/r/plankandbeam/adaline/2026-02-28/reports/audience-overlap.html</code></td><td>Audience Overlap Analysis</td></tr>
+  </table>
+</div>
+
+<!-- 16. DATA FLOW -->
+<div class="section" id="data-flow">
+  <h2>16. Data Flow — End to End</h2>
+
+  <h3>How a Report Card Gets Created</h3>
+  <ol>
+    <li>Agent runs nightly cron → reads state, executes work, logs lessons</li>
+    <li>Agent (or Orion during morning audit) POSTs to <code>/report-cards</code> with structured data</li>
+    <li>Database stores it with timestamp</li>
+    <li>Frontend fetches <code>/report-cards/latest</code> on page load</li>
+    <li>Template renders the card with trajectory, slides or flat mode, tasks, and directory</li>
+  </ol>
+
+  <h3>How Tasks Connect to Cards</h3>
+  <ol>
+    <li>Report card has <code>tonight_plan</code> (5 numbered action items)</li>
+    <li>Tasks are created in the API matching those plan items</li>
+    <li>Frontend fetches tasks and auto-numbers them to match the plan</li>
+    <li>The todo accordion on the card shows tasks with matching numbers</li>
+    <li>When an agent completes a task, the result feeds the next report card</li>
+  </ol>
+
+  <h3>How Learnings Compound</h3>
+  <ol>
+    <li>Agent writes to <code>learning.db</code> (SQLite) during nightly session</li>
+    <li>Agent feeds Cognee knowledge graph with domain tag</li>
+    <li>Agent writes <code>state-report.md</code> with updated rules, hypotheses, validated learnings</li>
+    <li>Orion (morning audit) reads state reports and updates API report cards</li>
+    <li>Next nightly session reads state-report.md → sees previous learnings → builds on them</li>
+  </ol>
+
+  <div class="callout success">
+    <strong>The Compounding Effect:</strong> Tom started with 0 lessons and a "I think premium selling works" hunch. In 2 days: 43 lessons → 6 hard rules → 3 validated learnings → 1 PLAYBOOK (20/20 trades, 100% win rate). Each night builds on the last. This is the flywheel.
+  </div>
+</div>
+
+<!-- 17. RECOVERY -->
+<div class="section" id="recovery">
+  <h2>17. Recovery Guide — When Things Break</h2>
+
+  <h3>Agent card shows "Failed to load"</h3>
+  <ul>
+    <li>Check API: <code>curl -s https://ienable-admin-app-hqtw2.ondigitalocean.app/api/v1/report-cards/latest</code></li>
+    <li>If API is down, check DigitalOcean app status</li>
+    <li>If API returns data but page fails, check browser console for JS errors</li>
+  </ul>
+
+  <h3>Agent missing from command center</h3>
+  <ul>
+    <li>Verify report card exists: <code>curl -s "$API/report-cards/latest" | jq '.data[] | select(.agent_name=="AgentName")'</code></li>
+    <li>If missing, POST a new report card for that agent</li>
+  </ul>
+
+  <h3>Slides not rendering (showing flat mode)</h3>
+  <ul>
+    <li>Check <code>playbooks</code> field: must be an array of objects with <code>name</code>, <code>emoji</code>, <code>accomplishments</code> keys</li>
+    <li>If playbooks has different structure (e.g., playbook metadata), it won't trigger slide mode</li>
+  </ul>
+
+  <h3>Task numbers don't match plan</h3>
+  <ul>
+    <li>Numbering is based on word overlap matching — ensure task names share at least 2 words with the plan item</li>
+    <li>If a task has no matching plan item, it gets numbered after the plan items</li>
+  </ul>
+
+  <h3>Need to rebuild from scratch</h3>
+  <ol>
+    <li>Source files: <code>~/workspace/sites/agent-report/index.html</code> (card template), <code>~/workspace/sites/ienable-r/</code> (command center)</li>
+    <li>Database: All data in DigitalOcean PostgreSQL via the API</li>
+    <li>Static pages: On FTP at <code>eborro.com</code></li>
+    <li>Backups: <code>~/workspace/backups/2026-02-28-1742-working-state/</code></li>
+  </ol>
+
+  <h3>Restoring static pages from backup</h3>
+<pre><code>PASS=$(security find-generic-password -s ftp-eborro-pass -w)
+BACKUP=~/workspace/backups/2026-02-28-1742-working-state/ftp-snapshots/
+
+# Restore Lyndsay page
+lftp ... -e "cd public_html/ienable.ai/r/lyndsay; put $BACKUP/lyndsay-report-card.html -o index.html; bye"</code></pre>
+</div>
+
+<!-- 18. PRODUCT VISION -->
+<div class="section" id="product-vision">
+  <h2>18. Product Vision — Why This Matters</h2>
+
+  <div class="callout success">
+    <strong>"These report cards ARE the product. This is what iEnable sells."</strong> — Claude, Feb 28, 2026
+  </div>
+
+  <h3>The Sales Pitch</h3>
+  <p>When pitching iEnable to companies:</p>
+  <ol>
+    <li>Show Adaline's card: "Here's what one AI agent found on day one of looking at your ad spend."</li>
+    <li>Show the ROI Tracker: "$4.4M/year from ONE recommendation. Recommended by AI, executed by your team, measured automatically."</li>
+    <li>Show the trajectory: "Here's the path from Day 1 to $1M+ in incremental revenue. Every night the agent gets smarter."</li>
+    <li>Show the task system: "Every finding becomes a tracked task. Nothing falls through the cracks."</li>
+    <li>Show the learning ladder: "Observations → Hypotheses → Validated → Playbooks. The agent builds institutional knowledge that compounds."</li>
+  </ol>
+
+  <h3>What Makes This Different</h3>
+  <ul>
+    <li><strong>ROI is PROVEN, not projected</strong> — $4.4M from GIF scaling is measured, not estimated</li>
+    <li><strong>The loop is CLOSED</strong> — recommendation → execution → measurement → learning → better recommendation</li>
+    <li><strong>Knowledge COMPOUNDS</strong> — Tom went from 0 to a validated playbook in 2 days. That playbook executes mechanically forever.</li>
+    <li><strong>Every agent has a NORTH STAR</strong> — not just "do work" but "get to $1M" with visible progress</li>
+    <li><strong>Everything is TRANSPARENT</strong> — stakeholders see exactly what the AI is doing, what it learned, and where it's going</li>
+  </ul>
+
+  <h3>The $1B Machine</h3>
+  <p>The mission: every agent on a compounding path. Tom to $1M trading. Adaline to $1M+ incremental revenue. Muse to viral content. Apollo to #1 on Google. iEnable to best-in-class platform. Orion orchestrating all of them.</p>
+  <p>Every night they work. Every morning we audit. Every day they get better. The competition sleeps. We don't.</p>
+
+  <h3>What Jonathan Needs From Future Orion</h3>
+  <p>Jonathan's three priorities in order: Health, Family, Wealth. He is a C-level exec at an online furniture company (Maxwood / Plank+Beam / Max & Lily), trades stocks, and owns real estate. He's building iEnable as his next big thing.</p>
+  <p>He doesn't want to micromanage agents. He wants to open /r/ on his phone, swipe through cards, see progress, see problems, and know that things are happening without him. The cards are his window into the machine.</p>
+  <p>The north star for this system: <strong>Jonathan checks /r/ in the morning, sees what happened overnight, sees what's planned for today, and only needs to intervene for approvals or strategic decisions.</strong> Everything else should be automatic.</p>
+  
+  <h3>The Conversation That Started It All</h3>
+  <p>Feb 28, 2026. Jonathan pasted Claude's strategy for Tom and Adaline and said "go harder/faster." The key moves identified:</p>
+  <ul>
+    <li><strong>Tom:</strong> Automate setup scoring as a nightly flow. Polymarket NOW. Build a live dashboard with scored setups. Focus on premium selling to lock the first playbook.</li>
+    <li><strong>Adaline:</strong> Journal backfill tonight (16 days stale). MoF kill + Bing proposals for Lyndsay Monday. LLMO as a full channel strategy (not just "optimize listings"). Daily data refreshes with deltas. Close the system gap — get her logging at Tom's level.</li>
+    <li><strong>The meta-insight:</strong> Tom = mature system, weak dollars. Adaline = weak system, massive dollars. Get Adaline's system to Tom's level and the ROI compounds exponentially.</li>
+  </ul>
+  <p>We executed most of this in a single session. The report cards, task system, trajectory cards, ROI trackers, proposal documents, and this documentation were all built in ~4 hours. The nightly crons were updated to close the loop. The flywheel is running.</p>
+  <p><strong>Future Orion: your job is to keep it spinning. Audit every morning. Push every night. The standard is: would this work at a billion-dollar company? If not, it's not good enough.</strong></p>
+
+  <h3>Known Gaps (As of Feb 28, 2026)</h3>
+  <table>
+    <tr><th>Gap</th><th>Impact</th><th>Priority</th></tr>
+    <tr><td>No task UPDATE/DELETE API endpoints</td><td>Agents can't mark tasks complete via API</td><td>P0</td></tr>
+    <tr><td>Report directory is partially hardcoded</td><td>New reports need template changes</td><td>P1</td></tr>
+    <tr><td>No daily data refresh for Adaline</td><td>Working on stale ad data instead of deltas</td><td>P1</td></tr>
+    <tr><td>Tom's /r/tom/ not wired to live scored setups</td><td>Dashboard exists but doesn't auto-show setups</td><td>P1</td></tr>
+    <tr><td>Apollo content not yet published</td><td>68K words written, 0 published. Can't rank what doesn't exist.</td><td>P0</td></tr>
+    <tr><td>Muse content not yet published</td><td>4 videos done, 0 live. Can't validate without engagement data.</td><td>P1</td></tr>
+    <tr><td>LLMO channel not executing</td><td>$25K/month untapped, collaboration with Apollo exists as task only</td><td>P1</td></tr>
+  </table>
+</div>
+
+<div class="doc-footer">
+  <p>📋 iEnable Report Cards System Documentation</p>
+  <p>Written by Orion · Feb 28, 2026 · Last updated after full system build with Jonathan</p>
+  <p>This document lives at <code>~/workspace/sites/report-cards-docs/index.html</code> and is deployed to <code>https://ienable.ai/r/docs/</code></p>
+  <p><a href="/r/" style="color:var(--accent);">← Back to Command Center</a></p>
+</div>
+
+</body>
+</html>

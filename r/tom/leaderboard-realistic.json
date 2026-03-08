@@ -1,0 +1,54 @@
+{
+  "iterations": [
+    {
+      "n": "AUDIT-V4",
+      "name": "\ud83d\udd0d AUDITED: BRatio+MROT+0DTE (30% risk cap, fixed MTM)",
+      "final_2024": 497.09,
+      "return_2024": -90.06,
+      "dd_2024": 89.64,
+      "wr_2024": 36.36,
+      "trades_2024": 77,
+      "final_2025": 1791.74,
+      "return_2025": -64.17,
+      "dd_2025": 65.96,
+      "wr_2025": 50.94,
+      "trades_2025": 106,
+      "max_risk_pct_2024": 32.02,
+      "max_risk_pct_2025": 32.58,
+      "skipped_2024": 1944,
+      "skipped_2025": 2206,
+      "br_losses_2024": 1,
+      "br_losses_2025": 1,
+      "strategy_breakdown": {
+        "2024": {
+          "0DTE": "$4 (26t, 77% WR)",
+          "BRATIO": "$1,235 (7t, 86% WR)",
+          "BFLY": "$-5,898 (44t, 5% WR)"
+        },
+        "2025": {
+          "0DTE": "$1,737 (46t, 87% WR)",
+          "BFLY": "$-8,730 (52t, 13% WR)",
+          "BRATIO": "$1,106 (7t, 86% WR)",
+          "MROT": "$2,597 (1t, 100% WR)"
+        }
+      },
+      "audit_notes": [
+        "BUG FIXED: value_backratio no longer floors at 0",
+        "BUG FIXED: VIX emergency exit no longer uses max(proc,0)",
+        "30% risk cap enforced on every trade entry",
+        "Back-ratio stop-loss at 80% of max loss"
+      ],
+      "avg_return": -77.12,
+      "min_return": -90.06,
+      "worst_dd": 89.64,
+      "geometric_return": 0
+    }
+  ],
+  "updated": "2026-02-28T23:41:56",
+  "constraints": "v4 AUDITED: Fixed back-ratio MTM, VIX exit, 30% risk cap enforced. Honest results.",
+  "audit_bugs_found": [
+    "value_backratio max(2*c2-c1, 0) floored negative MTM \u2014 hid losses",
+    "VIX emergency exit max(proc, 0) erased underwater position losses",
+    "No risk tracking or cap enforcement existed in v3"
+  ]
+}

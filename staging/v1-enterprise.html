@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iEnable | Enterprise AI Workforce Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        :root {
+            --primary: #0052CC;
+            --primary-dark: #003d99;
+            --secondary: #00875A;
+            --accent: #6554C0;
+            --dark: #172B4D;
+            --gray-900: #091E42;
+            --gray-700: #344563;
+            --gray-500: #5E6C84;
+            --gray-300: #B3BAC5;
+            --gray-100: #F4F5F7;
+            --white: #FFFFFF;
+            --gradient: linear-gradient(135deg, #0052CC 0%, #6554C0 100%);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            background: var(--white);
+        }
+        
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--gray-100);
+            z-index: 1000;
+            padding: 0 24px;
+        }
+        
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 72px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logo span { color: var(--accent); }
+        
+        .nav-links {
+            display: none;
+            gap: 32px;
+            list-style: none;
+        }
+        
+        @media (min-width: 768px) {
+            .nav-links { display: flex; }
+        }
+        
+        .nav-links a {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover { color: var(--primary); }
+        
+        .nav-cta {
+            background: var(--primary);
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        
+        .nav-cta:hover { background: var(--primary-dark); }
+        
+        /* Hero Section */
+        .hero {
+            padding: 140px 24px 80px;
+            background: linear-gradient(180deg, var(--gray-100) 0%, var(--white) 100%);
+        }
+        
+        .hero-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            gap: 48px;
+            align-items: center;
+        }
+        
+        @media (min-width: 1024px) {
+            .hero-inner { grid-template-columns: 1fr 1fr; }
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--white);
+            border: 1px solid var(--gray-300);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            color: var(--gray-700);
+            margin-bottom: 24px;
+        }
+        
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .hero h1 {
+            font-size: 40px;
+            line-height: 1.1;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .hero h1 { font-size: 56px; }
+        }
+        
+        .hero h1 span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-desc {
+            font-size: 18px;
+            color: var(--gray-700);
+            margin-bottom: 32px;
+            max-width: 520px;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            padding: 14px 28px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: var(--white);
+            color: var(--dark);
+            padding: 14px 28px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            border: 1px solid var(--gray-300);
+            transition: all 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        /* Product Preview */
+        .hero-visual {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(9, 30, 66, 0.15);
+            border: 1px solid var(--gray-100);
+            overflow: hidden;
+        }
+        
+        .product-header {
+            background: var(--gray-100);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .window-dots {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .window-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--gray-300);
+        }
+        
+        .window-dot.red { background: #FF5F56; }
+        .window-dot.yellow { background: #FFBD2E; }
+        .window-dot.green { background: #27C93F; }
+        
+        .product-content {
+            padding: 24px;
+        }
+        
+        .dashboard-preview {
+            background: var(--gray-100);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .dashboard-title {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        
+        .status-badge {
+            background: rgba(0, 135, 90, 0.1);
+            color: var(--secondary);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-card {
+            background: var(--white);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .metric-label {
+            font-size: 11px;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+        
+        .specialist-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .specialist-row {
+            background: var(--white);
+            padding: 12px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .specialist-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 14px;
+        }
+        
+        .specialist-info { flex: 1; }
+        
+        .specialist-name {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--gray-900);
+        }
+        
+        .specialist-role {
+            font-size: 11px;
+            color: var(--gray-500);
+        }
+        
+        .specialist-status {
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+        }
+        
+        /* Trust Logos */
+        .trust-section {
+            padding: 60px 24px;
+            background: var(--white);
+            border-top: 1px solid var(--gray-100);
+        }
+        
+        .trust-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .trust-label {
+            font-size: 13px;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 32px;
+        }
+        
+        .trust-logos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 48px;
+            opacity: 0.6;
+        }
+        
+        .trust-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-500);
+        }
+        
+        /* What Is Section */
+        .what-is {
+            padding: 100px 24px;
+            background: var(--gray-100);
+        }
+        
+        .what-is-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .section-label {
+            font-size: 13px;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .section-title { font-size: 44px; }
+        }
+        
+        .section-desc {
+            font-size: 18px;
+            color: var(--gray-700);
+            line-height: 1.7;
+        }
+        
+        /* Features */
+        .features {
+            padding: 100px 24px;
+            background: var(--white);
+        }
+        
+        .features-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .features-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+        
+        .features-grid {
+            display: grid;
+            gap: 32px;
+        }
+        
+        @media (min-width: 768px) {
+            .features-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        
+        .feature-card {
+            background: var(--gray-100);
+            border-radius: 12px;
+            padding: 32px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(9, 30, 66, 0.1);
+        }
+        
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+        }
+        
+        .feature-desc {
+            font-size: 15px;
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+        
+        /* Social Proof */
+        .social-proof {
+            padding: 100px 24px;
+            background: var(--gray-900);
+            color: var(--white);
+        }
+        
+        .social-proof-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .social-proof-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+        
+        .social-proof-header .section-label {
+            color: var(--gray-300);
+        }
+        
+        .social-proof-header .section-title {
+            color: var(--white);
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            gap: 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .testimonials-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 32px;
+        }
+        
+        .testimonial-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--gray-300);
+            margin-bottom: 24px;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .author-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .author-name {
+            font-weight: 600;
+            color: var(--white);
+        }
+        
+        .author-role {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 24px;
+            background: var(--gradient);
+            text-align: center;
+        }
+        
+        .cta-inner {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .cta-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 16px;
+        }
+        
+        @media (min-width: 768px) {
+            .cta-title { font-size: 44px; }
+        }
+        
+        .cta-desc {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 32px;
+        }
+        
+        .cta-button {
+            background: var(--white);
+            color: var(--primary);
+            padding: 16px 32px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 64px 24px 32px;
+            background: var(--gray-900);
+            color: var(--white);
+        }
+        
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-grid {
+            display: grid;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+        
+        @media (min-width: 768px) {
+            .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
+        }
+        
+        .footer-brand .logo {
+            color: var(--white);
+            margin-bottom: 16px;
+            display: block;
+        }
+        
+        .footer-desc {
+            color: var(--gray-500);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+        
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .footer-links a {
+            color: var(--gray-500);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        
+        .footer-links a:hover { color: var(--white); }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 32px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="#" class="logo">i<span>Enable</span></a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#resources">Resources</a></li>
+            </ul>
+            <a href="#demo" class="nav-cta">Request Demo</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="hero-badge-dot"></span>
+                    Trusted by 1,200+ enterprises worldwide
+                </div>
+                <h1>Enterprise-Grade <span>AI Workforce</span> Platform</h1>
+                <p class="hero-desc">Deploy AI specialists trained on your company's processes in minutes. Secure, compliant, and integrated with your existing enterprise stack.</p>
+                <div class="hero-buttons">
+                    <a href="#demo" class="btn-primary">
+                        Schedule Demo
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                    <a href="#features" class="btn-secondary">Explore Platform</a>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="product-header">
+                    <div class="window-dots">
+                        <span class="window-dot red"></span>
+                        <span class="window-dot yellow"></span>
+                        <span class="window-dot green"></span>
+                    </div>
+                </div>
+                <div class="product-content">
+                    <div class="dashboard-preview">
+                        <div class="dashboard-header">
+                            <span class="dashboard-title">Company Dashboard</span>
+                            <span class="status-badge">● All Systems Active</span>
+                        </div>
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <div class="metric-value">847</div>
+                                <div class="metric-label">Tasks Today</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value">12</div>
+                                <div class="metric-label">AI Specialists</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value">98%</div>
+                                <div class="metric-label">Success Rate</div>
+                            </div>
+                        </div>
+                        <div class="specialist-list">
+                            <div class="specialist-row">
+                                <div class="specialist-avatar">M</div>
+                                <div class="specialist-info">
+                                    <div class="specialist-name">Maya</div>
+                                    <div class="specialist-role">Marketing Specialist</div>
+                                </div>
+                                <div class="specialist-status"></div>
+                            </div>
+                            <div class="specialist-row">
+                                <div class="specialist-avatar">S</div>
+                                <div class="specialist-info">
+                                    <div class="specialist-name">Sofia</div>
+                                    <div class="specialist-role">Support Specialist</div>
+                                </div>
+                                <div class="specialist-status"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Section -->
+    <section class="trust-section">
+        <div class="trust-inner">
+            <div class="trust-label">Trusted by industry leaders</div>
+            <div class="trust-logos">
+                <span class="trust-logo">Accenture</span>
+                <span class="trust-logo">Deloitte</span>
+                <span class="trust-logo">McKinsey</span>
+                <span class="trust-logo">IBM</span>
+                <span class="trust-logo">Cisco</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- What Is Section -->
+    <section class="what-is">
+        <div class="what-is-inner">
+            <div class="section-label">What is iEnable?</div>
+            <h2 class="section-title">Your AI workforce, trained on your business</h2>
+            <p class="section-desc">iEnable deploys intelligent AI specialists that understand your company's unique processes, integrate with your enterprise tools, and execute real work autonomously — all while maintaining enterprise-grade security and compliance standards.</p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-inner">
+            <div class="features-header">
+                <div class="section-label">Platform Capabilities</div>
+                <h2 class="section-title">Everything you need to scale</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎙️</div>
+                    <h3 class="feature-title">Voice Onboarding</h3>
+                    <p class="feature-desc">Simply tell us about your business through natural conversation. Our AI captures your processes, preferences, and workflows in minutes — no forms, no technical setup required.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3 class="feature-title">AI Specialists</h3>
+                    <p class="feature-desc">Pre-trained specialists for Marketing, Sales, Support, Engineering, and more. Each understands industry best practices and adapts to your specific requirements.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Company Dashboard</h3>
+                    <p class="feature-desc">Complete visibility into your AI workforce. Monitor performance, track tasks, measure ROI, and manage permissions — all from a single unified interface.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="social-proof">
+        <div class="social-proof-inner">
+            <div class="social-proof-header">
+                <div class="section-label">Customer Success</div>
+                <h2 class="section-title">Trusted by leading enterprises</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"iEnable transformed our customer service operations. We reduced response times by 80% while maintaining quality our customers expect."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SC</div>
+                        <div>
+                            <div class="author-name">Sarah Chen</div>
+                            <div class="author-role">VP Operations, Fortune 500</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The voice onboarding was remarkably intuitive. We had AI specialists working within our systems the same afternoon."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MR</div>
+                        <div>
+                            <div class="author-name">Michael Rodriguez</div>
+                            <div class="author-role">CTO, Global Tech Firm</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Enterprise-grade security was non-negotiable for us. iEnable exceeded our compliance requirements while delivering real productivity gains."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">DP</div>
+                        <div>
+                            <div class="author-name">David Park</div>
+                            <div class="author-role">CISO, Financial Services</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-inner">
+            <h2 class="cta-title">Ready to transform your workforce?</h2>
+            <p class="cta-desc">Join 1,200+ enterprises already scaling with iEnable. Schedule a personalized demo with our solutions team.</p>
+            <a href="#demo" class="cta-button">
+                Request Enterprise Demo
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <span class="logo">i<span>Enable</span></span>
+                    <p class="footer-desc">Enterprise AI workforce platform. Deploy intelligent specialists trained on your business in minutes.</p>
+                </div>
+                <div>
+                    <div class="footer-title">Product</div>
+                    <ul class="footer-links">
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Security</a></li>
+                        <li><a href="#">Integrations</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="footer-title">Resources</div>
+                    <ul class="footer-links">
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="footer-title">Company</div>
+                    <ul class="footer-links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 iEnable. All rights reserved.</span>
+                <span>
+                    <a href="#" style="color: inherit;">Privacy</a> · 
+                    <a href="#" style="color: inherit;">Terms</a> · 
+                    <a href="#" style="color: inherit;">Cookies</a>
+                </span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

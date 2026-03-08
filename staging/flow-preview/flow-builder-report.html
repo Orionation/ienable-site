@@ -1,0 +1,2416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>iEnable Flow Builder — Architecture &amp; Competitive Research</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { 
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: #0a0a0f; color: #e0e0e8; line-height: 1.7; 
+  }
+  .container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+  .tabs { display: flex; gap: 0; margin-bottom: 0; position: sticky; top: 0; z-index: 100; background: #0a0a0f; padding-top: 1rem; }
+  .tab { 
+    padding: 0.8rem 1.5rem; cursor: pointer; 
+    background: #12121a; border: 1px solid #2a2a3a; 
+    color: #888; font-weight: 600; font-size: 0.95rem;
+    border-bottom: 2px solid transparent; transition: all 0.2s;
+  }
+  .tab:first-child { border-radius: 8px 0 0 0; }
+  .tab:last-child { border-radius: 0 8px 0 0; }
+  .tab.active { background: #1a1a2e; color: #7c6ef0; border-bottom: 2px solid #7c6ef0; }
+  .tab:hover:not(.active) { color: #bbb; }
+  .tab-content { display: none; background: #1a1a2e; border: 1px solid #2a2a3a; border-top: none; border-radius: 0 0 8px 8px; padding: 2rem; }
+  .tab-content.active { display: block; }
+  .header { text-align: center; padding: 3rem 0 2rem; }
+  .header h1 { font-size: 2.2rem; color: #fff; margin-bottom: 0.5rem; }
+  .header .subtitle { color: #7c6ef0; font-size: 1.1rem; font-weight: 500; }
+  .header .date { color: #666; margin-top: 0.5rem; font-size: 0.9rem; }
+  .header .badge { 
+    display: inline-block; background: rgba(124,110,240,0.15); 
+    color: #7c6ef0; padding: 0.3rem 0.8rem; border-radius: 20px; 
+    font-size: 0.8rem; margin-top: 0.8rem; border: 1px solid rgba(124,110,240,0.3);
+  }
+  h1 { font-size: 1.8rem; color: #fff; margin: 2.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #2a2a3a; }
+  h2 { font-size: 1.5rem; color: #c0b8f0; margin: 2rem 0 0.8rem; }
+  h3 { font-size: 1.2rem; color: #9990d0; margin: 1.5rem 0 0.6rem; }
+  h4 { font-size: 1.05rem; color: #8880c0; margin: 1.2rem 0 0.5rem; }
+  p { margin: 0.8rem 0; }
+  strong { color: #fff; }
+  em { color: #b0a8e0; }
+  a { color: #7c6ef0; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  blockquote { 
+    border-left: 3px solid #7c6ef0; padding: 0.8rem 1.2rem; 
+    margin: 1rem 0; background: rgba(124,110,240,0.05); 
+    border-radius: 0 8px 8px 0; font-style: italic;
+  }
+  pre { 
+    background: #12121a; border: 1px solid #2a2a3a; border-radius: 8px; 
+    padding: 1.2rem; overflow-x: auto; margin: 1rem 0; font-size: 0.85rem;
+    line-height: 1.5; white-space: pre-wrap; word-wrap: break-word;
+  }
+  code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.85rem; }
+  p code, li code { background: #12121a; padding: 0.15rem 0.4rem; border-radius: 4px; color: #c0b8f0; }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+  th { background: #12121a; color: #7c6ef0; padding: 0.7rem; text-align: left; border: 1px solid #2a2a3a; }
+  td { padding: 0.6rem 0.7rem; border: 1px solid #2a2a3a; }
+  tr:hover { background: rgba(124,110,240,0.03); }
+  ul, ol { margin: 0.8rem 0 0.8rem 1.5rem; }
+  li { margin: 0.3rem 0; }
+  hr { border: none; border-top: 1px solid #2a2a3a; margin: 2rem 0; }
+  .confidential {
+    text-align: center; padding: 1rem; margin: 2rem 0;
+    background: rgba(255,100,100,0.08); border: 1px solid rgba(255,100,100,0.2);
+    border-radius: 8px; color: #ff8888; font-size: 0.85rem;
+  }
+  @media (max-width: 700px) {
+    .container { padding: 1rem; }
+    .tab { padding: 0.6rem 0.8rem; font-size: 0.8rem; }
+    .tab-content { padding: 1rem; }
+    pre { font-size: 0.75rem; padding: 0.8rem; }
+    table { font-size: 0.8rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>iEnable Flow Builder</h1>
+    <div class="subtitle">Architecture Proposal &amp; Competitive Research</div>
+    <div class="date">February 26, 2026</div>
+    <div class="badge">CONFIDENTIAL</div>
+  </div>
+  <div class="confidential">This document is not indexed by search engines (noindex, nofollow). Do not share publicly.</div>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('arch', this)">Architecture</div>
+    <div class="tab" onclick="switchTab('research', this)">Competitive Research</div>
+  </div>
+  <div id="arch" class="tab-content active">
+    <h1 id="ienable-flow-builder-architecture-proposal">iEnable Flow Builder — Architecture Proposal</h1>
+<p><strong>Date:</strong> February 26, 2026<br />
+<strong>Author:</strong> Reel (Content Agent) — Research Subagent<br />
+<strong>Version:</strong> 1.0 — Initial Proposal<br />
+<strong>Companion:</strong> flow-builder-competitive-research.md</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#design-philosophy">Design Philosophy</a></li>
+<li><a href="#flow-primitives">Flow Primitives</a></li>
+<li><a href="#visual-builder-concept">Visual Builder Concept</a></li>
+<li><a href="#approval-gates">Approval Gates — The Killer Feature</a></li>
+<li><a href="#ai-agent-steps">AI Agent Steps</a></li>
+<li><a href="#qa-steps">QA Steps</a></li>
+<li><a href="#brief-first-pattern">Brief-First Pattern</a></li>
+<li><a href="#learning-loop">Learning Loop Architecture</a></li>
+<li><a href="#template-library">Template Library — Day 1</a></li>
+<li><a href="#data-model">Data Model &amp; Execution Engine</a></li>
+<li><a href="#pricing">Pricing Implications</a></li>
+<li><a href="#build-sequence">Build Sequence</a></li>
+</ol>
+<hr />
+<h2 id="1-design-philosophy">1. Design Philosophy <a name="design-philosophy"></a></h2>
+<h3 id="core-principle-pipes-with-quality-control">Core Principle: "Pipes With Quality Control"</h3>
+<p>Every workflow builder in the market optimizes for <strong>speed of execution</strong>. iEnable optimizes for <strong>quality of output</strong>. This is not a constraint — it's a feature. The fastest pipeline that ships garbage is worthless. A pipeline that takes 10 extra minutes but ships great work is priceless.</p>
+<h3 id="three-axioms">Three Axioms</h3>
+<ol>
+<li><strong>The generator never grades its own homework.</strong> Every AI output should be independently evaluated.</li>
+<li><strong>Approval is not an exception — it's the default.</strong> Gates start at Human, earn their way to Auto.</li>
+<li><strong>Rejection is the most valuable data in the system.</strong> Every "no" makes the next attempt better.</li>
+</ol>
+<h3 id="design-influences">Design Influences</h3>
+<ul>
+<li><strong>Make.com:</strong> Visual builder UX, real-time execution visualization, subscenarios</li>
+<li><strong>n8n:</strong> Data pinning, execution-based mental model, self-hosting option</li>
+<li><strong>Relay.app:</strong> HITL as first-class primitive (we extend this concept dramatically)</li>
+<li><strong>Retool:</strong> Platform approach (apps + workflows + data), User Task blocks</li>
+<li><strong>Dify:</strong> Plugin SDK, parallel execution, visual debugging</li>
+<li><strong>Zapier Canvas:</strong> NL → flow generation, ROI tracking</li>
+</ul>
+<hr />
+<h2 id="2-flow-primitives">2. Flow Primitives <a name="flow-primitives"></a></h2>
+<p>Every flow is composed of these building blocks. They're the atoms of the system.</p>
+<h3 id="primitive-types">Primitive Types</h3>
+<h4 id="trigger">🔵 Trigger</h4>
+<p>The entry point. What starts this flow?</p>
+<table>
+<thead>
+<tr>
+<th>Trigger Type</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Schedule</strong></td>
+<td>Cron/interval-based</td>
+<td>"Every Monday at 9am"</td>
+</tr>
+<tr>
+<td><strong>Webhook</strong></td>
+<td>External HTTP event</td>
+<td>Shopify order created</td>
+</tr>
+<tr>
+<td><strong>Manual</strong></td>
+<td>User clicks "Run"</td>
+<td>Ad-hoc content request</td>
+</tr>
+<tr>
+<td><strong>Event</strong></td>
+<td>Internal system event</td>
+<td>"New product added to catalog"</td>
+</tr>
+<tr>
+<td><strong>Form</strong></td>
+<td>User submits a form</td>
+<td>Creative brief submission</td>
+</tr>
+<tr>
+<td><strong>Watch</strong></td>
+<td>Monitor for changes</td>
+<td>"New competitor blog post detected"</td>
+</tr>
+</tbody>
+</table>
+<h4 id="action">🟢 Action</h4>
+<p>Do something. The workhorses of the flow.</p>
+<table>
+<thead>
+<tr>
+<th>Action Type</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>API Call</strong></td>
+<td>Hit any external API</td>
+<td>Generate image via Luma Labs</td>
+</tr>
+<tr>
+<td><strong>Transform</strong></td>
+<td>Modify data in-flight</td>
+<td>Resize image to 9:16</td>
+</tr>
+<tr>
+<td><strong>Database</strong></td>
+<td>Read/write data stores</td>
+<td>Save to product catalog</td>
+</tr>
+<tr>
+<td><strong>Notify</strong></td>
+<td>Send a notification</td>
+<td>Slack message, email, push</td>
+</tr>
+<tr>
+<td><strong>Publish</strong></td>
+<td>Push to external platform</td>
+<td>Post to Instagram, update Shopify</td>
+</tr>
+<tr>
+<td><strong>Agent</strong></td>
+<td>Run an AI agent (see §5)</td>
+<td>"Write product description"</td>
+</tr>
+</tbody>
+</table>
+<h4 id="gate-the-differentiator">🟡 Gate (THE DIFFERENTIATOR)</h4>
+<p>A quality checkpoint. The flow pauses until the gate passes. See §4 for full spec.</p>
+<table>
+<thead>
+<tr>
+<th>Gate Mode</th>
+<th>Who Evaluates</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Human</strong></td>
+<td>Person reviews + approves/rejects</td>
+<td>Marketing director reviews ad copy</td>
+</tr>
+<tr>
+<td><strong>AI QA</strong></td>
+<td>Independent AI agent evaluates</td>
+<td>QA agent scores brand compliance</td>
+</tr>
+<tr>
+<td><strong>Auto-pass</strong></td>
+<td>Automatic (trust earned)</td>
+<td>Proven flow step, skip review</td>
+</tr>
+<tr>
+<td><strong>Hybrid</strong></td>
+<td>AI pre-screens, human decides edge cases</td>
+<td>AI flags issues, human makes call</td>
+</tr>
+</tbody>
+</table>
+<h4 id="branch">🔴 Branch</h4>
+<p>Conditional logic. Split the flow based on data.</p>
+<table>
+<thead>
+<tr>
+<th>Branch Type</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>If/Else</strong></td>
+<td>Binary condition</td>
+<td>"If product price &gt; $500..."</td>
+</tr>
+<tr>
+<td><strong>Switch</strong></td>
+<td>Multiple conditions</td>
+<td>Route by product category</td>
+</tr>
+<tr>
+<td><strong>A/B Split</strong></td>
+<td>Random percentage split</td>
+<td>50/50 test two ad variants</td>
+</tr>
+<tr>
+<td><strong>Filter</strong></td>
+<td>Pass/block based on criteria</td>
+<td>"Only products with images"</td>
+</tr>
+</tbody>
+</table>
+<h4 id="loop">🟣 Loop</h4>
+<p>Repeat over a set of items.</p>
+<table>
+<thead>
+<tr>
+<th>Loop Type</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>For Each</strong></td>
+<td>Iterate over array</td>
+<td>Process each product in catalog</td>
+</tr>
+<tr>
+<td><strong>While</strong></td>
+<td>Repeat until condition</td>
+<td>Retry generation until QA passes</td>
+</tr>
+<tr>
+<td><strong>Batch</strong></td>
+<td>Process in chunks</td>
+<td>Generate 10 ads at a time</td>
+</tr>
+<tr>
+<td><strong>Retry</strong></td>
+<td>Automatic retry on failure</td>
+<td>Re-attempt API call 3x</td>
+</tr>
+</tbody>
+</table>
+<h4 id="brief">🟤 Brief</h4>
+<p>A structured input document that precedes creative work. See §7.</p>
+<h4 id="qa">⚪ QA</h4>
+<p>Independent quality evaluation. See §6.</p>
+<h4 id="merge">🔷 Merge</h4>
+<p>Combine parallel branches back together.</p>
+<table>
+<thead>
+<tr>
+<th>Merge Type</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Wait All</strong></td>
+<td>Proceed when all branches complete</td>
+<td>Wait for all platform formats</td>
+</tr>
+<tr>
+<td><strong>Wait Any</strong></td>
+<td>Proceed on first completion</td>
+<td>Use fastest image generation</td>
+</tr>
+<tr>
+<td><strong>Aggregate</strong></td>
+<td>Combine outputs from all branches</td>
+<td>Collect all product descriptions</td>
+</tr>
+</tbody>
+</table>
+<h4 id="subscenario">🔶 Subscenario</h4>
+<p>Call another flow as a reusable function.</p>
+<hr />
+<h3 id="primitive-visual-design-language">Primitive Visual Design Language</h3>
+<p>Each primitive has a distinct shape and color on the canvas:</p>
+<pre><code>🔵 Trigger    → Blue circle (entry point)
+🟢 Action     → Green rounded rectangle
+🟡 Gate       → Yellow diamond (⚠️ attention required)
+🔴 Branch     → Red diamond
+🟣 Loop       → Purple hexagon
+🟤 Brief      → Brown document shape
+⚪ QA         → White circle with checkmark
+🔷 Merge      → Blue inverted triangle
+🔶 Subscenario → Orange rectangle with nested icon
+</code></pre>
+<p><strong>Gates are DIAMONDS.</strong> This is intentional — the diamond shape universally means "decision point" in flowcharts. Every time someone sees a yellow diamond, they know: "quality check happens here." No other platform has this visual language for quality control.</p>
+<hr />
+<h2 id="3-visual-builder-concept">3. Visual Builder Concept <a name="visual-builder-concept"></a></h2>
+<h3 id="canvas-architecture">Canvas Architecture</h3>
+<h4 id="layout-directional-flow-left-right">Layout: Directional Flow (Left → Right)</h4>
+<p>Following Make.com's proven pattern, flows read left to right. Data moves from triggers (left) through actions and gates (center) to outputs (right). This matches natural reading direction and mental models.</p>
+<h4 id="canvas-features">Canvas Features</h4>
+<p><strong>Core:</strong>
+- Infinite canvas with zoom/pan (mouse wheel, trackpad, minimap)
+- Snap-to-grid alignment with smart guides
+- Connection lines with data type indicators
+- Drag from primitive palette onto canvas
+- Connect nodes by dragging from output port to input port</p>
+<p><strong>Smart Features:</strong>
+- <strong>NL → Flow Generator:</strong> "Create a flow that takes a product URL, generates a lifestyle image, gets it approved, and posts to Instagram" → generates the complete flow
+- <strong>Data Inspector:</strong> Click any connection line → see sample/live data flowing through
+- <strong>Execution Replay:</strong> Re-run any past execution with original data for debugging
+- <strong>Data Pinning:</strong> Freeze test data at any node for iterative downstream development (stolen from n8n — it's that good)
+- <strong>Real-Time Execution Viz:</strong> Watch data flow through the graph during live runs with green/red status per node
+- <strong>Relationship Panel:</strong> Shift+hover on any node highlights all connected nodes (stolen from Dify — also great)</p>
+<p><strong>Collaboration:</strong>
+- Multi-user editing (cursors visible)
+- Comments on any node or connection
+- Version history with diff view
+- Git export/import (JSON flow definition)
+- Share flows via link (view-only or fork)</p>
+<h4 id="builder-panels">Builder Panels</h4>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│ ┌──────────┐  ┌─────────────────────────────┐  ┌─────────┐ │
+│ │          │  │                             │  │         │ │
+│ │ Primitive│  │                             │  │ Node    │ │
+│ │ Palette  │  │        CANVAS               │  │ Config  │ │
+│ │          │  │                             │  │ Panel   │ │
+│ │ Triggers │  │  🔵──🟢──🟡──🟢──⚪──🟢    │  │         │ │
+│ │ Actions  │  │         ╲                   │  │ Props   │ │
+│ │ Gates    │  │          🟡──🟢──🔷         │  │ Data    │ │
+│ │ Branches │  │                             │  │ Logs    │ │
+│ │ Loops    │  │                             │  │ History │ │
+│ │ QA       │  │                             │  │         │ │
+│ │ Briefs   │  │                             │  │         │ │
+│ │          │  │                             │  │         │ │
+│ └──────────┘  └─────────────────────────────┘  └─────────┘ │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │  Execution Timeline  │  Approval Queue  │  Learning Log │ │
+│ └─────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>Left Panel:</strong> Primitive palette — drag building blocks onto canvas<br />
+<strong>Center:</strong> The canvas — the flow graph<br />
+<strong>Right Panel:</strong> Node configuration — properties, data mapping, logs<br />
+<strong>Bottom Panel:</strong> Three tabs:
+1. <strong>Execution Timeline</strong> — real-time and historical run tracking
+2. <strong>Approval Queue</strong> — pending gates across all flows (THE KILLER VIEW)
+3. <strong>Learning Log</strong> — what the system learned from rejections</p>
+<hr />
+<h3 id="the-approval-queue-bottom-panel-tab-2">The Approval Queue (Bottom Panel, Tab 2)</h3>
+<p>This is the view that doesn't exist in any competitor. It's a unified inbox for every pending approval across all flows:</p>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│ 📋 Approval Queue (4 pending)                     [Filters] │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│ 🟡 Product Video Brief — Plank+Beam Bunk Bed     ⏱️ 2h ago │
+│    Flow: Product Ad Pipeline  │  Step: Creative Brief Review │
+│    Assigned: Jonathan  │  Priority: High  │  [Review →]      │
+│                                                              │
+│ 🟡 Instagram Caption — Summer Collection          ⏱️ 45m ago│
+│    Flow: Social Content Calendar  │  Step: Copy Approval     │
+│    Assigned: Marketing Team  │  Priority: Medium │ [Review →]│
+│                                                              │
+│ ⚪ Blog SEO Score — &quot;Best Bunk Beds 2026&quot;        ⏱️ 12m ago │
+│    Flow: Blog Pipeline  │  Step: AI QA Check                 │
+│    QA Agent: SEO Scorer  │  Score: 7.2/10  │  [Override →]   │
+│                                                              │
+│ 🟡 Product Description — Standing Desk v3         ⏱️ 5m ago │
+│    Flow: Product Listing Optimizer  │  Step: Copy Review     │
+│    Assigned: Anyone  │  Priority: Low  │  [Review →]         │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>This is the command center.</strong> One view. Every pending decision. Across all flows. No other platform has this.</p>
+<hr />
+<h2 id="4-approval-gates-the-killer-feature">4. Approval Gates — The Killer Feature <a name="approval-gates"></a></h2>
+<h3 id="gate-configuration">Gate Configuration</h3>
+<p>Every gate has these properties:</p>
+<pre><code class="language-yaml">gate:
+  name: &quot;Creative Brief Approval&quot;
+  mode: human | ai_qa | auto_pass | hybrid
+
+  # Human mode config
+  human:
+    assignee: user | team | role | anyone_with_link
+    notification_channels: [email, slack, push, sms]
+    timeout: 48h
+    escalation:
+      - after: 24h → notify_manager
+      - after: 36h → reassign_to: backup_reviewer
+      - after: 48h → auto_action: reject_with_reason(&quot;timeout&quot;)
+    delegation: true  # assignee can delegate to another user
+
+  # AI QA mode config
+  ai_qa:
+    evaluator_agent: &quot;brand_compliance_checker&quot;
+    criteria:
+      - brand_voice_score: &gt;= 7
+      - factual_accuracy: true
+      - platform_compliance: true
+    pass_threshold: all_criteria_met
+    on_fail: reject_with_structured_feedback
+
+  # Auto-pass config
+  auto_pass:
+    conditions:
+      - trust_score: &gt;= 0.9  # earned over time
+      - content_type: in [text_only, minor_edit]
+      - risk_level: low
+    audit_log: true  # still logs even when auto-passing
+
+  # Hybrid config
+  hybrid:
+    ai_pre_screen: &quot;brand_compliance_checker&quot;
+    if_ai_passes: auto_pass
+    if_ai_flags: route_to_human
+    if_ai_rejects: reject_immediately
+
+  # Universal gate properties
+  feedback:
+    on_reject:
+      require_reason: true
+      reason_taxonomy: [off_brand, factually_wrong, wrong_tone, 
+                        wrong_format, wrong_audience, low_quality,
+                        missing_elements, other]
+      free_text: optional
+      reference_examples: optional  # reviewer can attach &quot;do it like this&quot;
+    on_approve:
+      score: optional  # 1-10 quality rating
+      notes: optional  # &quot;Great but next time try X&quot;
+
+  # Learning integration  
+  learning:
+    feed_rejection_to: generator_agent  # who created the content
+    update_brand_context: true
+    log_to_learning_db: true
+    adjustment_weight: 0.1  # how much this feedback shifts behavior
+</code></pre>
+<h3 id="gate-evolution-the-trust-ladder">Gate Evolution: The Trust Ladder</h3>
+<p>This is the concept no competitor has. Gates evolve based on track record:</p>
+<pre><code>STAGE 1: New Flow / New Agent
+├── All gates: HUMAN
+├── Every output reviewed by a person
+└── Building the training dataset
+
+STAGE 2: Patterns Emerge (after ~50 approvals)
+├── Low-risk gates: HYBRID (AI pre-screens, human decides edge cases)
+├── High-risk gates: HUMAN
+└── AI QA agent learning from human decisions
+
+STAGE 3: Trust Building (after ~200 approvals with &gt;90% first-pass rate)
+├── Low-risk gates: AUTO-PASS (with audit logging)
+├── Medium-risk gates: AI QA
+├── High-risk gates: HUMAN
+└── System suggests gate promotions: &quot;This gate has 95% approval rate — promote to AI QA?&quot;
+
+STAGE 4: Mature Flow (after ~500+ approvals)
+├── Most gates: AUTO-PASS
+├── Novel/unusual content: AI QA
+├── High-stakes content: HUMAN
+└── Anomaly detection: Auto-escalate when output looks unusual
+</code></pre>
+<p><strong>The key insight:</strong> The customer controls the pace. They can override any promotion suggestion. They can demote gates back to Human at any time. Trust is earned, not assumed.</p>
+<h3 id="gate-notification-system">Gate Notification System</h3>
+<pre><code>When gate is waiting for human:
+  1. Instant notification via configured channels (Slack, email, push, SMS)
+  2. Deep link directly to approval UI (mobile-friendly)
+  3. Rich preview of content being reviewed (not just &quot;you have an approval&quot;)
+  4. One-tap approve with optional feedback
+  5. Structured reject with required reason
+
+Escalation chain:
+  - T+0: Assigned reviewer notified
+  - T+X (configurable): Reminder sent
+  - T+Y: Manager/backup notified
+  - T+Z: Auto-action (reject, reassign, or escalate)
+
+Smart scheduling:
+  - Respect reviewer's working hours
+  - Batch non-urgent approvals into daily digest
+  - Flag urgent approvals with distinct notification style
+</code></pre>
+<hr />
+<h2 id="5-ai-agent-steps">5. AI Agent Steps <a name="ai-agent-steps"></a></h2>
+<h3 id="agent-as-a-flow-node">Agent as a Flow Node</h3>
+<p>An Agent step is a special Action node that executes an AI agent with persistent memory and brand context.</p>
+<pre><code class="language-yaml">agent_step:
+  name: &quot;Write Product Description&quot;
+  agent_id: &quot;product_copywriter_v3&quot;
+
+  # Agent capabilities
+  model: claude-sonnet-4  # or customer's preferred model
+  temperature: 0.7
+
+  # Brand context (loaded automatically)
+  brand_context:
+    brand_bible: &quot;plankandbeam_brand_bible_v2&quot;
+    tone_guide: &quot;warm, approachable, parent-focused&quot;
+    avoid: [&quot;cheap&quot;, &quot;discount&quot;, &quot;basic&quot;]
+    examples: [&quot;top_performing_descriptions.json&quot;]
+
+  # Memory
+  memory:
+    short_term: conversation_context  # within this flow run
+    long_term: learning_db  # accumulated wisdom from all runs
+    knowledge_graph: cognee_namespace  # brand knowledge graph
+
+  # Input mapping
+  inputs:
+    product_data: &quot;{{trigger.product}}&quot;
+    target_platform: &quot;shopify&quot;
+    word_count: 150
+
+  # Output schema
+  outputs:
+    description: string
+    meta_title: string
+    meta_description: string
+    keywords: string[]
+
+  # Learning integration
+  learning:
+    log_output: true
+    track_downstream_approval: true  # did the gate after this pass?
+    feedback_integration: &quot;adjust_next_run&quot;  # use rejection feedback
+</code></pre>
+<h3 id="agent-memory-architecture">Agent Memory Architecture</h3>
+<pre><code>┌─────────────────────────────────────────────┐
+│              Agent Memory Stack              │
+├─────────────────────────────────────────────┤
+│                                             │
+│  Layer 1: Brand Context (static, curated)   │
+│  ├── Brand bible                            │
+│  ├── Tone guidelines                        │
+│  ├── Approved examples                      │
+│  └── Prohibited terms/styles                │
+│                                             │
+│  Layer 2: Learning DB (dynamic, earned)     │
+│  ├── What worked (approved outputs)         │
+│  ├── What failed (rejected + reasons)       │
+│  ├── Reviewer preferences                  │
+│  ├── Platform-specific patterns             │
+│  └── Performance scores over time           │
+│                                             │
+│  Layer 3: Knowledge Graph (structured)      │
+│  ├── Product relationships                  │
+│  ├── Customer segments                      │
+│  ├── Competitor positioning                 │
+│  └── Industry context                       │
+│                                             │
+│  Layer 4: Run Context (ephemeral)           │
+│  ├── Current flow inputs                    │
+│  ├── Upstream node outputs                  │
+│  └── Conversation within this run           │
+│                                             │
+└─────────────────────────────────────────────┘
+</code></pre>
+<p>Each layer has different persistence:
+- <strong>Brand Context:</strong> Updated by humans, versioned, shared across agents
+- <strong>Learning DB:</strong> Updated automatically from gate feedback, per-agent
+- <strong>Knowledge Graph:</strong> Updated via Cognee, shared across flows
+- <strong>Run Context:</strong> Exists only during flow execution, then archived</p>
+<hr />
+<h2 id="6-qa-steps">6. QA Steps <a name="qa-steps"></a></h2>
+<h3 id="the-generator-grader-principle">The Generator ≠ Grader Principle</h3>
+<p>The most important architectural decision in iEnable: <strong>the agent that creates content is NEVER the agent that evaluates it.</strong> This mirrors how every good creative organization works — the writer doesn't edit their own copy, the designer doesn't QA their own designs.</p>
+<h3 id="qa-node-configuration">QA Node Configuration</h3>
+<pre><code class="language-yaml">qa_step:
+  name: &quot;Brand Compliance Check&quot;
+  evaluator_agent: &quot;brand_qa_agent_v2&quot;  # DIFFERENT from generator
+
+  # What's being evaluated
+  input: &quot;{{product_copywriter.output}}&quot;
+
+  # Evaluation criteria (rubric)
+  rubric:
+    - criterion: &quot;Brand Voice&quot;
+      description: &quot;Does the copy match our warm, approachable tone?&quot;
+      weight: 0.3
+      scoring: 1-10
+      auto_fail_below: 4
+
+    - criterion: &quot;Factual Accuracy&quot;
+      description: &quot;Are all product specs correct?&quot;
+      weight: 0.25
+      scoring: pass/fail
+
+    - criterion: &quot;Platform Compliance&quot;
+      description: &quot;Meets character limits, formatting rules for target platform?&quot;
+      weight: 0.2
+      scoring: pass/fail
+
+    - criterion: &quot;SEO Quality&quot;
+      description: &quot;Includes target keywords naturally?&quot;
+      weight: 0.15
+      scoring: 1-10
+      auto_fail_below: 5
+
+    - criterion: &quot;Differentiation&quot;
+      description: &quot;Stands out from competitor copy?&quot;
+      weight: 0.1
+      scoring: 1-10
+
+  # Pass/fail logic
+  passing:
+    min_weighted_score: 7.0
+    all_pass_fail_must_pass: true
+    no_auto_fails: true
+
+  # Output
+  outputs:
+    overall_score: number
+    per_criterion_scores: object
+    pass: boolean
+    feedback: string  # detailed feedback for generator
+    suggested_improvements: string[]
+
+  # On fail
+  on_fail:
+    action: route_to_gate  # human reviews the QA failure
+    # OR action: loop_back_to_generator  # auto-retry with feedback
+    max_retries: 3
+    include_feedback: true  # QA feedback sent to generator
+</code></pre>
+<h3 id="qa-agent-independence">QA Agent Independence</h3>
+<p>QA agents are:
+- <strong>Separate model instances</strong> — they don't share context with the generator
+- <strong>Separately prompted</strong> — their system prompt is about evaluation, not creation
+- <strong>Separately configured</strong> — different temperature (lower for QA), different model potentially
+- <strong>Separately learning</strong> — they learn what "good" looks like from human-approved outputs
+- <strong>Auditable</strong> — every evaluation is logged with full reasoning</p>
+<h3 id="qa-gate-integration">QA → Gate Integration</h3>
+<p>The QA step feeds into a Gate:</p>
+<pre><code>Agent (Generate) → QA (Evaluate) → Gate (Decide)
+
+If QA passes → Gate auto-passes (in AI QA mode)
+If QA fails → Gate shows human the output + QA feedback
+Human can:
+  - Agree with QA → Reject (feedback to generator)
+  - Override QA → Approve anyway (QA agent learns it was too strict)
+  - Partially agree → Edit and approve (system learns the edit pattern)
+</code></pre>
+<p>This three-step pattern (Generate → QA → Gate) is iEnable's core content production primitive.</p>
+<hr />
+<h2 id="7-brief-first-pattern">7. Brief-First Pattern <a name="brief-first-pattern"></a></h2>
+<h3 id="the-problem">The Problem</h3>
+<p>Every other platform goes straight to generation. User says "make me an ad" → AI makes an ad → human sees it → "that's not what I wanted" → rejected → try again.</p>
+<p>This wastes expensive generation resources and creates frustration.</p>
+<h3 id="the-solution-brief-approve-then-generate">The Solution: Brief → Approve → Then Generate</h3>
+<pre><code>┌──────────┐     ┌───────────┐     ┌──────────┐     ┌──────────┐
+│  Brief   │────▶│  Concept  │────▶│  Gate:   │────▶│ Generate │
+│  Input   │     │  Agent    │     │  Concept │     │  Agent   │
+│  (Form)  │     │  Pitches  │     │  Approval│     │ (Luma,   │
+└──────────┘     └───────────┘     └──────────┘     │ FLUX,etc)│
+                                         │          └──────────┘
+                                    Reject │               │
+                                    with   │          ┌──────────┐
+                                    notes  │          │    QA    │
+                                         │          │  Agent   │
+                                    ┌──────────┐     └──────────┘
+                                    │ Revised  │          │
+                                    │ Concept  │     ┌──────────┐
+                                    └──────────┘     │  Gate:   │
+                                                     │  Output  │
+                                                     │  Approval│
+                                                     └──────────┘
+</code></pre>
+<h3 id="brief-structure">Brief Structure</h3>
+<pre><code class="language-yaml">brief:
+  # Auto-populated from trigger
+  product: &quot;Plank+Beam Triple Bunk Bed&quot;
+  platform: &quot;Instagram Reels&quot;
+  objective: &quot;Drive consideration for back-to-school&quot;
+
+  # AI-generated concept (requires approval before generation)
+  concept:
+    hook: &quot;Morning chaos solved — one room, three happy kids&quot;
+    visual_direction: &quot;Warm morning light, kids waking up in bunk bed&quot;
+    camera_style: &quot;Slow dolly in, shallow depth of field&quot;
+    duration: &quot;15 seconds&quot;
+    music_mood: &quot;Gentle, uplifting&quot;
+    cta: &quot;Link in bio for $50 off&quot;
+    reference_examples: [&quot;successful_reel_032.mp4&quot;, &quot;competitor_ad_017.mp4&quot;]
+
+  # Constraints
+  constraints:
+    aspect_ratio: &quot;9:16&quot;
+    max_duration: &quot;30s&quot;
+    brand_colors: true
+    product_visibility: &quot;hero product visible by frame 3&quot;
+
+  # Budget (generation costs)
+  estimated_cost:
+    image_gen: &quot;$0.12 (FLUX Pro)&quot;
+    video_gen: &quot;$0.80 (Luma Ray3)&quot;
+    total: &quot;$0.92&quot;
+</code></pre>
+<p><strong>The concept gets approved BEFORE we spend $0.92 on generation.</strong> This seems trivial at one video, but at 100 products × 4 platforms × 3 variants = 1,200 videos, a 50% first-pass rejection rate means saving $552 in wasted generation costs.</p>
+<hr />
+<h2 id="8-learning-loop-architecture">8. Learning Loop Architecture <a name="learning-loop"></a></h2>
+<h3 id="how-rejection-becomes-improvement">How Rejection Becomes Improvement</h3>
+<pre><code>                    ┌─────────────────────┐
+                    │   Gate: REJECTED    │
+                    │                     │
+                    │ Reason: &quot;off_brand&quot; │
+                    │ Detail: &quot;Too casual │
+                    │  for this product   │
+                    │  category&quot;          │
+                    │ Score: 4/10         │
+                    └────────┬────────────┘
+                             │
+              ┌──────────────┼──────────────┐
+              ▼              ▼              ▼
+      ┌──────────────┐ ┌──────────┐ ┌──────────────┐
+      │ Learning DB  │ │ Agent    │ │ Brand        │
+      │              │ │ Prompt   │ │ Context      │
+      │ Record:      │ │ Update:  │ │ Update:      │
+      │ - input      │ │ Add to   │ │ &quot;Formal tone │
+      │ - output     │ │ negative │ │  for premium │
+      │ - rejection  │ │ examples │ │  products&quot;   │
+      │ - feedback   │ │          │ │              │
+      │ - timestamp  │ │          │ │              │
+      └──────────────┘ └──────────┘ └──────────────┘
+              │              │              │
+              └──────────────┼──────────────┘
+                             ▼
+                    ┌─────────────────────┐
+                    │ Next Generation Run │
+                    │                     │
+                    │ System prompt now   │
+                    │ includes:           │
+                    │ - &quot;Use formal tone  │
+                    │    for premium      │
+                    │    products&quot;        │
+                    │ - Negative example  │
+                    │    from rejection   │
+                    │ - Positive examples │
+                    │    from approvals   │
+                    └─────────────────────┘
+</code></pre>
+<h3 id="learning-database-schema-simplified">Learning Database Schema (Simplified)</h3>
+<pre><code class="language-sql">-- Every output ever generated
+CREATE TABLE flow_outputs (
+    id UUID PRIMARY KEY,
+    flow_id UUID,
+    run_id UUID,
+    agent_id UUID,
+    node_id UUID,
+    output_type TEXT,           -- text, image, video, etc.
+    output_data JSONB,
+    created_at TIMESTAMP
+);
+
+-- Every gate decision
+CREATE TABLE gate_decisions (
+    id UUID PRIMARY KEY,
+    flow_id UUID,
+    run_id UUID,
+    gate_id UUID,
+    output_id UUID REFERENCES flow_outputs(id),
+    decision TEXT,              -- approved, rejected, edited
+    gate_mode TEXT,             -- human, ai_qa, auto_pass
+    reviewer_id UUID,          -- who decided (human or AI agent)
+    score NUMERIC,             -- optional quality score
+    rejection_reason TEXT,     -- taxonomy code
+    rejection_detail TEXT,     -- free text
+    reference_examples JSONB,  -- links to &quot;do it like this&quot;
+    time_to_decision INTERVAL, -- how long approval took
+    created_at TIMESTAMP
+);
+
+-- Lessons extracted from decisions
+CREATE TABLE lessons (
+    id UUID PRIMARY KEY,
+    agent_id UUID,             -- which agent this applies to
+    category TEXT,             -- brand_voice, accuracy, format, etc.
+    lesson TEXT,               -- the actual lesson
+    source_decisions UUID[],   -- which decisions spawned this
+    confidence NUMERIC,        -- how confident (more data = higher)
+    active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP
+);
+
+-- Agent performance tracking
+CREATE TABLE agent_performance (
+    id UUID PRIMARY KEY,
+    agent_id UUID,
+    period DATE,
+    total_outputs INTEGER,
+    first_pass_approval_rate NUMERIC,
+    avg_quality_score NUMERIC,
+    common_rejection_reasons JSONB,
+    gate_promotion_eligible BOOLEAN,
+    created_at TIMESTAMP
+);
+
+-- Trust scores for gate evolution
+CREATE TABLE gate_trust (
+    id UUID PRIMARY KEY,
+    gate_id UUID,
+    current_mode TEXT,         -- human, ai_qa, auto_pass
+    approval_rate_30d NUMERIC,
+    total_decisions INTEGER,
+    last_rejection TIMESTAMP,
+    promotion_eligible BOOLEAN,
+    promotion_suggested_at TIMESTAMP,
+    promoted_at TIMESTAMP,
+    demoted_at TIMESTAMP
+);
+</code></pre>
+<h3 id="learning-loop-mechanics">Learning Loop Mechanics</h3>
+<ol>
+<li><strong>Immediate:</strong> Rejection feedback is structured (taxonomy + detail) and stored</li>
+<li><strong>Per-Run:</strong> If a loop/retry step exists, rejection feedback is injected into the next attempt's prompt</li>
+<li><strong>Per-Agent:</strong> After every N decisions, lessons are extracted and added to the agent's long-term memory</li>
+<li><strong>Per-Flow:</strong> Monthly, gate trust scores are recalculated. Promotion suggestions surface in the Approval Queue</li>
+<li><strong>Per-Organization:</strong> Cross-flow patterns emerge. If "off_brand" is the #1 rejection reason across all flows, the brand bible may need updating — system alerts the admin</li>
+</ol>
+<hr />
+<h2 id="9-template-library-day-1">9. Template Library — Day 1 <a name="template-library"></a></h2>
+<h3 id="philosophy">Philosophy</h3>
+<p>Start small, be exceptional. 12 templates that demonstrate the full power of gates + QA + learning. Each template should make a Make.com user say "I've been trying to build this for months."</p>
+<h3 id="day-1-templates">Day 1 Templates</h3>
+<h4 id="content-creation-4-templates">Content Creation (4 templates)</h4>
+<p><strong>1. Social Media Content Calendar</strong> ⭐ (Flagship)</p>
+<pre><code>Schedule Trigger (weekly)
+  → Content Strategist Agent (generate week's posts)
+  → Gate: Content Calendar Approval (Human)
+  → For Each Post:
+      → Copywriter Agent (write platform-specific copy)
+      → QA: Brand Voice Check
+      → Image Generator (FLUX/Luma)
+      → QA: Visual Quality Check
+      → Gate: Final Post Approval (Human → Hybrid as trust builds)
+      → Publish to Platform
+  → Weekly Performance Report
+</code></pre>
+<p><strong>2. Product Video Ad Pipeline</strong> ⭐ (Flagship)</p>
+<pre><code>Product URL Trigger
+  → Product Data Extractor (scrape specs, images, price)
+  → Brief Generator Agent (creates creative brief)
+  → Gate: Brief Approval (Human)
+  → Concept Agent (storyboard, shot list, camera direction)
+  → Gate: Concept Approval (Human)
+  → For Each Platform [TikTok 9:16, YouTube 16:9, IG 1:1]:
+      → Image Generation (keyframe from product photo)
+      → Video Generation (Luma Ray3 from keyframe)
+      → QA: Visual Quality + Brand Compliance
+      → Audio (voiceover or music)
+      → Format (ffmpeg platform-specific encoding)
+  → Gate: Final Creative Approval (Human → AI QA over time)
+  → Publish to Platforms
+  → Performance Tracking (7-day check)
+</code></pre>
+<p><strong>3. Blog Post Pipeline</strong></p>
+<pre><code>Topic Trigger (from SEO tool or manual)
+  → Research Agent (competitive analysis, keyword research)
+  → Outline Agent (H1-H3 structure, target keywords)
+  → Gate: Outline Approval (Human)
+  → Writer Agent (draft from approved outline)
+  → QA: SEO Score Check (keyword density, readability, links)
+  → QA: Factual Accuracy (claim verification)
+  → Gate: Content Approval (Human → Hybrid)
+  → Format for CMS (Shopify blog, WordPress, etc.)
+  → Publish
+  → Performance Tracking (30-day rank check)
+</code></pre>
+<p><strong>4. Email Campaign Builder</strong></p>
+<pre><code>Campaign Brief (Form Trigger)
+  → Strategy Agent (audience segment, send time, A/B approach)
+  → Gate: Strategy Approval (Human)
+  → Copywriter Agent (subject lines, body, CTA)
+  → QA: Brand Voice + Spam Score Check
+  → Designer Agent (email template, images)
+  → QA: Rendering Check (mobile, dark mode)
+  → Gate: Final Campaign Approval (Human)
+  → A/B Split → Send
+  → Performance Report (24h + 7d)
+</code></pre>
+<h4 id="e-commerce-4-templates">E-Commerce (4 templates)</h4>
+<p><strong>5. Product Listing Optimizer</strong></p>
+<pre><code>Product Catalog Sync Trigger
+  → For Each Product:
+      → Description Agent (SEO-optimized copy)
+      → QA: Brand Voice + SEO Score
+      → Image Enhancement (Claid.ai lifestyle scenes)
+      → QA: Image Quality Check
+      → Gate: Listing Approval (Human → AI QA for updates)
+      → Update Shopify/Amazon/etc.
+  → Batch Performance Report
+</code></pre>
+<p><strong>6. Review Response Automation</strong></p>
+<pre><code>New Review Webhook
+  → Sentiment Analysis
+  → Branch:
+      → 5-star: Auto-thank (Auto-pass Gate)
+      → 3-4 star: Response Agent → Gate: Quick Review (Hybrid)
+      → 1-2 star: Response Agent → Gate: Sensitive Review (Human always)
+  → Post Response
+  → Log for pattern analysis
+</code></pre>
+<p><strong>7. Competitive Price Monitor</strong></p>
+<pre><code>Daily Schedule Trigger
+  → Scrape competitor prices (configured URLs)
+  → Analysis Agent (price changes, trends, recommendations)
+  → Branch:
+      → Price drop detected: 
+          → Gate: Alert + Action Recommendation (Human)
+          → Optional: Auto-adjust price (Auto-pass for minor changes)
+      → No changes: Log and continue
+  → Weekly Competitive Report
+</code></pre>
+<p><strong>8. Inventory Alert &amp; Reorder</strong></p>
+<pre><code>Inventory Level Watch Trigger
+  → Demand Prediction Agent (based on sales velocity, seasonality)
+  → Branch:
+      → Critical low: Urgent notification + Auto-reorder suggestion
+      → Warning: Reorder Agent (supplier email draft)
+          → Gate: Reorder Approval (Human for high-value, Auto-pass for replenishment)
+      → Healthy: Log and continue
+  → Weekly Inventory Health Report
+</code></pre>
+<h4 id="marketing-operations-4-templates">Marketing &amp; Operations (4 templates)</h4>
+<p><strong>9. Ad Campaign Manager</strong></p>
+<pre><code>Campaign Brief (Form Trigger)
+  → Budget Allocation Agent
+  → Gate: Budget Approval (Human)
+  → Creative Brief Agent (per platform)
+  → Gate: Creative Direction Approval (Human)
+  → For Each Platform [Meta, Google, TikTok]:
+      → Ad Creative Generation (copy + image/video)
+      → QA: Platform Compliance + Brand Check
+      → Gate: Ad Approval (Human → Hybrid)
+  → Launch Campaigns (API)
+  → Daily Performance Monitor
+      → Optimization Agent (bid/audience suggestions)
+      → Gate: Optimization Approval (Auto-pass for minor, Human for major)
+</code></pre>
+<p><strong>10. Customer Onboarding Flow</strong></p>
+<pre><code>New Customer Signup Trigger
+  → Welcome Sequence Agent (personalized based on plan/industry)
+  → For Each Milestone [Day 1, Day 3, Day 7, Day 14, Day 30]:
+      → Content Agent (email + in-app message)
+      → QA: Personalization Check
+      → Gate: Content Review (Hybrid → Auto-pass as sequences prove effective)
+      → Send
+  → Health Score Check (Day 30)
+  → Branch:
+      → Healthy: Celebration + upsell path
+      → At risk: Alert customer success team
+</code></pre>
+<p><strong>11. Competitive Intelligence Monitor</strong></p>
+<pre><code>Daily Schedule Trigger
+  → For Each Competitor (configured list):
+      → Web Monitor (new blog posts, pricing changes, features)
+      → Social Monitor (new campaigns, engagement patterns)
+  → Analysis Agent (summarize changes, identify threats/opportunities)
+  → Gate: Intel Review (AI QA for routine, Human for significant changes)
+  → Distribute to team (Slack digest)
+  → Monthly Competitive Report
+</code></pre>
+<p><strong>12. Support Triage &amp; Response</strong></p>
+<pre><code>Support Ticket Webhook
+  → Classification Agent (category, priority, sentiment)
+  → Branch by Priority:
+      → Critical: Immediate human routing + alert
+      → High: Response Agent → Gate: Response Approval (Human)
+      → Medium: Response Agent → QA: Tone Check → Gate: Quick Review (Hybrid)
+      → Low: Response Agent → QA: Accuracy Check → Auto-send (Auto-pass)
+  → Post-resolution: CSAT survey
+  → Weekly support quality report
+</code></pre>
+<hr />
+<h2 id="10-data-model-execution-engine">10. Data Model &amp; Execution Engine <a name="data-model"></a></h2>
+<h3 id="flow-definition-format-json">Flow Definition Format (JSON)</h3>
+<p>Flows are stored as JSON documents, making them exportable, versionable, and shareable:</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;flow_abc123&quot;,
+  &quot;name&quot;: &quot;Product Video Ad Pipeline&quot;,
+  &quot;version&quot;: &quot;1.3.0&quot;,
+  &quot;author&quot;: &quot;jonathan@ienable.ai&quot;,
+  &quot;description&quot;: &quot;End-to-end product video creation with approval gates&quot;,
+  &quot;tags&quot;: [&quot;content&quot;, &quot;video&quot;, &quot;e-commerce&quot;],
+
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;trigger_1&quot;,
+      &quot;type&quot;: &quot;trigger&quot;,
+      &quot;subtype&quot;: &quot;webhook&quot;,
+      &quot;config&quot;: { &quot;source&quot;: &quot;shopify&quot;, &quot;event&quot;: &quot;product.create&quot; },
+      &quot;position&quot;: { &quot;x&quot;: 0, &quot;y&quot;: 200 }
+    },
+    {
+      &quot;id&quot;: &quot;agent_brief&quot;,
+      &quot;type&quot;: &quot;agent&quot;,
+      &quot;config&quot;: {
+        &quot;agent_id&quot;: &quot;creative_brief_writer&quot;,
+        &quot;inputs&quot;: { &quot;product&quot;: &quot;{{trigger_1.data}}&quot; },
+        &quot;outputs&quot;: [&quot;brief&quot;]
+      },
+      &quot;position&quot;: { &quot;x&quot;: 200, &quot;y&quot;: 200 }
+    },
+    {
+      &quot;id&quot;: &quot;gate_brief&quot;,
+      &quot;type&quot;: &quot;gate&quot;,
+      &quot;config&quot;: {
+        &quot;mode&quot;: &quot;human&quot;,
+        &quot;assignee&quot;: { &quot;type&quot;: &quot;role&quot;, &quot;role&quot;: &quot;creative_director&quot; },
+        &quot;timeout&quot;: &quot;48h&quot;,
+        &quot;escalation&quot;: [
+          { &quot;after&quot;: &quot;24h&quot;, &quot;action&quot;: &quot;reminder&quot; },
+          { &quot;after&quot;: &quot;48h&quot;, &quot;action&quot;: &quot;escalate&quot;, &quot;to&quot;: &quot;founder&quot; }
+        ],
+        &quot;feedback&quot;: {
+          &quot;on_reject&quot;: { &quot;require_reason&quot;: true, &quot;taxonomy&quot;: [&quot;off_brief&quot;, &quot;wrong_audience&quot;, &quot;budget_concern&quot;] }
+        }
+      },
+      &quot;position&quot;: { &quot;x&quot;: 400, &quot;y&quot;: 200 }
+    }
+  ],
+
+  &quot;edges&quot;: [
+    { &quot;from&quot;: &quot;trigger_1&quot;, &quot;to&quot;: &quot;agent_brief&quot; },
+    { &quot;from&quot;: &quot;agent_brief&quot;, &quot;to&quot;: &quot;gate_brief&quot; },
+    { &quot;from&quot;: &quot;gate_brief&quot;, &quot;to&quot;: &quot;agent_concept&quot;, &quot;condition&quot;: &quot;approved&quot; },
+    { &quot;from&quot;: &quot;gate_brief&quot;, &quot;to&quot;: &quot;agent_brief&quot;, &quot;condition&quot;: &quot;rejected&quot;, &quot;inject_feedback&quot;: true }
+  ],
+
+  &quot;settings&quot;: {
+    &quot;max_retries_per_gate&quot;: 3,
+    &quot;learning_enabled&quot;: true,
+    &quot;cost_tracking&quot;: true
+  }
+}
+</code></pre>
+<h3 id="execution-engine">Execution Engine</h3>
+<pre><code>Flow Run Lifecycle:
+
+1. TRIGGER fires → creates a Run instance
+2. Engine resolves first node(s) → executes
+3. For each node:
+   a. Resolve inputs (data mapping from upstream nodes)
+   b. Execute (API call, agent inference, etc.)
+   c. Store output in run context
+   d. Determine next node(s) via edges
+4. When a GATE is reached:
+   a. Pause execution at this branch
+   b. Create approval request
+   c. Notify assignee(s)
+   d. Wait for decision (async — engine continues other branches)
+   e. On decision: resume or loop back
+5. When all branches complete → Run finishes
+6. Post-run: learning loop processes all gate decisions
+</code></pre>
+<p><strong>Key architectural choices:</strong>
+- <strong>Event-driven, not polling-based</strong> — gates use webhooks/websockets, never polling
+- <strong>Parallel branch execution</strong> — branches run concurrently, Merge nodes sync them
+- <strong>Durable execution</strong> — runs survive server restarts (state persisted to DB)
+- <strong>Cost tracking</strong> — every API call's cost is recorded and attributed to the run
+- <strong>Audit log</strong> — every action, decision, and data transformation is logged</p>
+<hr />
+<h2 id="11-pricing-implications">11. Pricing Implications <a name="pricing"></a></h2>
+<h3 id="recommended-pricing-model">Recommended Pricing Model</h3>
+<p>Based on competitive research, we recommend <strong>flow-run-based pricing</strong> (like n8n's execution model) rather than per-action (Make) or per-task (Zapier).</p>
+<p><strong>Why:</strong> Per-action pricing penalizes quality-controlled flows. A flow with 3 approval gates and 2 QA steps has ~5 more "actions" than a flow without quality control. We should NEVER charge more for quality — that's our entire value proposition.</p>
+<pre><code>Proposed Tiers:
+
+| Plan       | Price/mo | Flow Runs/mo | Active Flows | AI Credits | Gates |
+|------------|----------|-------------|-------------|------------|-------|
+| Starter    | $29      | 500         | 10          | 5,000      | All types |
+| Growth     | $79      | 2,500       | 50          | 25,000     | All types |
+| Scale      | $199     | 10,000      | Unlimited   | 100,000    | All types |
+| Enterprise | Custom   | Unlimited   | Unlimited   | Custom     | All types |
+
+Key: 
+- Approval gates are FREE (never charge for quality control)
+- QA steps are FREE (never charge for evaluation)
+- AI credits cover agent execution (LLM calls)
+- BYOK reduces AI credit consumption
+- Gate notifications (Slack, email) are free
+</code></pre>
+<p><strong>Critical:</strong> Gates and QA steps should NEVER be a paid feature or consume credits. The moment we charge for quality control, we've betrayed our core value proposition.</p>
+<hr />
+<h2 id="12-build-sequence">12. Build Sequence <a name="build-sequence"></a></h2>
+<h3 id="phase-1-foundation-weeks-1-6">Phase 1: Foundation (Weeks 1-6)</h3>
+<ul>
+<li>[ ] Flow definition format (JSON schema)</li>
+<li>[ ] Execution engine (durable, event-driven)</li>
+<li>[ ] Canvas UI (basic drag-and-drop with primitives)</li>
+<li>[ ] Trigger: Manual, Webhook, Schedule</li>
+<li>[ ] Action: API Call, Transform, Notify</li>
+<li>[ ] Gate: Human mode only (email + web approval UI)</li>
+<li>[ ] Data inspector (click connection → see data)</li>
+</ul>
+<h3 id="phase-2-intelligence-weeks-7-12">Phase 2: Intelligence (Weeks 7-12)</h3>
+<ul>
+<li>[ ] Agent step (LLM integration with brand context)</li>
+<li>[ ] QA step (independent evaluation with rubric)</li>
+<li>[ ] Brief node (structured creative brief)</li>
+<li>[ ] Gate: AI QA mode</li>
+<li>[ ] Learning DB (store decisions, extract lessons)</li>
+<li>[ ] Approval Queue (unified inbox view)</li>
+</ul>
+<h3 id="phase-3-power-weeks-13-18">Phase 3: Power (Weeks 13-18)</h3>
+<ul>
+<li>[ ] Gate: Auto-pass mode + trust scoring</li>
+<li>[ ] Gate: Hybrid mode (AI pre-screen → human)</li>
+<li>[ ] Branch, Loop, Merge primitives</li>
+<li>[ ] Subscenarios (callable flows)</li>
+<li>[ ] Real-time execution visualization</li>
+<li>[ ] Data pinning for debugging</li>
+</ul>
+<h3 id="phase-4-ecosystem-weeks-19-24">Phase 4: Ecosystem (Weeks 19-24)</h3>
+<ul>
+<li>[ ] Template library (12 Day 1 templates)</li>
+<li>[ ] NL → flow generation</li>
+<li>[ ] Git export/import</li>
+<li>[ ] Multi-user collaboration</li>
+<li>[ ] Notification integrations (Slack, email, SMS, push)</li>
+<li>[ ] Cost tracking dashboard</li>
+</ul>
+<h3 id="phase-5-growth-weeks-25">Phase 5: Growth (Weeks 25+)</h3>
+<ul>
+<li>[ ] Template marketplace (user-contributed)</li>
+<li>[ ] Plugin SDK (custom node types)</li>
+<li>[ ] Gate evolution suggestions ("promote this gate?")</li>
+<li>[ ] Performance analytics per flow/agent</li>
+<li>[ ] Self-hosting option for enterprise</li>
+<li>[ ] Mobile approval app</li>
+</ul>
+<hr />
+<h2 id="summary-why-ienable-wins">Summary: Why iEnable Wins</h2>
+<table>
+<thead>
+<tr>
+<th>What They Say</th>
+<th>What We Say</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Connect any app to any app"</td>
+<td>"Connect apps with quality control at every step"</td>
+</tr>
+<tr>
+<td>"Automate everything"</td>
+<td>"Automate with confidence — humans stay in the loop until you're ready"</td>
+</tr>
+<tr>
+<td>"AI agents run your workflows"</td>
+<td>"AI agents run your workflows, get independently graded, and learn from every rejection"</td>
+</tr>
+<tr>
+<td>"7,000 templates"</td>
+<td>"12 templates that actually produce good output — because they have quality gates built in"</td>
+</tr>
+<tr>
+<td>"Operations-based pricing"</td>
+<td>"We never charge you more for caring about quality"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-one-liner">The One-Liner</h3>
+<blockquote>
+<p><strong>"The first workflow builder where the AI doesn't just execute — it earns your trust."</strong></p>
+</blockquote>
+<h3 id="the-two-sentence-pitch">The Two-Sentence Pitch</h3>
+<blockquote>
+<p>Make.com connects apps. n8n connects apps for developers. Zapier connects apps for everyone.<br />
+<strong>iEnable connects apps with approval gates, independent QA, and AI agents that learn from every rejection — so your automation actually ships work you're proud of.</strong></p>
+</blockquote>
+<hr />
+<p><em>End of Architecture Proposal. See companion document: flow-builder-competitive-research.md</em></p>
+  </div>
+  <div id="research" class="tab-content">
+    RESE<h1 id="ienable-flow-builder-architecture-proposal">iEnable Flow Builder — Architecture Proposal</h1>
+<p><strong>Date:</strong> February 26, 2026<br />
+<strong>Author:</strong> Reel (Content Agent) — Research Subagent<br />
+<strong>Version:</strong> 1.0 — Initial Proposal<br />
+<strong>Companion:</strong> flow-builder-competitive-research.md</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#design-philosophy">Design Philosophy</a></li>
+<li><a href="#flow-primitives">Flow Primitives</a></li>
+<li><a href="#visual-builder-concept">Visual Builder Concept</a></li>
+<li><a href="#approval-gates">Approval Gates — The Killer Feature</a></li>
+<li><a href="#ai-agent-steps">AI Agent Steps</a></li>
+<li><a href="#qa-steps">QA Steps</a></li>
+<li><a href="#brief-first-pattern">Brief-First Pattern</a></li>
+<li><a href="#learning-loop">Learning Loop Architecture</a></li>
+<li><a href="#template-library">Template Library — Day 1</a></li>
+<li><a href="#data-model">Data Model &amp; Execution Engine</a></li>
+<li><a href="#pricing">Pricing Implications</a></li>
+<li><a href="#build-sequence">Build Sequence</a></li>
+</ol>
+<hr />
+<h2 id="1-design-philosophy">1. Design Philosophy <a name="design-philosophy"></a></h2>
+<h3 id="core-principle-pipes-with-quality-control">Core Principle: "Pipes With Quality Control"</h3>
+<p>Every workflow builder in the market optimizes for <strong>speed of execution</strong>. iEnable optimizes for <strong>quality of output</strong>. This is not a constraint — it's a feature. The fastest pipeline that ships garbage is worthless. A pipeline that takes 10 extra minutes but ships great work is priceless.</p>
+<h3 id="three-axioms">Three Axioms</h3>
+<ol>
+<li><strong>The generator never grades its own homework.</strong> Every AI output should be independently evaluated.</li>
+<li><strong>Approval is not an exception — it's the default.</strong> Gates start at Human, earn their way to Auto.</li>
+<li><strong>Rejection is the most valuable data in the system.</strong> Every "no" makes the next attempt better.</li>
+</ol>
+<h3 id="design-influences">Design Influences</h3>
+<ul>
+<li><strong>Make.com:</strong> Visual builder UX, real-time execution visualization, subscenarios</li>
+<li><strong>n8n:</strong> Data pinning, execution-based mental model, self-hosting option</li>
+<li><strong>Relay.app:</strong> HITL as first-class primitive (we extend this concept dramatically)</li>
+<li><strong>Retool:</strong> Platform approach (apps + workflows + data), User Task blocks</li>
+<li><strong>Dify:</strong> Plugin SDK, parallel execution, visual debugging</li>
+<li><strong>Zapier Canvas:</strong> NL → flow generation, ROI tracking</li>
+</ul>
+<hr />
+<h2 id="2-flow-primitives">2. Flow Primitives <a name="flow-primitives"></a></h2>
+<p>Every flow is composed of these building blocks. They're the atoms of the system.</p>
+<h3 id="primitive-types">Primitive Types</h3>
+<h4 id="trigger">🔵 Trigger</h4>
+<p>The entry point. What starts this flow?</p>
+<table>
+<thead>
+<tr>
+<th>Trigger Type</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Schedule</strong></td>
+<td>Cron/interval-based</td>
+<td>"Every Monday at 9am"</td>
+</tr>
+<tr>
+<td><strong>Webhook</strong></td>
+<td>External HTTP event</td>
+<td>Shopify order created</td>
+</tr>
+<tr>
+<td><strong>Manual</strong></td>
+<td>User clicks "Run"</td>
+<td>Ad-hoc content request</td>
+</tr>
+<tr>
+<td><strong>Event</strong></td>
+<td>Internal system event</td>
+<td>"New product added to catalog"</td>
+</tr>
+<tr>
+<td><strong>Form</strong></td>
+<td>User submits a form</td>
+<td>Creative brief submission</td>
+</tr>
+<tr>
+<td><strong>Watch</strong></td>
+<td>Monitor for changes</td>
+<td>"New competitor blog post detected"</td>
+</tr>
+</tbody>
+</table>
+<h4 id="action">🟢 Action</h4>
+<p>Do something. The workhorses of the flow.</p>
+<table>
+<thead>
+<tr>
+<th>Action Type</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>API Call</strong></td>
+<td>Hit any external API</td>
+<td>Generate image via Luma Labs</td>
+</tr>
+<tr>
+<td><strong>Transform</strong></td>
+<td>Modify data in-flight</td>
+<td>Resize image to 9:16</td>
+</tr>
+<tr>
+<td><strong>Database</strong></td>
+<td>Read/write data stores</td>
+<td>Save to product catalog</td>
+</tr>
+<tr>
+<td><strong>Notify</strong></td>
+<td>Send a notification</td>
+<td>Slack message, email, push</td>
+</tr>
+<tr>
+<td><strong>Publish</strong></td>
+<td>Push to external platform</td>
+<td>Post to Instagram, update Shopify</td>
+</tr>
+<tr>
+<td><strong>Agent</strong></td>
+<td>Run an AI agent (see §5)</td>
+<td>"Write product description"</td>
+</tr>
+</tbody>
+</table>
+<h4 id="gate-the-differentiator">🟡 Gate (THE DIFFERENTIATOR)</h4>
+<p>A quality checkpoint. The flow pauses until the gate passes. See §4 for full spec.</p>
+<table>
+<thead>
+<tr>
+<th>Gate Mode</th>
+<th>Who Evaluates</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Human</strong></td>
+<td>Person reviews + approves/rejects</td>
+<td>Marketing director reviews ad copy</td>
+</tr>
+<tr>
+<td><strong>AI QA</strong></td>
+<td>Independent AI agent evaluates</td>
+<td>QA agent scores brand compliance</td>
+</tr>
+<tr>
+<td><strong>Auto-pass</strong></td>
+<td>Automatic (trust earned)</td>
+<td>Proven flow step, skip review</td>
+</tr>
+<tr>
+<td><strong>Hybrid</strong></td>
+<td>AI pre-screens, human decides edge cases</td>
+<td>AI flags issues, human makes call</td>
+</tr>
+</tbody>
+</table>
+<h4 id="branch">🔴 Branch</h4>
+<p>Conditional logic. Split the flow based on data.</p>
+<table>
+<thead>
+<tr>
+<th>Branch Type</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>If/Else</strong></td>
+<td>Binary condition</td>
+<td>"If product price &gt; $500..."</td>
+</tr>
+<tr>
+<td><strong>Switch</strong></td>
+<td>Multiple conditions</td>
+<td>Route by product category</td>
+</tr>
+<tr>
+<td><strong>A/B Split</strong></td>
+<td>Random percentage split</td>
+<td>50/50 test two ad variants</td>
+</tr>
+<tr>
+<td><strong>Filter</strong></td>
+<td>Pass/block based on criteria</td>
+<td>"Only products with images"</td>
+</tr>
+</tbody>
+</table>
+<h4 id="loop">🟣 Loop</h4>
+<p>Repeat over a set of items.</p>
+<table>
+<thead>
+<tr>
+<th>Loop Type</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>For Each</strong></td>
+<td>Iterate over array</td>
+<td>Process each product in catalog</td>
+</tr>
+<tr>
+<td><strong>While</strong></td>
+<td>Repeat until condition</td>
+<td>Retry generation until QA passes</td>
+</tr>
+<tr>
+<td><strong>Batch</strong></td>
+<td>Process in chunks</td>
+<td>Generate 10 ads at a time</td>
+</tr>
+<tr>
+<td><strong>Retry</strong></td>
+<td>Automatic retry on failure</td>
+<td>Re-attempt API call 3x</td>
+</tr>
+</tbody>
+</table>
+<h4 id="brief">🟤 Brief</h4>
+<p>A structured input document that precedes creative work. See §7.</p>
+<h4 id="qa">⚪ QA</h4>
+<p>Independent quality evaluation. See §6.</p>
+<h4 id="merge">🔷 Merge</h4>
+<p>Combine parallel branches back together.</p>
+<table>
+<thead>
+<tr>
+<th>Merge Type</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Wait All</strong></td>
+<td>Proceed when all branches complete</td>
+<td>Wait for all platform formats</td>
+</tr>
+<tr>
+<td><strong>Wait Any</strong></td>
+<td>Proceed on first completion</td>
+<td>Use fastest image generation</td>
+</tr>
+<tr>
+<td><strong>Aggregate</strong></td>
+<td>Combine outputs from all branches</td>
+<td>Collect all product descriptions</td>
+</tr>
+</tbody>
+</table>
+<h4 id="subscenario">🔶 Subscenario</h4>
+<p>Call another flow as a reusable function.</p>
+<hr />
+<h3 id="primitive-visual-design-language">Primitive Visual Design Language</h3>
+<p>Each primitive has a distinct shape and color on the canvas:</p>
+<pre><code>🔵 Trigger    → Blue circle (entry point)
+🟢 Action     → Green rounded rectangle
+🟡 Gate       → Yellow diamond (⚠️ attention required)
+🔴 Branch     → Red diamond
+🟣 Loop       → Purple hexagon
+🟤 Brief      → Brown document shape
+⚪ QA         → White circle with checkmark
+🔷 Merge      → Blue inverted triangle
+🔶 Subscenario → Orange rectangle with nested icon
+</code></pre>
+<p><strong>Gates are DIAMONDS.</strong> This is intentional — the diamond shape universally means "decision point" in flowcharts. Every time someone sees a yellow diamond, they know: "quality check happens here." No other platform has this visual language for quality control.</p>
+<hr />
+<h2 id="3-visual-builder-concept">3. Visual Builder Concept <a name="visual-builder-concept"></a></h2>
+<h3 id="canvas-architecture">Canvas Architecture</h3>
+<h4 id="layout-directional-flow-left-right">Layout: Directional Flow (Left → Right)</h4>
+<p>Following Make.com's proven pattern, flows read left to right. Data moves from triggers (left) through actions and gates (center) to outputs (right). This matches natural reading direction and mental models.</p>
+<h4 id="canvas-features">Canvas Features</h4>
+<p><strong>Core:</strong>
+- Infinite canvas with zoom/pan (mouse wheel, trackpad, minimap)
+- Snap-to-grid alignment with smart guides
+- Connection lines with data type indicators
+- Drag from primitive palette onto canvas
+- Connect nodes by dragging from output port to input port</p>
+<p><strong>Smart Features:</strong>
+- <strong>NL → Flow Generator:</strong> "Create a flow that takes a product URL, generates a lifestyle image, gets it approved, and posts to Instagram" → generates the complete flow
+- <strong>Data Inspector:</strong> Click any connection line → see sample/live data flowing through
+- <strong>Execution Replay:</strong> Re-run any past execution with original data for debugging
+- <strong>Data Pinning:</strong> Freeze test data at any node for iterative downstream development (stolen from n8n — it's that good)
+- <strong>Real-Time Execution Viz:</strong> Watch data flow through the graph during live runs with green/red status per node
+- <strong>Relationship Panel:</strong> Shift+hover on any node highlights all connected nodes (stolen from Dify — also great)</p>
+<p><strong>Collaboration:</strong>
+- Multi-user editing (cursors visible)
+- Comments on any node or connection
+- Version history with diff view
+- Git export/import (JSON flow definition)
+- Share flows via link (view-only or fork)</p>
+<h4 id="builder-panels">Builder Panels</h4>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│ ┌──────────┐  ┌─────────────────────────────┐  ┌─────────┐ │
+│ │          │  │                             │  │         │ │
+│ │ Primitive│  │                             │  │ Node    │ │
+│ │ Palette  │  │        CANVAS               │  │ Config  │ │
+│ │          │  │                             │  │ Panel   │ │
+│ │ Triggers │  │  🔵──🟢──🟡──🟢──⚪──🟢    │  │         │ │
+│ │ Actions  │  │         ╲                   │  │ Props   │ │
+│ │ Gates    │  │          🟡──🟢──🔷         │  │ Data    │ │
+│ │ Branches │  │                             │  │ Logs    │ │
+│ │ Loops    │  │                             │  │ History │ │
+│ │ QA       │  │                             │  │         │ │
+│ │ Briefs   │  │                             │  │         │ │
+│ │          │  │                             │  │         │ │
+│ └──────────┘  └─────────────────────────────┘  └─────────┘ │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │  Execution Timeline  │  Approval Queue  │  Learning Log │ │
+│ └─────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>Left Panel:</strong> Primitive palette — drag building blocks onto canvas<br />
+<strong>Center:</strong> The canvas — the flow graph<br />
+<strong>Right Panel:</strong> Node configuration — properties, data mapping, logs<br />
+<strong>Bottom Panel:</strong> Three tabs:
+1. <strong>Execution Timeline</strong> — real-time and historical run tracking
+2. <strong>Approval Queue</strong> — pending gates across all flows (THE KILLER VIEW)
+3. <strong>Learning Log</strong> — what the system learned from rejections</p>
+<hr />
+<h3 id="the-approval-queue-bottom-panel-tab-2">The Approval Queue (Bottom Panel, Tab 2)</h3>
+<p>This is the view that doesn't exist in any competitor. It's a unified inbox for every pending approval across all flows:</p>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│ 📋 Approval Queue (4 pending)                     [Filters] │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│ 🟡 Product Video Brief — Plank+Beam Bunk Bed     ⏱️ 2h ago │
+│    Flow: Product Ad Pipeline  │  Step: Creative Brief Review │
+│    Assigned: Jonathan  │  Priority: High  │  [Review →]      │
+│                                                              │
+│ 🟡 Instagram Caption — Summer Collection          ⏱️ 45m ago│
+│    Flow: Social Content Calendar  │  Step: Copy Approval     │
+│    Assigned: Marketing Team  │  Priority: Medium │ [Review →]│
+│                                                              │
+│ ⚪ Blog SEO Score — &quot;Best Bunk Beds 2026&quot;        ⏱️ 12m ago │
+│    Flow: Blog Pipeline  │  Step: AI QA Check                 │
+│    QA Agent: SEO Scorer  │  Score: 7.2/10  │  [Override →]   │
+│                                                              │
+│ 🟡 Product Description — Standing Desk v3         ⏱️ 5m ago │
+│    Flow: Product Listing Optimizer  │  Step: Copy Review     │
+│    Assigned: Anyone  │  Priority: Low  │  [Review →]         │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>This is the command center.</strong> One view. Every pending decision. Across all flows. No other platform has this.</p>
+<hr />
+<h2 id="4-approval-gates-the-killer-feature">4. Approval Gates — The Killer Feature <a name="approval-gates"></a></h2>
+<h3 id="gate-configuration">Gate Configuration</h3>
+<p>Every gate has these properties:</p>
+<pre><code class="language-yaml">gate:
+  name: &quot;Creative Brief Approval&quot;
+  mode: human | ai_qa | auto_pass | hybrid
+
+  # Human mode config
+  human:
+    assignee: user | team | role | anyone_with_link
+    notification_channels: [email, slack, push, sms]
+    timeout: 48h
+    escalation:
+      - after: 24h → notify_manager
+      - after: 36h → reassign_to: backup_reviewer
+      - after: 48h → auto_action: reject_with_reason(&quot;timeout&quot;)
+    delegation: true  # assignee can delegate to another user
+
+  # AI QA mode config
+  ai_qa:
+    evaluator_agent: &quot;brand_compliance_checker&quot;
+    criteria:
+      - brand_voice_score: &gt;= 7
+      - factual_accuracy: true
+      - platform_compliance: true
+    pass_threshold: all_criteria_met
+    on_fail: reject_with_structured_feedback
+
+  # Auto-pass config
+  auto_pass:
+    conditions:
+      - trust_score: &gt;= 0.9  # earned over time
+      - content_type: in [text_only, minor_edit]
+      - risk_level: low
+    audit_log: true  # still logs even when auto-passing
+
+  # Hybrid config
+  hybrid:
+    ai_pre_screen: &quot;brand_compliance_checker&quot;
+    if_ai_passes: auto_pass
+    if_ai_flags: route_to_human
+    if_ai_rejects: reject_immediately
+
+  # Universal gate properties
+  feedback:
+    on_reject:
+      require_reason: true
+      reason_taxonomy: [off_brand, factually_wrong, wrong_tone, 
+                        wrong_format, wrong_audience, low_quality,
+                        missing_elements, other]
+      free_text: optional
+      reference_examples: optional  # reviewer can attach &quot;do it like this&quot;
+    on_approve:
+      score: optional  # 1-10 quality rating
+      notes: optional  # &quot;Great but next time try X&quot;
+
+  # Learning integration  
+  learning:
+    feed_rejection_to: generator_agent  # who created the content
+    update_brand_context: true
+    log_to_learning_db: true
+    adjustment_weight: 0.1  # how much this feedback shifts behavior
+</code></pre>
+<h3 id="gate-evolution-the-trust-ladder">Gate Evolution: The Trust Ladder</h3>
+<p>This is the concept no competitor has. Gates evolve based on track record:</p>
+<pre><code>STAGE 1: New Flow / New Agent
+├── All gates: HUMAN
+├── Every output reviewed by a person
+└── Building the training dataset
+
+STAGE 2: Patterns Emerge (after ~50 approvals)
+├── Low-risk gates: HYBRID (AI pre-screens, human decides edge cases)
+├── High-risk gates: HUMAN
+└── AI QA agent learning from human decisions
+
+STAGE 3: Trust Building (after ~200 approvals with &gt;90% first-pass rate)
+├── Low-risk gates: AUTO-PASS (with audit logging)
+├── Medium-risk gates: AI QA
+├── High-risk gates: HUMAN
+└── System suggests gate promotions: &quot;This gate has 95% approval rate — promote to AI QA?&quot;
+
+STAGE 4: Mature Flow (after ~500+ approvals)
+├── Most gates: AUTO-PASS
+├── Novel/unusual content: AI QA
+├── High-stakes content: HUMAN
+└── Anomaly detection: Auto-escalate when output looks unusual
+</code></pre>
+<p><strong>The key insight:</strong> The customer controls the pace. They can override any promotion suggestion. They can demote gates back to Human at any time. Trust is earned, not assumed.</p>
+<h3 id="gate-notification-system">Gate Notification System</h3>
+<pre><code>When gate is waiting for human:
+  1. Instant notification via configured channels (Slack, email, push, SMS)
+  2. Deep link directly to approval UI (mobile-friendly)
+  3. Rich preview of content being reviewed (not just &quot;you have an approval&quot;)
+  4. One-tap approve with optional feedback
+  5. Structured reject with required reason
+
+Escalation chain:
+  - T+0: Assigned reviewer notified
+  - T+X (configurable): Reminder sent
+  - T+Y: Manager/backup notified
+  - T+Z: Auto-action (reject, reassign, or escalate)
+
+Smart scheduling:
+  - Respect reviewer's working hours
+  - Batch non-urgent approvals into daily digest
+  - Flag urgent approvals with distinct notification style
+</code></pre>
+<hr />
+<h2 id="5-ai-agent-steps">5. AI Agent Steps <a name="ai-agent-steps"></a></h2>
+<h3 id="agent-as-a-flow-node">Agent as a Flow Node</h3>
+<p>An Agent step is a special Action node that executes an AI agent with persistent memory and brand context.</p>
+<pre><code class="language-yaml">agent_step:
+  name: &quot;Write Product Description&quot;
+  agent_id: &quot;product_copywriter_v3&quot;
+
+  # Agent capabilities
+  model: claude-sonnet-4  # or customer's preferred model
+  temperature: 0.7
+
+  # Brand context (loaded automatically)
+  brand_context:
+    brand_bible: &quot;plankandbeam_brand_bible_v2&quot;
+    tone_guide: &quot;warm, approachable, parent-focused&quot;
+    avoid: [&quot;cheap&quot;, &quot;discount&quot;, &quot;basic&quot;]
+    examples: [&quot;top_performing_descriptions.json&quot;]
+
+  # Memory
+  memory:
+    short_term: conversation_context  # within this flow run
+    long_term: learning_db  # accumulated wisdom from all runs
+    knowledge_graph: cognee_namespace  # brand knowledge graph
+
+  # Input mapping
+  inputs:
+    product_data: &quot;{{trigger.product}}&quot;
+    target_platform: &quot;shopify&quot;
+    word_count: 150
+
+  # Output schema
+  outputs:
+    description: string
+    meta_title: string
+    meta_description: string
+    keywords: string[]
+
+  # Learning integration
+  learning:
+    log_output: true
+    track_downstream_approval: true  # did the gate after this pass?
+    feedback_integration: &quot;adjust_next_run&quot;  # use rejection feedback
+</code></pre>
+<h3 id="agent-memory-architecture">Agent Memory Architecture</h3>
+<pre><code>┌─────────────────────────────────────────────┐
+│              Agent Memory Stack              │
+├─────────────────────────────────────────────┤
+│                                             │
+│  Layer 1: Brand Context (static, curated)   │
+│  ├── Brand bible                            │
+│  ├── Tone guidelines                        │
+│  ├── Approved examples                      │
+│  └── Prohibited terms/styles                │
+│                                             │
+│  Layer 2: Learning DB (dynamic, earned)     │
+│  ├── What worked (approved outputs)         │
+│  ├── What failed (rejected + reasons)       │
+│  ├── Reviewer preferences                  │
+│  ├── Platform-specific patterns             │
+│  └── Performance scores over time           │
+│                                             │
+│  Layer 3: Knowledge Graph (structured)      │
+│  ├── Product relationships                  │
+│  ├── Customer segments                      │
+│  ├── Competitor positioning                 │
+│  └── Industry context                       │
+│                                             │
+│  Layer 4: Run Context (ephemeral)           │
+│  ├── Current flow inputs                    │
+│  ├── Upstream node outputs                  │
+│  └── Conversation within this run           │
+│                                             │
+└─────────────────────────────────────────────┘
+</code></pre>
+<p>Each layer has different persistence:
+- <strong>Brand Context:</strong> Updated by humans, versioned, shared across agents
+- <strong>Learning DB:</strong> Updated automatically from gate feedback, per-agent
+- <strong>Knowledge Graph:</strong> Updated via Cognee, shared across flows
+- <strong>Run Context:</strong> Exists only during flow execution, then archived</p>
+<hr />
+<h2 id="6-qa-steps">6. QA Steps <a name="qa-steps"></a></h2>
+<h3 id="the-generator-grader-principle">The Generator ≠ Grader Principle</h3>
+<p>The most important architectural decision in iEnable: <strong>the agent that creates content is NEVER the agent that evaluates it.</strong> This mirrors how every good creative organization works — the writer doesn't edit their own copy, the designer doesn't QA their own designs.</p>
+<h3 id="qa-node-configuration">QA Node Configuration</h3>
+<pre><code class="language-yaml">qa_step:
+  name: &quot;Brand Compliance Check&quot;
+  evaluator_agent: &quot;brand_qa_agent_v2&quot;  # DIFFERENT from generator
+
+  # What's being evaluated
+  input: &quot;{{product_copywriter.output}}&quot;
+
+  # Evaluation criteria (rubric)
+  rubric:
+    - criterion: &quot;Brand Voice&quot;
+      description: &quot;Does the copy match our warm, approachable tone?&quot;
+      weight: 0.3
+      scoring: 1-10
+      auto_fail_below: 4
+
+    - criterion: &quot;Factual Accuracy&quot;
+      description: &quot;Are all product specs correct?&quot;
+      weight: 0.25
+      scoring: pass/fail
+
+    - criterion: &quot;Platform Compliance&quot;
+      description: &quot;Meets character limits, formatting rules for target platform?&quot;
+      weight: 0.2
+      scoring: pass/fail
+
+    - criterion: &quot;SEO Quality&quot;
+      description: &quot;Includes target keywords naturally?&quot;
+      weight: 0.15
+      scoring: 1-10
+      auto_fail_below: 5
+
+    - criterion: &quot;Differentiation&quot;
+      description: &quot;Stands out from competitor copy?&quot;
+      weight: 0.1
+      scoring: 1-10
+
+  # Pass/fail logic
+  passing:
+    min_weighted_score: 7.0
+    all_pass_fail_must_pass: true
+    no_auto_fails: true
+
+  # Output
+  outputs:
+    overall_score: number
+    per_criterion_scores: object
+    pass: boolean
+    feedback: string  # detailed feedback for generator
+    suggested_improvements: string[]
+
+  # On fail
+  on_fail:
+    action: route_to_gate  # human reviews the QA failure
+    # OR action: loop_back_to_generator  # auto-retry with feedback
+    max_retries: 3
+    include_feedback: true  # QA feedback sent to generator
+</code></pre>
+<h3 id="qa-agent-independence">QA Agent Independence</h3>
+<p>QA agents are:
+- <strong>Separate model instances</strong> — they don't share context with the generator
+- <strong>Separately prompted</strong> — their system prompt is about evaluation, not creation
+- <strong>Separately configured</strong> — different temperature (lower for QA), different model potentially
+- <strong>Separately learning</strong> — they learn what "good" looks like from human-approved outputs
+- <strong>Auditable</strong> — every evaluation is logged with full reasoning</p>
+<h3 id="qa-gate-integration">QA → Gate Integration</h3>
+<p>The QA step feeds into a Gate:</p>
+<pre><code>Agent (Generate) → QA (Evaluate) → Gate (Decide)
+
+If QA passes → Gate auto-passes (in AI QA mode)
+If QA fails → Gate shows human the output + QA feedback
+Human can:
+  - Agree with QA → Reject (feedback to generator)
+  - Override QA → Approve anyway (QA agent learns it was too strict)
+  - Partially agree → Edit and approve (system learns the edit pattern)
+</code></pre>
+<p>This three-step pattern (Generate → QA → Gate) is iEnable's core content production primitive.</p>
+<hr />
+<h2 id="7-brief-first-pattern">7. Brief-First Pattern <a name="brief-first-pattern"></a></h2>
+<h3 id="the-problem">The Problem</h3>
+<p>Every other platform goes straight to generation. User says "make me an ad" → AI makes an ad → human sees it → "that's not what I wanted" → rejected → try again.</p>
+<p>This wastes expensive generation resources and creates frustration.</p>
+<h3 id="the-solution-brief-approve-then-generate">The Solution: Brief → Approve → Then Generate</h3>
+<pre><code>┌──────────┐     ┌───────────┐     ┌──────────┐     ┌──────────┐
+│  Brief   │────▶│  Concept  │────▶│  Gate:   │────▶│ Generate │
+│  Input   │     │  Agent    │     │  Concept │     │  Agent   │
+│  (Form)  │     │  Pitches  │     │  Approval│     │ (Luma,   │
+└──────────┘     └───────────┘     └──────────┘     │ FLUX,etc)│
+                                         │          └──────────┘
+                                    Reject │               │
+                                    with   │          ┌──────────┐
+                                    notes  │          │    QA    │
+                                         │          │  Agent   │
+                                    ┌──────────┐     └──────────┘
+                                    │ Revised  │          │
+                                    │ Concept  │     ┌──────────┐
+                                    └──────────┘     │  Gate:   │
+                                                     │  Output  │
+                                                     │  Approval│
+                                                     └──────────┘
+</code></pre>
+<h3 id="brief-structure">Brief Structure</h3>
+<pre><code class="language-yaml">brief:
+  # Auto-populated from trigger
+  product: &quot;Plank+Beam Triple Bunk Bed&quot;
+  platform: &quot;Instagram Reels&quot;
+  objective: &quot;Drive consideration for back-to-school&quot;
+
+  # AI-generated concept (requires approval before generation)
+  concept:
+    hook: &quot;Morning chaos solved — one room, three happy kids&quot;
+    visual_direction: &quot;Warm morning light, kids waking up in bunk bed&quot;
+    camera_style: &quot;Slow dolly in, shallow depth of field&quot;
+    duration: &quot;15 seconds&quot;
+    music_mood: &quot;Gentle, uplifting&quot;
+    cta: &quot;Link in bio for $50 off&quot;
+    reference_examples: [&quot;successful_reel_032.mp4&quot;, &quot;competitor_ad_017.mp4&quot;]
+
+  # Constraints
+  constraints:
+    aspect_ratio: &quot;9:16&quot;
+    max_duration: &quot;30s&quot;
+    brand_colors: true
+    product_visibility: &quot;hero product visible by frame 3&quot;
+
+  # Budget (generation costs)
+  estimated_cost:
+    image_gen: &quot;$0.12 (FLUX Pro)&quot;
+    video_gen: &quot;$0.80 (Luma Ray3)&quot;
+    total: &quot;$0.92&quot;
+</code></pre>
+<p><strong>The concept gets approved BEFORE we spend $0.92 on generation.</strong> This seems trivial at one video, but at 100 products × 4 platforms × 3 variants = 1,200 videos, a 50% first-pass rejection rate means saving $552 in wasted generation costs.</p>
+<hr />
+<h2 id="8-learning-loop-architecture">8. Learning Loop Architecture <a name="learning-loop"></a></h2>
+<h3 id="how-rejection-becomes-improvement">How Rejection Becomes Improvement</h3>
+<pre><code>                    ┌─────────────────────┐
+                    │   Gate: REJECTED    │
+                    │                     │
+                    │ Reason: &quot;off_brand&quot; │
+                    │ Detail: &quot;Too casual │
+                    │  for this product   │
+                    │  category&quot;          │
+                    │ Score: 4/10         │
+                    └────────┬────────────┘
+                             │
+              ┌──────────────┼──────────────┐
+              ▼              ▼              ▼
+      ┌──────────────┐ ┌──────────┐ ┌──────────────┐
+      │ Learning DB  │ │ Agent    │ │ Brand        │
+      │              │ │ Prompt   │ │ Context      │
+      │ Record:      │ │ Update:  │ │ Update:      │
+      │ - input      │ │ Add to   │ │ &quot;Formal tone │
+      │ - output     │ │ negative │ │  for premium │
+      │ - rejection  │ │ examples │ │  products&quot;   │
+      │ - feedback   │ │          │ │              │
+      │ - timestamp  │ │          │ │              │
+      └──────────────┘ └──────────┘ └──────────────┘
+              │              │              │
+              └──────────────┼──────────────┘
+                             ▼
+                    ┌─────────────────────┐
+                    │ Next Generation Run │
+                    │                     │
+                    │ System prompt now   │
+                    │ includes:           │
+                    │ - &quot;Use formal tone  │
+                    │    for premium      │
+                    │    products&quot;        │
+                    │ - Negative example  │
+                    │    from rejection   │
+                    │ - Positive examples │
+                    │    from approvals   │
+                    └─────────────────────┘
+</code></pre>
+<h3 id="learning-database-schema-simplified">Learning Database Schema (Simplified)</h3>
+<pre><code class="language-sql">-- Every output ever generated
+CREATE TABLE flow_outputs (
+    id UUID PRIMARY KEY,
+    flow_id UUID,
+    run_id UUID,
+    agent_id UUID,
+    node_id UUID,
+    output_type TEXT,           -- text, image, video, etc.
+    output_data JSONB,
+    created_at TIMESTAMP
+);
+
+-- Every gate decision
+CREATE TABLE gate_decisions (
+    id UUID PRIMARY KEY,
+    flow_id UUID,
+    run_id UUID,
+    gate_id UUID,
+    output_id UUID REFERENCES flow_outputs(id),
+    decision TEXT,              -- approved, rejected, edited
+    gate_mode TEXT,             -- human, ai_qa, auto_pass
+    reviewer_id UUID,          -- who decided (human or AI agent)
+    score NUMERIC,             -- optional quality score
+    rejection_reason TEXT,     -- taxonomy code
+    rejection_detail TEXT,     -- free text
+    reference_examples JSONB,  -- links to &quot;do it like this&quot;
+    time_to_decision INTERVAL, -- how long approval took
+    created_at TIMESTAMP
+);
+
+-- Lessons extracted from decisions
+CREATE TABLE lessons (
+    id UUID PRIMARY KEY,
+    agent_id UUID,             -- which agent this applies to
+    category TEXT,             -- brand_voice, accuracy, format, etc.
+    lesson TEXT,               -- the actual lesson
+    source_decisions UUID[],   -- which decisions spawned this
+    confidence NUMERIC,        -- how confident (more data = higher)
+    active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP
+);
+
+-- Agent performance tracking
+CREATE TABLE agent_performance (
+    id UUID PRIMARY KEY,
+    agent_id UUID,
+    period DATE,
+    total_outputs INTEGER,
+    first_pass_approval_rate NUMERIC,
+    avg_quality_score NUMERIC,
+    common_rejection_reasons JSONB,
+    gate_promotion_eligible BOOLEAN,
+    created_at TIMESTAMP
+);
+
+-- Trust scores for gate evolution
+CREATE TABLE gate_trust (
+    id UUID PRIMARY KEY,
+    gate_id UUID,
+    current_mode TEXT,         -- human, ai_qa, auto_pass
+    approval_rate_30d NUMERIC,
+    total_decisions INTEGER,
+    last_rejection TIMESTAMP,
+    promotion_eligible BOOLEAN,
+    promotion_suggested_at TIMESTAMP,
+    promoted_at TIMESTAMP,
+    demoted_at TIMESTAMP
+);
+</code></pre>
+<h3 id="learning-loop-mechanics">Learning Loop Mechanics</h3>
+<ol>
+<li><strong>Immediate:</strong> Rejection feedback is structured (taxonomy + detail) and stored</li>
+<li><strong>Per-Run:</strong> If a loop/retry step exists, rejection feedback is injected into the next attempt's prompt</li>
+<li><strong>Per-Agent:</strong> After every N decisions, lessons are extracted and added to the agent's long-term memory</li>
+<li><strong>Per-Flow:</strong> Monthly, gate trust scores are recalculated. Promotion suggestions surface in the Approval Queue</li>
+<li><strong>Per-Organization:</strong> Cross-flow patterns emerge. If "off_brand" is the #1 rejection reason across all flows, the brand bible may need updating — system alerts the admin</li>
+</ol>
+<hr />
+<h2 id="9-template-library-day-1">9. Template Library — Day 1 <a name="template-library"></a></h2>
+<h3 id="philosophy">Philosophy</h3>
+<p>Start small, be exceptional. 12 templates that demonstrate the full power of gates + QA + learning. Each template should make a Make.com user say "I've been trying to build this for months."</p>
+<h3 id="day-1-templates">Day 1 Templates</h3>
+<h4 id="content-creation-4-templates">Content Creation (4 templates)</h4>
+<p><strong>1. Social Media Content Calendar</strong> ⭐ (Flagship)</p>
+<pre><code>Schedule Trigger (weekly)
+  → Content Strategist Agent (generate week's posts)
+  → Gate: Content Calendar Approval (Human)
+  → For Each Post:
+      → Copywriter Agent (write platform-specific copy)
+      → QA: Brand Voice Check
+      → Image Generator (FLUX/Luma)
+      → QA: Visual Quality Check
+      → Gate: Final Post Approval (Human → Hybrid as trust builds)
+      → Publish to Platform
+  → Weekly Performance Report
+</code></pre>
+<p><strong>2. Product Video Ad Pipeline</strong> ⭐ (Flagship)</p>
+<pre><code>Product URL Trigger
+  → Product Data Extractor (scrape specs, images, price)
+  → Brief Generator Agent (creates creative brief)
+  → Gate: Brief Approval (Human)
+  → Concept Agent (storyboard, shot list, camera direction)
+  → Gate: Concept Approval (Human)
+  → For Each Platform [TikTok 9:16, YouTube 16:9, IG 1:1]:
+      → Image Generation (keyframe from product photo)
+      → Video Generation (Luma Ray3 from keyframe)
+      → QA: Visual Quality + Brand Compliance
+      → Audio (voiceover or music)
+      → Format (ffmpeg platform-specific encoding)
+  → Gate: Final Creative Approval (Human → AI QA over time)
+  → Publish to Platforms
+  → Performance Tracking (7-day check)
+</code></pre>
+<p><strong>3. Blog Post Pipeline</strong></p>
+<pre><code>Topic Trigger (from SEO tool or manual)
+  → Research Agent (competitive analysis, keyword research)
+  → Outline Agent (H1-H3 structure, target keywords)
+  → Gate: Outline Approval (Human)
+  → Writer Agent (draft from approved outline)
+  → QA: SEO Score Check (keyword density, readability, links)
+  → QA: Factual Accuracy (claim verification)
+  → Gate: Content Approval (Human → Hybrid)
+  → Format for CMS (Shopify blog, WordPress, etc.)
+  → Publish
+  → Performance Tracking (30-day rank check)
+</code></pre>
+<p><strong>4. Email Campaign Builder</strong></p>
+<pre><code>Campaign Brief (Form Trigger)
+  → Strategy Agent (audience segment, send time, A/B approach)
+  → Gate: Strategy Approval (Human)
+  → Copywriter Agent (subject lines, body, CTA)
+  → QA: Brand Voice + Spam Score Check
+  → Designer Agent (email template, images)
+  → QA: Rendering Check (mobile, dark mode)
+  → Gate: Final Campaign Approval (Human)
+  → A/B Split → Send
+  → Performance Report (24h + 7d)
+</code></pre>
+<h4 id="e-commerce-4-templates">E-Commerce (4 templates)</h4>
+<p><strong>5. Product Listing Optimizer</strong></p>
+<pre><code>Product Catalog Sync Trigger
+  → For Each Product:
+      → Description Agent (SEO-optimized copy)
+      → QA: Brand Voice + SEO Score
+      → Image Enhancement (Claid.ai lifestyle scenes)
+      → QA: Image Quality Check
+      → Gate: Listing Approval (Human → AI QA for updates)
+      → Update Shopify/Amazon/etc.
+  → Batch Performance Report
+</code></pre>
+<p><strong>6. Review Response Automation</strong></p>
+<pre><code>New Review Webhook
+  → Sentiment Analysis
+  → Branch:
+      → 5-star: Auto-thank (Auto-pass Gate)
+      → 3-4 star: Response Agent → Gate: Quick Review (Hybrid)
+      → 1-2 star: Response Agent → Gate: Sensitive Review (Human always)
+  → Post Response
+  → Log for pattern analysis
+</code></pre>
+<p><strong>7. Competitive Price Monitor</strong></p>
+<pre><code>Daily Schedule Trigger
+  → Scrape competitor prices (configured URLs)
+  → Analysis Agent (price changes, trends, recommendations)
+  → Branch:
+      → Price drop detected: 
+          → Gate: Alert + Action Recommendation (Human)
+          → Optional: Auto-adjust price (Auto-pass for minor changes)
+      → No changes: Log and continue
+  → Weekly Competitive Report
+</code></pre>
+<p><strong>8. Inventory Alert &amp; Reorder</strong></p>
+<pre><code>Inventory Level Watch Trigger
+  → Demand Prediction Agent (based on sales velocity, seasonality)
+  → Branch:
+      → Critical low: Urgent notification + Auto-reorder suggestion
+      → Warning: Reorder Agent (supplier email draft)
+          → Gate: Reorder Approval (Human for high-value, Auto-pass for replenishment)
+      → Healthy: Log and continue
+  → Weekly Inventory Health Report
+</code></pre>
+<h4 id="marketing-operations-4-templates">Marketing &amp; Operations (4 templates)</h4>
+<p><strong>9. Ad Campaign Manager</strong></p>
+<pre><code>Campaign Brief (Form Trigger)
+  → Budget Allocation Agent
+  → Gate: Budget Approval (Human)
+  → Creative Brief Agent (per platform)
+  → Gate: Creative Direction Approval (Human)
+  → For Each Platform [Meta, Google, TikTok]:
+      → Ad Creative Generation (copy + image/video)
+      → QA: Platform Compliance + Brand Check
+      → Gate: Ad Approval (Human → Hybrid)
+  → Launch Campaigns (API)
+  → Daily Performance Monitor
+      → Optimization Agent (bid/audience suggestions)
+      → Gate: Optimization Approval (Auto-pass for minor, Human for major)
+</code></pre>
+<p><strong>10. Customer Onboarding Flow</strong></p>
+<pre><code>New Customer Signup Trigger
+  → Welcome Sequence Agent (personalized based on plan/industry)
+  → For Each Milestone [Day 1, Day 3, Day 7, Day 14, Day 30]:
+      → Content Agent (email + in-app message)
+      → QA: Personalization Check
+      → Gate: Content Review (Hybrid → Auto-pass as sequences prove effective)
+      → Send
+  → Health Score Check (Day 30)
+  → Branch:
+      → Healthy: Celebration + upsell path
+      → At risk: Alert customer success team
+</code></pre>
+<p><strong>11. Competitive Intelligence Monitor</strong></p>
+<pre><code>Daily Schedule Trigger
+  → For Each Competitor (configured list):
+      → Web Monitor (new blog posts, pricing changes, features)
+      → Social Monitor (new campaigns, engagement patterns)
+  → Analysis Agent (summarize changes, identify threats/opportunities)
+  → Gate: Intel Review (AI QA for routine, Human for significant changes)
+  → Distribute to team (Slack digest)
+  → Monthly Competitive Report
+</code></pre>
+<p><strong>12. Support Triage &amp; Response</strong></p>
+<pre><code>Support Ticket Webhook
+  → Classification Agent (category, priority, sentiment)
+  → Branch by Priority:
+      → Critical: Immediate human routing + alert
+      → High: Response Agent → Gate: Response Approval (Human)
+      → Medium: Response Agent → QA: Tone Check → Gate: Quick Review (Hybrid)
+      → Low: Response Agent → QA: Accuracy Check → Auto-send (Auto-pass)
+  → Post-resolution: CSAT survey
+  → Weekly support quality report
+</code></pre>
+<hr />
+<h2 id="10-data-model-execution-engine">10. Data Model &amp; Execution Engine <a name="data-model"></a></h2>
+<h3 id="flow-definition-format-json">Flow Definition Format (JSON)</h3>
+<p>Flows are stored as JSON documents, making them exportable, versionable, and shareable:</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;flow_abc123&quot;,
+  &quot;name&quot;: &quot;Product Video Ad Pipeline&quot;,
+  &quot;version&quot;: &quot;1.3.0&quot;,
+  &quot;author&quot;: &quot;jonathan@ienable.ai&quot;,
+  &quot;description&quot;: &quot;End-to-end product video creation with approval gates&quot;,
+  &quot;tags&quot;: [&quot;content&quot;, &quot;video&quot;, &quot;e-commerce&quot;],
+
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;trigger_1&quot;,
+      &quot;type&quot;: &quot;trigger&quot;,
+      &quot;subtype&quot;: &quot;webhook&quot;,
+      &quot;config&quot;: { &quot;source&quot;: &quot;shopify&quot;, &quot;event&quot;: &quot;product.create&quot; },
+      &quot;position&quot;: { &quot;x&quot;: 0, &quot;y&quot;: 200 }
+    },
+    {
+      &quot;id&quot;: &quot;agent_brief&quot;,
+      &quot;type&quot;: &quot;agent&quot;,
+      &quot;config&quot;: {
+        &quot;agent_id&quot;: &quot;creative_brief_writer&quot;,
+        &quot;inputs&quot;: { &quot;product&quot;: &quot;{{trigger_1.data}}&quot; },
+        &quot;outputs&quot;: [&quot;brief&quot;]
+      },
+      &quot;position&quot;: { &quot;x&quot;: 200, &quot;y&quot;: 200 }
+    },
+    {
+      &quot;id&quot;: &quot;gate_brief&quot;,
+      &quot;type&quot;: &quot;gate&quot;,
+      &quot;config&quot;: {
+        &quot;mode&quot;: &quot;human&quot;,
+        &quot;assignee&quot;: { &quot;type&quot;: &quot;role&quot;, &quot;role&quot;: &quot;creative_director&quot; },
+        &quot;timeout&quot;: &quot;48h&quot;,
+        &quot;escalation&quot;: [
+          { &quot;after&quot;: &quot;24h&quot;, &quot;action&quot;: &quot;reminder&quot; },
+          { &quot;after&quot;: &quot;48h&quot;, &quot;action&quot;: &quot;escalate&quot;, &quot;to&quot;: &quot;founder&quot; }
+        ],
+        &quot;feedback&quot;: {
+          &quot;on_reject&quot;: { &quot;require_reason&quot;: true, &quot;taxonomy&quot;: [&quot;off_brief&quot;, &quot;wrong_audience&quot;, &quot;budget_concern&quot;] }
+        }
+      },
+      &quot;position&quot;: { &quot;x&quot;: 400, &quot;y&quot;: 200 }
+    }
+  ],
+
+  &quot;edges&quot;: [
+    { &quot;from&quot;: &quot;trigger_1&quot;, &quot;to&quot;: &quot;agent_brief&quot; },
+    { &quot;from&quot;: &quot;agent_brief&quot;, &quot;to&quot;: &quot;gate_brief&quot; },
+    { &quot;from&quot;: &quot;gate_brief&quot;, &quot;to&quot;: &quot;agent_concept&quot;, &quot;condition&quot;: &quot;approved&quot; },
+    { &quot;from&quot;: &quot;gate_brief&quot;, &quot;to&quot;: &quot;agent_brief&quot;, &quot;condition&quot;: &quot;rejected&quot;, &quot;inject_feedback&quot;: true }
+  ],
+
+  &quot;settings&quot;: {
+    &quot;max_retries_per_gate&quot;: 3,
+    &quot;learning_enabled&quot;: true,
+    &quot;cost_tracking&quot;: true
+  }
+}
+</code></pre>
+<h3 id="execution-engine">Execution Engine</h3>
+<pre><code>Flow Run Lifecycle:
+
+1. TRIGGER fires → creates a Run instance
+2. Engine resolves first node(s) → executes
+3. For each node:
+   a. Resolve inputs (data mapping from upstream nodes)
+   b. Execute (API call, agent inference, etc.)
+   c. Store output in run context
+   d. Determine next node(s) via edges
+4. When a GATE is reached:
+   a. Pause execution at this branch
+   b. Create approval request
+   c. Notify assignee(s)
+   d. Wait for decision (async — engine continues other branches)
+   e. On decision: resume or loop back
+5. When all branches complete → Run finishes
+6. Post-run: learning loop processes all gate decisions
+</code></pre>
+<p><strong>Key architectural choices:</strong>
+- <strong>Event-driven, not polling-based</strong> — gates use webhooks/websockets, never polling
+- <strong>Parallel branch execution</strong> — branches run concurrently, Merge nodes sync them
+- <strong>Durable execution</strong> — runs survive server restarts (state persisted to DB)
+- <strong>Cost tracking</strong> — every API call's cost is recorded and attributed to the run
+- <strong>Audit log</strong> — every action, decision, and data transformation is logged</p>
+<hr />
+<h2 id="11-pricing-implications">11. Pricing Implications <a name="pricing"></a></h2>
+<h3 id="recommended-pricing-model">Recommended Pricing Model</h3>
+<p>Based on competitive research, we recommend <strong>flow-run-based pricing</strong> (like n8n's execution model) rather than per-action (Make) or per-task (Zapier).</p>
+<p><strong>Why:</strong> Per-action pricing penalizes quality-controlled flows. A flow with 3 approval gates and 2 QA steps has ~5 more "actions" than a flow without quality control. We should NEVER charge more for quality — that's our entire value proposition.</p>
+<pre><code>Proposed Tiers:
+
+| Plan       | Price/mo | Flow Runs/mo | Active Flows | AI Credits | Gates |
+|------------|----------|-------------|-------------|------------|-------|
+| Starter    | $29      | 500         | 10          | 5,000      | All types |
+| Growth     | $79      | 2,500       | 50          | 25,000     | All types |
+| Scale      | $199     | 10,000      | Unlimited   | 100,000    | All types |
+| Enterprise | Custom   | Unlimited   | Unlimited   | Custom     | All types |
+
+Key: 
+- Approval gates are FREE (never charge for quality control)
+- QA steps are FREE (never charge for evaluation)
+- AI credits cover agent execution (LLM calls)
+- BYOK reduces AI credit consumption
+- Gate notifications (Slack, email) are free
+</code></pre>
+<p><strong>Critical:</strong> Gates and QA steps should NEVER be a paid feature or consume credits. The moment we charge for quality control, we've betrayed our core value proposition.</p>
+<hr />
+<h2 id="12-build-sequence">12. Build Sequence <a name="build-sequence"></a></h2>
+<h3 id="phase-1-foundation-weeks-1-6">Phase 1: Foundation (Weeks 1-6)</h3>
+<ul>
+<li>[ ] Flow definition format (JSON schema)</li>
+<li>[ ] Execution engine (durable, event-driven)</li>
+<li>[ ] Canvas UI (basic drag-and-drop with primitives)</li>
+<li>[ ] Trigger: Manual, Webhook, Schedule</li>
+<li>[ ] Action: API Call, Transform, Notify</li>
+<li>[ ] Gate: Human mode only (email + web approval UI)</li>
+<li>[ ] Data inspector (click connection → see data)</li>
+</ul>
+<h3 id="phase-2-intelligence-weeks-7-12">Phase 2: Intelligence (Weeks 7-12)</h3>
+<ul>
+<li>[ ] Agent step (LLM integration with brand context)</li>
+<li>[ ] QA step (independent evaluation with rubric)</li>
+<li>[ ] Brief node (structured creative brief)</li>
+<li>[ ] Gate: AI QA mode</li>
+<li>[ ] Learning DB (store decisions, extract lessons)</li>
+<li>[ ] Approval Queue (unified inbox view)</li>
+</ul>
+<h3 id="phase-3-power-weeks-13-18">Phase 3: Power (Weeks 13-18)</h3>
+<ul>
+<li>[ ] Gate: Auto-pass mode + trust scoring</li>
+<li>[ ] Gate: Hybrid mode (AI pre-screen → human)</li>
+<li>[ ] Branch, Loop, Merge primitives</li>
+<li>[ ] Subscenarios (callable flows)</li>
+<li>[ ] Real-time execution visualization</li>
+<li>[ ] Data pinning for debugging</li>
+</ul>
+<h3 id="phase-4-ecosystem-weeks-19-24">Phase 4: Ecosystem (Weeks 19-24)</h3>
+<ul>
+<li>[ ] Template library (12 Day 1 templates)</li>
+<li>[ ] NL → flow generation</li>
+<li>[ ] Git export/import</li>
+<li>[ ] Multi-user collaboration</li>
+<li>[ ] Notification integrations (Slack, email, SMS, push)</li>
+<li>[ ] Cost tracking dashboard</li>
+</ul>
+<h3 id="phase-5-growth-weeks-25">Phase 5: Growth (Weeks 25+)</h3>
+<ul>
+<li>[ ] Template marketplace (user-contributed)</li>
+<li>[ ] Plugin SDK (custom node types)</li>
+<li>[ ] Gate evolution suggestions ("promote this gate?")</li>
+<li>[ ] Performance analytics per flow/agent</li>
+<li>[ ] Self-hosting option for enterprise</li>
+<li>[ ] Mobile approval app</li>
+</ul>
+<hr />
+<h2 id="summary-why-ienable-wins">Summary: Why iEnable Wins</h2>
+<table>
+<thead>
+<tr>
+<th>What They Say</th>
+<th>What We Say</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Connect any app to any app"</td>
+<td>"Connect apps with quality control at every step"</td>
+</tr>
+<tr>
+<td>"Automate everything"</td>
+<td>"Automate with confidence — humans stay in the loop until you're ready"</td>
+</tr>
+<tr>
+<td>"AI agents run your workflows"</td>
+<td>"AI agents run your workflows, get independently graded, and learn from every rejection"</td>
+</tr>
+<tr>
+<td>"7,000 templates"</td>
+<td>"12 templates that actually produce good output — because they have quality gates built in"</td>
+</tr>
+<tr>
+<td>"Operations-based pricing"</td>
+<td>"We never charge you more for caring about quality"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-one-liner">The One-Liner</h3>
+<blockquote>
+<p><strong>"The first workflow builder where the AI doesn't just execute — it earns your trust."</strong></p>
+</blockquote>
+<h3 id="the-two-sentence-pitch">The Two-Sentence Pitch</h3>
+<blockquote>
+<p>Make.com connects apps. n8n connects apps for developers. Zapier connects apps for everyone.<br />
+<strong>iEnable connects apps with approval gates, independent QA, and AI agents that learn from every rejection — so your automation actually ships work you're proud of.</strong></p>
+</blockquote>
+<hr />
+<p><em>End of Architecture Proposal. See companion document: flow-builder-competitive-research.md</em></p>
+  </div>
+</div>
+<script>
+function switchTab(id, el) {
+  document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(e => e.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>

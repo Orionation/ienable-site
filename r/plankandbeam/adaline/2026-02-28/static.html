@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Adaline's Report Card — Ads Intelligence Lead · Plank+Beam</title>
+<style>
+  :root {
+    --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+    --gray-300: #d1d5db; --gray-400: #9ca3af; --gray-500: #6b7280;
+    --gray-600: #4b5563; --gray-700: #374151; --gray-800: #1f2937; --gray-900: #111827;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: var(--gray-100); color: var(--gray-800); line-height: 1.5; }
+  .header { text-align: center; padding: 20px 16px 12px; background: white; border-bottom: 1px solid var(--gray-200); }
+  .header-date { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-400); }
+  .header-title { font-size: 22px; font-weight: 800; color: var(--gray-900); margin-top: 2px; }
+  .header-subtitle { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
+  .card { background: white; border-radius: 16px; margin: 16px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .card-header { padding: 16px; color: white; }
+  .card-header-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .card-emoji { font-size: 28px; }
+  .card-name { font-size: 18px; font-weight: 700; margin-top: 4px; }
+  .card-role { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+  .grade-badge { background: rgba(255,255,255,0.25); border-radius: 12px; padding: 4px 14px; font-size: 20px; font-weight: 800; }
+  .stats { display: flex; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--gray-100); }
+  .stat { flex: 1; text-align: center; background: var(--gray-50); border-radius: 10px; padding: 8px 4px; }
+  .stat-value { font-size: 18px; font-weight: 800; color: var(--gray-900); }
+  .stat-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-400); margin-top: 2px; }
+  .accomplishments { padding: 12px 16px; }
+  .accomplishment { display: flex; gap: 10px; padding: 6px 0; font-size: 13px; color: var(--gray-700); line-height: 1.4; }
+  .accomplishment-icon { flex-shrink: 0; font-size: 16px; }
+  .accomplishment a { color: #2563eb; text-decoration: none; }
+  .key-finding { margin: 8px 16px 12px; padding: 12px; background: #f0fdf4; border-radius: 10px; border-left: 3px solid #22c55e; }
+  .key-finding.warning { background: #fffbeb; border-left-color: #f59e0b; }
+  .key-finding-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--gray-600); }
+  .key-finding-text { font-size: 13px; color: var(--gray-700); margin-top: 4px; line-height: 1.4; }
+  .status-bar { padding: 8px 16px 12px; font-size: 11px; color: var(--gray-400); display: flex; align-items: center; gap: 6px; }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-date">Saturday, February 28, 2026</div>
+  <div class="header-title">Adaline's Report Card</div>
+  <div class="header-subtitle">📢 Ads Intelligence Lead · Plank+Beam</div>
+</div>
+
+<div class="card">
+  <div class="card-header" style="background: linear-gradient(135deg, #7c3aed, #6366f1);">
+    <div class="card-header-top">
+      <div>
+        <div class="card-emoji">📋</div>
+        <div class="card-name">Executive Summary</div>
+        <div class="card-role">Overnight Analysis by Adaline</div>
+      </div>
+      <div class="grade-badge">A+</div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-value">6</div><div class="stat-label">Reports</div></div>
+    <div class="stat"><div class="stat-value">5</div><div class="stat-label">Findings</div></div>
+    <div class="stat"><div class="stat-value">$500K+</div><div class="stat-label">Upside</div></div>
+  </div>
+  <div class="accomplishments">
+    <div class="accomplishment"><span class="accomplishment-icon">🎯</span><span><strong>Campaign optimization opportunity</strong> — MoF Consideration burning $73.8K/month at 1.03x ROAS. Budget reallocation could unlock $500-600K/month.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">🤖</span><span><strong>AI Recommendation → Executed → $369K/month!</strong> Adaline recommended scaling GIF allocation. Lyndsay executed (2% → 13.1% of spend). Result: ~$369K/month incremental revenue ($4.4M/year). <em>This is what AI enablement looks like.</em></span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">🏆</span><span><strong>Brand winners identified</strong> — Max &amp; Lily 7.32x ROAS ($2.57M revenue), P+B 11.27x, Maxtrix 3.36x.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">⚠️</span><span><strong>Major waste found</strong> — DPA-Only campaign at 0.73x ROAS losing ~$10.2K/month. Immediate action needed.</span></div>
+  </div>
+  <div class="key-finding">
+    <div class="key-finding-label">💰 Biggest Opportunity</div>
+    <div class="key-finding-text">Retargeting (20.61x) and ASC+ Promo (17.08x) are massively underutilized. ASC+ Promo running on only $2.5K/month with low frequency — huge scaling headroom.</div>
+  </div>
+  <div class="status-bar"><span class="status-dot" style="background: #22c55e;"></span>Complete · 6 reports built</div>
+</div>
+
+<div class="card">
+  <div class="card-header" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">
+    <div class="card-header-top">
+      <div>
+        <div class="card-emoji">🔍</div>
+        <div class="card-name">Key Findings</div>
+        <div class="card-role">5 Strategic Insights</div>
+      </div>
+      <div class="grade-badge">5</div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-value">$25K</div><div class="stat-label">ChatGPT</div></div>
+    <div class="stat"><div class="stat-value">40%</div><div class="stat-label">CPC Drop</div></div>
+    <div class="stat"><div class="stat-value">19%</div><div class="stat-label">Repeat</div></div>
+  </div>
+  <div class="accomplishments">
+    <div class="accomplishment"><span class="accomplishment-icon">🤖</span><span><strong>ChatGPT as revenue channel</strong> — Driving $25K/month with ZERO ad spend. Untapped opportunity for optimization.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">📉</span><span><strong>Google CPC collapse</strong> — 40% drop in cost-per-click. Market dynamics shifting — opportunity to scale Google Ads aggressively.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">🔄</span><span><strong>Repeat customer rate: 19%</strong> — Strong retention foundation. LTV optimization should be priority for scaling profitably.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">📺</span><span><strong>CTV halo effect detected</strong> — Connected TV ads showing positive spillover to other channels. Worth deeper analysis.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">🎯</span><span><strong>Engagement paradox</strong> — High engagement doesn't always equal high revenue. Creative scoring needs ROAS weighting.</span></div>
+  </div>
+  <div class="key-finding warning">
+    <div class="key-finding-label">⚡ Action Item</div>
+    <div class="key-finding-text">Google CPC collapse is a rare market window. Recommend 2x scaling test on best-performing Google campaigns within 48 hours.</div>
+  </div>
+  <div class="status-bar"><span class="status-dot" style="background: #22c55e;"></span>All findings validated against data</div>
+</div>
+
+<div class="card">
+  <div class="card-header" style="background: linear-gradient(135deg, #10b981, #059669);">
+    <div class="card-header-top">
+      <div>
+        <div class="card-emoji">💸</div>
+        <div class="card-name">Budget Recommendations</div>
+        <div class="card-role">Where to Allocate</div>
+      </div>
+      <div class="grade-badge">4</div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-value">$73.8K</div><div class="stat-label">MoF Issue</div></div>
+    <div class="stat"><div class="stat-value">20.61x</div><div class="stat-label">Retarget</div></div>
+    <div class="stat"><div class="stat-value">17.08x</div><div class="stat-label">ASC+</div></div>
+  </div>
+  <div class="accomplishments">
+    <div class="accomplishment"><span class="accomplishment-icon">🔴</span><span><strong>Cut: MoF Consideration</strong> — $73.8K/month at 1.03x ROAS. Barely break-even. Reallocate 70% to winners.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">🔴</span><span><strong>Kill: DPA-Only</strong> — 0.73x ROAS losing ~$10.2K/month. Shut down immediately. No salvageable segments.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">🟢</span><span><strong>Scale: Retargeting</strong> — 20.61x ROAS. Currently modest spend. Test 3x budget increase — should remain profitable at 15x+.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">🟢</span><span><strong>Scale: ASC+ Promo</strong> — 17.08x ROAS on only $2.5K/month. Low frequency = headroom. Test 10x scale to $25K/month.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">🟡</span><span><strong>Test: GIF expansion</strong> — Already at 13.1% of spend with strong ROI. Push to 20% with new creative rotation.</span></div>
+  </div>
+  <div class="key-finding warning">
+    <div class="key-finding-label">⚠️ Urgent</div>
+    <div class="key-finding-text">DPA-Only campaign hemorrhaging $10.2K/month. Every day of delay = $340 lost. Recommend immediate pause.</div>
+  </div>
+  <div class="status-bar"><span class="status-dot" style="background: #f59e0b;"></span>Awaiting budget reallocation approval</div>
+</div>
+
+<div class="card">
+  <div class="card-header" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+    <div class="card-header-top">
+      <div>
+        <div class="card-emoji">📱</div>
+        <div class="card-name">Channel Performance</div>
+        <div class="card-role">Platform Comparison</div>
+      </div>
+      <div class="grade-badge">3</div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-value">7.32x</div><div class="stat-label">Max&Lily</div></div>
+    <div class="stat"><div class="stat-value">11.27x</div><div class="stat-label">P+B</div></div>
+    <div class="stat"><div class="stat-value">3.36x</div><div class="stat-label">Maxtrix</div></div>
+  </div>
+  <div class="accomplishments">
+    <div class="accomplishment"><span class="accomplishment-icon">🏆</span><span><strong>Max &amp; Lily</strong> — $351.7K spend → $2.57M revenue (7.32x). Clear winner. Scale aggressively.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">🏆</span><span><strong>Plank+Beam</strong> — 11.27x ROAS. Premium positioning working. Allocate more creative budget here.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">📊</span><span><strong>Maxtrix</strong> — 3.36x ROAS. Solid but not spectacular. Maintain current allocation, optimize creative.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">🎯</span><span><strong>GIF creative ROI</strong> — Scaled from 2% to 13.1% of total spend = ~$369K/month incremental. Keep expanding.</span></div>
+  </div>
+  <div class="key-finding">
+    <div class="key-finding-label">💡 Insight</div>
+    <div class="key-finding-text">Max &amp; Lily and Plank+Beam both crushing it with different customer segments. Consider separate creative strategies for each brand rather than one-size-fits-all.</div>
+  </div>
+  <div class="status-bar"><span class="status-dot" style="background: #22c55e;"></span>All brands tracked · Performance validated</div>
+</div>
+
+<div class="card">
+  <div class="card-header" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+    <div class="card-header-top">
+      <div>
+        <div class="card-emoji">📂</div>
+        <div class="card-name">Reports Available</div>
+        <div class="card-role">6 Deep-Dive Reports</div>
+      </div>
+      <div class="grade-badge">6</div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-value">6</div><div class="stat-label">Reports</div></div>
+    <div class="stat"><div class="stat-value">CSV</div><div class="stat-label">Format</div></div>
+    <div class="stat"><div class="stat-value">✓</div><div class="stat-label">Ready</div></div>
+  </div>
+  <div class="accomplishments">
+    <div class="accomplishment"><span class="accomplishment-icon">📊</span><span><strong><a href='reports/weekly-roas.html'>Weekly ROAS by Campaign</a></strong> — Time-series breakdown of every campaign. Identify trends and seasonality.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">🎨</span><span><strong><a href='reports/creative-performance.html'>Creative Performance</a></strong> — Which images/videos drive best ROAS. Includes GIF vs static comparison.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">💰</span><span><strong><a href='reports/budget-pacing.html'>Budget Pacing</a></strong> — Spend velocity vs revenue. Flags over/under-spending campaigns.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">👥</span><span><strong><a href='reports/audience-overlap.html'>Audience Overlap</a></strong> — Which customer segments are being hit by multiple campaigns (wasted spend).</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">📱</span><span><strong><a href='reports/platform-comparison.html'>Platform Comparison</a></strong> — Facebook vs Google vs others. CPA, ROAS, frequency by channel.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">🏅</span><span><strong><a href='reports/creative-scoring.html'>Creative Scoring</a></strong> — AI-weighted scores combining engagement, CTR, CVR, and ROAS.</span></div>
+  </div>
+  <div class="key-finding">
+    <div class="key-finding-label">📋 Next Steps</div>
+    <div class="key-finding-text">All reports saved to shared drive. Recommend weekly review cadence with Lyndsay to track optimization progress and adjust strategy.</div>
+  </div>
+  <div class="status-bar"><span class="status-dot" style="background: #22c55e;"></span>All reports generated · Ready for review</div>
+</div>
+
+<div class="card">
+  <div class="card-header" style="background: linear-gradient(135deg, #059669, #10b981);">
+    <div class="card-header-top">
+      <div>
+        <div class="card-emoji">🔄</div>
+        <div class="card-name">AI ROI Tracker</div>
+        <div class="card-role">Recommendation → Action → Results</div>
+      </div>
+      <div class="grade-badge">$4.4M</div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-value">2</div><div class="stat-label">Tracked</div></div>
+    <div class="stat"><div class="stat-value">2</div><div class="stat-label">Executed</div></div>
+    <div class="stat"><div class="stat-value">$4.4M</div><div class="stat-label">Annual ROI</div></div>
+  </div>
+  <div class="accomplishments">
+    <div class="accomplishment"><span class="accomplishment-icon">🤖</span><span><strong>Adaline recommended:</strong> 'Scale GIF creative allocation from 2% to 10-15% of total ad spend.'</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">👩‍💼</span><span><strong>Lyndsay executed:</strong> Scaled GIF allocation from 2% → 13.1% of spend.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">📊</span><span><strong>Result measured:</strong> ~$436K/month GIF revenue vs ~$67K at old allocation. <strong>+$369K/month incremental ($4.4M/year).</strong></span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">✅</span><span><strong>Bing scaling:</strong> Recommended tripling from $16K to $48K at $13+ ROAS. Lyndsay executed. Results EXCEEDED prediction.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">⭐</span><span><strong>Attribution:</strong> High confidence — direct budget shifts with measurable channel-level revenue.</span></div>
+  </div>
+  <div class="key-finding">
+    <div class="key-finding-label">🏆 Why This Matters</div>
+    <div class="key-finding-text">Two AI recommendations, properly executed, generated massive proven ROI. This is the closed loop: AI recommends → Human executes → Results measured → ROI proven. Every recommendation will be tracked like this going forward.</div>
+  </div>
+  <div class="status-bar"><span class="status-dot" style="background: #22c55e;"></span>2 tracked recommendations · The loop is working</div>
+</div>
+
+<div class="card">
+  <div class="card-header" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+    <div class="card-header-top">
+      <div>
+        <div class="card-emoji">🧠</div>
+        <div class="card-name">Learning Ladder</div>
+        <div class="card-role">Intelligence Compounding</div>
+      </div>
+      <div class="grade-badge">2</div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-value">2</div><div class="stat-label">Lessons</div></div>
+    <div class="stat"><div class="stat-value">2</div><div class="stat-label">Validated ✨</div></div>
+    <div class="stat"><div class="stat-value">0</div><div class="stat-label">Playbooks</div></div>
+  </div>
+  <div class="accomplishments">
+    <div class="accomplishment"><span class="accomplishment-icon">✅</span><span><strong>2 VALIDATED learnings (GOLD)</strong> — Bing scaling outperforms prediction (Lyndsay executed, results exceeded). ChatGPT $25K/month confirmed. Both HIGH confidence.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">⚠️</span><span><strong>Only 2 lessons in learning.db</strong> — CRITICAL GAP. Has gold-level findings but not logging them systematically. Journal 16 days stale.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">🔬</span><span><strong>3 active hypotheses</strong> — (1) Kill MoF saves $10K/mo, (2) GIF scaling to 20% improves further, (3) LLMO optimization 3x ChatGPT to $75K/mo.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">📋</span><span><strong>Closest to first playbook</strong> — Bing scaling: one more validation at $100K+ spend → permanent SOP: 'When ROAS &gt;10x on channel with &lt;$20K spend, scale aggressively.'</span></div>
+  </div>
+  <div class="key-finding">
+    <div class="key-finding-label">🪜 The Ladder</div>
+    <div class="key-finding-text">Adaline has the BEST validated learnings in the system — real money found, real execution by Lyndsay. But she's not logging to learning.db. The gold is being generated but not captured systematically.</div>
+  </div>
+  <div class="status-bar"><span class="status-dot" style="background: #f59e0b;"></span>2 validated (GOLD) but learning.db nearly empty · Must start logging</div>
+</div>
+
+<div class="card">
+  <div class="card-header" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+    <div class="card-header-top">
+      <div>
+        <div class="card-emoji">🚫</div>
+        <div class="card-name">Hard Rules</div>
+        <div class="card-role">Proven Guidelines</div>
+      </div>
+      <div class="grade-badge">2</div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-value">2</div><div class="stat-label">Rules</div></div>
+    <div class="stat"><div class="stat-value">9</div><div class="stat-label">Channels</div></div>
+    <div class="stat"><div class="stat-value">$1M+</div><div class="stat-label">Ad Spend</div></div>
+  </div>
+  <div class="accomplishments">
+    <div class="accomplishment"><span class="accomplishment-icon">💬</span><span><strong>ONE message to Lyndsay/Jonathan</strong> — Never dump raw data. Always: finding → recommendation → predicted impact.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">📊</span><span><strong>Never send without context</strong> — Every recommendation needs the data backing it up. Show the numbers or don't send it.</span></div>
+  </div>
+  <div class="key-finding">
+    <div class="key-finding-label">💡 Next Rule</div>
+    <div class="key-finding-text">Almost ready to codify: 'When ROAS &gt;10x on channel with &lt;$20K spend, scale 3x immediately.' Bing validated this. One more proof point and it's a playbook.</div>
+  </div>
+  <div class="status-bar"><span class="status-dot" style="background: #22c55e;"></span>2 rules · Building toward first playbook</div>
+</div>
+
+<div class="card">
+  <div class="card-header" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">
+    <div class="card-header-top">
+      <div>
+        <div class="card-emoji">🚀</div>
+        <div class="card-name">Tonight's Plan</div>
+        <div class="card-role">Next Actions</div>
+      </div>
+      <div class="grade-badge">5</div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-value">1</div><div class="stat-label">Proposal</div></div>
+    <div class="stat"><div class="stat-value">1</div><div class="stat-label">Kill Rec</div></div>
+    <div class="stat"><div class="stat-value">16d</div><div class="stat-label">Journal Gap</div></div>
+  </div>
+  <div class="accomplishments">
+    <div class="accomplishment"><span class="accomplishment-icon">📈</span><span><strong>Write Bing scaling proposal</strong> — Current $16K → $48K → $100K roadmap with projected ROAS at each level.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">🚫</span><span><strong>Write MoF DPA-Only kill recommendation</strong> — $10K/month waste, shift to Retargeting. Formal doc for Lyndsay.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">📊</span><span><strong>Document ChatGPT attribution methodology</strong> — How do we track this channel? Build proper attribution model.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">📝</span><span><strong>Backfill journal for last 2 weeks</strong> — 16 days missing. URGENT. Need continuous record.</span></div>
+    <div class="accomplishment"><span class="accomplishment-icon">🧠</span><span><strong>Start logging to learning.db</strong> — 0 entries is unacceptable. Backfill all existing knowledge.</span></div>
+  </div>
+  <div class="key-finding">
+    <div class="key-finding-label">💡 Priority</div>
+    <div class="key-finding-text">Bing proposal + MoF kill recommendation first. These are actionable savings and revenue that Lyndsay can execute this week.</div>
+  </div>
+  <div class="status-bar"><span class="status-dot" style="background: #f59e0b;"></span>5 tasks · Journal backfill is 16 days overdue</div>
+</div>
+</body></html>

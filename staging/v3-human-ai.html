@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iEnable | AI Teammates for Your Team</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        :root {
+            --cream: #FFFCF5;
+            --cream-dark: #FFF8EB;
+            --peach: #FFE5D9;
+            --coral: #FF8A65;
+            --coral-dark: #E57550;
+            --purple: #7C5CFF;
+            --purple-light: #9D85FF;
+            --teal: #2DD4BF;
+            --text: #1F2937;
+            --text-muted: #6B7280;
+            --text-light: #9CA3AF;
+            --white: #FFFFFF;
+            --border: #E5E7EB;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 252, 245, 0.9);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            padding: 0 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 72px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--coral) 0%, var(--purple) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .nav-links {
+            display: none;
+            gap: 32px;
+            list-style: none;
+        }
+        
+        @media (min-width: 768px) {
+            .nav-links { display: flex; }
+        }
+        
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover { color: var(--text); }
+        
+        .nav-cta {
+            background: var(--text);
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 140px 24px 80px;
+            overflow: hidden;
+        }
+        
+        .hero-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            gap: 64px;
+            align-items: center;
+        }
+        
+        @media (min-width: 1024px) {
+            .hero-inner { grid-template-columns: 1.2fr 1fr; }
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        
+        .hero-badge span {
+            font-size: 16px;
+        }
+        
+        .hero h1 {
+            font-size: 44px;
+            line-height: 1.15;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .hero h1 { font-size: 56px; }
+        }
+        
+        .hero h1 .highlight {
+            color: var(--purple);
+            position: relative;
+        }
+        
+        .hero h1 .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: var(--peach);
+            z-index: -1;
+            border-radius: 4px;
+        }
+        
+        .hero-desc {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            max-width: 520px;
+            line-height: 1.7;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+        }
+        
+        .btn-primary {
+            background: var(--purple);
+            color: var(--white);
+            padding: 16px 28px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background: var(--purple-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(124, 92, 255, 0.3);
+        }
+        
+        .btn-text {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
+        }
+        
+        .btn-text:hover { color: var(--purple); }
+        
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+        }
+        
+        .team-illustration {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border);
+        }
+        
+        .team-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .team-avatars {
+            display: flex;
+        }
+        
+        .team-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 3px solid var(--white);
+            margin-left: -12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .team-avatar:first-child { margin-left: 0; }
+        .team-avatar.human-1 { background: var(--peach); }
+        .team-avatar.human-2 { background: #D1FAE5; }
+        .team-avatar.ai { background: linear-gradient(135deg, var(--coral) 0%, var(--purple) 100%); }
+        
+        .team-label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        .team-label strong {
+            color: var(--text);
+        }
+        
+        .activity-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .activity-item {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            background: var(--cream);
+            border-radius: 16px;
+            align-items: flex-start;
+        }
+        
+        .activity-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .activity-avatar.ai {
+            background: linear-gradient(135deg, var(--coral) 0%, var(--purple) 100%);
+        }
+        
+        .activity-avatar.human {
+            background: var(--peach);
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-text {
+            font-size: 14px;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+        
+        .activity-text strong {
+            color: var(--purple);
+        }
+        
+        .activity-time {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        
+        .collaboration-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--teal);
+            color: var(--white);
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 16px;
+        }
+        
+        /* Trust Section */
+        .trust-section {
+            padding: 60px 24px;
+            background: var(--white);
+        }
+        
+        .trust-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .trust-label {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 24px;
+        }
+        
+        .trust-logos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .trust-logo {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+        
+        /* What Is Section */
+        .what-is {
+            padding: 100px 24px;
+            background: var(--cream-dark);
+        }
+        
+        .what-is-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .section-emoji {
+            font-size: 48px;
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .section-title { font-size: 44px; }
+        }
+        
+        .section-desc {
+            font-size: 18px;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+        
+        /* Features */
+        .features {
+            padding: 100px 24px;
+            background: var(--white);
+        }
+        
+        .features-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .features-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+        
+        .features-grid {
+            display: grid;
+            gap: 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .features-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        
+        .feature-card {
+            background: var(--cream);
+            border-radius: 24px;
+            padding: 32px;
+            transition: transform 0.2s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 24px;
+        }
+        
+        .feature-icon.voice { background: var(--peach); }
+        .feature-icon.specialists { background: #DDD6FE; }
+        .feature-icon.dashboard { background: #D1FAE5; }
+        
+        .feature-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+        
+        .feature-desc {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 100px 24px;
+            background: var(--cream-dark);
+        }
+        
+        .how-it-works-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+            margin-top: 64px;
+        }
+        
+        .step {
+            display: grid;
+            gap: 32px;
+            align-items: center;
+        }
+        
+        @media (min-width: 768px) {
+            .step { grid-template-columns: 1fr 1.5fr; }
+            .step.reverse { direction: rtl; }
+            .step.reverse > * { direction: ltr; }
+        }
+        
+        .step-visual {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--purple);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+        
+        .step-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+        
+        .step-desc {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+        
+        .voice-visual {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .voice-wave {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: 40px;
+        }
+        
+        .wave-bar {
+            width: 4px;
+            background: var(--purple);
+            border-radius: 2px;
+            animation: wave 1s ease-in-out infinite;
+        }
+        
+        .wave-bar:nth-child(1) { height: 16px; animation-delay: 0s; }
+        .wave-bar:nth-child(2) { height: 28px; animation-delay: 0.1s; }
+        .wave-bar:nth-child(3) { height: 40px; animation-delay: 0.2s; }
+        .wave-bar:nth-child(4) { height: 24px; animation-delay: 0.3s; }
+        .wave-bar:nth-child(5) { height: 32px; animation-delay: 0.4s; }
+        
+        @keyframes wave {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.5); }
+        }
+        
+        .voice-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        
+        /* Social Proof */
+        .social-proof {
+            padding: 100px 24px;
+            background: var(--white);
+        }
+        
+        .social-proof-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            gap: 24px;
+            margin-top: 64px;
+        }
+        
+        @media (min-width: 768px) {
+            .testimonials-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        
+        .testimonial-card {
+            background: var(--cream);
+            border-radius: 24px;
+            padding: 32px;
+        }
+        
+        .testimonial-emoji {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+        
+        .testimonial-text {
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 24px;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .author-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .author-avatar.pink { background: var(--peach); }
+        .author-avatar.green { background: #D1FAE5; }
+        .author-avatar.purple { background: #DDD6FE; }
+        
+        .author-name {
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .author-role {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 24px;
+            background: linear-gradient(135deg, var(--coral) 0%, var(--purple) 100%);
+            text-align: center;
+        }
+        
+        .cta-inner {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .cta-emoji {
+            font-size: 56px;
+            margin-bottom: 24px;
+        }
+        
+        .cta-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 16px;
+        }
+        
+        @media (min-width: 768px) {
+            .cta-title { font-size: 44px; }
+        }
+        
+        .cta-desc {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 32px;
+        }
+        
+        .cta-button {
+            background: var(--white);
+            color: var(--purple);
+            padding: 18px 36px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 17px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px) scale(1.02);
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 64px 24px 32px;
+            background: var(--text);
+            color: var(--white);
+        }
+        
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-grid {
+            display: grid;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+        
+        @media (min-width: 768px) {
+            .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
+        }
+        
+        .footer-brand .logo {
+            color: var(--white);
+            margin-bottom: 16px;
+            display: flex;
+        }
+        
+        .footer-desc {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        
+        .footer-links a:hover { color: var(--white); }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 32px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        .footer-bottom a { color: inherit; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="#" class="logo">
+                <span class="logo-icon">✨</span>
+                iEnable
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#stories">Stories</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+            </ul>
+            <a href="#start" class="nav-cta">Try Free</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span>👋</span>
+                    Meet your new AI teammates
+                </div>
+                <h1>Your team, <span class="highlight">supercharged</span> with AI</h1>
+                <p class="hero-desc">iEnable gives everyone on your team an AI partner that handles the busy work — so humans can focus on the work that matters most.</p>
+                <div class="hero-buttons">
+                    <a href="#start" class="btn-primary">
+                        Get Started Free
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                    <a href="#story" class="btn-text">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/></svg>
+                        Watch Sarah's story
+                    </a>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="team-illustration">
+                    <div class="team-header">
+                        <div class="team-avatars">
+                            <div class="team-avatar human-1">👩</div>
+                            <div class="team-avatar human-2">👨</div>
+                            <div class="team-avatar ai">🤖</div>
+                        </div>
+                        <div class="team-label">
+                            <strong>Marketing Team</strong> · 3 humans + Maya AI
+                        </div>
+                    </div>
+                    <div class="activity-feed">
+                        <div class="activity-item">
+                            <div class="activity-avatar ai">🎨</div>
+                            <div class="activity-content">
+                                <div class="activity-text"><strong>Maya</strong> drafted the Q4 blog post — ready for your review!</div>
+                                <div class="activity-time">2 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-avatar human">👩</div>
+                            <div class="activity-content">
+                                <div class="activity-text"><strong>Sarah</strong> approved the headline, adding final touches ✨</div>
+                                <div class="activity-time">Just now</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="collaboration-badge">
+                        <span>✓</span> Human + AI collaboration
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust -->
+    <section class="trust-section">
+        <div class="trust-inner">
+            <div class="trust-label">Loved by teams at</div>
+            <div class="trust-logos">
+                <span class="trust-logo">Notion</span>
+                <span class="trust-logo">Figma</span>
+                <span class="trust-logo">Stripe</span>
+                <span class="trust-logo">Shopify</span>
+                <span class="trust-logo">Linear</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- What Is -->
+    <section class="what-is">
+        <div class="what-is-inner">
+            <div class="section-emoji">🤝</div>
+            <h2 class="section-title">AI that works with you, not instead of you</h2>
+            <p class="section-desc">iEnable isn't about replacing people — it's about giving every person on your team an AI partner. Maya writes first drafts. Marcus reviews code. Sofia handles tickets. Your team stays in control, but gets more done.</p>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="features-inner">
+            <div class="features-header">
+                <h2 class="section-title">How your team becomes unstoppable</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon voice">🎙️</div>
+                    <h3 class="feature-title">Voice Onboarding</h3>
+                    <p class="feature-desc">No forms or complicated setup. Just have a conversation with iEnable — tell us about your team, your work, your goals. We'll set everything up for you.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon specialists">🤖</div>
+                    <h3 class="feature-title">AI Teammates</h3>
+                    <p class="feature-desc">Meet Maya, Marcus, Sofia, and more. Each AI teammate has a specialty and personality. They learn your team's style and become true partners.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon dashboard">📊</div>
+                    <h3 class="feature-title">Team Dashboard</h3>
+                    <p class="feature-desc">See what everyone's working on — humans and AI alike. Celebrate wins, catch issues early, and keep your whole team aligned and happy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="how-it-works-inner">
+            <div class="features-header">
+                <h2 class="section-title">Start in 5 minutes, really</h2>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">Tell us about your team</h3>
+                        <p class="step-desc">Have a quick voice chat with iEnable. Tell us what your team does, what tools you use, and what takes up too much of your time.</p>
+                    </div>
+                    <div class="step-visual">
+                        <div class="voice-visual">
+                            <div class="voice-wave">
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                            </div>
+                            <div class="voice-text">"We're a marketing team of 5, and we spend way too much time on first drafts..."</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="step reverse">
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">Meet your AI teammates</h3>
+                        <p class="step-desc">Based on your conversation, we'll introduce you to the AI teammates that can help most. They're already learning your team's preferences.</p>
+                    </div>
+                    <div class="step-visual">
+                        <div style="display: flex; gap: 16px; justify-content: center;">
+                            <div style="text-align: center;">
+                                <div style="width: 64px; height: 64px; border-radius: 16px; background: linear-gradient(135deg, var(--coral) 0%, var(--purple) 100%); display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 8px;">🎨</div>
+                                <div style="font-weight: 600; font-size: 14px;">Maya</div>
+                                <div style="font-size: 12px; color: var(--text-muted);">Content</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="width: 64px; height: 64px; border-radius: 16px; background: linear-gradient(135deg, var(--teal) 0%, var(--purple) 100%); display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 8px;">📞</div>
+                                <div style="font-weight: 600; font-size: 14px;">Sofia</div>
+                                <div style="font-size: 12px; color: var(--text-muted);">Support</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">Work better together</h3>
+                        <p class="step-desc">Your AI teammates start helping immediately. They handle the repetitive stuff. You stay in control. Everyone wins.</p>
+                    </div>
+                    <div class="step-visual">
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="font-size: 48px; margin-bottom: 12px;">🎉</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">5x more done</div>
+                            <div style="font-size: 14px; color: var(--text-muted);">Same team, same hours</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="social-proof" id="stories">
+        <div class="social-proof-inner">
+            <div class="features-header">
+                <h2 class="section-title">Real teams, real stories</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-emoji">💜</div>
+                    <p class="testimonial-text">"My team was skeptical at first — 'AI can't do what we do.' But Maya doesn't replace us. She handles the grunt work so we can be more creative. We're happier AND more productive."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar pink">👩</div>
+                        <div>
+                            <div class="author-name">Sarah Chen</div>
+                            <div class="author-role">Marketing Lead</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-emoji">🚀</div>
+                    <p class="testimonial-text">"The voice onboarding blew me away. I just talked about our challenges for 5 minutes, and iEnable understood exactly what we needed. No tech setup, no learning curve."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar green">👨</div>
+                        <div>
+                            <div class="author-name">James Park</div>
+                            <div class="author-role">Startup Founder</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-emoji">🤝</div>
+                    <p class="testimonial-text">"It really does feel like having extra teammates. Sofia handles routine tickets overnight, and my support team wakes up to just the complex stuff that needs human judgment."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar purple">👩</div>
+                        <div>
+                            <div class="author-name">Maria Rodriguez</div>
+                            <div class="author-role">Support Manager</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-inner">
+            <div class="cta-emoji">✨</div>
+            <h2 class="cta-title">Ready to supercharge your team?</h2>
+            <p class="cta-desc">Start free, no credit card required. Your AI teammates are ready to meet you.</p>
+            <a href="#start" class="cta-button">
+                Meet Your AI Team
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <span class="logo-icon">✨</span>
+                        iEnable
+                    </a>
+                    <p class="footer-desc">AI teammates for your team. Work better together, achieve more, stay human.</p>
+                </div>
+                <div>
+                    <div class="footer-title">Product</div>
+                    <ul class="footer-links">
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Integrations</a></li>
+                        <li><a href="#">Updates</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="footer-title">Resources</div>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Templates</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="footer-title">Company</div>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Press Kit</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 iEnable. Made with 💜 for teams everywhere.</span>
+                <span>
+                    <a href="#">Privacy</a> · 
+                    <a href="#">Terms</a> · 
+                    <a href="#">Cookies</a>
+                </span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

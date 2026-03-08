@@ -1,0 +1,17 @@
+{
+  "iterations": [
+    {
+      "n": 1,
+      "final": 14962,
+      "return_pct": 49.6,
+      "avg_weekly": 0.87,
+      "trades": 22,
+      "win_rate": 77,
+      "max_dd": 13.8,
+      "green_days": null,
+      "streak": null,
+      "strategy": "2025 Iteration 1 - SPY calls, conservative sizing",
+      "learnings": null
+    }
+  ]
+}

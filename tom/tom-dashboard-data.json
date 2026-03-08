@@ -1,0 +1,212 @@
+{
+  "account": {
+    "id": "U24675952",
+    "balance": 881.42,
+    "cash": 99.5,
+    "buying_power": 99.5,
+    "unrealized_pnl": -37.21,
+    "realized_pnl": -81.37,
+    "day_pnl": -118.58000000000001
+  },
+  "positions": [
+    {
+      "symbol": "PLTR",
+      "sec_type": "STK",
+      "position": 2.0,
+      "avg_cost": 146.0088,
+      "strike": 0.0,
+      "right": "",
+      "expiry": ""
+    },
+    {
+      "symbol": "HAL",
+      "sec_type": "STK",
+      "position": 6.0,
+      "avg_cost": 35.54166665,
+      "strike": 0.0,
+      "right": "",
+      "expiry": ""
+    },
+    {
+      "symbol": "OXY",
+      "sec_type": "STK",
+      "position": 4.0,
+      "avg_cost": 55.03,
+      "strike": 0.0,
+      "right": "",
+      "expiry": ""
+    },
+    {
+      "symbol": "SPY",
+      "sec_type": "OPT",
+      "position": 1.0,
+      "avg_cost": 93.74295,
+      "strike": 650.0,
+      "right": "P",
+      "expiry": "20260306"
+    }
+  ],
+  "orders": [
+    {
+      "symbol": "OXY",
+      "action": "SELL",
+      "qty": 4,
+      "price": 51.03,
+      "type": "STP",
+      "status": "PreSubmitted"
+    },
+    {
+      "symbol": "HAL",
+      "action": "SELL",
+      "qty": 6,
+      "price": 33.03,
+      "type": "STP",
+      "status": "PreSubmitted"
+    }
+  ],
+  "fills": [
+    {
+      "symbol": "COIN",
+      "side": "SLD",
+      "qty": 2,
+      "price": 175.03,
+      "time": "2026-03-03 14:47:21+00:00",
+      "commission": 1.00039
+    },
+    {
+      "symbol": "MARA",
+      "side": "SLD",
+      "qty": 24,
+      "price": 8.702,
+      "time": "2026-03-03 15:22:20+00:00",
+      "commission": 1.00468
+    },
+    {
+      "symbol": "MARA",
+      "side": "SLD",
+      "qty": 6,
+      "price": 8.7028,
+      "time": "2026-03-03 15:22:20+00:00",
+      "commission": 0.00117
+    },
+    {
+      "symbol": "OXY",
+      "side": "BOT",
+      "qty": 4,
+      "price": 54.78,
+      "time": "2026-03-03 16:09:38+00:00",
+      "commission": 1.0
+    },
+    {
+      "symbol": "HAL",
+      "side": "BOT",
+      "qty": 6,
+      "price": 35.375,
+      "time": "2026-03-03 16:09:41+00:00",
+      "commission": 1.0
+    },
+    {
+      "symbol": "SPY",
+      "side": "BOT",
+      "qty": 1,
+      "price": 0.95,
+      "time": "2026-03-03 17:13:12+00:00",
+      "commission": 1.43795
+    },
+    {
+      "symbol": "SPY",
+      "side": "BOT",
+      "qty": 1,
+      "price": 0.9,
+      "time": "2026-03-03 17:15:59+00:00",
+      "commission": 1.04795
+    },
+    {
+      "symbol": "SPY",
+      "side": "SLD",
+      "qty": 1,
+      "price": 0.65,
+      "time": "2026-03-03 19:34:43+00:00",
+      "commission": 0.86124
+    }
+  ],
+  "predictions": [],
+  "daily_calendar": {
+    "2026-03-02": {
+      "type": "gray",
+      "pnl": 0.0
+    },
+    "2026-03-03": {
+      "type": "red",
+      "pnl": -114.35000000000002
+    }
+  },
+  "milestones": [
+    {
+      "target": 25000.0,
+      "target_date": "2026-06-02",
+      "status": "pending",
+      "shift": "PDT cleared. Unlock SPX options. Expand options universe."
+    },
+    {
+      "target": 50000.0,
+      "target_date": "2026-07-02",
+      "status": "pending",
+      "shift": "LEAPS viable on expensive stocks. Add LEAPS layer."
+    },
+    {
+      "target": 100000.0,
+      "target_date": "2026-08-02",
+      "status": "pending",
+      "shift": "Portfolio mode. 3-5 active LEAPS + IC income floor."
+    },
+    {
+      "target": 250000.0,
+      "target_date": "2026-10-02",
+      "status": "pending",
+      "shift": "Diversification mandatory. No position >15%."
+    },
+    {
+      "target": 500000.0,
+      "target_date": "2026-12-02",
+      "status": "pending",
+      "shift": "Capital preservation. Tighter stops. Lower leverage."
+    },
+    {
+      "target": 1000000.0,
+      "target_date": "2027-03-02",
+      "status": "pending",
+      "shift": "MISSION ACCOMPLISHED."
+    }
+  ],
+  "stats": {
+    "total_trades": 6,
+    "wins": 0,
+    "losses": 5,
+    "win_rate": 0.0,
+    "avg_winner": null,
+    "avg_loser": -26.56
+  },
+  "last_sync": "2026-03-03T16:53:31.480572",
+  "charts": [
+    "charts/LMT-daily-annotated-2026-03-02.png",
+    "charts/LMT-weekly-annotated-2026-03-02.png",
+    "charts/RTX-daily-annotated-2026-03-02.png",
+    "charts/XOM-daily-annotated-2026-03-02.png"
+  ],
+  "today_plan": {
+    "primary": "LMT $720-730C Mar 6",
+    "entry_window": "9:45-10:15 AM",
+    "max_spend": 750,
+    "stop": "-40% premium",
+    "targets": [
+      "+100% sell 40%",
+      "+200% sell 40%",
+      "+300% trail"
+    ],
+    "backups": [
+      "RTX $220-225C Mar 7",
+      "XOM $165C Mar 7"
+    ]
+  }
+}

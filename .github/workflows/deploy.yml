@@ -1,0 +1,25 @@
+name: Deploy to GoDaddy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          server: eborro.com
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          server-dir: /public_html/ienable.ai/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            README.md
+            error_log

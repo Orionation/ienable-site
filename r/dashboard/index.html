@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Agent Dashboard - iEnable.ai</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .dashboard-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .cards-wrapper {
+            display: flex;
+            height: 100vh;
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            touch-action: pan-y;
+        }
+
+        .card {
+            min-width: 100vw;
+            height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .card-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+        }
+
+        /* Overview Grid */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .agent-tile {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .agent-tile:active {
+            transform: scale(0.95);
+        }
+
+        .agent-tile .emoji {
+            font-size: 48px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .agent-tile .name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .agent-tile .grade-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        /* Status Dots */
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            position: absolute;
+            top: 12px;
+            right: 12px;
+        }
+
+        .status-dot.working {
+            background: #48bb78;
+            animation: pulse-green 2s infinite;
+        }
+
+        .status-dot.idle {
+            background: #a0aec0;
+        }
+
+        .status-dot.stale {
+            background: #ed8936;
+            animation: pulse-amber 3s infinite;
+        }
+
+        .status-dot.error {
+            background: #f56565;
+        }
+
+        @keyframes pulse-green {
+            0%, 100% { 
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.7);
+            }
+            50% { 
+                opacity: 0.8;
+                box-shadow: 0 0 0 8px rgba(72, 187, 120, 0);
+            }
+        }
+
+        @keyframes pulse-amber {
+            0%, 100% { 
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(237, 137, 54, 0.7);
+            }
+            50% { 
+                opacity: 0.7;
+                box-shadow: 0 0 0 8px rgba(237, 137, 54, 0);
+            }
+        }
+
+        /* Summary Bar */
+        .summary-bar {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 16px;
+            text-align: center;
+            color: #2d3748;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Individual Agent Card */
+        .agent-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .agent-header .emoji {
+            font-size: 56px;
+            margin-right: 16px;
+        }
+
+        .agent-header .info {
+            flex: 1;
+        }
+
+        .agent-header .name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+
+        .agent-header .role {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 8px;
+        }
+
+        .agent-header .grade-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .agent-header .status-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Section Headers */
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-header .toggle {
+            cursor: pointer;
+            user-select: none;
+            color: #667eea;
+            font-size: 14px;
+        }
+
+        /* Current Activity */
+        .current-activity {
+            background: linear-gradient(135deg, #e0e7ff 0%, #cffafe 100%);
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        .current-activity.idle {
+            background: #f7fafc;
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        /* Task List */
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            background: #f7fafc;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            transition: background 0.2s;
+        }
+
+        .task-item:hover {
+            background: #edf2f7;
+        }
+
+        .task-icon {
+            font-size: 18px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-name {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+
+        .task-detail {
+            font-size: 13px;
+            color: #718096;
+            line-height: 1.5;
+        }
+
+        /* Deliverables */
+        .deliverable-item {
+            background: #f7fafc;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #2d3748;
+            line-height: 1.5;
+        }
+
+        .deliverable-item .time {
+            color: #a0aec0;
+            font-size: 12px;
+            display: block;
+            margin-top: 4px;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .stat-item {
+            background: #f7fafc;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Links */
+        .report-link {
+            display: block;
+            text-align: center;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-top: 16px;
+            transition: opacity 0.2s;
+        }
+
+        .report-link:active {
+            opacity: 0.8;
+        }
+
+        /* Last Updated */
+        .last-updated {
+            text-align: center;
+            color: #a0aec0;
+            font-size: 12px;
+            margin-top: 16px;
+        }
+
+        /* Navigation Dots */
+        .nav-dots {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-dot.active {
+            background: white;
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        /* Offline Badge */
+        .offline-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #f56565;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+            display: none;
+        }
+
+        .offline-badge.show {
+            display: block;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #a0aec0;
+        }
+
+        .loading-spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Collapsible Sections */
+        .collapsible-content {
+            max-height: 1000px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .collapsible-content.collapsed {
+            max-height: 0;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .card {
+                padding: 40px;
+            }
+
+            .card-content {
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .overview-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="offline-badge" id="offlineBadge">Offline</div>
+        
+        <div class="cards-wrapper" id="cardsWrapper">
+            <!-- Cards will be dynamically generated -->
+        </div>
+
+        <div class="nav-dots" id="navDots">
+            <!-- Dots will be dynamically generated -->
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_BASE = 'https://ienable-admin-app-hqtw2.ondigitalocean.app/api/v1';
+        const AGENTS = [
+            { id: 'orion', name: 'Orion', emoji: '🌟', slug: 'orion' },
+            { id: 'tom', name: 'Tom', emoji: '📈', slug: 'tom' },
+            { id: 'adaline', name: 'Adaline', emoji: '📢', slug: 'adaline' },
+            { id: 'apollo', name: 'Apollo', emoji: '✍️', slug: 'apollo' },
+            { id: 'muse', name: 'Muse', emoji: '🎨', slug: 'muse' },
+            { id: 'ienable', name: 'iEnable', emoji: '🤖', slug: 'ienable' }
+        ];
+
+        // State
+        let currentCard = 0;
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+        let agentData = {};
+        let tasksData = {};
+        let deliverablesData = {};
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            setupNavigation();
+            loadData();
+            setInterval(loadData, 60000); // Refresh every 60 seconds
+        });
+
+        // API Functions
+        async function loadData() {
+            try {
+                // Fetch all data in parallel
+                const [statusResponse, tasksResponse] = await Promise.all([
+                    fetch(`${API_BASE}/agent-status`),
+                    fetch(`${API_BASE}/agent-tasks/active`)
+                ]);
+
+                if (!statusResponse.ok || !tasksResponse.ok) {
+                    throw new Error('API request failed');
+                }
+
+                const statusData = await statusResponse.json();
+                const allTasks = await tasksResponse.json();
+
+                // Process agent status data
+                agentData = {};
+                statusData.forEach(agent => {
+                    agentData[agent.agent.toLowerCase()] = agent;
+                });
+
+                // Group tasks by agent
+                tasksData = {};
+                allTasks.forEach(task => {
+                    const agentKey = task.agent.toLowerCase();
+                    if (!tasksData[agentKey]) {
+                        tasksData[agentKey] = [];
+                    }
+                    tasksData[agentKey].push(task);
+                });
+
+                // Fetch deliverables for each agent
+                const deliverablePromises = AGENTS.map(agent =>
+                    fetch(`${API_BASE}/agent-deliverables?agent=${agent.id}&hours=24`)
+                        .then(r => r.json())
+                        .then(data => ({ agent: agent.id, deliverables: data }))
+                        .catch(() => ({ agent: agent.id, deliverables: [] }))
+                );
+
+                const deliverableResults = await Promise.all(deliverablePromises);
+                deliverablesData = {};
+                deliverableResults.forEach(result => {
+                    deliverablesData[result.agent] = result.deliverables;
+                });
+
+                hideOfflineBadge();
+                renderCards();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showOfflineBadge();
+            }
+        }
+
+        function showOfflineBadge() {
+            document.getElementById('offlineBadge').classList.add('show');
+        }
+
+        function hideOfflineBadge() {
+            document.getElementById('offlineBadge').classList.remove('show');
+        }
+
+        // Rendering Functions
+        function renderCards() {
+            const wrapper = document.getElementById('cardsWrapper');
+            wrapper.innerHTML = '';
+
+            // Card 1: Overview
+            wrapper.appendChild(createOverviewCard());
+
+            // Cards 2-7: Individual agents
+            AGENTS.forEach(agent => {
+                wrapper.appendChild(createAgentCard(agent));
+            });
+
+            updateNavDots();
+        }
+
+        function createOverviewCard() {
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            const content = document.createElement('div');
+            content.className = 'card-content';
+
+            // Header
+            const header = document.createElement('div');
+            header.style.textAlign = 'center';
+            header.style.marginBottom = '24px';
+            header.innerHTML = '<h1 style="font-size: 32px; font-weight: 700; color: #2d3748; margin-bottom: 8px;">Agent Dashboard</h1>';
+            header.innerHTML += '<p style="color: #718096; font-size: 14px;">Live status across all agents</p>';
+            content.appendChild(header);
+
+            // Grid
+            const grid = document.createElement('div');
+            grid.className = 'overview-grid';
+
+            AGENTS.forEach((agent, index) => {
+                const data = agentData[agent.id] || {};
+                const status = determineStatus(data);
+
+                const tile = document.createElement('div');
+                tile.className = 'agent-tile';
+                tile.onclick = () => goToCard(index + 1);
+
+                const statusDot = document.createElement('div');
+                statusDot.className = `status-dot ${status}`;
+                tile.appendChild(statusDot);
+
+                tile.innerHTML += `
+                    <span class="emoji">${agent.emoji}</span>
+                    <div class="name">${agent.name}</div>
+                    <div class="grade-badge">${data.grade || 'N/A'}</div>
+                `;
+
+                grid.appendChild(tile);
+            });
+
+            content.appendChild(grid);
+
+            // Summary
+            const summary = calculateSummary();
+            const summaryBar = document.createElement('div');
+            summaryBar.className = 'summary-bar';
+            summaryBar.textContent = `${summary.working} working, ${summary.idle} idle, ${summary.stale} stale`;
+            content.appendChild(summaryBar);
+
+            // Last updated
+            const lastUpdated = document.createElement('div');
+            lastUpdated.className = 'last-updated';
+            lastUpdated.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+            content.appendChild(lastUpdated);
+
+            card.appendChild(content);
+            return card;
+        }
+
+        function createAgentCard(agent) {
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            const content = document.createElement('div');
+            content.className = 'card-content';
+
+            const data = agentData[agent.id] || {};
+            const status = determineStatus(data);
+            const tasks = tasksData[agent.id] || [];
+            const deliverables = deliverablesData[agent.id] || [];
+
+            // Header
+            const header = document.createElement('div');
+            header.className = 'agent-header';
+            header.innerHTML = `
+                <span class="emoji">${agent.emoji}</span>
+                <div class="info">
+                    <div class="name">${agent.name}</div>
+                    <div class="role">${data.role || 'Agent'}</div>
+                    <div class="grade-badge">${data.grade || 'N/A'}</div>
+                </div>
+                <div class="status-dot ${status}"></div>
+            `;
+            content.appendChild(header);
+
+            // Current Activity
+            const activitySection = document.createElement('div');
+            activitySection.className = 'section';
+            activitySection.innerHTML = '<div class="section-header">Current Activity</div>';
+            
+            const activity = document.createElement('div');
+            activity.className = `current-activity ${data.current_task ? '' : 'idle'}`;
+            activity.textContent = data.current_task || 'Idle';
+            activitySection.appendChild(activity);
+            content.appendChild(activitySection);
+
+            // Tasks
+            const tasksSection = document.createElement('div');
+            tasksSection.className = 'section';
+            tasksSection.innerHTML = `<div class="section-header">Tasks (${tasks.length})</div>`;
+            
+            if (tasks.length > 0) {
+                const taskList = document.createElement('ul');
+                taskList.className = 'task-list';
+                
+                tasks.forEach(task => {
+                    const taskItem = document.createElement('li');
+                    taskItem.className = 'task-item';
+                    taskItem.innerHTML = `
+                        <span class="task-icon">${getTaskIcon(task.status)}</span>
+                        <div class="task-content">
+                            <div class="task-name">${task.name || 'Unnamed task'}</div>
+                            <div class="task-detail">${task.description || ''}</div>
+                        </div>
+                    `;
+                    taskList.appendChild(taskItem);
+                });
+                
+                tasksSection.appendChild(taskList);
+            } else {
+                tasksSection.innerHTML += '<p style="color: #a0aec0; font-style: italic;">No active tasks</p>';
+            }
+            content.appendChild(tasksSection);
+
+            // Deliverables (collapsible)
+            if (deliverables.length > 0) {
+                const deliverablesSection = document.createElement('div');
+                deliverablesSection.className = 'section';
+                
+                const deliverableId = `deliverables-${agent.id}`;
+                deliverablesSection.innerHTML = `
+                    <div class="section-header">
+                        <span>Recent Deliverables (${deliverables.length})</span>
+                        <span class="toggle" onclick="toggleSection('${deliverableId}')">Show</span>
+                    </div>
+                `;
+                
+                const deliverableContent = document.createElement('div');
+                deliverableContent.id = deliverableId;
+                deliverableContent.className = 'collapsible-content collapsed';
+                
+                deliverables.slice(0, 5).forEach(deliverable => {
+                    const item = document.createElement('div');
+                    item.className = 'deliverable-item';
+                    item.innerHTML = `
+                        ${deliverable.description || deliverable.title || 'Deliverable'}
+                        <span class="time">${formatTime(deliverable.created_at)}</span>
+                    `;
+                    deliverableContent.appendChild(item);
+                });
+                
+                deliverablesSection.appendChild(deliverableContent);
+                content.appendChild(deliverablesSection);
+            }
+
+            // Stats
+            const stats = parseStats(data.stats_json);
+            if (stats && Object.keys(stats).length > 0) {
+                const statsSection = document.createElement('div');
+                statsSection.className = 'section';
+                statsSection.innerHTML = '<div class="section-header">Key Stats</div>';
+                
+                const statsGrid = document.createElement('div');
+                statsGrid.className = 'stats-grid';
+                
+                Object.entries(stats).slice(0, 4).forEach(([key, value]) => {
+                    const statItem = document.createElement('div');
+                    statItem.className = 'stat-item';
+                    statItem.innerHTML = `
+                        <div class="stat-value">${value}</div>
+                        <div class="stat-label">${key}</div>
+                    `;
+                    statsGrid.appendChild(statItem);
+                });
+                
+                statsSection.appendChild(statsGrid);
+                content.appendChild(statsSection);
+            }
+
+            // Report link
+            const reportLink = document.createElement('a');
+            reportLink.className = 'report-link';
+            reportLink.href = `/r/${agent.slug}/`;
+            reportLink.textContent = 'View Full Report Card';
+            content.appendChild(reportLink);
+
+            // Last updated
+            const lastUpdated = document.createElement('div');
+            lastUpdated.className = 'last-updated';
+            lastUpdated.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+            content.appendChild(lastUpdated);
+
+            card.appendChild(content);
+            return card;
+        }
+
+        // Helper Functions
+        function determineStatus(data) {
+            if (!data || !data.last_active) return 'idle';
+            
+            const lastActive = new Date(data.last_active);
+            const now = new Date();
+            const minutesSinceActive = (now - lastActive) / 1000 / 60;
+
+            if (data.status === 'error') return 'error';
+            if (minutesSinceActive > 30) return 'stale';
+            if (data.status === 'working' || data.current_task) return 'working';
+            return 'idle';
+        }
+
+        function calculateSummary() {
+            const summary = { working: 0, idle: 0, stale: 0 };
+            AGENTS.forEach(agent => {
+                const status = determineStatus(agentData[agent.id]);
+                if (status === 'working') summary.working++;
+                else if (status === 'stale') summary.stale++;
+                else summary.idle++;
+            });
+            return summary;
+        }
+
+        function getTaskIcon(status) {
+            const icons = {
+                'queued': '⏳',
+                'working': '🔄',
+                'in_progress': '🔄',
+                'complete': '✅',
+                'completed': '✅',
+                'failed': '❌',
+                'error': '❌'
+            };
+            return icons[status?.toLowerCase()] || '⏳';
+        }
+
+        function parseStats(statsJson) {
+            if (!statsJson) return {};
+            try {
+                return typeof statsJson === 'string' ? JSON.parse(statsJson) : statsJson;
+            } catch {
+                return {};
+            }
+        }
+
+        function formatTime(timestamp) {
+            if (!timestamp) return '';
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diffMinutes = Math.floor((now - date) / 1000 / 60);
+            
+            if (diffMinutes < 60) return `${diffMinutes}m ago`;
+            if (diffMinutes < 1440) return `${Math.floor(diffMinutes / 60)}h ago`;
+            return date.toLocaleDateString();
+        }
+
+        function toggleSection(id) {
+            const element = document.getElementById(id);
+            const toggle = element.previousElementSibling.querySelector('.toggle');
+            
+            if (element.classList.contains('collapsed')) {
+                element.classList.remove('collapsed');
+                toggle.textContent = 'Hide';
+            } else {
+                element.classList.add('collapsed');
+                toggle.textContent = 'Show';
+            }
+        }
+
+        // Navigation
+        function setupNavigation() {
+            const wrapper = document.getElementById('cardsWrapper');
+
+            // Touch events
+            wrapper.addEventListener('touchstart', handleTouchStart, { passive: true });
+            wrapper.addEventListener('touchmove', handleTouchMove, { passive: false });
+            wrapper.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+            // Keyboard events
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') navigateLeft();
+                if (e.key === 'ArrowRight') navigateRight();
+            });
+        }
+
+        function handleTouchStart(e) {
+            startX = e.touches[0].clientX;
+            currentX = startX;
+            isDragging = true;
+        }
+
+        function handleTouchMove(e) {
+            if (!isDragging) return;
+            
+            currentX = e.touches[0].clientX;
+            const diff = currentX - startX;
+            const wrapper = document.getElementById('cardsWrapper');
+            
+            // Apply resistance at boundaries
+            if ((currentCard === 0 && diff > 0) || (currentCard === AGENTS.length && diff < 0)) {
+                return;
+            }
+            
+            e.preventDefault();
+            const translateX = -currentCard * 100 + (diff / window.innerWidth) * 100;
+            wrapper.style.transform = `translateX(${translateX}vw)`;
+        }
+
+        function handleTouchEnd() {
+            if (!isDragging) return;
+            isDragging = false;
+            
+            const diff = currentX - startX;
+            const threshold = window.innerWidth * 0.2;
+            
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0) navigateLeft();
+                else navigateRight();
+            } else {
+                goToCard(currentCard);
+            }
+        }
+
+        function navigateLeft() {
+            if (currentCard > 0) goToCard(currentCard - 1);
+        }
+
+        function navigateRight() {
+            if (currentCard < AGENTS.length) goToCard(currentCard + 1);
+        }
+
+        function goToCard(index) {
+            currentCard = index;
+            const wrapper = document.getElementById('cardsWrapper');
+            wrapper.style.transform = `translateX(-${currentCard * 100}vw)`;
+            updateNavDots();
+        }
+
+        function updateNavDots() {
+            const dotsContainer = document.getElementById('navDots');
+            dotsContainer.innerHTML = '';
+            
+            for (let i = 0; i <= AGENTS.length; i++) {
+                const dot = document.createElement('div');
+                dot.className = `nav-dot ${i === currentCard ? 'active' : ''}`;
+                dot.onclick = () => goToCard(i);
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        // Make toggleSection global
+        window.toggleSection = toggleSection;
+    </script>
+</body>
+</html>

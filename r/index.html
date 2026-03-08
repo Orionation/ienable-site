@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Agent Report Cards</title>
+<style>
+  :root {
+    --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+    --gray-300: #d1d5db; --gray-400: #9ca3af; --gray-500: #6b7280;
+    --gray-600: #4b5563; --gray-700: #374151; --gray-800: #1f2937; --gray-900: #111827;
+    --green-50: #f0fdf4; --green-100: #dcfce7; --green-500: #22c55e; --green-600: #16a34a; --green-700: #15803d;
+    --blue-50: #eff6ff; --blue-100: #dbeafe; --blue-500: #3b82f6; --blue-600: #2563eb;
+    --amber-50: #fffbeb; --amber-100: #fef3c7; --amber-500: #f59e0b; --amber-600: #d97706;
+    --red-50: #fef2f2; --red-100: #fee2e2; --red-500: #ef4444; --red-600: #dc2626;
+    --purple-50: #faf5ff; --purple-500: #8b5cf6; --purple-600: #7c3aed;
+    --pink-50: #fdf2f8; --pink-500: #ec4899; --pink-600: #db2777;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+    background: var(--gray-100);
+    color: var(--gray-800);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .header {
+    text-align: center;
+    padding: 20px 16px 12px;
+    background: white;
+    border-bottom: 1px solid var(--gray-200);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .header-date {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--gray-400);
+  }
+
+  .header-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--gray-900);
+    margin-top: 2px;
+  }
+
+  .header-subtitle {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-top: 2px;
+  }
+
+  /* Swipe container */
+  .cards-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px;
+    gap: 12px;
+    scrollbar-width: none;
+  }
+
+  .cards-container::-webkit-scrollbar { display: none; }
+
+  /* Dots indicator */
+  .dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 0 16px;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gray-300);
+    transition: all 0.2s ease;
+  }
+
+  .dot.active {
+    background: var(--gray-800);
+    width: 20px;
+    border-radius: 4px;
+  }
+
+  /* Agent Card */
+  .agent-card {
+    flex: 0 0 calc(100vw - 40px);
+    max-width: 400px;
+    scroll-snap-align: center;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .agent-header {
+    padding: 20px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .agent-header::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: -20px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .agent-emoji {
+    font-size: 36px;
+    margin-bottom: 8px;
+  }
+
+  .agent-name {
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  .agent-role {
+    font-size: 12px;
+    opacity: 0.8;
+    font-weight: 500;
+  }
+
+  .agent-grade {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 800;
+    backdrop-filter: blur(4px);
+    border: 2px solid rgba(255,255,255,0.3);
+  }
+
+  /* Stats row */
+  .agent-stats {
+    display: flex;
+    padding: 12px 20px;
+    gap: 8px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .stat {
+    flex: 1;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--gray-800);
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--gray-400);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  /* Accomplishments */
+  .agent-body {
+    padding: 16px 20px;
+  }
+
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--gray-400);
+    margin-bottom: 8px;
+  }
+
+  .accomplishment {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+
+  .accomplishment:last-child { margin-bottom: 0; }
+
+  .acc-icon {
+    font-size: 14px;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  .acc-text {
+    font-size: 13px;
+    color: var(--gray-600);
+    line-height: 1.5;
+  }
+
+  .acc-text strong {
+    color: var(--gray-800);
+  }
+
+  /* Key finding callout */
+  .key-finding {
+    background: var(--green-50);
+    border: 1px solid var(--green-100);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 12px;
+  }
+
+  .key-finding.warning {
+    background: var(--amber-50);
+    border-color: var(--amber-100);
+  }
+
+  .key-finding-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--green-600);
+    margin-bottom: 4px;
+  }
+
+  .key-finding.warning .key-finding-label {
+    color: var(--amber-600);
+  }
+
+  .key-finding-text {
+    font-size: 13px;
+    color: var(--gray-700);
+    line-height: 1.5;
+  }
+
+  /* Summary card (first card) */
+  .summary-body {
+    padding: 16px 20px 20px;
+  }
+
+  .summary-agent-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .summary-agent-row:last-child { border-bottom: none; }
+
+  .summary-agent-emoji {
+    font-size: 20px;
+    width: 32px;
+    text-align: center;
+  }
+
+  .summary-agent-info {
+    flex: 1;
+  }
+
+  .summary-agent-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gray-800);
+  }
+
+  .summary-agent-headline {
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+
+  .summary-agent-grade {
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .summary-status-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .summary-status-dot.working {
+    background: #22c55e;
+    animation: pulse-dot 2s infinite;
+  }
+  .summary-status-dot.sleeping, .summary-status-dot.idle {
+    background: #9ca3af;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
+    50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+  }
+  .summary-current-task {
+    font-size: 11px;
+    color: #059669;
+    font-style: italic;
+    margin-top: 1px;
+  }
+
+  /* Bottom status */
+  .agent-footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--gray-100);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .status-text {
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+  /* Collapsible Sections - Next Steps & Todo */
+  .collapsible-section {
+    margin: 0 16px 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .collapsible-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    background: #f9fafb;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    font-size: 14px;
+    font-weight: 700;
+    color: #374151;
+  }
+  .collapsible-header:active { background: #f3f4f6; }
+  .collapsible-arrow {
+    font-size: 11px;
+    color: #9ca3af;
+    transition: transform 0.25s;
+  }
+  .collapsible-section.open .collapsible-arrow { transform: rotate(180deg); }
+  .collapsible-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .collapsible-section.open .collapsible-body {
+    max-height: 2000px;
+  }
+  .collapsible-loading {
+    padding: 14px;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 13px;
+  }
+  /* Next Steps items */
+  .ns-item {
+    padding: 10px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .ns-item:last-child { border-bottom: none; }
+  .ns-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .ns-text { font-size: 13px; color: #374151; line-height: 1.4; }
+  .ns-empty { padding: 14px; color: #9ca3af; font-size: 13px; text-align: center; }
+  .master-agent-label {
+    font-size: 13px; font-weight: 700; color: #374151;
+    padding: 12px 14px 4px; border-top: 1px solid #e5e7eb;
+  }
+  .master-agent-label:first-child { border-top: none; }
+  /* Todo items */
+  .todo-progress { height: 4px; background: #e5e7eb; border-radius: 2px; margin: 10px 14px 8px; overflow: hidden; }
+  .todo-progress-fill { height: 100%; background: linear-gradient(90deg, #10b981, #059669); border-radius: 2px; transition: width 0.5s; }
+  .todo-group { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #6b7280; padding: 8px 14px 4px; }
+  .todo-item {
+    padding: 8px 14px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: background 0.15s;
+  }
+  .todo-item:active { opacity: 0.85; }
+  .todo-item.s-working { border-left-color: #10b981; background: #f0fdf4; }
+  .todo-item.s-queued { border-left-color: #d1d5db; background: #f9fafb; }
+  .todo-item.s-complete { border-left-color: #86efac; background: #fafafa; }
+  .todo-item.s-failed { border-left-color: #ef4444; background: #fef2f2; }
+  .todo-item-row {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .todo-icon { font-size: 13px; flex-shrink: 0; }
+  .todo-name { flex: 1; font-size: 13px; font-weight: 600; color: #1f2937; line-height: 1.3; }
+  .todo-item.s-complete .todo-name { text-decoration: line-through; color: #9ca3af; }
+  .todo-chevron { font-size: 12px; color: #9ca3af; transition: transform 0.2s; }
+  .todo-item.detail-open .todo-chevron { transform: rotate(90deg); }
+  .todo-time { font-size: 11px; color: #6b7280; padding: 2px 0 0 25px; }
+  .todo-detail-box {
+    display: none;
+    margin: 6px 0 2px 25px;
+    padding: 8px 10px;
+    background: rgba(0,0,0,0.03);
+    border-radius: 8px;
+  }
+  .todo-item.detail-open .todo-detail-box { display: block; }
+  .todo-detail-text { font-size: 12px; color: #4b5563; line-height: 1.4; }
+  .todo-result-text { font-size: 11px; color: #059669; font-style: italic; margin-top: 4px; }
+  .todo-summary { text-align: center; font-size: 12px; font-weight: 600; color: #9ca3af; padding: 8px 0; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-date" id="headerDate"></div>
+  <div class="header-title">🎯 Agent Command Center</div>
+  <div class="header-subtitle">Live data · Auto-refreshes every 60s</div>
+</div>
+
+<div class="dots" id="dots"></div>
+
+<div class="cards-container" id="cards"></div>
+
+<script>
+const API = 'https://ienable-admin-app-hqtw2.ondigitalocean.app/api/v1';
+
+// Agent display config — colors only, everything else from API
+const AGENT_COLORS = {
+  adaline:  'linear-gradient(135deg, #7c3aed, #6366f1)',
+  muse:     'linear-gradient(135deg, #ec4899, #f43f5e)',
+  ienable:  'linear-gradient(135deg, #3b82f6, #2563eb)',
+  orion:    'linear-gradient(135deg, #1f2937, #374151)',
+  tom:      'linear-gradient(135deg, #059669, #10b981)',
+  apollo:   'linear-gradient(135deg, #f59e0b, #d97706)',
+};
+const AGENT_ORDER = ['adaline', 'tom', 'muse', 'apollo', 'ienable', 'orion'];
+// Override display names if API uses different ones
+const DISPLAY_NAMES = { ienable: 'Dev Team' };
+const REPORT_URLS = {};
+
+let reportCards = [];
+let agentStatuses = [];
+let allTasks = [];
+
+async function fetchAll() {
+  try {
+    const [rcRes, statusRes, tasksRes] = await Promise.all([
+      fetch(`${API}/report-cards/latest`),
+      fetch(`${API}/agent-status`),
+      fetch(`${API}/agent-tasks/active`)
+    ]);
+    const rcJson = await rcRes.json();
+    const statusJson = await statusRes.json();
+    const tasksJson = await tasksRes.json();
+    reportCards = rcJson.data || rcJson || [];
+    agentStatuses = statusJson.data || statusJson || [];
+    allTasks = tasksJson.data || tasksJson || [];
+    renderAll();
+  } catch(e) {
+    console.error('Fetch failed:', e);
+    document.getElementById('cards').innerHTML = '<div style="padding:40px;text-align:center;color:#666;">Failed to load — pull to refresh</div>';
+  }
+}
+
+function getRC(key) {
+  return reportCards.find(r => (r.agent_name||'').toLowerCase() === key || (r.agent||'').toLowerCase() === key) || {};
+}
+function getStatus(key) {
+  return agentStatuses.find(a => (a.agent||'').toLowerCase() === key) || {};
+}
+function getTasks(key) {
+  return allTasks.filter(t => t.agent.toLowerCase() === key);
+}
+
+// Defensive data normalization helpers
+function normalizePlan(plan) {
+  if (Array.isArray(plan)) return plan;
+  if (typeof plan === 'string') {
+    // Split by newline if it contains newlines, otherwise wrap in array
+    return plan.includes('\n') ? plan.split('\n').filter(s => s.trim()) : [plan];
+  }
+  return [];
+}
+
+function normalizeStats(stats) {
+  if (Array.isArray(stats)) return stats;
+  if (stats && typeof stats === 'object') {
+    // Convert object to array format
+    return Object.entries(stats)
+      .filter(([k, v]) => k !== 'created_at' && k !== 'updated_at' && k !== 'id' && k !== 'agent_name' && k !== 'company_id' && k !== 'date')
+      .map(([k, v]) => ({
+        label: k.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        value: String(v)
+      }))
+      .slice(0, 4); // Limit to 4 stats for display
+  }
+  return [];
+}
+
+// Extract text from accomplishment (string or object format)
+function getAccomplishmentText(a) {
+  if (!a) return '';
+  if (typeof a === 'string') return a;
+  if (typeof a === 'object') return a.text || a.name || JSON.stringify(a);
+  return String(a || '');
+}
+
+// Extract icon from accomplishment (object format only)
+function getAccomplishmentIcon(a) {
+  if (!a) return '•';
+  if (typeof a === 'object' && a.icon) return a.icon;
+  return '•';
+}
+
+function renderAll() {
+  try {
+  const container = document.getElementById('cards');
+  container.innerHTML = '';
+
+  // Update header date
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  document.querySelector('.header-date').textContent = dateStr;
+
+  // Card 1: Summary
+  container.innerHTML += renderSummaryCard();
+
+  // Agent cards
+  AGENT_ORDER.forEach(key => {
+    container.innerHTML += renderAgentCard(key);
+  });
+
+  renderDots();
+
+  // Scroll listener for dots
+  container.addEventListener('scroll', () => {
+    const cardWidth = container.firstElementChild.offsetWidth + 12;
+    const activeIndex = Math.round(container.scrollLeft / cardWidth);
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === activeIndex);
+    });
+  });
+  } catch (err) {
+    console.error('Render error:', err);
+    document.getElementById('cards').innerHTML = '<div style="padding:40px;text-align:center;color:#ef4444;">Render error: ' + err.message + '<br><small>Check console for details</small></div>';
+  }
+}
+
+function renderSummaryCard() {
+  try {
+  const totalTasks = allTasks.length;
+  const doneTasks = allTasks.filter(t => t.status === 'complete').length;
+  const workingTasks = allTasks.filter(t => t.status === 'working').length;
+
+  const agentRows = AGENT_ORDER.map(key => {
+    const rc = getRC(key);
+    const st = getStatus(key);
+    const tasks = getTasks(key);
+    const status = st.status || 'sleeping';
+    const name = DISPLAY_NAMES[key] || rc.agent_name || key;
+    const emoji = rc.emoji || '•';
+    const grade = rc.grade || 'N/A';
+    const gradeColor = rc.grade_color || '#6b7280';
+    const currentTask = st.current_task;
+    const workingTask = tasks.find(t => t.status === 'working');
+    const taskLine = status === 'working' && (currentTask || workingTask)
+      ? `<div class="summary-current-task">▸ ${currentTask || workingTask.task_name}</div>`
+      : '';
+    const headline = rc.accomplishments && rc.accomplishments[0]
+      ? getAccomplishmentText(rc.accomplishments[0]).replace(/<[^>]*>/g, '').substring(0, 60) + '...'
+      : 'No report card data';
+
+    const rowUrl = REPORT_URLS[key] || `/r/${key}/`;
+    return `<div class="summary-agent-row" style="cursor:pointer;" onclick="window.location.href='${rowUrl}'">
+      <span class="summary-status-dot ${status}"></span>
+      <span class="summary-agent-emoji">${emoji}</span>
+      <div class="summary-agent-info">
+        <div class="summary-agent-name">${name}</div>
+        <div class="summary-agent-headline">${headline}</div>
+        ${taskLine}
+      </div>
+      <span class="summary-agent-grade" style="color:${gradeColor}">${grade}</span>
+    </div>`;
+  }).join('');
+
+  // Master Next Steps
+  let masterNS = '';
+  AGENT_ORDER.forEach(key => {
+    const rc = getRC(key);
+    const plan = normalizePlan(rc.tonight_plan);
+    if (plan.length > 0) {
+      const name = DISPLAY_NAMES[key] || rc.agent_name || key;
+      masterNS += `<div class="master-agent-label">${rc.emoji || '•'} ${name}</div>`;
+      masterNS += plan.map((s, idx) => `<div class="ns-item"><span class="ns-num">${idx+1}</span><span class="ns-text">${s}</span></div>`).join('');
+    }
+  });
+
+  // Master Todo
+  const masterTodoHtml = renderMasterTodo();
+
+  return `<div class="agent-card">
+    <div class="agent-header" style="background:linear-gradient(135deg, #111827, #1f2937)">
+      <div class="agent-emoji">📊</div>
+      <div class="agent-name">Team Summary</div>
+      <div class="agent-role">${doneTasks}/${totalTasks} tasks done · ${workingTasks} in progress</div>
+    </div>
+    <div class="summary-body">
+      <div class="section-title">Agent Status</div>
+      ${agentRows}
+    </div>
+
+    <div class="collapsible-section">
+      <div class="collapsible-header" onclick="this.parentElement.classList.toggle('open')">
+        <span>🚀 All Next Steps</span>
+        <span class="collapsible-arrow">▼</span>
+      </div>
+      <div class="collapsible-body">${masterNS || '<div class="ns-empty">No action plans yet</div>'}</div>
+    </div>
+
+    <div class="collapsible-section">
+      <div class="collapsible-header" onclick="this.parentElement.classList.toggle('open')">
+        <span>📋 All Todos (${doneTasks}/${totalTasks})</span>
+        <span class="collapsible-arrow">▼</span>
+      </div>
+      <div class="collapsible-body">${masterTodoHtml}</div>
+    </div>
+
+    <div class="agent-footer">
+      <div class="status-dot" style="background:#22c55e"></div>
+      <span class="status-text">Swipe → for individual cards · Auto-refreshes</span>
+    </div>
+  </div>`;
+  } catch (err) {
+    console.error('Summary card render error:', err);
+    return `<div class="agent-card"><div style="padding:40px;text-align:center;color:#ef4444;">Error rendering summary<br><small>${err.message}</small></div></div>`;
+  }
+}
+
+function renderMasterTodo() {
+  const working = allTasks.filter(t => t.status === 'working');
+  const queued = allTasks.filter(t => t.status === 'queued');
+  const complete = allTasks.filter(t => t.status === 'complete');
+  const failed = allTasks.filter(t => t.status === 'failed');
+  const doneCount = complete.length;
+  const totalCount = allTasks.length;
+  if (totalCount === 0) return '<div class="ns-empty">No tasks</div>';
+
+  let html = `<div class="todo-progress"><div class="todo-progress-fill" style="width:${(doneCount/totalCount)*100}%"></div></div>`;
+  if (working.length) html += `<div class="todo-group">🔄 In Progress (${working.length})</div>` + working.map(t => renderTodoItem(t, true)).join('');
+  if (queued.length) html += `<div class="todo-group">⏳ Up Next (${queued.length})</div>` + queued.map(t => renderTodoItem(t, true)).join('');
+  if (complete.length) html += `<div class="todo-group">✅ Done (${complete.length})</div>` + complete.map(t => renderTodoItem(t, true)).join('');
+  if (failed.length) html += `<div class="todo-group">❌ Failed (${failed.length})</div>` + failed.map(t => renderTodoItem(t, true)).join('');
+  html += `<div class="todo-summary">${doneCount} of ${totalCount} complete</div>`;
+  return html;
+}
+
+function renderAgentCard(key) {
+  try {
+  const rc = getRC(key);
+  const st = getStatus(key);
+  const tasks = getTasks(key);
+  const name = DISPLAY_NAMES[key] || rc.agent_name || key;
+  const emoji = rc.emoji || '•';
+  const role = rc.role || '';
+  const grade = rc.grade || 'N/A';
+  const gradeColor = rc.grade_color || '#6b7280';
+  const color = AGENT_COLORS[key] || 'linear-gradient(135deg, #667eea, #764ba2)';
+  const accomplishments = rc.accomplishments || [];
+  const keyFinding = rc.key_finding;
+  const plan = normalizePlan(rc.tonight_plan);
+  const stats = normalizeStats(rc.stats);
+
+  // Stats row
+  const statsHtml = stats.length > 0 ? `<div class="agent-stats">${stats.map(s => `
+    <div class="stat"><div class="stat-value">${s.value}</div><div class="stat-label">${s.label}</div></div>
+  `).join('')}</div>` : '';
+
+  // Accomplishments
+  const accsHtml = accomplishments.map(a => `
+    <div class="accomplishment">
+      <span class="acc-icon">${getAccomplishmentIcon(a)}</span>
+      <span class="acc-text">${getAccomplishmentText(a)}</span>
+    </div>
+  `).join('');
+
+  // Key finding
+  const kfHtml = keyFinding ? `
+    <div class="key-finding">
+      <div class="key-finding-label">${keyFinding.label || '💡 Key Finding'}</div>
+      <div class="key-finding-text">${keyFinding.text}</div>
+    </div>
+  ` : '';
+
+  // Next Steps section
+  const nsBody = plan.length > 0
+    ? plan.map((s, idx) => `<div class="ns-item"><span class="ns-num">${idx+1}</span><span class="ns-text">${s}</span></div>`).join('')
+    : '<div class="ns-empty">No action plan yet</div>';
+
+  // Todo section
+  const working = tasks.filter(t => t.status === 'working');
+  const queued = tasks.filter(t => t.status === 'queued');
+  const complete = tasks.filter(t => t.status === 'complete');
+  const failed = tasks.filter(t => t.status === 'failed');
+  const doneCount = complete.length;
+  const totalCount = tasks.length;
+
+  let todoBody = '';
+  if (totalCount === 0) {
+    todoBody = '<div class="ns-empty">No tasks in database</div>';
+  } else {
+    todoBody = `<div class="todo-progress"><div class="todo-progress-fill" style="width:${totalCount>0?(doneCount/totalCount)*100:0}%"></div></div>`;
+    if (working.length) todoBody += `<div class="todo-group">🔄 In Progress</div>` + working.map(t => renderTodoItem(t)).join('');
+    if (queued.length) todoBody += `<div class="todo-group">⏳ Up Next</div>` + queued.map(t => renderTodoItem(t)).join('');
+    if (complete.length) todoBody += `<div class="todo-group">✅ Done</div>` + complete.map(t => renderTodoItem(t)).join('');
+    if (failed.length) todoBody += `<div class="todo-group">❌ Failed</div>` + failed.map(t => renderTodoItem(t)).join('');
+    todoBody += `<div class="todo-summary">${doneCount} of ${totalCount} complete</div>`;
+  }
+
+  // Status footer
+  const status = st.status || 'sleeping';
+  const statusColor = status === 'working' ? '#22c55e' : '#9ca3af';
+  const statusText = status === 'working' ? `Working · ${st.current_task || tasks.find(t=>t.status==='working')?.task_name || ''}` : `${status} · ${doneCount}/${totalCount} tasks done`;
+
+  const reportUrl = REPORT_URLS[key] || `/r/${key}/`;
+
+  return `<div class="agent-card">
+    <div class="agent-header" style="background:${color};cursor:pointer;" onclick="window.location.href='${reportUrl}'">
+      <div class="agent-emoji">${emoji}</div>
+      <div class="agent-name">${name}</div>
+      <div class="agent-role">${role}</div>
+      <div class="agent-grade" style="color:${gradeColor}">${grade}</div>
+    </div>
+    ${statsHtml}
+    <div class="agent-body">
+      <div class="section-title">What they did</div>
+      ${accsHtml}
+      ${kfHtml}
+    </div>
+
+    <div class="collapsible-section">
+      <div class="collapsible-header" onclick="this.parentElement.classList.toggle('open')">
+        <span>🚀 Next Steps (${plan.length})</span>
+        <span class="collapsible-arrow">▼</span>
+      </div>
+      <div class="collapsible-body">${nsBody}</div>
+    </div>
+
+    <div class="collapsible-section">
+      <div class="collapsible-header" onclick="this.parentElement.classList.toggle('open')">
+        <span>📋 Todo List (${doneCount}/${totalCount})</span>
+        <span class="collapsible-arrow">▼</span>
+      </div>
+      <div class="collapsible-body">${todoBody}</div>
+    </div>
+
+    <div class="agent-footer">
+      <div class="status-dot" style="background:${statusColor}"></div>
+      <span class="status-text">${statusText}</span>
+    </div>
+  </div>`;
+  } catch (err) {
+    console.error('Agent card render error for', key, err);
+    return `<div class="agent-card"><div style="padding:40px;text-align:center;color:#ef4444;">Error rendering ${key}<br><small>${err.message}</small></div></div>`;
+  }
+}
+
+function renderTodoItem(task, showAgent) {
+  const icons = { working: '🔄', queued: '⏳', complete: '✅', failed: '❌' };
+  const agentEmoji = showAgent ? (getRC(task.agent).emoji || '•') + ' ' : '';
+  let ti = '';
+  if (task.status === 'working' && task.started_at) {
+    const mins = Math.floor((Date.now() - new Date(task.started_at).getTime()) / 60000);
+    ti = mins < 60 ? `⏱ Running ${mins}m` : `⏱ Running ${Math.floor(mins/60)}h ${mins%60}m`;
+  }
+  if (task.status === 'complete' && task.completed_at) {
+    const mins = Math.floor((Date.now() - new Date(task.completed_at).getTime()) / 60000);
+    ti = mins < 60 ? `✓ ${mins}m ago` : mins < 1440 ? `✓ ${Math.floor(mins/60)}h ago` : '✓ Done';
+  }
+  return `<div class="todo-item s-${task.status}" onclick="this.classList.toggle('detail-open');event.stopPropagation()">
+    <div class="todo-item-row">
+      <span class="todo-icon">${icons[task.status]}</span>
+      <span class="todo-name">${agentEmoji}${task.task_name}</span>
+      <span class="todo-chevron">›</span>
+    </div>
+    ${ti ? `<div class="todo-time">${ti}</div>` : ''}
+    <div class="todo-detail-box">
+      ${task.task_detail ? `<div class="todo-detail-text">${task.task_detail}</div>` : ''}
+      ${task.result_summary ? `<div class="todo-result-text">✓ ${task.result_summary}</div>` : ''}
+    </div>
+  </div>`;
+}
+
+function renderDots() {
+  const dotsContainer = document.getElementById('dots');
+  const totalCards = AGENT_ORDER.length + 1; // +1 for summary
+  dotsContainer.innerHTML = Array.from({length: totalCards}, (_, i) =>
+    `<div class="dot ${i === 0 ? 'active' : ''}" id="dot-${i}"></div>`
+  ).join('');
+}
+
+// Initial load
+fetchAll();
+// Auto-refresh every 60s
+setInterval(fetchAll, 60000);
+
+</script>
+</body>
+</html>

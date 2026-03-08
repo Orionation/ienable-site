@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Flow Preview — iEnable</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+:root { --blue-50: #eff6ff; --blue-100: #dbeafe; --blue-500: #3b82f6; --blue-600: #2563eb; --blue-700: #1d4ed8; --green-50: #f0fdf4; --green-100: #dcfce7; --green-500: #22c55e; --green-600: #16a34a; --green-700: #15803d; --red-50: #fef2f2; --red-500: #ef4444; --red-600: #dc2626; --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-300: #d1d5db; --gray-400: #9ca3af; --gray-500: #6b7280; --gray-600: #4b5563; --gray-700: #374151; --gray-800: #1f2937; --gray-900: #111827; --amber-50: #fffbeb; --amber-100: #fef3c7; --amber-500: #f59e0b; --amber-600: #d97706; --purple-50: #faf5ff; --purple-500: #a855f7; --purple-600: #9333ea; --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05); --shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1); --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1); --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: var(--gray-50); color: var(--gray-800); line-height: 1.5; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
+.header { background: white; border-bottom: 1px solid var(--gray-200); padding: 12px 16px 10px; position: sticky; top: 0; z-index: 50; }
+.header-inner { max-width: 600px; margin: 0 auto; }
+.flow-name { font-size: 20px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.025em; margin-bottom: 4px; }
+.proposer { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.avatar { width: 22px; height: 22px; background: linear-gradient(135deg, var(--blue-500), var(--purple-500)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; color: white; flex-shrink: 0; }
+.proposer-text { font-size: 12px; color: var(--gray-500); }
+.proposer-name { font-weight: 600; color: var(--gray-700); }
+.status-row { display: flex; align-items: center; gap: 8px; }
+.status-pill { display: inline-flex; align-items: center; gap: 3px; padding: 3px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: var(--amber-50); color: var(--amber-600); border: 1px solid var(--amber-100); }
+.status-pill.approved { background: var(--green-50); color: var(--green-600); border-color: var(--green-100); }
+.status-pill.rejected { background: var(--red-50); color: var(--red-600); border-color: #fecaca; }
+.content { max-width: 600px; margin: 0 auto; padding: 16px; }
+.change-summary-card { background: linear-gradient(135deg, var(--blue-50), var(--purple-50)); border: 1px solid var(--blue-100); border-radius: 16px; padding: 16px; margin-bottom: 12px; }
+.change-summary-title { font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.change-summary-body { font-size: 14px; color: var(--gray-600); line-height: 1.6; margin-bottom: 10px; }
+.change-reason { font-size: 13px; color: var(--gray-500); padding-top: 10px; border-top: 1px solid rgba(59, 130, 246, 0.15); }
+.change-reason strong { color: var(--gray-700); }
+.deps-card { background: white; border-radius: 16px; border: 2px solid var(--gray-200); padding: 16px; margin-bottom: 12px; }
+.deps-title { font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+.dep-item { display: flex; gap: 10px; padding: 12px; border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--gray-100); }
+.dep-item:last-child { margin-bottom: 0; }
+.dep-item.status-connected { background: var(--green-50); border-color: var(--green-100); }
+.dep-item.status-missing { background: #fff7ed; border-color: #fed7aa; }
+.dep-item.status-needs_review { background: var(--amber-50); border-color: var(--amber-100); }
+.dep-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.dep-info { flex: 1; min-width: 0; }
+.dep-header { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+.dep-name { font-size: 14px; font-weight: 600; color: var(--gray-800); }
+.dep-status { display: inline-flex; align-items: center; gap: 3px; padding: 1px 7px; border-radius: 9999px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+.dep-status.connected { background: var(--green-100); color: var(--green-700); }
+.dep-status.missing { background: #fed7aa; color: #c2410c; }
+.dep-status.needs_review { background: var(--amber-100); color: var(--amber-600); }
+.dep-desc { font-size: 13px; color: var(--gray-500); line-height: 1.5; margin-top: 2px; }
+.dep-offer { font-size: 13px; color: var(--gray-700); line-height: 1.5; margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(0,0,0,0.06); }
+.dep-action-btn { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; padding: 8px 16px; border-radius: 10px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent; min-height: 36px; transition: all 0.15s ease; }
+.dep-action-btn:active { transform: scale(0.97); }
+.dep-item.status-missing .dep-action-btn { background: #ea580c; color: white; }
+.dep-item.status-needs_review .dep-action-btn { background: var(--amber-500); color: white; }
+.dep-action-btn.done { background: var(--green-100) !important; color: var(--green-700) !important; pointer-events: none; }
+.change-stats { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.stat-chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+.stat-chip.new { background: var(--green-50); color: var(--green-700); border: 1px solid var(--green-100); }
+.stat-chip.modified { background: var(--blue-50); color: var(--blue-700); border: 1px solid var(--blue-100); }
+.phase-card { background: white; border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200); margin-bottom: 10px; overflow: hidden; transition: box-shadow 0.2s ease; }
+.phase-card:active { box-shadow: var(--shadow); }
+.phase-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; min-height: 48px; }
+.phase-header:active { background: var(--gray-50); }
+.phase-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+.phase-emoji { font-size: 20px; flex-shrink: 0; width: 28px; text-align: center; }
+.phase-label { font-size: 15px; font-weight: 600; color: var(--gray-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.phase-header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.step-count { font-size: 12px; color: var(--gray-400); font-weight: 500; }
+.chevron { width: 20px; height: 20px; color: var(--gray-400); transition: transform 0.25s ease; flex-shrink: 0; }
+.phase-card.open .chevron { transform: rotate(180deg); }
+.phase-body { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.phase-card.open .phase-body { max-height: 2000px; }
+.phase-steps { padding: 0 12px 12px; }
+.step-card { background: var(--gray-50); border-radius: 12px; padding: 12px; margin-bottom: 8px; border-left: 3px solid transparent; transition: all 0.2s ease; }
+.step-card:last-child { margin-bottom: 0; }
+.step-agent { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; padding: 3px 8px 3px 3px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: white; border: 1.5px solid var(--gray-200); }
+.step-agent-avatar { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; color: white; font-weight: 700; flex-shrink: 0; }
+.step-agent-name { color: var(--gray-600); }
+.step-card.new .step-agent { border-color: rgba(34,197,94,0.2); }
+.step-card.unchanged { border-left-color: var(--gray-200); }
+.step-card.new { border-left-color: var(--green-500); background: var(--green-50); }
+.step-card.modified { border-left-color: var(--blue-500); background: var(--blue-50); }
+.step-top { display: flex; align-items: flex-start; gap: 8px; }
+.step-icon { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; margin-top: 1px; }
+.step-info { flex: 1; min-width: 0; }
+.step-label-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.step-label { font-size: 14px; font-weight: 600; color: var(--gray-800); }
+.step-badge { display: inline-flex; align-items: center; gap: 2px; padding: 1px 7px; border-radius: 9999px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
+.step-badge.new { background: var(--green-100); color: var(--green-700); }
+.step-badge.modified { background: var(--blue-100); color: var(--blue-700); }
+.step-desc { font-size: 13px; color: var(--gray-500); margin-top: 2px; line-height: 1.4; }
+.step-change-note { font-size: 12px; color: var(--blue-600); margin-top: 4px; font-style: italic; }
+.step-meta { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.meta-tag { display: inline-flex; align-items: center; gap: 3px; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 500; background: white; color: var(--gray-600); border: 1px solid var(--gray-200); }
+.step-card.new .meta-tag { background: white; border-color: rgba(34,197,94,0.2); }
+.step-card.modified .meta-tag { background: white; border-color: rgba(59,130,246,0.2); }
+.gate-info { margin-top: 8px; padding: 8px 10px; background: white; border-radius: 8px; border: 1px solid var(--gray-200); }
+.gate-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray-600); }
+.gate-row + .gate-row { margin-top: 4px; }
+.criteria-list { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.criteria-tag { padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 500; background: white; color: var(--gray-600); border: 1px solid var(--gray-200); }
+.phase-description { padding: 10px 16px 4px; font-size: 13px; color: var(--gray-500); line-height: 1.6; }
+.keywords-section { margin-top: 8px; }
+.keywords-label { font-size: 11px; font-weight: 600; color: var(--gray-500); margin-bottom: 4px; }
+.keyword-tag { padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: 500; background: linear-gradient(135deg, var(--blue-50), var(--purple-50)); color: var(--blue-700); border: 1px solid var(--blue-100); display: inline-flex; align-items: center; }
+.flywheel-banner { border-radius: 16px; margin: 12px 12px 8px; overflow: hidden; border: 2px solid #7c3aed; }
+.flywheel-header { background: linear-gradient(135deg, #6366f1, #7c3aed); padding: 14px 16px; color: white; }
+.flywheel-title { font-size: 15px; font-weight: 800; margin-bottom: 2px; }
+.flywheel-subtitle { font-size: 12px; opacity: 0.85; }
+.flywheel-timeline { background: #faf5ff; padding: 14px 16px; }
+.flywheel-example-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #7c3aed; margin-bottom: 10px; }
+.fw-day { display: flex; gap: 10px; margin-bottom: 12px; position: relative; }
+.fw-day:last-child { margin-bottom: 0; }
+.fw-day-marker { width: 32px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
+.fw-day-dot { width: 10px; height: 10px; border-radius: 50%; background: #7c3aed; flex-shrink: 0; margin-top: 4px; }
+.fw-day-line { width: 2px; flex: 1; background: #ddd6fe; margin-top: 4px; }
+.fw-day:last-child .fw-day-line { display: none; }
+.fw-day-dot.gold { background: #f59e0b; }
+.fw-day-dot.green { background: #16a34a; }
+.fw-day-content { flex: 1; min-width: 0; }
+.fw-day-label { font-size: 12px; font-weight: 700; color: var(--gray-800); margin-bottom: 2px; }
+.fw-day-text { font-size: 12px; color: var(--gray-500); line-height: 1.5; }
+.fw-day-result { display: inline-flex; align-items: center; gap: 3px; margin-top: 4px; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+.fw-day-result.rank-up { background: #dcfce7; color: #15803d; }
+.fw-day-result.rank-target { background: #fef3c7; color: #b45309; }
+.fw-day-result.rank-win { background: linear-gradient(135deg, #dcfce7, #d1fae5); color: #15803d; font-weight: 700; border: 1px solid #86efac; }
+.flywheel-insight { background: linear-gradient(135deg, #6366f1, #7c3aed); padding: 12px 16px; color: white; font-size: 13px; font-weight: 600; line-height: 1.5; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); }
+.flywheel-insight em { font-style: normal; opacity: 0.7; font-weight: 400; font-size: 11px; display: block; margin-top: 2px; }
+.step-card.loopback { border-left-color: #8b5cf6 !important; background: linear-gradient(135deg, var(--green-50), #faf5ff) !important; }
+.step-card.optimization-loop { border-left-color: #ea580c !important; background: linear-gradient(135deg, #fff7ed, #fef3c7) !important; }
+.phase-empty { padding: 12px 16px; text-align: center; font-size: 13px; color: var(--gray-400); font-style: italic; }
+.cta-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid var(--gray-200); padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 100; box-shadow: 0 -4px 12px rgba(0,0,0,0.08); }
+.cta-inner { max-width: 600px; margin: 0 auto; display: flex; gap: 8px; }
+.cta-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 4px; padding: 12px 8px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; border: 2px solid transparent; transition: all 0.15s ease; -webkit-tap-highlight-color: transparent; min-height: 48px; white-space: nowrap; }
+.cta-btn:active { transform: scale(0.97); }
+.cta-approve { background: var(--green-600); color: white; flex: 1.2; }
+.cta-approve:active { background: var(--green-700); }
+.cta-modify { background: var(--blue-600); color: white; }
+.cta-modify:active { background: var(--blue-700); }
+.cta-reject { background: white; color: var(--red-500); border-color: var(--red-500); }
+.cta-reject:active { background: var(--red-50); }
+.confirmation { display: none; text-align: center; padding: 8px 0; }
+.confirmation.active { display: block; }
+.confirmation-msg { font-size: 15px; font-weight: 600; color: var(--gray-700); }
+.modify-input-wrap { display: none; flex-direction: column; gap: 8px; }
+.modify-input-wrap.active { display: flex; }
+.modify-input { width: 100%; padding: 12px; border: 2px solid var(--blue-500); border-radius: 12px; font-size: 15px; font-family: inherit; resize: none; min-height: 80px; outline: none; color: var(--gray-800); background: white; }
+.modify-input:focus { border-color: var(--blue-600); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+.modify-input::placeholder { color: var(--gray-400); }
+.modify-actions { display: flex; gap: 8px; }
+.modify-send { flex: 1; padding: 10px; border-radius: 10px; border: none; background: var(--blue-600); color: white; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 44px; }
+.modify-cancel { padding: 10px 16px; border-radius: 10px; border: 1px solid var(--gray-300); background: white; color: var(--gray-600); font-size: 14px; font-weight: 500; cursor: pointer; min-height: 44px; }
+.powered-by { text-align: center; padding: 24px 16px 16px; font-size: 12px; color: var(--gray-400); }
+.powered-by a { color: var(--blue-500); text-decoration: none; font-weight: 600; }
+.loading, .error-state { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; padding: 32px; text-align: center; }
+.loading-spinner { width: 40px; height: 40px; border: 3px solid var(--gray-200); border-top-color: var(--blue-500); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.error-icon { font-size: 48px; margin-bottom: 12px; }
+.error-title { font-size: 18px; font-weight: 700; color: var(--gray-800); margin-bottom: 4px; }
+.error-msg { font-size: 14px; color: var(--gray-500); }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in-up { animation: fadeInUp 0.35s ease both; }
+.delay-1 { animation-delay: 0.05s; } .delay-2 { animation-delay: 0.1s; } .delay-3 { animation-delay: 0.15s; } .delay-4 { animation-delay: 0.2s; } .delay-5 { animation-delay: 0.25s; } .delay-6 { animation-delay: 0.3s; } .delay-7 { animation-delay: 0.35s; } .delay-8 { animation-delay: 0.4s; } .delay-9 { animation-delay: 0.45s; } .delay-10 { animation-delay: 0.5s; }
+@keyframes subtlePulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } 50% { box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.08); } }
+.step-card.new { animation: subtlePulse 3s ease-in-out 1; }
+.view-toggle { display: flex; background: var(--gray-100); border-radius: 10px; padding: 3px; margin-top: 6px; }
+.view-toggle-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 4px; padding: 7px 12px; border-radius: 8px; border: none; background: transparent; font-size: 12px; font-weight: 600; color: var(--gray-500); cursor: pointer; transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; min-height: 36px; }
+.view-toggle-btn.active { background: white; color: var(--gray-800); box-shadow: var(--shadow-sm); }
+.snake-view { display: none; }
+.snake-view.active { display: block; }
+.cards-view.active { display: block; }
+.cards-view { display: none; }
+.snake-container { position: relative; padding: 8px 0 24px; }
+.snake-row { display: flex; align-items: flex-start; margin-bottom: 0; position: relative; }
+.snake-row.ltr { flex-direction: row; }
+.snake-row.rtl { flex-direction: row-reverse; }
+.snake-node { flex-shrink: 0; width: 140px; min-height: 80px; padding: 10px; border-radius: 14px; border: 2px solid var(--gray-200); background: white; text-align: center; position: relative; transition: all 0.2s ease; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.snake-node.type-trigger { border-color: var(--blue-500); background: var(--blue-50); }
+.snake-node.type-gate { border-color: var(--amber-500); background: var(--amber-50); border-width: 3px; width: 160px; min-height: 100px; }
+.snake-node.type-qa { border-color: var(--gray-400); background: var(--gray-50); }
+.snake-node.type-action { border-color: var(--gray-200); background: white; }
+.snake-node.status-new { border-color: var(--green-500) !important; background: var(--green-50) !important; box-shadow: 0 0 0 3px rgba(34,197,94,0.12), var(--shadow-sm); }
+.snake-node.status-modified { border-color: var(--blue-500) !important; background: var(--blue-50) !important; box-shadow: 0 0 0 3px rgba(59,130,246,0.12), var(--shadow-sm); }
+.snake-node-emoji { font-size: 22px; margin-bottom: 4px; display: block; }
+.snake-node-label { font-size: 11px; font-weight: 600; color: var(--gray-800); line-height: 1.3; word-wrap: break-word; }
+.snake-node-badge { display: inline-block; padding: 1px 6px; border-radius: 9999px; font-size: 9px; font-weight: 700; text-transform: uppercase; margin-top: 4px; }
+.snake-node-badge.new { background: var(--green-100); color: var(--green-700); }
+.snake-node-badge.modified { background: var(--blue-100); color: var(--blue-700); }
+.snake-node .gate-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--amber-500), #f97316); border: 3px solid white; box-shadow: 0 0 0 2px var(--amber-400), var(--shadow-sm); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; color: white; margin: 0 auto 6px; }
+.snake-node .gate-mode { font-size: 9px; color: var(--amber-600); font-weight: 600; margin-top: 3px; padding: 2px 8px; background: var(--amber-100); border-radius: 9999px; }
+.snake-node-agent { position: absolute; top: -6px; right: -6px; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; color: white; border: 2px solid white; box-shadow: var(--shadow-sm); z-index: 2; }
+.snake-arrow-h { flex-shrink: 0; width: 28px; display: flex; align-items: center; justify-content: center; align-self: center; position: relative; }
+.snake-arrow-h::before { content: ''; display: block; width: 100%; height: 3px; background: linear-gradient(90deg, var(--blue-500), var(--purple-500)); border-radius: 2px; }
+.snake-arrow-h::after { content: ''; position: absolute; right: -1px; width: 0; height: 0; border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-left: 8px solid var(--purple-500); }
+.snake-row.rtl .snake-arrow-h::after { right: auto; left: -1px; border-left: none; border-right: 8px solid var(--blue-500); }
+.snake-turn { display: flex; justify-content: flex-end; padding: 0 40px; height: 36px; position: relative; }
+.snake-turn.turn-right { justify-content: flex-end; padding-right: 70px; }
+.snake-turn.turn-left { justify-content: flex-start; padding-left: 70px; }
+.snake-turn-line { width: 3px; height: 100%; background: linear-gradient(180deg, var(--blue-500), var(--purple-500)); border-radius: 2px; position: relative; }
+.snake-turn-line::after { content: ''; position: absolute; bottom: -1px; left: -4px; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid var(--purple-500); }
+.snake-phase-label { display: flex; align-items: center; gap: 6px; padding: 6px 12px; margin-bottom: 8px; font-size: 13px; font-weight: 700; color: var(--gray-600); }
+.snake-phase-emoji { font-size: 16px; }
+.snake-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0 16px; margin: 0 -16px; }
+.snake-scroll::-webkit-scrollbar { display: none; }
+.live-header { text-align: center; padding: 16px 0 12px; }
+.live-title { font-size: 16px; font-weight: 800; color: var(--gray-900); }
+.live-subtitle { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+.live-step { background: white; border-radius: 16px; border: 1px solid var(--gray-200); margin-bottom: 12px; overflow: hidden; box-shadow: var(--shadow-sm); opacity: 0; transform: translateY(16px); transition: all 0.5s ease; }
+.live-step.visible { opacity: 1; transform: translateY(0); }
+.live-step.active { border-color: var(--blue-500); box-shadow: 0 0 0 3px rgba(59,130,246,0.1), var(--shadow); }
+.live-step.completed { border-color: var(--green-500); }
+.live-step.waiting-human { border-color: var(--amber-500); box-shadow: 0 0 0 3px rgba(245,158,11,0.1), var(--shadow); }
+.live-step-header { display: flex; align-items: center; gap: 10px; padding: 12px 14px; }
+.live-step-agent { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; color: white; flex-shrink: 0; }
+.live-step-info { flex: 1; min-width: 0; }
+.live-step-name { font-size: 14px; font-weight: 700; color: var(--gray-800); }
+.live-step-agent-name { font-size: 11px; color: var(--gray-400); }
+.live-step-status { flex-shrink: 0; padding: 3px 8px; border-radius: 9999px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+.live-step-status.running { background: var(--blue-50); color: var(--blue-600); }
+.live-step-status.done { background: var(--green-50); color: var(--green-600); }
+.live-step-status.waiting { background: var(--amber-50); color: var(--amber-600); }
+.live-output { padding: 0 14px 14px; }
+.live-output-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--gray-400); margin-bottom: 8px; }
+.live-output-text { font-size: 13px; color: var(--gray-600); line-height: 1.6; background: var(--gray-50); border-radius: 12px; padding: 12px; border: 1px solid var(--gray-100); }
+.live-output-text strong { color: var(--gray-800); }
+.live-output-images { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.live-output-img { border-radius: 12px; aspect-ratio: 16/10; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; position: relative; overflow: hidden; border: none; color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+.live-output-img.hero { background: linear-gradient(135deg, #1e3a5f, #2563eb, #60a5fa); grid-column: span 2; aspect-ratio: 16/7; }
+.live-output-img.social-square { background: linear-gradient(135deg, #7c3aed, #a855f7, #c084fc); aspect-ratio: 1/1; }
+.live-output-img.stories { background: linear-gradient(135deg, #ec4899, #f43f5e, #fb923c); aspect-ratio: 9/14; }
+.live-output-img.video { background: linear-gradient(135deg, #059669, #10b981, #34d399); aspect-ratio: 16/10; }
+.live-output-img .play-badge { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.4); border-radius: 6px; padding: 2px 6px; font-size: 9px; font-weight: 600; backdrop-filter: blur(4px); }
+.live-replay { display: none; justify-content: center; padding: 20px 0 10px; }
+.live-replay.visible { display: flex; }
+.live-replay-btn { display: flex; align-items: center; gap: 6px; padding: 12px 24px; border-radius: 12px; border: 2px solid var(--blue-500); background: var(--blue-50); color: var(--blue-600); font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.15s ease; -webkit-tap-highlight-color: transparent; }
+.live-replay-btn:active { transform: scale(0.97); background: var(--blue-100); }
+.flywheel-anim { display: flex; flex-direction: column; align-items: center; padding: 16px 0 8px; }
+.flywheel-spinner { width: 120px; height: 120px; position: relative; animation: flywheelSpin 8s linear infinite; }
+.flywheel-ring { position: absolute; inset: 0; border-radius: 50%; border: 3px solid transparent; border-top-color: #7c3aed; border-right-color: #3b82f6; border-bottom-color: #ec4899; border-left-color: #22c55e; }
+.flywheel-ring.inner { inset: 12px; border-top-color: #22c55e; border-right-color: #7c3aed; border-bottom-color: #3b82f6; border-left-color: #ec4899; animation: flywheelSpin 5s linear infinite reverse; }
+.flywheel-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 28px; }
+.flywheel-nodes { position: absolute; width: 100%; height: 100%; }
+.flywheel-node { position: absolute; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; color: white; box-shadow: var(--shadow-sm); border: 2px solid white; }
+.flywheel-node:nth-child(1) { top: -4px; left: 50%; transform: translateX(-50%); background: #3b82f6; }
+.flywheel-node:nth-child(2) { top: 50%; right: -4px; transform: translateY(-50%); background: #ec4899; }
+.flywheel-node:nth-child(3) { bottom: -4px; left: 50%; transform: translateX(-50%); background: #22c55e; }
+.flywheel-node:nth-child(4) { top: 50%; left: -4px; transform: translateY(-50%); background: #7c3aed; }
+@keyframes flywheelSpin { to { transform: rotate(360deg); } }
+.flywheel-labels { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 14px; max-width: 260px; }
+.flywheel-label-item { display: flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 600; color: var(--gray-500); }
+.flywheel-label-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.live-qa-scores { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.live-qa-row { display: flex; align-items: center; gap: 10px; }
+.live-qa-label { font-size: 12px; color: var(--gray-600); width: 100px; flex-shrink: 0; }
+.live-qa-bar-track { flex: 1; height: 8px; background: var(--gray-100); border-radius: 9999px; overflow: hidden; }
+.live-qa-bar-fill { height: 100%; border-radius: 9999px; transition: width 1.5s ease; }
+.live-qa-score { font-size: 12px; font-weight: 700; width: 36px; text-align: right; }
+.live-typing { display: inline-flex; align-items: center; gap: 3px; padding: 8px 14px; background: var(--gray-50); border-radius: 12px; border: 1px solid var(--gray-100); }
+.live-typing-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gray-400); animation: typingBounce 1.4s ease-in-out infinite; }
+.live-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.live-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-4px); } }
+.live-connector { display: flex; justify-content: center; padding: 4px 0; }
+.live-connector-line { width: 2px; height: 20px; background: linear-gradient(180deg, var(--blue-500), var(--purple-500)); border-radius: 1px; }
+.live-connector.completed .live-connector-line { background: var(--green-500); }
+.live-approval-card { background: linear-gradient(135deg, var(--amber-50), #fef3c7); border-radius: 12px; padding: 14px; border: 2px solid var(--amber-500); margin-top: 8px; }
+.live-approval-prompt { font-size: 14px; font-weight: 700; color: var(--gray-800); margin-bottom: 8px; }
+.live-approval-preview { font-size: 13px; color: var(--gray-600); line-height: 1.5; margin-bottom: 12px; }
+.live-approval-actions { display: flex; gap: 8px; }
+.live-approval-btn { flex: 1; padding: 10px; border-radius: 10px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; min-height: 40px; transition: all 0.15s ease; -webkit-tap-highlight-color: transparent; }
+.live-approval-btn:active { transform: scale(0.97); }
+.live-approval-btn.approve { background: var(--green-600); color: white; }
+.live-approval-btn.revise { background: white; color: var(--amber-600); border: 1.5px solid var(--amber-400); }
+.live-elapsed { font-size: 10px; color: var(--gray-400); margin-left: auto; font-variant-numeric: tabular-nums; }
+
+</style>
+</head>
+<body>
+<div id="app-loading" class="loading" style="display: none;">
+<div class="loading-spinner"></div>
+<div style="font-size:14px;color:var(--gray-500)">Loading flow preview…</div>
+</div>
+<div id="app-error" class="error-state" style="display:none">
+<div class="error-icon">😕</div>
+<div class="error-title">Can't load this flow</div>
+<div class="error-msg">The link might be broken or expired. Ask the sender for a new one.</div>
+</div>
+<div id="app" style="">
+<!-- Header -->
+<div class="header">
+<div class="header-inner">
+<div class="flow-name" id="flow-name">Blog Post Pipeline</div>
+<div class="proposer">
+<div class="avatar" id="avatar">🤖</div>
+<div class="proposer-text">Proposed by <span class="proposer-name" id="proposer-name">Apollo</span> · <span id="timestamp">8h ago</span></div>
+</div>
+<div class="status-row">
+<div class="status-pill" id="status-pill">📋 Awaiting your review</div>
+</div>
+<div class="view-toggle">
+<button class="view-toggle-btn active" id="toggle-cards" onclick="switchView('cards')">📋 Steps</button>
+<button class="view-toggle-btn" id="toggle-snake" onclick="switchView('snake')">🔀 Flowchart</button>
+<button class="view-toggle-btn" id="toggle-live" onclick="switchView('live')">▶️ Live Demo</button>
+</div>
+</div>
+</div>
+<!-- Content views will be rendered by JS -->
+<div class="content cards-view active" id="content"></div>
+<div class="content snake-view" id="snake-content" style="display: none;"></div>
+<div class="content snake-view" id="live-content" style="display: none;"></div>
+<!-- Powered By -->
+<div class="powered-by">
+Powered by <a href="https://ienable.ai" target="_blank">iEnable.ai</a>
+</div>
+<!-- CTA Bar -->
+<div class="cta-bar" id="cta-bar">
+<div class="cta-inner" id="cta-buttons">
+<button class="cta-btn cta-approve" onclick="handleAction('approve')">✅ Approve</button>
+<button class="cta-btn cta-modify" onclick="handleAction('modify')">✏️ Modify</button>
+<button class="cta-btn cta-reject" onclick="handleAction('reject')">❌ Reject</button>
+</div>
+<div class="confirmation" id="confirmation">
+<div class="confirmation-msg" id="confirmation-msg"></div>
+</div>
+<div class="modify-input-wrap" id="modify-wrap">
+<textarea class="modify-input" id="modify-input" placeholder="What would you change?" rows="3"></textarea>
+<div class="modify-actions">
+<button class="modify-send" onclick="submitModify()">📝 Send Feedback</button>
+<button class="modify-cancel" onclick="cancelModify()">Cancel</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+// ─── Demo Flow Data ───
+const DEMO_FLOW = {
+"flowName": "Blog Post Pipeline",
+"proposedBy": "Apollo",
+"timestamp": "2026-02-26T18:30:00Z",
+"changeSummary": "Two upgrades: (1) Adding visual content — Reel will generate hero images, social graphics, and a 15-second video teaser for every post. (2) Adding a nightly learning loop — Apollo will review performance in GA4 and Search Console every night and sharpen tomorrow's posts based on what's working.",
+"changeReason": "Posts without images get 50% less engagement. And without measurement, we're flying blind. These changes mean every post gets visuals AND every night the AI gets smarter about what works for your audience.",
+"dependencies": [
+{ "id": "content_calendar", "icon": "📅", "name": "Content Calendar", "status": "missing", "description": "I don't have a content calendar yet. I need one to know what topics to write about each day.", "offer": "Want me to create one? I'll research your top 30 keyword opportunities, map them to a 30-day calendar with topics, target audiences, and publish dates. Takes about 10 minutes.", "actionLabel": "Yes, create it" },
+{ "id": "ga4", "icon": "📊", "name": "Google Analytics 4", "status": "connected", "description": "Connected to your GA4 property. I can see traffic, engagement, and conversion data." },
+{ "id": "search_console", "icon": "🔍", "name": "Google Search Console", "status": "connected", "description": "Connected. I can see your keyword rankings, impressions, and click-through rates." },
+{ "id": "brand_guide", "icon": "🎨", "name": "Brand Voice Guide", "status": "needs_review", "description": "I created a draft brand voice guide based on your existing blog posts. It might need your review.", "offer": "Want to review it now, or should I use my best judgment and you can refine it over time?", "actionLabel": "Show me the draft" }
+],
+"phases": [
+{ "id": "research", "emoji": "🔍", "label": "Research & Understand", "steps": [
+{ "label": "Start Blog Post", "description": "Runs 3× daily or manually — pulls today's topics from the Content Calendar", "type": "trigger", "status": "unchanged", "icon": "🕐", "sources": ["📅 Content Calendar ← Reads from this"] },
+{ "label": "Research Today's Topics", "description": "Checks content calendar, researches competitors, finds keywords", "type": "action", "status": "unchanged", "icon": "🔍", "sources": ["📅 Content Calendar", "🔑 Keywords", "🕵️ Competitors"], "agent": { "name": "Apollo", "avatar": "📝", "color": "#3b82f6" } }
+] },
+{ "id": "brief", "emoji": "📋", "label": "Brief", "steps": [
+{ "label": "Create Outlines", "description": "Structured outline for each topic", "type": "action", "status": "unchanged", "icon": "📝", "agent": { "name": "Apollo", "avatar": "📝", "color": "#3b82f6" } }
+] },
+{ "id": "approve", "emoji": "✅", "label": "You Approve", "steps": [
+{ "label": "You Approve the Outlines", "description": "Review and approve or send back with feedback", "type": "gate", "status": "unchanged", "icon": "🛡️", "approver": "Jonathan", "mode": "👤 You review every time" }
+] },
+{ "id": "execute", "emoji": "⚡", "label": "Execute", "steps": [
+{ "label": "Write the Full Posts", "description": "Complete blog posts from approved outlines", "type": "action", "status": "unchanged", "icon": "✍️", "model": "Claude Opus 4", "agent": { "name": "Apollo", "avatar": "📝", "color": "#3b82f6" } },
+{ "label": "Create Visual Content", "description": "Reel generates hero image, OG image, Instagram square, Stories format, and 15-sec video teaser", "type": "action", "status": "new", "icon": "🎨", "model": "Claude Sonnet 4", "sources": ["🎨 Brand Guide", "🖼️ Image Generator", "🎬 Video Generator"], "agent": { "name": "Reel", "avatar": "🎬", "color": "#ec4899" } }
+] },
+{ "id": "qa", "emoji": "🎯", "label": "Quality Check", "steps": [
+{ "label": "SEO Score", "description": "Keywords, readability, meta tags", "type": "qa", "status": "unchanged", "icon": "🎯", "criteria": ["Keyword Density", "Readability", "H2 Structure", "Meta Description"] },
+{ "label": "Brand Voice Score", "description": "Tone, terminology, messaging", "type": "qa", "status": "unchanged", "icon": "🎯", "criteria": ["Tone", "Terminology", "CTA"] },
+{ "label": "Visual Quality Score", "description": "Image resolution, brand colors, text readability, video quality", "type": "qa", "status": "new", "icon": "🎯", "criteria": ["Resolution", "Brand Colors", "Composition", "Video Quality"] }
+] },
+{ "id": "approve2", "emoji": "✅", "label": "Final Approval", "steps": [
+{ "label": "You Approve the Posts", "description": "Final review — text + visuals together", "type": "gate", "status": "modified", "icon": "🛡️", "approver": "Jonathan", "mode": "🔀 AI pre-screens, you review if needed", "changeNote": "Now includes visual content in review" }
+] },
+{ "id": "measure", "emoji": "📊", "label": "Publish & Measure", "steps": [
+{ "label": "Format & Package", "description": "Meta tags, social preview images, web formatting", "type": "action", "status": "modified", "icon": "📦", "changeNote": "Now packages images and video alongside text" },
+{ "label": "Publish to Blog", "description": "Posts live with embedded visuals", "type": "action", "status": "unchanged", "icon": "🚀" },
+{ "label": "Tell Google", "description": "Submit for indexing", "type": "action", "status": "unchanged", "icon": "🔍" }
+] },
+{ "id": "learn", "emoji": "🔄", "label": "The Flywheel",
+"description": "Two flywheels running every night. Flywheel 1: tonight's data sharpens tomorrow's NEW posts. Flywheel 2: Apollo goes back to EXISTING posts and optimizes them — tightening headlines, adding internal links, refreshing content — until they rank. Publish and compound, not publish and forget.",
+"steps": [
+{ "label": "Nightly Performance Review", "description": "Every night at 11 PM, Apollo checks GA4 and Search Console for ALL posts — not just today's. Pageviews, time on page, bounce rate, keyword positions, click-through rates", "type": "action", "status": "new", "icon": "📊", "sources": ["📊 Google Analytics 4", "🔍 Search Console"] },
+{ "label": "Track Keyword Rankings", "description": "Monitors where every post ranks for its target keywords. Flags posts sitting on page 2 (positions 11-20) as high-priority optimization candidates — these are the closest to breaking through", "type": "action", "status": "new", "icon": "📈", "sources": ["🔑 Target Keywords", "🔍 Search Console"], "keywords": ["AI enablement platform", "ChatGPT for business vs dedicated AI", "AI employees for small business", "best AI automation tools 2026", "AI content creation for e-commerce"] },
+{ "label": "Optimize Existing Posts", "description": "This is the second flywheel. Apollo revisits published posts every few days and makes them better: tightens the H1 for the target keyword, adds internal links from newer posts, updates outdated stats, strengthens the meta description, improves readability. Checks rankings again in 3 days. Keeps pushing until page 1.", "type": "action", "status": "new", "icon": "🔧", "model": "Claude Sonnet 4", "sources": ["📊 Post Performance Data", "🔑 Keyword Rankings", "🔗 Internal Link Map"], "optimizationLoop": true },
+{ "label": "Score & Compare", "description": "Scores each post against your top 10 performers. What worked? Long-form vs short? Which CTAs converted? Which topics drove the most traffic? Which optimizations moved the needle?", "type": "qa", "status": "new", "icon": "🏆", "criteria": ["Traffic vs Average", "Engagement Score", "Conversion Rate", "Time to Index", "Rank Improvement"] },
+{ "label": "Update Tomorrow's Calendar →", "description": "Feeds everything back into the Content Calendar — the same place Step 1 starts. New post topics based on what's trending. Optimization schedule for existing posts that need a push. Tomorrow's 9 AM run starts smarter than today's.", "type": "action", "status": "new", "icon": "🔁", "model": "Claude Sonnet 4", "sources": ["📅 Content Calendar ← Updates this", "🧠 Your Feedback History", "📈 Optimization Queue"], "loopBack": true }
+] }
+]
+};
+
+// ─── Helpers ───
+function timeAgo(ts) {
+const now = new Date();
+const date = new Date(ts);
+const diffMs = now - date;
+const diffMin = Math.floor(diffMs / 60000);
+if (diffMin < 1) return 'Just now';
+if (diffMin < 60) return `${diffMin}m ago`;
+const diffHr = Math.floor(diffMin / 60);
+if (diffHr < 24) return `${diffHr}h ago`;
+const diffDay = Math.floor(diffHr / 24);
+if (diffDay === 1) return 'Yesterday';
+if (diffDay < 7) return `${diffDay} days ago`;
+return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function countChanges(phases) {
+let newCount = 0, modCount = 0;
+phases.forEach(p => { (p.steps || []).forEach(s => { if (s.status === 'new') newCount++; if (s.status === 'modified') modCount++; }); });
+return { newCount, modCount };
+}
+
+// ─── Render ───
+function render(flow) {
+document.getElementById('app-loading').style.display = 'none';
+document.getElementById('app').style.display = '';
+document.getElementById('flow-name').textContent = flow.flowName;
+document.getElementById('proposer-name').textContent = flow.proposedBy;
+document.getElementById('timestamp').textContent = timeAgo(flow.timestamp);
+const avatarEl = document.getElementById('avatar');
+avatarEl.textContent = '🤖';
+const content = document.getElementById('content');
+let html = '';
+let cardIndex = 0;
+const { newCount, modCount } = countChanges(flow.phases);
+if (newCount > 0 || modCount > 0) {
+html += '<div class="change-stats fade-in-up delay-1">';
+if (newCount > 0) html += `<span class="stat-chip new">✨ ${newCount} new step${newCount > 1 ? 's' : ''}</span>`;
+if (modCount > 0) html += `<span class="stat-chip modified">✏️ ${modCount} modified step${modCount > 1 ? 's' : ''}</span>`;
+html += '</div>';
+}
+if (flow.changeSummary) {
+html += `<div class="change-summary-card fade-in-up delay-2"><div class="change-summary-title">💡 What's changing?</div><div class="change-summary-body">${esc(flow.changeSummary)}</div>`;
+if (flow.changeReason) html += `<div class="change-reason"><strong>Why:</strong> ${esc(flow.changeReason)}</div>`;
+html += '</div>';
+cardIndex = 2;
+}
+if (flow.dependencies && flow.dependencies.length > 0) {
+cardIndex++;
+html += `<div class="deps-card fade-in-up delay-${Math.min(cardIndex, 10)}"><div class="deps-title">🔗 What I need to make this work</div>`;
+flow.dependencies.forEach(dep => {
+const statusLabels = { connected: '✓ Connected', missing: '⚠ Missing', needs_review: '👀 Needs review' };
+const statusLabel = statusLabels[dep.status] || dep.status;
+html += `<div class="dep-item status-${dep.status}"><span class="dep-icon">${dep.icon}</span><div class="dep-info"><div class="dep-header"><span class="dep-name">${esc(dep.name)}</span><span class="dep-status ${dep.status}">${statusLabel}</span></div><div class="dep-desc">${esc(dep.description)}</div>`;
+if (dep.offer) html += `<div class="dep-offer">${esc(dep.offer)}</div>`;
+if (dep.actionLabel) html += `<button class="dep-action-btn" onclick="handleDepAction(this, '${dep.id}')">${esc(dep.actionLabel)}</button>`;
+html += '</div></div>';
+});
+html += '</div>';
+}
+flow.phases.forEach((phase, pi) => {
+cardIndex++;
+const stepCount = (phase.steps || []).length;
+const hasChanges = (phase.steps || []).some(s => s.status === 'new' || s.status === 'modified');
+const autoOpen = hasChanges;
+html += `<div class="phase-card fade-in-up delay-${Math.min(cardIndex, 10)}${autoOpen ? ' open' : ''}" data-phase="${phase.id}"><div class="phase-header" onclick="togglePhase(this)"><div class="phase-header-left"><span class="phase-emoji">${phase.emoji}</span><span class="phase-label">${esc(phase.label)}</span></div><div class="phase-header-right">${stepCount > 0 ? `<span class="step-count">${stepCount} step${stepCount !== 1 ? 's' : ''}</span>` : '<span class="step-count" style="color:var(--gray-300)">empty</span>'}<svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></div></div><div class="phase-body">`;
+if (phase.description) html += `<div class="phase-description">${esc(phase.description)}</div>`;
+if (stepCount === 0 && !phase.description) html += '<div class="phase-empty">No steps yet</div>';
+else if (stepCount > 0) {
+html += '<div class="phase-steps">';
+phase.steps.forEach(step => { html += renderStep(step); });
+html += '</div>';
+}
+const hasLoopBack = (phase.steps || []).some(s => s.loopBack);
+if (hasLoopBack) {
+html += `<div class="flywheel-banner"><div class="flywheel-header"><div class="flywheel-title">♾️ This never stops improving</div><div class="flywheel-subtitle">Here's what happens to a real post over 30 days:</div></div><div class="flywheel-timeline"><div class="flywheel-example-label">Example: "ChatGPT Enterprise vs AI Enablement"</div>
+<div class="fw-day"><div class="fw-day-marker"><div class="fw-day-dot"></div><div class="fw-day-line"></div></div><div class="fw-day-content"><div class="fw-day-label">Day 1 — Published</div><div class="fw-day-text">Apollo writes and publishes the post. Google starts indexing.</div><div class="fw-day-result rank-target">📍 Not ranked yet</div></div></div>
+<div class="fw-day"><div class="fw-day-marker"><div class="fw-day-dot"></div><div class="fw-day-line"></div></div><div class="fw-day-content"><div class="fw-day-label">Day 4 — First signal</div><div class="fw-day-text">Nightly review spots it ranking #47 for "ChatGPT for business vs dedicated AI." Low traffic, high bounce rate.</div><div class="fw-day-result rank-target">📍 Position #47</div></div></div>
+<div class="fw-day"><div class="fw-day-marker"><div class="fw-day-dot gold"></div><div class="fw-day-line"></div></div><div class="fw-day-content"><div class="fw-day-label">Day 5 — First optimization</div><div class="fw-day-text">Apollo rewrites the H1 and meta description to better match the search intent. Adds a comparison table (competitors' posts with tables rank higher). Adds internal links from 2 newer posts.</div></div></div>
+<div class="fw-day"><div class="fw-day-marker"><div class="fw-day-dot"></div><div class="fw-day-line"></div></div><div class="fw-day-content"><div class="fw-day-label">Day 11 — Climbing</div><div class="fw-day-text">Jumped to #18. Bounce rate dropped 23%. The comparison table is getting clicks.</div><div class="fw-day-result rank-up">📈 #47 → #18</div></div></div>
+<div class="fw-day"><div class="fw-day-marker"><div class="fw-day-dot gold"></div><div class="fw-day-line"></div></div><div class="fw-day-content"><div class="fw-day-label">Day 12 — Second optimization</div><div class="fw-day-text">Adds an FAQ section (People Also Ask data). Updates stats to latest numbers. Strengthens the CTA. Meanwhile, a NEW post published today links back to this one — boosting its authority.</div></div></div>
+<div class="fw-day"><div class="fw-day-marker"><div class="fw-day-dot"></div><div class="fw-day-line"></div></div><div class="fw-day-content"><div class="fw-day-label">Day 20 — Page 1</div><div class="fw-day-text">Position #8. Organic clicks: 340/week. Avg time on page: 4m 12s.</div><div class="fw-day-result rank-up">📈 #18 → #8</div></div></div>
+<div class="fw-day"><div class="fw-day-marker"><div class="fw-day-dot gold"></div><div class="fw-day-line"></div></div><div class="fw-day-content"><div class="fw-day-label">Day 21 — Third optimization</div><div class="fw-day-text">Apollo notices the #1 result has a video embed. Reel creates a 60-second summary video and Apollo adds it to the post.</div></div></div>
+<div class="fw-day"><div class="fw-day-marker"><div class="fw-day-dot green"></div></div><div class="fw-day-content"><div class="fw-day-label">Day 30 — Top 3</div><div class="fw-day-text">Position #3. 890 clicks/week. This one post now drives 12% of your total organic traffic. And it's still improving.</div><div class="fw-day-result rank-win">🏆 #47 → #3 in 30 days</div></div></div>
+</div><div class="flywheel-insight">This happens to every post. Every night. Automatically. <em>While you sleep, your content gets better.</em></div></div>`;
+}
+html += '</div></div>';
+});
+content.innerHTML = html;
+}
+
+function renderStep(step) {
+const status = step.status || 'unchanged';
+let badgeHtml = '';
+if (status === 'new') badgeHtml = '<span class="step-badge new">✨ NEW</span>';
+else if (status === 'modified') badgeHtml = '<span class="step-badge modified">✏️ MODIFIED</span>';
+let metaHtml = '';
+if (step.sources && step.sources.length > 0) { metaHtml += '<div class="step-meta">'; step.sources.forEach(s => { metaHtml += `<span class="meta-tag">${esc(s)}</span>`; }); metaHtml += '</div>'; }
+if (step.model) metaHtml += `<div class="step-meta"><span class="meta-tag">🧠 ${esc(step.model)}</span></div>`;
+if (step.type === 'gate' && step.approver) { metaHtml += `<div class="gate-info"><div class="gate-row">👤 <strong>${esc(step.approver)}</strong></div>${step.mode ? `<div class="gate-row">${esc(step.mode)}</div>` : ''}</div>`; }
+if (step.criteria && step.criteria.length > 0) { metaHtml += '<div class="criteria-list">'; step.criteria.forEach(c => { metaHtml += `<span class="criteria-tag">${esc(c)}</span>`; }); metaHtml += '</div>'; }
+if (step.agent) { metaHtml += `<div class="step-agent"><span class="step-agent-avatar" style="background:${step.agent.color || '#6b7280'}">${step.agent.avatar || step.agent.name.charAt(0)}</span><span class="step-agent-name">${esc(step.agent.name)}</span></div>`; }
+if (step.keywords && step.keywords.length > 0) { metaHtml += '<div class="keywords-section"><div class="keywords-label">🎯 Targeting these keywords:</div><div class="criteria-list">'; step.keywords.forEach(k => { metaHtml += `<span class="keyword-tag">${esc(k)}</span>`; }); metaHtml += '</div></div>'; }
+let changeNoteHtml = '';
+if (step.changeNote) changeNoteHtml = `<div class="step-change-note">↳ ${esc(step.changeNote)}</div>`;
+const loopClass = step.loopBack ? ' loopback' : step.optimizationLoop ? ' optimization-loop' : '';
+return `<div class="step-card ${status}${loopClass}"><div class="step-top"><span class="step-icon">${step.icon || '📄'}</span><div class="step-info"><div class="step-label-row"><span class="step-label">${esc(step.label)}</span>${badgeHtml}</div><div class="step-desc">${esc(step.description)}</div>${changeNoteHtml}${metaHtml}</div></div></div>`;
+}
+
+// ─── Interactions ───
+function togglePhase(header) { header.closest('.phase-card').classList.toggle('open'); }
+let currentAction = null;
+function handleAction(action) {
+currentAction = action;
+const btns = document.getElementById('cta-buttons');
+const conf = document.getElementById('confirmation');
+const modWrap = document.getElementById('modify-wrap');
+const confMsg = document.getElementById('confirmation-msg');
+const pill = document.getElementById('status-pill');
+if (action === 'approve') { btns.style.display = 'none'; conf.classList.add('active'); confMsg.textContent = '✅ Locked in! ' + (window._flow ? window._flow.proposedBy : 'Apollo') + ' will update the flow.'; pill.textContent = '✅ Approved'; pill.className = 'status-pill approved'; }
+else if (action === 'modify') { btns.style.display = 'none'; modWrap.classList.add('active'); document.getElementById('modify-input').focus(); }
+else if (action === 'reject') { btns.style.display = 'none'; conf.classList.add('active'); confMsg.textContent = '❌ Got it. Flow stays as-is.'; pill.textContent = '❌ Rejected'; pill.className = 'status-pill rejected'; }
+}
+function submitModify() {
+const text = document.getElementById('modify-input').value.trim();
+if (!text) { document.getElementById('modify-input').focus(); return; }
+document.getElementById('modify-wrap').classList.remove('active');
+document.getElementById('confirmation').classList.add('active');
+document.getElementById('confirmation-msg').textContent = '📝 Feedback sent to ' + (window._flow ? window._flow.proposedBy : 'Apollo') + '!';
+const pill = document.getElementById('status-pill');
+pill.textContent = '✏️ Feedback sent'; pill.className = 'status-pill'; pill.style.background = 'var(--blue-50)'; pill.style.color = 'var(--blue-600)'; pill.style.borderColor = 'var(--blue-100)';
+}
+function cancelModify() { document.getElementById('modify-wrap').classList.remove('active'); document.getElementById('cta-buttons').style.display = 'flex'; }
+function handleDepAction(btn, depId) {
+const messages = { content_calendar: '✅ On it! Creating your 30-day content calendar now...', brand_guide: '✅ Opening the brand voice draft for your review...' };
+btn.textContent = messages[depId] || '✅ Got it!'; btn.classList.add('done');
+}
+
+// ─── View Toggle ───
+function switchView(view) {
+const cardsView = document.querySelector('.cards-view');
+const snakeView = document.getElementById('snake-content');
+const liveView = document.getElementById('live-content');
+document.getElementById('toggle-cards').classList.remove('active');
+document.getElementById('toggle-snake').classList.remove('active');
+document.getElementById('toggle-live').classList.remove('active');
+cardsView.classList.remove('active'); snakeView.style.display = 'none'; liveView.style.display = 'none';
+if (view === 'snake') { snakeView.style.display = 'block'; document.getElementById('toggle-snake').classList.add('active'); if (!snakeView.innerHTML.trim()) renderSnake(window._flow); }
+else if (view === 'live') { liveView.style.display = 'block'; document.getElementById('toggle-live').classList.add('active'); if (!liveView.innerHTML.trim()) startLiveDemo(); }
+else { cardsView.classList.add('active'); document.getElementById('toggle-cards').classList.add('active'); }
+}
+
+// ─── Live Demo ───
+function startLiveDemo() {
+const container = document.getElementById('live-content');
+const steps = [
+{ agent: { name: 'Apollo', avatar: '📝', color: '#3b82f6' }, name: 'Research Today\'s Topics', delay: 0, duration: 2000, output: `<strong>3 topics found for today:</strong><br><br>1. "ChatGPT Enterprise vs AI Enablement" — 2,400 monthly searches, difficulty: medium, gap in competitor coverage<br>2. "AI Automation ROI Calculator" — 1,800 monthly searches, rising trend +34%<br>3. "How to Onboard AI Employees" — 960 monthly searches, low competition<br><br><em>Recommending topic #1 — highest search volume with a clear angle we can own.</em>` },
+{ agent: { name: 'Apollo', avatar: '📝', color: '#3b82f6' }, name: 'Create Outline', delay: 2500, duration: 2500, output: `<strong>"ChatGPT Enterprise vs AI Enablement"</strong><br><br><strong>Angle:</strong> Tool vs Teammate — why general AI falls short for real business transformation<br><br>• What ChatGPT Enterprise actually offers<br>• 5 critical limitations (no personalization, no cross-dept context, no proactive work...)<br>• Feature comparison table<br>• Decision framework: when to use which<br>• CTA → iEnable demo<br><br><strong>Target:</strong> 1,800 words · 7 min read · Primary KW: "chatgpt for business vs dedicated AI"` },
+{ agent: { name: 'Jonathan', avatar: 'J', color: '#f59e0b', isHuman: true }, name: 'You Approve the Outline', delay: 5500, duration: 0, isGate: true, gatePreview: 'Apollo wants to write about ChatGPT Enterprise vs AI Enablement. The outline is above — does this angle work?' },
+{ agent: { name: 'Apollo', avatar: '📝', color: '#3b82f6' }, name: 'Write the Full Post', delay: 8000, duration: 3000, output: `<strong>"ChatGPT Enterprise vs Dedicated AI Enablement: Which Approach Actually Works?"</strong><br><br><em>1,847 words · Reading time: 7 minutes</em><br><br>Every Fortune 500 company is asking the same question: should we roll out ChatGPT Enterprise, or invest in a dedicated AI enablement platform? It's the most important technology decision of 2026, and most companies are getting it wrong...<br><br><span style="color:var(--gray-400)">[Full post ready — 1,847 words with comparison table, FAQ section, and 3 internal links]</span>` },
+{ agent: { name: 'Reel', avatar: '🎬', color: '#ec4899' }, name: 'Create Visual Content', delay: 11500, duration: 3500, output: 'richImages' },
+{ agent: { name: 'QA', avatar: '🎯', color: '#6b7280' }, name: 'Quality Scores', delay: 15500, duration: 2000, output: 'scores', scores: [
+{ label: 'SEO', score: 92, color: '#22c55e' },
+{ label: 'Brand Voice', score: 88, color: '#3b82f6' },
+{ label: 'Readability', score: 95, color: '#22c55e' },
+{ label: 'Visual Quality', score: 91, color: '#22c55e' }
+] },
+{ agent: { name: 'Jonathan', avatar: 'J', color: '#f59e0b', isHuman: true }, name: 'Final Approval', delay: 18000, duration: 0, isGate: true, gatePreview: 'Post + visuals are ready. SEO: 92, Brand Voice: 88, Readability: 95. Approve to publish?' },
+{ agent: { name: 'Apollo', avatar: '📝', color: '#3b82f6' }, name: 'Publish to Blog', delay: 20500, duration: 1500, output: `<strong>✅ Published!</strong><br><br>🔗 <a href="https://ienable.ai/blog/chatgpt-enterprise-vs-ai-enablement.html" style="color:var(--blue-600)">ienable.ai/blog/chatgpt-enterprise-vs-ai-enablement</a><br><br>📊 Submitted to Google for indexing<br>📱 Social cards generated for all platforms<br>⏱️ Total time: 22 minutes from start to published` },
+{ agent: { name: 'Apollo', avatar: '📝', color: '#3b82f6' }, name: 'The Flywheel — Tonight at 11 PM', delay: 23000, duration: 3000, isFlywheel: true, output: 'flywheel' }
+];
+
+let html = `<div class="live-header"><div class="live-title">▶️ Watch this flow run</div><div class="live-subtitle">Simulated run of the Blog Post Pipeline</div></div>`;
+
+steps.forEach((step, i) => {
+const stepId = `live-step-${i}`;
+if (i > 0) html += `<div class="live-connector" id="live-conn-${i}"><div class="live-connector-line"></div></div>`;
+html += `<div class="live-step" id="${stepId}"><div class="live-step-header"><div class="live-step-agent" style="background:${step.agent.color}">${step.agent.avatar}</div><div class="live-step-info"><div class="live-step-name">${esc(step.name)}</div><div class="live-step-agent-name">${esc(step.agent.name)}</div></div><div class="live-step-status" id="${stepId}-status" style="display:none"></div></div><div class="live-output" id="${stepId}-output" style="display:none"></div></div>`;
+});
+html += `<div class="live-replay" id="live-replay"><button class="live-replay-btn" onclick="replayLiveDemo()">🔄 Watch it again</button></div>`;
+container.innerHTML = html;
+
+const lastStep = steps[steps.length - 1];
+const replayDelay = lastStep.delay + lastStep.duration + 1500;
+setTimeout(() => { document.getElementById('live-replay').classList.add('visible'); }, replayDelay);
+
+steps.forEach((step, i) => {
+const stepEl = document.getElementById(`live-step-${i}`);
+const statusEl = document.getElementById(`live-step-${i}-status`);
+const outputEl = document.getElementById(`live-step-${i}-output`);
+
+setTimeout(() => {
+stepEl.classList.add('visible');
+if (step.isFlywheel) {
+stepEl.style.borderColor = '#7c3aed'; stepEl.style.background = 'linear-gradient(135deg, #faf5ff, #f5f3ff)';
+stepEl.classList.add('active'); statusEl.style.display = ''; statusEl.className = 'live-step-status running'; statusEl.style.background = '#f5f3ff'; statusEl.style.color = '#7c3aed'; statusEl.textContent = '♾️ Scheduled';
+outputEl.style.display = ''; outputEl.innerHTML = `<div class="live-typing"><div class="live-typing-dot"></div><div class="live-typing-dot"></div><div class="live-typing-dot"></div></div>`;
+} else if (!step.isGate) {
+stepEl.classList.add('active'); statusEl.style.display = ''; statusEl.className = 'live-step-status running'; statusEl.textContent = '● Working...';
+outputEl.style.display = ''; outputEl.innerHTML = `<div class="live-typing"><div class="live-typing-dot"></div><div class="live-typing-dot"></div><div class="live-typing-dot"></div></div>`;
+} else {
+stepEl.classList.add('waiting-human'); statusEl.style.display = ''; statusEl.className = 'live-step-status waiting'; statusEl.textContent = '⏳ Waiting';
+}
+}, step.delay);
+
+if (step.duration > 0) {
+setTimeout(() => {
+stepEl.classList.remove('active'); stepEl.classList.add('completed');
+statusEl.className = 'live-step-status done'; statusEl.textContent = '✓ Done';
+if (step.output === 'richImages') {
+outputEl.innerHTML = `<div class="live-output-label">Generated by Reel — 4 assets in 90 seconds</div><div style="background:var(--gray-50);border-radius:12px;padding:12px;border:1px solid var(--gray-100)"><div style="font-size:12px;color:var(--gray-500);margin-bottom:8px;display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:#ec4899;display:inline-block"></span><em>Reel created these from the blog post content + your brand guide:</em></div><div class="live-output-images" style="grid-template-columns:1fr 1fr;gap:8px"><div class="live-output-img hero" style="grid-column:span 2"><div style="font-size:16px;font-weight:800;text-shadow:0 2px 8px rgba(0,0,0,0.4)">ChatGPT Enterprise</div><div style="font-size:11px;font-weight:600;opacity:0.9">vs AI Enablement</div><div style="font-size:9px;opacity:0.6;margin-top:4px;padding:2px 8px;background:rgba(255,255,255,0.2);border-radius:4px">HERO · 1200×630</div></div><div class="live-output-img social-square"><div style="font-size:24px;margin-bottom:2px">🤖 vs 🏢</div><div style="font-size:10px;font-weight:700">Which AI approach<br>actually works?</div><div style="font-size:8px;opacity:0.6;margin-top:3px">IG · 1080×1080</div></div><div class="live-output-img stories"><div style="font-size:11px;font-weight:800;padding:0 8px;text-align:center;line-height:1.4">The #1 mistake companies make with AI</div><div style="font-size:20px;margin:4px 0">👆</div><div style="font-size:9px;font-weight:600;opacity:0.8">Swipe up to read</div><div style="font-size:8px;opacity:0.5;margin-top:3px">Stories · 1080×1920</div></div><div class="live-output-img video" style="grid-column:span 2;aspect-ratio:16/7"><div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)"><span style="font-size:18px;margin-left:2px">▶</span></div><div style="font-size:11px;font-weight:700;margin-top:4px">15-second video teaser</div><div class="play-badge">▶ 0:15</div></div></div><div style="font-size:11px;color:var(--gray-400);margin-top:10px;text-align:center;line-height:1.5">☝️ These are concept mockups of what Reel will generate when this flow runs.<br>Final assets will be production-ready and match your brand guide.</div><div style="display:flex;gap:8px;margin-top:10px"><button style="flex:1;padding:8px;border-radius:8px;border:1.5px solid #e5e7eb;background:white;font-size:12px;font-weight:600;color:#4b5563;cursor:pointer" onclick="this.textContent='✅ Brief sent to Reel'">✏️ Edit Reel's brief</button><button style="flex:1;padding:8px;border-radius:8px;border:1.5px solid #ddd6fe;background:#faf5ff;font-size:12px;font-weight:600;color:#7c3aed;cursor:pointer" onclick="this.textContent='✅ Styles saved'">🎨 Adjust style</button></div></div>`;
+} else if (step.output === 'flywheel') {
+outputEl.innerHTML = `<div class="flywheel-anim"><div class="flywheel-spinner"><div class="flywheel-ring"></div><div class="flywheel-ring inner"></div><div class="flywheel-center">♾️</div><div class="flywheel-nodes"><div class="flywheel-node">📊</div><div class="flywheel-node">🔧</div><div class="flywheel-node">📅</div><div class="flywheel-node">📈</div></div></div><div class="flywheel-labels"><div class="flywheel-label-item"><div class="flywheel-label-dot" style="background:#3b82f6"></div> Measure</div><div class="flywheel-label-item"><div class="flywheel-label-dot" style="background:#ec4899"></div> Optimize</div><div class="flywheel-label-item"><div class="flywheel-label-dot" style="background:#22c55e"></div> Plan</div><div class="flywheel-label-item"><div class="flywheel-label-dot" style="background:#7c3aed"></div> Rank</div></div></div><div class="live-output-text" style="background:linear-gradient(135deg,#faf5ff,#eff6ff);border-color:#ddd6fe;margin-top:12px"><strong>Tonight at 11 PM, this post enters the flywheel:</strong><br><br>📊 <strong>Measure</strong> — GA4 pageviews, bounce rate, time on page<br>🔧 <strong>Optimize</strong> — rewrite H1, add FAQ, strengthen internal links<br>📅 <strong>Plan</strong> — learnings shape tomorrow's new content<br>📈 <strong>Rank</strong> — check keyword positions, push toward page 1<br><br><div style="text-align:center;padding:12px;background:rgba(124,58,237,0.08);border-radius:10px;margin-top:4px"><strong style="color:#7c3aed;font-size:15px">Every night. Every post. Automatically.</strong><br><span style="font-size:12px;color:var(--gray-500)">This post will go from unranked → top 3 in 30 days.</span></div></div>`;
+} else if (step.output === 'scores') {
+let scoreHtml = '<div class="live-output-label">Quality Scores</div><div class="live-qa-scores">';
+step.scores.forEach(s => { scoreHtml += `<div class="live-qa-row"><span class="live-qa-label">${esc(s.label)}</span><div class="live-qa-bar-track"><div class="live-qa-bar-fill" style="width:0%;background:${s.color}" id="qa-bar-${s.label}"></div></div><span class="live-qa-score" style="color:${s.color}">${s.score}/100</span></div>`; });
+scoreHtml += '</div>'; outputEl.innerHTML = scoreHtml;
+setTimeout(() => { step.scores.forEach(s => { document.getElementById(`qa-bar-${s.label}`).style.width = s.score + '%'; }); }, 100);
+} else {
+outputEl.innerHTML = `<div class="live-output-label">Output</div><div class="live-output-text">${step.output}</div>`;
+}
+}, step.delay + step.duration);
+}
+
+if (step.isGate) {
+setTimeout(() => {
+outputEl.style.display = '';
+outputEl.innerHTML = `<div class="live-approval-card"><div class="live-approval-prompt">Your turn</div><div class="live-approval-preview">${esc(step.gatePreview)}</div><div class="live-approval-actions"><button class="live-approval-btn approve" onclick="approveLiveGate(${i})">✅ Approve</button><button class="live-approval-btn revise" onclick="approveLiveGate(${i})">✏️ Revise</button></div></div>`;
+}, step.delay + 500);
+}
+});
+}
+
+function replayLiveDemo() {
+const container = document.getElementById('live-content');
+container.innerHTML = '';
+startLiveDemo();
+container.scrollIntoView({ behavior: 'smooth' });
+}
+
+function approveLiveGate(stepIndex) {
+const stepEl = document.getElementById(`live-step-${stepIndex}`);
+const statusEl = document.getElementById(`live-step-${stepIndex}-status`);
+const outputEl = document.getElementById(`live-step-${stepIndex}-output`);
+stepEl.classList.remove('waiting-human'); stepEl.classList.add('completed');
+statusEl.className = 'live-step-status done'; statusEl.textContent = '✓ Approved';
+outputEl.innerHTML = '<div class="live-output-text" style="text-align:center;color:var(--green-600);font-weight:600">✅ Approved — continuing flow</div>';
+}
+
+// ─── Snake Flowchart Renderer ───
+function renderSnake(flow) {
+const container = document.getElementById('snake-content');
+const allSteps = [];
+flow.phases.forEach(phase => {
+if (phase.steps && phase.steps.length > 0) {
+phase.steps.forEach((step, i) => { allSteps.push({ ...step, phaseEmoji: phase.emoji, phaseLabel: phase.label, isFirstInPhase: i === 0 }); });
+}
+});
+if (allSteps.length === 0) { container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--gray-400);">No steps to display</div>'; return; }
+const NODES_PER_ROW = 2;
+const rows = [];
+for (let i = 0; i < allSteps.length; i += NODES_PER_ROW) { rows.push(allSteps.slice(i, i + NODES_PER_ROW)); }
+let html = '<div class="snake-container">';
+rows.forEach((row, rowIdx) => {
+const isRTL = rowIdx % 2 === 1;
+const orderedRow = isRTL ? [...row].reverse() : row;
+const firstStepOriginal = row[0];
+if (firstStepOriginal.isFirstInPhase) {
+html += `<div class="snake-phase-label fade-in-up delay-${Math.min(rowIdx + 1, 10)}"><span class="snake-phase-emoji">${firstStepOriginal.phaseEmoji}</span> ${esc(firstStepOriginal.phaseLabel)}</div>`;
+}
+html += `<div class="snake-row ${isRTL ? 'rtl' : 'ltr'} fade-in-up delay-${Math.min(rowIdx + 2, 10)}">`;
+orderedRow.forEach((step, ni) => {
+if (ni > 0) html += `<div class="snake-arrow-h">${isRTL ? '←' : '→'}</div>`;
+const typeClass = 'type-' + (step.type || 'action');
+const statusClass = (step.status === 'new' || step.status === 'modified') ? 'status-' + step.status : '';
+html += `<div class="snake-node ${typeClass} ${statusClass}">`;
+if (step.agent) html += `<div class="snake-node-agent" style="background:${step.agent.color || '#6b7280'}">${step.agent.avatar || step.agent.name.charAt(0)}</div>`;
+if (step.type === 'gate') {
+const initial = (step.approver || '?').charAt(0).toUpperCase();
+html += `<div class="gate-avatar">${initial}</div><div class="snake-node-label">${esc(step.label)}</div>`;
+if (step.mode) html += `<div class="gate-mode">${esc(step.mode)}</div>`;
+} else {
+html += `<span class="snake-node-emoji">${step.icon || '📄'}</span><div class="snake-node-label">${esc(step.label)}</div>`;
+}
+if (step.status === 'new') html += '<div class="snake-node-badge new">✨ NEW</div>';
+else if (step.status === 'modified') html += '<div class="snake-node-badge modified">✏️ MODIFIED</div>';
+html += '</div>';
+});
+html += '</div>';
+if (rowIdx < rows.length - 1) {
+const turnClass = isRTL ? 'turn-left' : 'turn-right';
+html += `<div class="snake-turn ${turnClass}"><div class="snake-turn-line"></div></div>`;
+}
+});
+html += '</div>';
+container.innerHTML = html;
+}
+
+// ─── Init ───
+function init() {
+let flowData = null;
+const hash = window.location.hash.slice(1);
+if (hash && hash.length > 10) {
+try { const json = atob(hash); flowData = JSON.parse(json); } catch (e) { console.warn('Failed to parse hash data, using demo flow'); }
+}
+if (!flowData) flowData = DEMO_FLOW;
+window._flow = flowData;
+try { render(flowData); } catch (e) {
+console.error('Render error:', e);
+document.getElementById('app-loading').style.display = 'none';
+document.getElementById('app-error').style.display = 'flex';
+}
+}
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

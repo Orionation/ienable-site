@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iEnable Discovery v3 — Widget Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #f0f2f5; color: #1a1a2e; }
+
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+  }
+  .modal {
+    width: 1140px; height: 90vh;
+    background: #f5f6f8;
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.18);
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    padding: 16px 24px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .header-left .favicon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: #f0f2f5; border: 1px solid #e5e7eb;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .header-left .favicon img { width: 22px; height: 22px; object-fit: contain; }
+  .header-left h1 { font-size: 16px; font-weight: 700; }
+  .header-left .url { font-size: 11px; color: #888; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600; padding: 6px 14px; border-radius: 100px;
+  }
+  .pill-live { background: #f0fdf4; border: 1px solid #bbf7d0; color: #16a34a; }
+  .pill-live .dot { width: 6px; height: 6px; border-radius: 50%; background: #16a34a; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  .close-btn {
+    background: #f0f2f5; border: none; color: #999; width: 30px; height: 30px;
+    border-radius: 8px; cursor: pointer; font-size: 15px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ===== KPI BAR ===== */
+  .kpi-bar {
+    display: flex; gap: 1px; background: #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .kpi {
+    flex: 1; background: #fff; padding: 12px 16px;
+    text-align: center;
+  }
+  .kpi .num { font-size: 22px; font-weight: 800; color: #1a1a2e; font-variant-numeric: tabular-nums; }
+  .kpi .num .unit { font-size: 12px; font-weight: 600; color: #888; }
+  .kpi .num .plus { color: #16a34a; font-size: 14px; }
+  .kpi .num .growing { color: #16a34a; }
+  .kpi .lbl { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: #999; margin-top: 2px; }
+
+  /* ===== WIDGET GRID ===== */
+  .grid-area {
+    flex: 1; overflow-y: auto; padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: min-content;
+    gap: 12px;
+    align-content: start;
+  }
+  .grid-area::-webkit-scrollbar { width: 5px; }
+  .grid-area::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+  /* Widget base */
+  .widget {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .widget.span2 { grid-column: span 2; }
+  .w-header {
+    padding: 12px 14px 8px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid #f0f2f5;
+  }
+  .w-header h3 {
+    font-size: 12px; font-weight: 700; color: #1a1a2e;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .w-header .badge {
+    font-size: 8px; font-weight: 700; padding: 2px 6px; border-radius: 100px;
+  }
+  .badge-live { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; animation: pulse 2s infinite; }
+  .badge-count { background: #f0f2f5; color: #555; }
+  .w-body {
+    padding: 12px 14px;
+    max-height: 220px;
+    overflow-y: auto;
+    flex: 1;
+  }
+  .w-body::-webkit-scrollbar { width: 4px; }
+  .w-body::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 2px; }
+
+  /* Score bars */
+  .score-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+  .score-row .sl { font-size: 11px; color: #555; width: 78px; font-weight: 500; }
+  .score-bar-bg { flex: 1; height: 7px; background: #f0f2f5; border-radius: 4px; overflow: hidden; }
+  .score-bar { height: 100%; border-radius: 4px; transition: width 2s cubic-bezier(.16,1,.3,1); }
+  .sb-brand { background: linear-gradient(90deg,#a855f7,#c084fc); }
+  .sb-product { background: linear-gradient(90deg,#3b82f6,#60a5fa); }
+  .sb-process { background: linear-gradient(90deg,#f59e0b,#fbbf24); }
+  .sb-customer { background: linear-gradient(90deg,#ec4899,#f472b6); }
+  .sb-integration { background: linear-gradient(90deg,#10b981,#34d399); }
+  .score-row .sv { font-size: 11px; font-weight: 700; width: 32px; text-align: right; }
+
+  /* Brand DNA */
+  .brand-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .brand-logo { width: 40px; height: 40px; border-radius: 10px; background: #f0f2f5; border: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .brand-logo img { width: 28px; height: 28px; object-fit: contain; }
+  .brand-name { font-size: 15px; font-weight: 700; }
+  .brand-tagline { font-size: 11px; color: #888; font-style: italic; }
+  .swatches { display: flex; gap: 6px; margin: 8px 0; }
+  .swatch { width: 28px; height: 28px; border-radius: 7px; border: 2px solid #e5e7eb; cursor: pointer; position: relative; }
+  .swatch:hover::after { content: attr(data-hex); position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 8px; color: #888; white-space: nowrap; }
+  .social-icons { display: flex; gap: 6px; margin-top: 8px; }
+  .social-icon {
+    width: 28px; height: 28px; border-radius: 7px;
+    background: #f0f2f5; border: 1px solid #e5e7eb;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; cursor: pointer;
+  }
+  .social-icon:hover { background: #e5e7eb; }
+  .brand-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .brand-tag { font-size: 10px; padding: 3px 8px; border-radius: 5px; background: #f5f3ff; color: #7c3aed; border: 1px solid #e9d5ff; }
+
+  /* Integration grid */
+  .int-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 7px 0; border-bottom: 1px solid #f5f5f5;
+    font-size: 12px;
+  }
+  .int-item:last-child { border-bottom: none; }
+  .int-left { display: flex; align-items: center; gap: 8px; }
+  .int-icon { width: 24px; height: 24px; border-radius: 6px; background: #f0f2f5; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+  .int-name { font-weight: 500; }
+  .int-status { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 100px; }
+  .int-connected { background: #f0fdf4; color: #16a34a; }
+  .int-missing { background: #fef2f2; color: #dc2626; }
+  .int-action { background: #eff6ff; color: #2563eb; cursor: pointer; }
+
+  /* List items (issues, opps, tasks, depts) */
+  .list-item {
+    padding: 8px 0; border-bottom: 1px solid #f5f5f5;
+    cursor: pointer;
+  }
+  .list-item:last-child { border-bottom: none; }
+  .list-item:hover { background: #fafbfc; margin: 0 -14px; padding: 8px 14px; border-radius: 8px; }
+  .li-top { display: flex; align-items: flex-start; gap: 8px; }
+  .li-icon { font-size: 13px; margin-top: 1px; }
+  .li-text { font-size: 12px; font-weight: 500; color: #1a1a2e; }
+  .li-detail { font-size: 10px; color: #888; margin-top: 2px; margin-left: 21px; }
+  .li-tag {
+    font-size: 8px; font-weight: 700; padding: 1px 5px; border-radius: 3px;
+    margin-left: auto; flex-shrink: 0;
+  }
+  .lt-high { background: #fef2f2; color: #dc2626; }
+  .lt-med { background: #fffbeb; color: #d97706; }
+  .lt-dept { background: #eff6ff; color: #2563eb; }
+
+  /* Activity feed */
+  .feed-line {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 5px 0; border-bottom: 1px solid #f8f9fa;
+    font-size: 11px; color: #555;
+    opacity: 0; transform: translateY(6px);
+    transition: all .3s;
+  }
+  .feed-line.visible { opacity: 1; transform: translateY(0); }
+  .feed-line:last-child { border-bottom: none; }
+  .feed-time { font-size: 9px; color: #bbb; width: 28px; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+  .feed-dot { width: 5px; height: 5px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+  .fd-brand { background: #a855f7; }
+  .fd-tech { background: #3b82f6; }
+  .fd-issue { background: #ef4444; }
+  .fd-task { background: #16a34a; }
+  .fd-opp { background: #f59e0b; }
+  .fd-rep { background: #7c3aed; }
+  .fd-info { background: #888; }
+
+  /* Category chips in collections */
+  .cat-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .cat-chip { font-size: 10px; font-weight: 600; padding: 4px 10px; border-radius: 6px; background: #f0f2f5; color: #555; border: 1px solid #e5e7eb; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    padding: 12px 24px;
+    background: #fff;
+    border-top: 1px solid #e5e7eb;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-left { display: flex; align-items: center; gap: 14px; }
+  .footer-note {
+    font-size: 11px; color: #888; max-width: 500px; line-height: 1.4;
+  }
+  .footer-note strong { color: #555; }
+  .footer-actions { display: flex; gap: 8px; }
+  .btn {
+    font-size: 12px; font-weight: 600; padding: 8px 18px;
+    border-radius: 9px; cursor: pointer; border: none;
+  }
+  .btn-ghost { background: #fff; border: 1px solid #d0d5dd; color: #555; }
+  .btn-ghost:hover { background: #f5f5f5; }
+  .btn-primary {
+    background: linear-gradient(135deg,#16a34a,#15803d); color: #fff;
+    box-shadow: 0 2px 8px rgba(22,163,106,.25);
+  }
+  .btn-primary:hover { filter: brightness(1.05); }
+
+  /* Note banner */
+  .note-banner {
+    margin: 0; padding: 8px 14px;
+    background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px;
+    font-size: 11px; color: #92400e; line-height: 1.4;
+    display: none;
+  }
+  .note-banner strong { color: #78350f; }
+</style>
+</head>
+<body>
+<div class="modal-overlay">
+<div class="modal">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="favicon"><img src="https://plankandbeam.com/cdn/shop/files/Profile.png?crop=center&height=32&v=1731605605&width=32" alt=""></div>
+    <div>
+      <h1>Discovering Plank+Beam</h1>
+      <div class="url">plankandbeam.com</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div class="pill pill-live"><span class="dot"></span><span id="statusText">✨ Scanning homepage...</span></div>
+    <button class="close-btn">✕</button>
+  </div>
+</div>
+
+<!-- KPI BAR -->
+<div class="kpi-bar">
+  <div class="kpi"><div class="num" id="kPages">0</div><div class="lbl">Pages Scanned</div></div>
+  <div class="kpi"><div class="num" id="kProducts">0<span class="plus">+</span></div><div class="lbl">Products Found</div></div>
+  <div class="kpi"><div class="num" id="kCollections">0</div><div class="lbl">Collections</div></div>
+  <div class="kpi"><div class="num" id="kReviews">0</div><div class="lbl">Reviews Saved</div></div>
+  <div class="kpi"><div class="num" id="kIntegrations">0</div><div class="lbl">Integrations</div></div>
+  <div class="kpi"><div class="num" id="kTasks">0</div><div class="lbl">Tasks Created</div></div>
+  <div class="kpi"><div class="num" id="kSpend">$0<span class="unit">/mo</span></div><div class="lbl">Est. Tech Spend</div></div>
+  <div class="kpi"><div class="num" id="kScore">0<span class="unit">%</span></div><div class="lbl">Context Score</div></div>
+</div>
+
+<!-- WIDGET GRID -->
+<div class="grid-area">
+
+  <!-- Context Scores -->
+  <div class="widget">
+    <div class="w-header"><h3>📊 Context Scores</h3><span class="badge badge-live">BUILDING</span></div>
+    <div class="w-body">
+      <div class="score-row"><span class="sl">🎨 Brand</span><div class="score-bar-bg"><div class="score-bar sb-brand" id="bBrand" style="width:0"></div></div><span class="sv" id="vBrand">0%</span></div>
+      <div class="score-row"><span class="sl">📦 Product</span><div class="score-bar-bg"><div class="score-bar sb-product" id="bProduct" style="width:0"></div></div><span class="sv" id="vProduct">0%</span></div>
+      <div class="score-row"><span class="sl">⚙️ Process</span><div class="score-bar-bg"><div class="score-bar sb-process" id="bProcess" style="width:0"></div></div><span class="sv" id="vProcess">0%</span></div>
+      <div class="score-row"><span class="sl">👥 Customer</span><div class="score-bar-bg"><div class="score-bar sb-customer" id="bCustomer" style="width:0"></div></div><span class="sv" id="vCustomer">0%</span></div>
+      <div class="score-row"><span class="sl">🔗 Integration</span><div class="score-bar-bg"><div class="score-bar sb-integration" id="bIntegration" style="width:0"></div></div><span class="sv" id="vIntegration">0%</span></div>
+    </div>
+  </div>
+
+  <!-- Brand DNA -->
+  <div class="widget">
+    <div class="w-header"><h3>🎨 Brand DNA</h3></div>
+    <div class="w-body" id="wBrandDNA">
+      <div style="color:#ccc;font-size:12px;text-align:center;padding:20px;">Discovering...</div>
+    </div>
+  </div>
+
+  <!-- Activity Feed -->
+  <div class="widget">
+    <div class="w-header"><h3>⚡ Live Activity</h3><span class="badge badge-live">LIVE</span></div>
+    <div class="w-body" id="wFeed" style="padding:8px 14px;"></div>
+  </div>
+
+  <!-- Integrations -->
+  <div class="widget">
+    <div class="w-header"><h3>🔗 Integrations</h3><span class="badge badge-count" id="intBadge">0 found</span></div>
+    <div class="w-body" id="wInt">
+      <div style="color:#ccc;font-size:12px;text-align:center;padding:20px;">Scanning...</div>
+    </div>
+  </div>
+
+  <!-- Reputation Center -->
+  <div class="widget">
+    <div class="w-header"><h3>🛡️ Reputation Center</h3><span class="badge badge-live">BUILDING</span></div>
+    <div class="w-body" id="wRep">
+      <div style="color:#ccc;font-size:12px;text-align:center;padding:20px;">Initializing...</div>
+    </div>
+  </div>
+
+  <!-- Opportunities (the big ah-ha) -->
+  <div class="widget">
+    <div class="w-header"><h3>💡 Opportunities</h3><span class="badge badge-count" id="oppBadge">0</span></div>
+    <div class="w-body" id="wOpp">
+      <div style="color:#ccc;font-size:12px;text-align:center;padding:20px;">Analyzing...</div>
+    </div>
+  </div>
+
+  <!-- Tasks Created -->
+  <div class="widget">
+    <div class="w-header"><h3>✅ Tasks Created</h3><span class="badge badge-count" id="taskBadge">0</span></div>
+    <div class="w-body" id="wTasks">
+      <div style="color:#ccc;font-size:12px;text-align:center;padding:20px;">Generating...</div>
+    </div>
+  </div>
+
+  <!-- Suggested Departments -->
+  <div class="widget">
+    <div class="w-header"><h3>🏢 Suggested Departments</h3></div>
+    <div class="w-body" id="wDepts">
+      <div style="color:#ccc;font-size:12px;text-align:center;padding:20px;">Analyzing needs...</div>
+    </div>
+  </div>
+
+  <!-- Issues -->
+  <div class="widget">
+    <div class="w-header"><h3>⚠️ Issues</h3><span class="badge badge-count" id="issBadge">0</span></div>
+    <div class="w-body" id="wIssues">
+      <div style="color:#ccc;font-size:12px;text-align:center;padding:20px;">Checking...</div>
+    </div>
+  </div>
+
+  <!-- Note banner -->
+  <div class="widget span2" id="noteBanner" style="display:none;">
+    <div class="w-body" style="max-height:none;padding:14px 16px;">
+      <div style="font-size:12px;color:#555;line-height:1.5;">
+        <strong>📋 Next steps:</strong> Review the tasks above and assign them to departments for execution. Your AI team will pick them up automatically.<br><br>
+        <strong>🔄 This runs daily.</strong> iEnable will re-crawl your site, check for changes, monitor your reputation, and surface new opportunities. Check back tomorrow — your counters will keep growing.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-left">
+    <span style="font-size:11px;color:#999;">⏱️ <span id="timer">0s</span></span>
+    <span class="pill pill-live" style="font-size:10px;padding:4px 10px;"><span class="dot"></span>Counters updating in background</span>
+  </div>
+  <div class="footer-actions">
+    <button class="btn btn-ghost">Edit Details</button>
+    <button class="btn btn-primary">Looks Good →</button>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+let t=0, tasks=0, opps=0, issues=0, integrations=0;
+setInterval(()=>{t++;document.getElementById('timer').textContent=t+'s';},1000);
+
+const statuses=["✨ Scanning homepage...","✨ Crawling sitemap...","✨ Finding your logo...","✨ Extracting brand colors...","✨ Detecting tech stack...","✨ Counting products...","✨ Checking social presence...","✨ Reading menu navigation...","✨ Collecting reviews...","✨ Estimating tech spend...","✨ Building Reputation Center...","✨ Generating tasks..."];
+let si=0;setInterval(()=>{si=(si+1)%statuses.length;document.getElementById('statusText').textContent=statuses[si];},3000);
+
+function anim(id,val,dur,sfx=''){const e=document.getElementById(id);let s=parseInt(e.textContent)||0,c=s,step=(val-s)/(dur/25);const i=setInterval(()=>{c+=step;if(c>=val){c=val;clearInterval(i);}e.innerHTML=Math.round(c)+(sfx||'');},25);}
+function setScore(cat,val){document.getElementById('b'+cat).style.width=val+'%';document.getElementById('v'+cat).textContent=val+'%';}
+
+function addFeed(dot,text){
+  const f=document.getElementById('wFeed');
+  const d=document.createElement('div');d.className='feed-line';
+  d.innerHTML=`<span class="feed-time">${t}s</span><span class="feed-dot ${dot}"></span><span>${text}</span>`;
+  f.prepend(d);requestAnimationFrame(()=>requestAnimationFrame(()=>d.classList.add('visible')));
+}
+function addInt(icon,name,status,action){
+  const w=document.getElementById('wInt');
+  if(w.querySelector('div[style]'))w.innerHTML='';
+  const d=document.createElement('div');d.className='int-item';
+  const sc=status==='connected'?'int-connected':status==='missing'?'int-missing':'int-action';
+  const sl=status==='connected'?'✓ Connected':status==='missing'?'✗ Missing':'→ Connect';
+  d.innerHTML=`<div class="int-left"><div class="int-icon">${icon}</div><span class="int-name">${name}</span></div><span class="int-status ${sc}">${action||sl}</span>`;
+  w.appendChild(d);integrations++;document.getElementById('intBadge').textContent=integrations+' found';
+}
+function addTask(icon,text,priority,dept){
+  const w=document.getElementById('wTasks');
+  if(w.querySelector('div[style]'))w.innerHTML='';
+  const d=document.createElement('div');d.className='list-item';
+  const pc=priority==='HIGH'?'lt-high':'lt-med';
+  d.innerHTML=`<div class="li-top"><span class="li-icon">${icon}</span><span class="li-text">${text}</span><span class="li-tag ${pc}">${priority}</span></div><div class="li-detail">→ ${dept}</div>`;
+  w.appendChild(d);tasks++;document.getElementById('taskBadge').textContent=tasks;anim('kTasks',tasks,300);
+}
+function addOpp(icon,text,detail){
+  const w=document.getElementById('wOpp');
+  if(w.querySelector('div[style]'))w.innerHTML='';
+  const d=document.createElement('div');d.className='list-item';
+  d.innerHTML=`<div class="li-top"><span class="li-icon">${icon}</span><span class="li-text">${text}</span></div><div class="li-detail">${detail}</div>`;
+  w.appendChild(d);opps++;document.getElementById('oppBadge').textContent=opps;
+}
+function addIssue(icon,text,detail){
+  const w=document.getElementById('wIssues');
+  if(w.querySelector('div[style]'))w.innerHTML='';
+  const d=document.createElement('div');d.className='list-item';
+  d.innerHTML=`<div class="li-top"><span class="li-icon">${icon}</span><span class="li-text">${text}</span><span class="li-tag lt-high">ISSUE</span></div><div class="li-detail">${detail}</div>`;
+  w.appendChild(d);issues++;document.getElementById('issBadge').textContent=issues;
+}
+function addDept(icon,name,taskCount){
+  const w=document.getElementById('wDepts');
+  if(w.querySelector('div[style]'))w.innerHTML='';
+  const d=document.createElement('div');d.className='list-item';
+  d.innerHTML=`<div class="li-top"><span class="li-icon">${icon}</span><span class="li-text">${name}</span><span class="li-tag lt-dept">${taskCount} tasks</span></div><div class="li-detail">Ready to deploy</div>`;
+  w.appendChild(d);
+}
+
+// ===== THE SHOW =====
+const E=[
+  // Brand DNA starts populating
+  {d:2000,f:()=>{
+    addFeed('fd-brand','Connecting to plankandbeam.com...');
+    anim('kPages',3,800);
+  }},
+  {d:4500,f:()=>{
+    addFeed('fd-brand','Logo extracted: PLANK+BEAM');
+    setScore('Brand',20);
+  }},
+  {d:7000,f:()=>{
+    addFeed('fd-brand','Brand colors identified');
+    setScore('Brand',35);
+  }},
+  {d:9500,f:()=>{
+    addFeed('fd-brand','Tagline found');
+    setScore('Brand',50);
+    // Populate Brand DNA widget
+    document.getElementById('wBrandDNA').innerHTML=`
+      <div class="brand-row">
+        <div class="brand-logo"><img src="https://plankandbeam.com/cdn/shop/files/Profile.png?crop=center&height=32&v=1731605605&width=32" alt=""></div>
+        <div><div class="brand-name">Plank+Beam</div><div class="brand-tagline">"Furniture designed right + priced fair."</div></div>
+      </div>
+      <div style="font-size:10px;font-weight:600;color:#999;text-transform:uppercase;margin-bottom:4px;">Colors</div>
+      <div class="swatches">
+        <div class="swatch" style="background:#2f3b50" data-hex="#2f3b50"></div>
+        <div class="swatch" style="background:#f6f3eb" data-hex="#f6f3eb"></div>
+        <div class="swatch" style="background:#333333" data-hex="#333333"></div>
+        <div class="swatch" style="background:#88614b" data-hex="#88614b"></div>
+      </div>
+      <div style="font-size:10px;font-weight:600;color:#999;text-transform:uppercase;margin:8px 0 4px;">Social</div>
+      <div class="social-icons">
+        <div class="social-icon" title="Facebook">f</div>
+        <div class="social-icon" title="Instagram">📷</div>
+        <div class="social-icon" title="Pinterest">📌</div>
+        <div class="social-icon" title="TikTok">🎵</div>
+        <div class="social-icon" title="YouTube">▶️</div>
+      </div>
+      <div class="brand-tags">
+        <span class="brand-tag">Modern Organic</span>
+        <span class="brand-tag">Scandi-Industrial</span>
+        <span class="brand-tag">DTC Furniture</span>
+        <span class="brand-tag">Minimalist</span>
+      </div>
+    `;
+  }},
+  {d:12000,f:()=>{
+    addFeed('fd-brand','Industry: Home & Garden / Furniture / DTC');
+    setScore('Brand',65);
+  }},
+
+  // Collections
+  {d:15000,f:()=>{
+    addFeed('fd-info','Scanning menu navigation...');
+    anim('kCollections',9,1000);
+    anim('kPages',12,1000);
+  }},
+  {d:17500,f:()=>{
+    addFeed('fd-info','9 collections found: Bedroom, Dining, Living Room...');
+    setScore('Product',25);
+  }},
+
+  // Integrations + Products
+  {d:20000,f:()=>{
+    addFeed('fd-tech','Shopify store detected!');
+    addInt('🛒','Shopify','connected');
+    setScore('Integration',15);
+    anim('kIntegrations',1,300);
+  }},
+  {d:22500,f:()=>{
+    addFeed('fd-tech','296 products indexed — counter still growing');
+    anim('kProducts',296,2000);
+    setScore('Product',50);
+  }},
+  {d:25000,f:()=>{
+    addFeed('fd-tech','Google Analytics (GA4) detected');
+    addInt('📊','Google Analytics (GA4)','connected');
+    setScore('Integration',25);anim('kIntegrations',2,300);
+  }},
+  {d:27500,f:()=>{
+    addFeed('fd-tech','Klaviyo email marketing detected');
+    addInt('📧','Klaviyo','connected');
+    setScore('Integration',35);anim('kIntegrations',3,300);
+  }},
+  {d:30000,f:()=>{
+    addFeed('fd-tech','Google Ads conversion tracking detected');
+    addInt('📢','Google Ads','connected');
+    setScore('Integration',45);anim('kIntegrations',4,300);
+  }},
+
+  // Issues + Tasks
+  {d:33000,f:()=>{
+    addFeed('fd-issue','⚠️ Meta Pixel NOT detected');
+    addInt('📱','Meta Pixel','missing');
+    addIssue('🚨','Meta Pixel not installed','87% of DTC furniture brands use Meta retargeting');
+  }},
+  {d:35500,f:()=>{
+    addFeed('fd-task','Task created: Install Meta Pixel');
+    addTask('📱','Install Meta Pixel','HIGH','Marketing & Ads');
+  }},
+  {d:38000,f:()=>{
+    addFeed('fd-issue','⚠️ No review platform detected');
+    addIssue('🚨','No customer review platform','92% of consumers read reviews before buying furniture');
+  }},
+  {d:40500,f:()=>{
+    addFeed('fd-task','Task created: Evaluate review platforms');
+    addTask('⭐','Evaluate review platforms (Judge.me, Yotpo)','HIGH','E-commerce Ops');
+  }},
+  {d:43000,f:()=>{
+    addFeed('fd-issue','⚠️ Pinterest Tag not found');
+    addInt('📌','Pinterest Tag','missing');
+    addIssue('📌','Pinterest Tag not installed','#1 platform for furniture discovery — you have a profile but no pixel');
+  }},
+  {d:45000,f:()=>{
+    addFeed('fd-task','Task created: Install Pinterest Tag');
+    addTask('📌','Install Pinterest Tag','MED','Marketing & Ads');
+  }},
+
+  // Opportunities
+  {d:48000,f:()=>{
+    addFeed('fd-opp','💡 Missing return policy page');
+    addOpp('📄','Missing Return Policy page','Reduces purchase anxiety — most DTC brands link this in footer');
+    addTask('📄','Create Return Policy page','HIGH','Customer Service');
+  }},
+  {d:51000,f:()=>{
+    addFeed('fd-opp','💡 Blog underutilized — 12 posts in 2 years');
+    addOpp('✍️','Blog underutilized','Only 12 posts in 2 years. Competitors average 4/month. Huge SEO opportunity.');
+    addTask('✍️','Create content calendar','MED','Content');
+  }},
+  {d:54000,f:()=>{
+    addFeed('fd-opp','💡 No email popup detected');
+    addOpp('📧','No email capture popup','Klaviyo connected but no visible popup. Average popup captures 3-5% of visitors.');
+    addTask('📧','Create email capture popup','MED','Marketing & Ads');
+  }},
+  {d:57000,f:()=>{
+    addFeed('fd-opp','💡 Google Tag Manager not installed');
+    addOpp('🏷️','Google Tag Manager not installed','Makes it easy to add/remove tracking pixels without developer help');
+    addTask('🏷️','Install Google Tag Manager','MED','E-commerce Ops');
+    addInt('🏷️','Google Tag Manager','missing');
+  }},
+
+  // Reviews
+  {d:60000,f:()=>{
+    addFeed('fd-rep','Collecting product reviews...');
+    let r=0;const ri=setInterval(()=>{r+=Math.floor(Math.random()*8)+2;if(r>347){r=347;clearInterval(ri);}document.getElementById('kReviews').textContent=r;},150);
+    setScore('Customer',15);
+  }},
+
+  // Reputation Center
+  {d:64000,f:()=>{
+    addFeed('fd-rep','🛡️ Building Reputation Center...');
+    document.getElementById('wRep').innerHTML=`
+      <div class="int-item"><div class="int-left"><div class="int-icon">📱</div><span class="int-name">Social Mentions</span></div><span class="int-status int-connected" id="repS">Scanning...</span></div>
+      <div class="int-item"><div class="int-left"><div class="int-icon">💬</div><span class="int-name">Reddit Threads</span></div><span class="int-status int-connected" id="repR">Scanning...</span></div>
+      <div class="int-item"><div class="int-left"><div class="int-icon">🤖</div><span class="int-name">AI Brand Sentiment</span></div><span class="int-status int-connected" id="repA">Analyzing...</span></div>
+      <div class="int-item"><div class="int-left"><div class="int-icon">⭐</div><span class="int-name">Review Score</span></div><span class="int-status int-connected" id="repRv">Collecting...</span></div>
+      <div class="int-item"><div class="int-left"><div class="int-icon">🌐</div><span class="int-name">Google Sentiment</span></div><span class="int-status int-connected" id="repG">Checking...</span></div>
+    `;
+  }},
+  {d:67000,f:()=>{document.getElementById('repS').textContent='23 mentions';document.getElementById('repR').textContent='7 threads';}},
+  {d:70000,f:()=>{document.getElementById('repA').textContent='😊 Positive';document.getElementById('repRv').textContent='4.2 / 5.0';document.getElementById('repG').textContent='Generally positive';}},
+
+  // Tech spend
+  {d:73000,f:()=>{
+    addFeed('fd-info','💰 Estimated tech spend: $15,700+/mo');
+    anim('kSpend',15700,2000);
+    // fix display
+    const el=document.getElementById('kSpend');
+    let c=0;const i=setInterval(()=>{c+=600;if(c>=15700){c=15700;clearInterval(i);el.innerHTML='$'+c.toLocaleString()+'<span class="unit">/mo</span>';}else{el.innerHTML='$'+c.toLocaleString()+'<span class="unit">/mo</span>';}},30);
+  }},
+
+  // Departments
+  {d:76000,f:()=>{
+    addFeed('fd-task','🏢 Suggesting departments...');
+    addDept('📢','Marketing & Ads',7);
+  }},
+  {d:78500,f:()=>{addDept('🛒','E-commerce Operations',5);}},
+  {d:81000,f:()=>{addDept('🎧','Customer Service',3);}},
+  {d:83000,f:()=>{addDept('✍️','Content',2);}},
+
+  // Final scores
+  {d:86000,f:()=>{
+    setScore('Brand',85);setScore('Product',72);setScore('Process',15);setScore('Customer',28);setScore('Integration',60);
+    anim('kPages',47,1500);anim('kScore',52,1500);
+    addFeed('fd-info','✅ Discovery complete — 52% context score');
+  }},
+
+  // Show note banner
+  {d:89000,f:()=>{
+    document.getElementById('noteBanner').style.display='block';
+    addFeed('fd-info','📋 Review tasks and assign to departments');
+  }},
+];
+
+E.forEach(e=>setTimeout(e.f,e.d));
+</script>
+</body>
+</html>

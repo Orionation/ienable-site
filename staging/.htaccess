@@ -1,0 +1,17 @@
+AuthType Basic
+AuthName "iEnable Staging"
+AuthUserFile /home/px6l3w6i8fqm/public_html/ienable.ai/staging/.htpasswd
+Require valid-user
+
+<IfModule mod_headers.c>
+Header set X-Robots-Tag "noindex, nofollow"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /staging/
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /staging/index.html [L]
+</IfModule>

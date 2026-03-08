@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Pacing — Adaline Report</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        .back-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 24px;
+        }
+        .back-link:hover { text-decoration: underline; }
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        .date {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .hero-stat {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .hero-stat.warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        .hero-stat-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+        .hero-stat-value {
+            font-size: 36px;
+            font-weight: 700;
+        }
+        .channel-spend {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .channel-spend h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1e293b;
+        }
+        .channel-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .channel-item:last-child {
+            border-bottom: none;
+        }
+        .channel-name {
+            font-weight: 500;
+            color: #1e293b;
+        }
+        .channel-amount {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        .status-badge.good {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .status-badge.alert {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .status-badge.watch {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .insight {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+            font-size: 14px;
+            color: #1e293b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../" class="back-link">← Back to Report Card</a>
+        
+        <h1>💰 Budget Pacing</h1>
+        <p class="date">February 28, 2026 • YTD Performance</p>
+
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-label">Revenue vs Goal</div>
+                <div class="hero-stat-value">+$577K</div>
+                <div style="font-size: 14px; margin-top: 4px;">Ahead YTD</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-label">TACOS</div>
+                <div class="hero-stat-value">16.8%</div>
+                <div style="font-size: 14px; margin-top: 4px;">Best Ever 🏆</div>
+            </div>
+            <div class="hero-stat warning">
+                <div class="hero-stat-label">Monthly Spend</div>
+                <div class="hero-stat-value">$1.02M</div>
+                <div style="font-size: 14px; margin-top: 4px;">Feb Pacing</div>
+            </div>
+        </div>
+
+        <div class="channel-spend">
+            <h3>💳 Spend by Channel (Monthly)</h3>
+            <div class="channel-item">
+                <span class="channel-name">Meta (All brands)</span>
+                <span>
+                    <span class="channel-amount">$824K</span>
+                    <span class="status-badge good">On pace</span>
+                </span>
+            </div>
+            <div class="channel-item">
+                <span class="channel-name">Google Shopping</span>
+                <span>
+                    <span class="channel-amount">$98K</span>
+                    <span class="status-badge good">Scaling up</span>
+                </span>
+            </div>
+            <div class="channel-item">
+                <span class="channel-name">Bing Search</span>
+                <span>
+                    <span class="channel-amount">$48K</span>
+                    <span class="status-badge good">3x scaled ✅</span>
+                </span>
+            </div>
+            <div class="channel-item">
+                <span class="channel-name">TikTok</span>
+                <span>
+                    <span class="channel-amount">$32K</span>
+                    <span class="status-badge watch">Testing</span>
+                </span>
+            </div>
+            <div class="channel-item">
+                <span class="channel-name">Pinterest</span>
+                <span>
+                    <span class="channel-amount">$12K</span>
+                    <span class="status-badge watch">Low volume</span>
+                </span>
+            </div>
+            <div class="channel-item">
+                <span class="channel-name">CTV</span>
+                <span>
+                    <span class="channel-amount">$8K</span>
+                    <span class="status-badge watch">Halo testing</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="insight">
+            <strong>🎯 Efficiency Milestone:</strong> TACOS at 16.8% is the best we've ever achieved. We're spending $1.02M/month and generating $6.07M in attributed revenue. That's a 5.96x blended ROAS across all channels.
+        </div>
+
+        <div class="insight">
+            <strong>📊 YTD Performance:</strong> We're $577K ahead of revenue goals. This is despite cutting $10.2K/month in waste (MoF DPA-Only pending kill). The efficiency gains from GIF creative scaling and Bing optimization are compounding.
+        </div>
+
+        <div class="channel-spend">
+            <h3>🚨 Over/Under-Spending Flags</h3>
+            <div class="channel-item">
+                <span class="channel-name">❌ MoF DPA-Only</span>
+                <span>
+                    <span class="channel-amount" style="color: #ef4444;">-$10.2K/mo</span>
+                    <span class="status-badge alert">Burning money</span>
+                </span>
+            </div>
+            <div class="channel-item">
+                <span class="channel-name">🎯 Retargeting</span>
+                <span>
+                    <span class="channel-amount" style="color: #10b981;">Underallocated</span>
+                    <span class="status-badge good">20.61x ROAS</span>
+                </span>
+            </div>
+            <div class="channel-item">
+                <span class="channel-name">🚀 ASC+ Promo</span>
+                <span>
+                    <span class="channel-amount" style="color: #10b981;">Tiny $2.5K</span>
+                    <span class="status-badge good">17.08x ROAS</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="insight">
+            <strong>💡 Reallocation Opportunity:</strong> Kill MoF DPA-Only (-$10.2K waste) → shift to Retargeting (20.61x) and ASC+ Promo (17.08x). This single move saves $10.2K and redirects it to campaigns returning 17-20x. Projected impact: +$180K/month revenue.
+        </div>
+    </div>
+</body>
+</html>
