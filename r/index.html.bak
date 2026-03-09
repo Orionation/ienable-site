@@ -929,155 +929,6 @@ function renderSystemHealth() {
   container.insertAdjacentHTML('beforeend', healthHtml);
 }
 
-// Content Calendar for Apollo
-function renderContentCalendar(tasks) {
-  const now = Date.now();
-  const oneWeek = 7 * 24 * 60 * 60 * 1000;
-  
-  // This Week: recently completed or currently working
-  const thisWeek = tasks.filter(t => {
-    if (t.status === 'working') return true;
-    if (t.status === 'complete' && t.completed_at) {
-      const completed = new Date(t.completed_at).getTime();
-      return (now - completed) < oneWeek;
-    }
-    return false;
-  });
-  
-  // Up Next: queued, sorted by created_at (newest = most relevant intel)
-  const upNext = tasks
-    .filter(t => t.status === 'queued')
-    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-    .slice(0, 5);
-  
-  const queuedCount = tasks.filter(t => t.status === 'queued').length;
-  
-  let html = '<div class="collapsible-section"><div class="collapsible-header" onclick="this.parentElement.classList.toggle(\'open\')">';
-  html += '<span>📅 Content Calendar</span><span class="collapsible-arrow">▼</span></div>';
-  html += '<div class="collapsible-body">';
-  
-  // This Week
-  if (thisWeek.length > 0) {
-    html += '<div class="todo-group">📍 This Week</div>';
-    html += thisWeek.map(t => renderCalendarTask(t)).join('');
-  }
-  
-  // Up Next
-  if (upNext.length > 0) {
-    html += '<div class="todo-group">⏭️ Up Next (Latest Intel)</div>';
-    html += upNext.map(t => renderCalendarTask(t)).join('');
-  }
-  
-  // Pipeline summary
-  html += `<div class="todo-summary">📊 Pipeline: ${queuedCount} blog drafts in queue</div>`;
-  html += '</div></div>';
-  
-  return html;
-}
-
-// Creative Pipeline for Muse
-function renderCreativePipeline(tasks) {
-  // In Production: currently working
-  const inProduction = tasks.filter(t => t.status === 'working');
-  
-  // Up Next: queued, sorted by created_at (newest first)
-  const upNext = tasks
-    .filter(t => t.status === 'queued')
-    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-    .slice(0, 5);
-  
-  const queuedCount = tasks.filter(t => t.status === 'queued').length;
-  
-  let html = '<div class="collapsible-section"><div class="collapsible-header" onclick="this.parentElement.classList.toggle(\'open\')">';
-  html += '<span>🎬 Creative Pipeline</span><span class="collapsible-arrow">▼</span></div>';
-  html += '<div class="collapsible-body">';
-  
-  // In Production
-  if (inProduction.length > 0) {
-    html += '<div class="todo-group">🎥 In Production</div>';
-    html += inProduction.map(t => renderCalendarTask(t)).join('');
-  }
-  
-  // Up Next
-  if (upNext.length > 0) {
-    html += '<div class="todo-group">⏭️ Up Next</div>';
-    html += upNext.map(t => renderCalendarTask(t)).join('');
-  }
-  
-  // Pipeline summary
-  html += `<div class="todo-summary">📊 Pipeline: ${queuedCount} creative projects in queue</div>`;
-  html += '</div></div>';
-  
-  return html;
-}
-
-// Task Queue compact section (all agents)
-function renderTaskQueue(tasks) {
-  const working = tasks.filter(t => t.status === 'working').length;
-  const queued = tasks.filter(t => t.status === 'queued').length;
-  const complete = tasks.filter(t => t.status === 'complete').length;
-  
-  // Top 3 priorities: working first, then newest queued
-  const priorities = [
-    ...tasks.filter(t => t.status === 'working'),
-    ...tasks.filter(t => t.status === 'queued')
-      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-  ].slice(0, 3);
-  
-  let html = '<div class="agent-body" style="border-top:1px solid var(--gray-100);">';
-  html += '<div class="section-title">📋 Task Queue</div>';
-  html += `<div style="display:flex;gap:12px;padding:8px 0;font-size:12px;color:var(--gray-600);">`;
-  html += `<span><strong style="color:var(--green-600);">Working:</strong> ${working}</span>`;
-  html += `<span><strong style="color:var(--gray-500);">Queued:</strong> ${queued}</span>`;
-  html += `<span><strong style="color:var(--gray-400);">Complete:</strong> ${complete}</span>`;
-  html += '</div>';
-  
-  if (priorities.length > 0) {
-    html += '<div style="font-size:11px;font-weight:700;color:var(--gray-400);margin-top:8px;">TOP PRIORITIES</div>';
-    priorities.forEach((t, i) => {
-      const icon = t.status === 'working' ? '🔄' : '⏳';
-      const reassigned = (t.task_detail || '').includes('Reassigned') || (t.result_summary || '').includes('Reassigned');
-      const badge = reassigned ? '<span style="font-size:10px;color:var(--purple-600);margin-left:4px;">↪️</span>' : '';
-      html += `<div style="display:flex;gap:6px;align-items:flex-start;padding:6px 0;font-size:12px;color:var(--gray-700);">`;
-      html += `<span style="flex-shrink:0;font-size:10px;width:16px;height:16px;border-radius:50%;background:var(--gray-200);display:flex;align-items:center;justify-content:center;font-weight:700;">${i+1}</span>`;
-      html += `<span>${icon} ${t.task_name}${badge}</span>`;
-      html += '</div>';
-    });
-  }
-  
-  html += '</div>';
-  return html;
-}
-
-// Render calendar task (simplified todo item)
-function renderCalendarTask(task) {
-  const icons = { working: '🔄', queued: '⏳', complete: '✅' };
-  const reassigned = (task.task_detail || '').includes('Reassigned') || (task.result_summary || '').includes('Reassigned');
-  const badge = reassigned ? '<span style="font-size:9px;color:var(--purple-600);background:var(--purple-50);padding:2px 6px;border-radius:4px;margin-left:6px;">↪️ Reassigned</span>' : '';
-  
-  let timeInfo = '';
-  if (task.status === 'working' && task.started_at) {
-    const mins = Math.floor((Date.now() - new Date(task.started_at).getTime()) / 60000);
-    timeInfo = mins < 60 ? `${mins}m` : `${Math.floor(mins/60)}h`;
-  } else if (task.status === 'complete' && task.completed_at) {
-    const mins = Math.floor((Date.now() - new Date(task.completed_at).getTime()) / 60000);
-    timeInfo = mins < 60 ? `${mins}m ago` : mins < 1440 ? `${Math.floor(mins/60)}h ago` : 'Done';
-  } else if (task.created_at) {
-    const date = new Date(task.created_at);
-    timeInfo = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  }
-  
-  return `<div style="padding:8px 14px;border-left:3px solid ${task.status === 'working' ? 'var(--green-500)' : task.status === 'complete' ? 'var(--gray-300)' : 'var(--blue-500)'};background:${task.status === 'working' ? 'var(--green-50)' : task.status === 'complete' ? 'var(--gray-50)' : 'var(--blue-50)'};">
-    <div style="display:flex;gap:8px;align-items:flex-start;">
-      <span style="font-size:13px;flex-shrink:0;">${icons[task.status] || '•'}</span>
-      <div style="flex:1;">
-        <div style="font-size:13px;font-weight:600;color:var(--gray-800);line-height:1.3;">${task.task_name}${badge}</div>
-        ${timeInfo ? `<div style="font-size:11px;color:var(--gray-500);margin-top:2px;">${timeInfo}</div>` : ''}
-      </div>
-    </div>
-  </div>`;
-}
-
 function renderAgentCard(key) {
   try {
   const rc = getRC(key);
@@ -1138,20 +989,6 @@ function renderAgentCard(key) {
     if (complete.length) todoBody += `<div class="todo-group">✅ Done</div>` + complete.map(t => renderTodoItem(t)).join('');
     if (failed.length) todoBody += `<div class="todo-group">❌ Failed</div>` + failed.map(t => renderTodoItem(t)).join('');
     todoBody += `<div class="todo-summary">${doneCount} of ${totalCount} complete</div>`;
-  }
-
-  // Content Calendar / Creative Pipeline (agent-specific)
-  let calendarHtml = '';
-  if (key === 'apollo' && totalCount > 0) {
-    calendarHtml = renderContentCalendar(tasks);
-  } else if (key === 'muse' && totalCount > 0) {
-    calendarHtml = renderCreativePipeline(tasks);
-  }
-
-  // Task Queue (all agents with tasks)
-  let taskQueueHtml = '';
-  if (totalCount > 0) {
-    taskQueueHtml = renderTaskQueue(tasks);
   }
 
   // Status footer
@@ -1230,9 +1067,6 @@ function renderAgentCard(key) {
         <div class="ladder-stage ${learningScore >= 90 ? 'active' : ''}">📚<br>Playbook</div>
       </div>
     </div>` : ''}
-
-    ${taskQueueHtml}
-    ${calendarHtml}
 
     <div class="collapsible-section">
       <div class="collapsible-header" onclick="this.parentElement.classList.toggle('open')">
