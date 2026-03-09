@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && npm run postbuild",
+    "postbuild": "cp dist/sitemap-index.xml dist/sitemap.xml",
     "preview": "astro preview"
   },
   "repository": {
