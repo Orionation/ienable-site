@@ -6,7 +6,14 @@ RewriteCond %{HTTPS} off
 RewriteCond %{HTTP_HOST} ^(www\.)?ienable\.ai$ [NC]
 RewriteRule ^(.*)$ https://ienable.ai/$1 [L,R=301]
 
-# Serve .html files for clean URLs (Astro static build)
+# Clean URLs: /blog/post-name/ → /blog/post-name.html
+# Handle trailing slash by stripping it and checking for .html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} (.+)/$
+RewriteCond %{DOCUMENT_ROOT}%1.html -f
+RewriteRule ^(.+)/$ /$1.html [L]
+
+# Clean URLs: /blog/post-name → /blog/post-name.html (no trailing slash)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
