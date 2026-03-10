@@ -202,6 +202,14 @@ const { title, date, description, tags, readTime, emoji, author = 'iEnable Team'
       border-bottom-color: var(--cyan);
     }
     
+    article :global(img) {
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--radius);
+      margin: 20px 0;
+      display: block;
+    }
+    
     /* Custom blog components */
     article :global(.step-flow) {
       display: flex;
