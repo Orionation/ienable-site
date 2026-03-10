@@ -69,6 +69,7 @@ The first two layers get almost all the investment. Continuous indexing. Better 
 
 The third layer — the one that determines whether AI actually works in your organization — is invisible to every platform on the market.
 
+![The Three Layers of Context Rot](/blog/images/context-rot-symptom-not-disease-enterprise-ai-diagram-1.jpg)
 
 ## Why Fresh Data and Smart Retrieval Still Fail
 

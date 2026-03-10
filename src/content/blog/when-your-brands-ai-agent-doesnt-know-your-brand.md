@@ -13,7 +13,7 @@ readTime: "15 min read"
 
 📅 March 8, 2026 ⏱ 15 min
 
-![Brand identity fragmenting across AI agent interactions](/blog/images/post53-hero-image.jpg)
+![Brand identity fragmenting across AI agent interactions](/blog/images/when-your-brands-ai-agent-doesnt-know-your-brand-hero.jpg)
 
 *The agentic commerce revolution has a fatal flaw — and Harvard Business Review just named it.*
 
@@ -125,6 +125,8 @@ Customer history, loyalty status, past interactions, satisfaction patterns, and 
 At each layer, the accuracy of AI-driven brand representation drops — and the commercial stakes rise. The transactions that require Layer 4-5 context are the highest-value transactions. The ones where brand loyalty, repeat purchase, and lifetime value are determined. And they're the ones where AI agents have the least context.
 
 This is the [Context Gradient](/blog/the-context-gradient-enterprise-ai-evaluation-framework.html) applied to commerce: the features that matter most require the context that exists least.
+
+![Five Layers of Brand Context in Agentic Commerce](/blog/images/when-your-brands-ai-agent-doesnt-know-your-brand-diagram-1.jpg)
 
 ## What "Brand-Ready" Actually Means for Agentic Commerce
 

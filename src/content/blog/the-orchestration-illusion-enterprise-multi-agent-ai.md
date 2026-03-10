@@ -85,6 +85,7 @@ The logic is seductive: a four-tier model stack where ultra-fast local models ha
 
 This is architecturally sound and strategically incomplete.
 
+![Multi-Agent Orchestration vs Context Quality](/blog/images/the-orchestration-illusion-enterprise-multi-agent-ai-diagram-1.jpg)
 
 ## Why Orchestration Alone Fails: The Evidence
 

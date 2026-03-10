@@ -14,7 +14,7 @@ readTime: "5 min read"
 
 📅 March 1, 2026⏱ 14 min
 
-![Neural network visualization with glowing persistent memory core](/blog/images/post52-hero-image.jpg)
+![Neural network visualization with glowing persistent memory core](/blog/images/why-your-ai-agent-forgets-everything-persistent-memory-solution-hero.jpg)
 
 
 # Why Your AI Agent Forgets Everything (And the Pattern That Fixes It)
@@ -124,7 +124,7 @@ After summarization? That becomes: "Discussed model options for trading agent." 
 
 Summaries preserve topics. They lose *decisions*. And in an AI workforce, decisions are everything.
 
-![AI Agent Memory: The Full Landscape — Nine approaches compared, March 2026](/blog/images/post52-comparison-table.jpg)
+![AI Agent Memory: The Full Landscape — Nine approaches compared, March 2026](/blog/images/why-your-ai-agent-forgets-everything-persistent-memory-solution-diagram-1.jpg)
 
 
 ## The Breakthrough: Separate the Note-Taker from the Worker

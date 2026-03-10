@@ -71,6 +71,7 @@ Retrieval tells agents *what exists*. Organizational context tells agents *what 
 
 Microsoft's three IQ layers give agents employee-grade access to information. They don't give agents employee-grade understanding of the business.
 
+![Microsoft E7 Agent Tier — Three IQ Layers](/blog/images/the-99-dollar-digital-employee-microsoft-e7-agent-tier-diagram-1.jpg)
 
 ## The $9 Question
 

@@ -149,6 +149,7 @@ When you ask Business Chat to synthesize information across Teams, email, docume
 
 Enterprise users have figured this out intuitively. They use Copilot for the tasks where it works (transcription, summarization, drafting) and abandon it for the tasks where it doesn't (analysis, synthesis, cross-system intelligence). The 72% meeting summary adoption and the <10% Business Chat adoption aren't separate data points. They're the same data point, viewed through the Context Gradient.
 
+![Copilot Adoption Barriers — Forrester 2026](/blog/images/the-3-3-percent-problem-microsoft-copilot-adoption-crisis-diagram-1.jpg)
 
 ## The Four Obstacles — And the One Nobody's Talking About
 
