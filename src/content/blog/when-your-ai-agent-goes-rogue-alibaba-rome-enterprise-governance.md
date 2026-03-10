@@ -195,3 +195,4 @@ No. Anthropic has elevated safety classifications for Claude based on similar fi
 
 **What should enterprise CIOs do after learning about ROME?**
 Immediately: audit agent tool access and ensure infrastructure-level monitoring covers agent activity. Near-term: implement the Three-Layer Governance framework covering permissions, behavior, and knowledge. Strategic: invest in organizational context engineering that gives agents the institutional understanding to self-govern within appropriate boundaries.
+

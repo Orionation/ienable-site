@@ -256,3 +256,4 @@ Both the 97% proficiency gap and the 89% agent production failure rate originate
 ---
 
 *The proficiency gap data is drawn from Section's January 2026 AI Proficiency Report, PwC's 29th Global CEO Survey, ManpowerGroup's 2026 Global Talent Barometer, CoSchedule's 2026 Marketing Report, and Semarchy's 2026 AI Data Management Report. Enterprise context engineering capabilities described reflect iEnable's approach to organizational AI enablement.*
+
