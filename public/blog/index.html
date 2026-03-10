@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog — iEnable | AI Enablement for Every Employee</title>
+    <meta name="description" content="Insights on AI enablement, enterprise AI adoption, and the future of work.">
+    <meta name="keywords" content="AI enablement, enterprise AI, AI agents, context engineering, AI governance">
+    <link rel="canonical" href="https://ienable.ai/blog/">
+    <meta property="og:title" content="Blog — iEnable">
+    <meta property="og:description" content="Thought leadership on AI enablement and enterprise AI.">
+    <meta property="og:url" content="https://ienable.ai/blog/">
+    <meta property="og:type" content="website">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M98JCVWXVX"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-M98JCVWXVX');</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        :root{--bg-dark:#0a0a0f;--bg-card:#12121a;--bg-card-hover:#1a1a25;--text-primary:#f0f0f5;--text-secondary:#9090a0;--text-muted:#606070;--accent:#4f7fff;--accent-hover:#6b93ff;--border:#1e1e2e}
+        body{font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-dark);color:var(--text-primary);line-height:1.7;-webkit-font-smoothing:antialiased}
+        a{color:inherit;text-decoration:none}
+        .nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,15,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+        .nav-logo{font-size:1.25rem;font-weight:700;letter-spacing:-0.02em}
+        .nav-logo span{color:var(--accent)}
+        .nav-links{display:flex;gap:2rem;align-items:center}
+        .nav-links a{font-size:.9rem;font-weight:500;color:var(--text-secondary);transition:color .2s}
+        .nav-links a:hover{color:var(--text-primary)}
+        .nav-cta{background:var(--accent)!important;color:#fff!important;padding:.5rem 1.25rem;border-radius:8px;font-weight:600}
+        .hero{padding:10rem 2rem 3rem;text-align:center}
+        .hero h1{font-size:clamp(2.5rem,5vw,4rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:1rem}
+        .hero p{font-size:1.2rem;color:var(--text-secondary);max-width:600px;margin:0 auto}
+        .threads{max-width:1100px;margin:2rem auto;padding:0 2rem;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+        .thread-btn{padding:.5rem 1.25rem;border:1px solid var(--border);border-radius:8px;background:var(--bg-card);color:var(--text-secondary);font-size:.9rem;font-weight:500;cursor:pointer;transition:all .2s;font-family:inherit}
+        .thread-btn:hover,.thread-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+        .blog-grid{max-width:1100px;margin:0 auto;padding:2rem 2rem 6rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:2rem}
+        .blog-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:transform .2s,border-color .2s,background .2s;display:block}
+        .blog-card:hover{transform:translateY(-4px);border-color:var(--accent);background:var(--bg-card-hover)}
+        .blog-card-body{padding:2rem}
+        .blog-card-tag{display:inline-block;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.75rem}
+        .blog-card h2{font-size:1.35rem;font-weight:700;letter-spacing:-0.02em;line-height:1.3;margin-bottom:.75rem}
+        .blog-card p{color:var(--text-secondary);font-size:.95rem;line-height:1.6;margin-bottom:1.25rem}
+        .blog-card-meta{display:flex;align-items:center;gap:1rem;font-size:.8rem;color:var(--text-muted)}
+        .blog-card.featured{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:0}
+        .blog-card.featured .blog-card-image{background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center;min-height:300px}
+        .blog-card.featured .icon-large{font-size:5rem;opacity:.6}
+        .blog-card.featured .blog-card-body{padding:2.5rem;display:flex;flex-direction:column;justify-content:center}
+        .blog-card.featured h2{font-size:1.75rem}
+        .footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;color:var(--text-muted);font-size:.85rem}
+        @media(max-width:768px){.nav-links{display:none}.hero{padding:8rem 1.5rem 2rem}.threads{padding:0 1.5rem}.blog-grid{grid-template-columns:1fr;padding:1.5rem}.blog-card.featured{grid-template-columns:1fr}}
+        .blog-card.hidden{display:none}
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="https://ienable.ai" class="nav-logo">i<span>Enable</span></a>
+        <div class="nav-links">
+            <a href="https://ienable.ai">Home</a>
+            <a href="https://ienable.ai/manifesto/">Manifesto</a>
+            <a href="https://ienable.ai/blog/" class="active">Blog</a>
+            <a href="https://ienable.ai" class="nav-cta">Get Started</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>The AI Enablement Blog</h1>
+        <p>Thought leadership on enterprise AI, context engineering, and the future of AI-enabled work.</p>
+    </section>
+
+    <div class="threads">
+        <button class="thread-btn active" data-thread="All">All Posts</button>
+        <button class="thread-btn" data-thread="Our Journey">Our Journey</button>
+        <button class="thread-btn" data-thread="Enterprise AI">Enterprise AI</button>
+        <button class="thread-btn" data-thread="AI Agent Architecture">AI Agent Architecture</button>
+        <button class="thread-btn" data-thread="Market Intelligence">Market Intelligence</button>
+        <button class="thread-btn" data-thread="Context Engineering">Context Engineering</button>
+    </div>
+
+    <div class="blog-grid">
+
+        <a href="why-your-ai-agent-still-forgets-everything.html" class="blog-card featured" data-thread="Our Journey">
+            <div class="blog-card-image"><div class="icon-large">🧠</div></div>
+            <div class="blog-card-body">
+                <span class="blog-card-tag">📌 Featured · Our Journey</span>
+                <h2>Why Your AI Agent Still Forgets Everything (And the 4-Layer Architecture That Actually Fixes It)</h2>
+                <p>Most AI agent memory solutions handle identity but not real learning. Here's the 4-layer memory architecture running in production with 8 AI agents — with real schemas, SQL, and code.</p>
+                <div class="blog-card-meta"><span>📅 Mar 09, 2026</span><span>⏱ 16 min</span></div>
+            </div>
+        </a>
+
+        <a href="why-your-ai-agent-forgets-everything-persistent-memory-solution.html" class="blog-card featured" data-thread="Our Journey">
+            <div class="blog-card-image"><div class="icon-large">📝</div></div>
+            <div class="blog-card-body">
+                <span class="blog-card-tag">📌 Featured · Our Journey</span>
+                <h2>Why Your AI Agent Forgets Everything (And the Pattern That Fixes It)</h2>
+                <p>AI agents lose 65% of their effectiveness to context drift. The 'court stenographer' pattern separates the note-taker from the worker, solving persistent memory for AI agents.</p>
+                <div class="blog-card-meta"><span>📅 Mar 08, 2026</span><span>⏱ 12 min</span></div>
+            </div>
+        </a>
+
+        <a href="when-your-brands-ai-agent-doesnt-know-your-brand.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>When Your Brand's AI Agent Doesn't Know Your Brand</h2>
+                <p>Harvard Business Review warns brands aren't ready for agentic commerce. AI agents transacting on your behalf don't understand your brand.</p>
+                <div class="blog-card-meta"><span>📅 Mar 08, 2026</span><span>⏱ 15 min</span></div>
+            </div>
+        </a>
+
+        <a href="the-99-dollar-digital-employee-microsoft-e7-agent-tier.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>The $99 Digital Employee: Why Microsoft's New Agent Tier Won't Fix Enterprise AI</h2>
+                <p>Microsoft's reported E7 tier at $99/month gives AI agents identity, compliance, and security — but not organizational context.</p>
+                <div class="blog-card-meta"><span>📅 Mar 08, 2026</span><span>⏱ 15 min</span></div>
+            </div>
+        </a>
+
+        <a href="the-context-gradient-enterprise-ai-evaluation-framework.html" class="blog-card" data-thread="AI Agent Architecture">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">AI Agent Architecture</span>
+                <h2>The Context Gradient: A Framework for Evaluating Any Enterprise AI Tool</h2>
+                <p>Why enterprise AI tools excel at meeting summaries but fail at strategic analysis. The Context Gradient framework maps AI features against organizational complexity.</p>
+                <div class="blog-card-meta"><span>📅 Mar 08, 2026</span><span>⏱ 14 min</span></div>
+            </div>
+        </a>
+
+        <a href="enterprise-connect-2026-what-enterprise-ai-wont-solve.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>The Week Enterprise AI Gets Real: What Enterprise Connect 2026 Won't Solve</h2>
+                <p>Enterprise Connect 2026 features 50+ AI announcements. Every vendor solves agent actions and access. None solve organizational context.</p>
+                <div class="blog-card-meta"><span>📅 Mar 07, 2026</span><span>⏱ 12 min</span></div>
+            </div>
+        </a>
+
+        <a href="context-rot-symptom-not-disease-enterprise-ai.html" class="blog-card" data-thread="Context Engineering">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Context Engineering</span>
+                <h2>Context Rot Is a Symptom, Not a Disease: Why Enterprise AI Degrades Over Time</h2>
+                <p>Glean identified 'context rot' as AI performance degradation over time. They're right about the symptom. They're wrong about the cause.</p>
+                <div class="blog-card-meta"><span>📅 Mar 07, 2026</span><span>⏱ 11 min</span></div>
+            </div>
+        </a>
+
+        <a href="the-3-3-percent-problem-microsoft-copilot-adoption-crisis.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>The 3.3% Problem: Why Microsoft's Biggest AI Bet Isn't Working</h2>
+                <p>Microsoft Copilot seat utilization hits 3.3% at some companies. Here's why throwing more AI at the adoption problem makes it worse.</p>
+                <div class="blog-card-meta"><span>📅 Mar 07, 2026</span><span>⏱ 14 min</span></div>
+            </div>
+        </a>
+
+        <a href="the-orchestration-illusion-enterprise-multi-agent-ai.html" class="blog-card" data-thread="AI Agent Architecture">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">AI Agent Architecture</span>
+                <h2>The Orchestration Illusion: Why Multi-Model AI Strategies Still Fail</h2>
+                <p>Enterprises are investing in multi-model AI orchestration. But 78% of agentic pilots fail because orchestration alone isn't enough.</p>
+                <div class="blog-card-meta"><span>📅 Mar 06, 2026</span><span>⏱ 12 min</span></div>
+            </div>
+        </a>
+
+        <a href="the-readiness-illusion-enterprise-ai-2026.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>The Readiness Illusion: 93% of Enterprises Aren't Ready for AI — And More Models Won't Save Them</h2>
+                <p>Only 7% of enterprises have data ready for AI. 47% believe agentic AI will fix their data quality problems.</p>
+                <div class="blog-card-meta"><span>📅 Mar 06, 2026</span><span>⏱ 15 min</span></div>
+            </div>
+        </a>
+
+        <a href="when-ai-models-retire-enterprise-lifecycle-management.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>When AI Models Retire: The Enterprise Model Lifecycle Crisis Nobody's Talking About</h2>
+                <p>Google Gemini 3 Pro Preview retires March 9, 2026. 94% of IT leaders fear vendor lock-in.</p>
+                <div class="blog-card-meta"><span>📅 Mar 05, 2026</span><span>⏱ 14 min</span></div>
+            </div>
+        </a>
+
+        <a href="glean-vs-copilot-vs-chatgpt-enterprise-comparison-2026.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>Glean vs Microsoft Copilot vs ChatGPT Enterprise: Which AI Platform Actually Works in 2026?</h2>
+                <p>An honest comparison with real utilization data, pricing analysis, and the question none of them answer.</p>
+                <div class="blog-card-meta"><span>📅 Mar 05, 2026</span><span>⏱ 16 min</span></div>
+            </div>
+        </a>
+
+        <a href="agent-control-plane-vs-context-engineering.html" class="blog-card" data-thread="AI Agent Architecture">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">AI Agent Architecture</span>
+                <h2>Agent Control Plane vs Context Engineering: Why Governing AI Agents Isn't Enough</h2>
+                <p>Microsoft's Agent Control Plane governs what AI agents can do. But nobody governs what agents know.</p>
+                <div class="blog-card-meta"><span>📅 Mar 05, 2026</span><span>⏱ 14 min</span></div>
+            </div>
+        </a>
+
+        <a href="copilot-paradox-revenue-up-users-down.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>The Copilot Paradox: Microsoft's AI Revenue Is Growing While Users Are Leaving</h2>
+                <p>Microsoft Copilot revenue grew 16.7% YoY while user preference dropped from 18.8% to 11.5%.</p>
+                <div class="blog-card-meta"><span>📅 Mar 04, 2026</span><span>⏱ 12 min</span></div>
+            </div>
+        </a>
+
+        <a href="agent-sandbox-vs-context-window-enterprise-ai.html" class="blog-card" data-thread="AI Agent Architecture">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">AI Agent Architecture</span>
+                <h2>Agent Sandbox vs Context Window: The False Choice Killing Enterprise AI</h2>
+                <p>Glean launched agent sandboxes. Context windows hit 1M tokens. Neither solves the real problem.</p>
+                <div class="blog-card-meta"><span>📅 Mar 04, 2026</span><span>⏱ 14 min</span></div>
+            </div>
+        </a>
+
+        <a href="ai-trough-of-disillusionment-2026.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>The AI Trough of Disillusionment Is Here—And It's the Best Thing That Could Happen to Your Business</h2>
+                <p>Enterprise AI spending hits $2 trillion in 2026 while 95% of pilots deliver zero ROI.</p>
+                <div class="blog-card-meta"><span>📅 Mar 02, 2026</span><span>⏱ 12 min</span></div>
+            </div>
+        </a>
+
+        <a href="enterprise-ai-roi-measurement-crisis.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>How to Measure Enterprise AI ROI: The 79/29 Gap Is Killing Your AI Strategy</h2>
+                <p>79% of enterprises perceive AI productivity gains but only 29% can measure them.</p>
+                <div class="blog-card-meta"><span>📅 Mar 02, 2026</span><span>⏱ 14 min</span></div>
+            </div>
+        </a>
+
+        <a href="agent-sprawl-enterprise-ai-governance-crisis.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>Agent Sprawl Is the New Shadow IT: Why 50% of Enterprise AI Agents Are Running Ungoverned</h2>
+                <p>Enterprises average 12 AI agents today, but 50% run in isolated silos with no governance.</p>
+                <div class="blog-card-meta"><span>📅 Mar 02, 2026</span><span>⏱ 11 min</span></div>
+            </div>
+        </a>
+
+        <a href="amazon-openai-50b-deal-enterprise-ai-strategy.html" class="blog-card" data-thread="Market Intelligence">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Market Intelligence</span>
+                <h2>The $50 Billion Question: What Amazon's OpenAI Deal Really Means for Your Enterprise AI Strategy</h2>
+                <p>Amazon just invested $50 billion in OpenAI and locked exclusive distribution rights for Frontier on AWS.</p>
+                <div class="blog-card-meta"><span>📅 Mar 02, 2026</span><span>⏱ 11 min</span></div>
+            </div>
+        </a>
+
+        <a href="ai-reliability-crisis-enterprise-single-vendor-risk.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>The AI Reliability Crisis: Why Single-Vendor AI Is Enterprise Risk</h2>
+                <p>Claude went down worldwide. ChatGPT users fled by the hundreds of thousands. And most enterprises still have no Plan B.</p>
+                <div class="blog-card-meta"><span>📅 Mar 01, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="perplexity-computer-review-business.html" class="blog-card" data-thread="Market Intelligence">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Market Intelligence</span>
+                <h2>Perplexity Computer Review: 19 AI Models, Zero Governance — What It Means for Business</h2>
+                <p>Perplexity launched Computer — an AI agent that orchestrates 19 models to handle complex workflows autonomously.</p>
+                <div class="blog-card-meta"><span>📅 Mar 01, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="ai-agent-governance-framework.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>The AI Agent Governance Framework Your Company Needs Before It's Too Late</h2>
+                <p>3 million AI agents are running in enterprises. Only 47% are monitored. NIST just launched standards.</p>
+                <div class="blog-card-meta"><span>📅 Mar 01, 2026</span><span>⏱ 16 min</span></div>
+            </div>
+        </a>
+
+        <a href="copilot-adoption-crisis.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>The Copilot Adoption Crisis: Why 39% Market Share Loss Reveals Enterprise AI's Real Problem</h2>
+                <p>Microsoft 365 Copilot's paid market share dropped from 18.8% to 11.5% in six months.</p>
+                <div class="blog-card-meta"><span>📅 Mar 01, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="context-engineering-for-sales-teams.html" class="blog-card" data-thread="Context Engineering">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Context Engineering</span>
+                <h2>Context Engineering for Sales Teams: How to Make AI Actually Close Deals</h2>
+                <p>Your CRM has 10 years of customer data. Your AI can't access any of it. Here's how to fix that.</p>
+                <div class="blog-card-meta"><span>📅 Mar 01, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="openai-frontier-alliances-consulting-tax.html" class="blog-card" data-thread="Market Intelligence">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Market Intelligence</span>
+                <h2>OpenAI Just Made Enterprise AI a $500K Consulting Problem (Again)</h2>
+                <p>Why Frontier Alliances proves the enterprise AI industry still doesn't understand enablement.</p>
+                <div class="blog-card-meta"><span>📅 Mar 01, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="context-engineering-enterprise-guide.html" class="blog-card" data-thread="Context Engineering">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Context Engineering</span>
+                <h2>Context Engineering: The Definitive Enterprise Guide for 2026</h2>
+                <p>Why the companies winning at AI aren't writing better prompts—they're building better context systems.</p>
+                <div class="blog-card-meta"><span>📅 Mar 01, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="servicenow-employeeworks-vs-ai-enablement.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>ServiceNow EmployeeWorks vs AI Enablement Platforms: The $2.85 Billion Gap Nobody's Talking About</h2>
+                <p>ServiceNow EmployeeWorks vs AI Enablement Platforms: The $2.85 Billion Gap Nobody's Talking About</p>
+                <div class="blog-card-meta"><span>📅 Mar 01, 2026</span><span>⏱ 18 min</span></div>
+            </div>
+        </a>
+
+        <a href="context-engineering-for-marketing-teams.html" class="blog-card" data-thread="Context Engineering">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Context Engineering</span>
+                <h2>Context Engineering for Marketing Teams: How to Stop AI From Destroying Your Brand</h2>
+                <p>Your marketing AI can generate 50 blog posts a day. None of them sound like you. Here's how to fix that.</p>
+                <div class="blog-card-meta"><span>📅 Mar 01, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="g42-hiring-ai-agents-what-it-means.html" class="blog-card" data-thread="Market Intelligence">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Market Intelligence</span>
+                <h2>G42 Is Literally Hiring AI Agents. Here's What That Means for Your Company.</h2>
+                <p>G42 just opened formal job applications for AI agents — with probation periods, performance reviews, and compensation.</p>
+                <div class="blog-card-meta"><span>📅 Mar 01, 2026</span><span>⏱ 14 min</span></div>
+            </div>
+        </a>
+
+        <a href="context-engineering-for-hr-teams.html" class="blog-card" data-thread="Context Engineering">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Context Engineering</span>
+                <h2>Context Engineering for HR Teams: How to Make AI Actually Transform Talent Management</h2>
+                <p>Your HRIS has a decade of employee data. Your AI can't access any of it. That's why 95% of HR AI pilots fail.</p>
+                <div class="blog-card-meta"><span>📅 Mar 01, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="context-engineering-for-finance-teams.html" class="blog-card" data-thread="Context Engineering">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Context Engineering</span>
+                <h2>Context Engineering for Finance Teams: Why Your AI Can't Pass an Audit</h2>
+                <p>Your AI just hallucinated $500K in budget overruns. Nobody caught it until the board presentation.</p>
+                <div class="blog-card-meta"><span>📅 Mar 01, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="ai-fragmentation-paradox-every-vendor-solution-makes-it-worse.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>The AI Fragmentation Paradox: Why Every Vendor's &quot;Solution&quot; Is Making Enterprise AI Worse</h2>
+                <p>Every new AI vendor promises to simplify your stack. Instead, they add another layer of fragmentation.</p>
+                <div class="blog-card-meta"><span>📅 Mar 01, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="context-graphs-missing-layer.html" class="blog-card" data-thread="Context Engineering">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Context Engineering</span>
+                <h2>Context Graphs: The Missing Layer Between Your Data and Your AI Agents (2026)</h2>
+                <p>The W3C just formalized context graphs as a web standard. Here's what context graphs mean for your business.</p>
+                <div class="blog-card-meta"><span>📅 Feb 28, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="copilot-tasks-vs-ai-enablement.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>Copilot Tasks vs. AI Enablement: Why a To-Do List That Does Itself Isn't Enterprise-Ready (2026)</h2>
+                <p>Microsoft's Copilot Tasks promises AI that works for you — but enterprises need governance, not just automation.</p>
+                <div class="blog-card-meta"><span>📅 Feb 28, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="how-to-choose-ai-enablement-platform.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>How to Choose an AI Enablement Platform: The 2026 Evaluation Framework</h2>
+                <p>Not all AI platforms are enablement platforms. Use this evaluation framework with 8 critical criteria.</p>
+                <div class="blog-card-meta"><span>📅 Feb 28, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="the-ai-adoption-gap-is-real.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>The AI Adoption Gap Is Real: Why 90% of Companies Fail at Agentic AI (2026)</h2>
+                <p>Only 10% of organizations achieve significant AI ROI. 72% of IT leaders say users struggle with Copilot.</p>
+                <div class="blog-card-meta"><span>📅 Feb 28, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="running-a-business-on-ai-agents.html" class="blog-card" data-thread="Our Journey">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Our Journey</span>
+                <h2>We're Running a Real Business on AI Agents — Here's What Actually Happens</h2>
+                <p>Not a demo. Not a pilot. We run real ecommerce brands with AI agents handling advertising, content, analytics, and operations.</p>
+                <div class="blog-card-meta"><span>📅 Feb 28, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="glean-alternatives-ai-enablement.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>7 Best Glean Alternatives for AI Enablement in 2026 (Comparison + Pricing)</h2>
+                <p>Compare 7 enterprise AI platforms across features, pricing, deployment time, and AI enablement capabilities.</p>
+                <div class="blog-card-meta"><span>📅 Feb 28, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="ai-roi-calculator-measure-workforce.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>The AI ROI Calculator: How to Measure What Your AI Workforce Actually Delivers (2026)</h2>
+                <p>Stop guessing whether AI is working. Use this framework to calculate the real ROI of your AI workforce.</p>
+                <div class="blog-card-meta"><span>📅 Feb 27, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="the-ai-manager-most-important-role.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>The AI Manager: The Most Important Role Nobody's Hiring For (2026)</h2>
+                <p>By 2028, the highest-paid person at your company won't be an engineer. It'll be whoever manages the AI workforce.</p>
+                <div class="blog-card-meta"><span>📅 Feb 27, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="stuck-in-ai-phase-1.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>Your Company Is Stuck in AI Phase 1. Here's How to Jump to Phase 3.</h2>
+                <p>Most companies are stuck at ChatGPT subscriptions and prompt workshops. That's Phase 1. Here's what Phase 3 looks like.</p>
+                <div class="blog-card-meta"><span>📅 Feb 27, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="adaline-found-240k-missing-meta-revenue.html" class="blog-card" data-thread="Our Journey">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Our Journey</span>
+                <h2>Case Study: How an AI Enabler Found $240K in Missing Meta Advertising Revenue</h2>
+                <p>Adaline, an AI enabler running on iEnable, audited Meta ad campaigns and discovered $240,000 in missing revenue that human analysts overlooked.</p>
+                <div class="blog-card-meta"><span>📅 Feb 27, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="ai-enablement-ecommerce-playbook.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>The AI Enablement Playbook for Ecommerce: How to Deploy AI Across Your Entire Store (2026)</h2>
+                <p>AI in ecommerce isn't just chatbots and product recommendations anymore.</p>
+                <div class="blog-card-meta"><span>📅 Feb 27, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="engineering-only-ai-misses-80-percent.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>Why Engineering-Only AI Agents Miss 80% of Your Company (2026)</h2>
+                <p>Glean shipped 8 engineering agents. Jasper has 100+ marketing agents. Neither covers your full company.</p>
+                <div class="blog-card-meta"><span>📅 Feb 27, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="build-vs-rent-ai-department.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>Build vs. Rent Your AI Department: The Math That Changes Everything (2026)</h2>
+                <p>Building an internal AI team costs $1.2M+/year and takes 6-12 months. Renting deploys in days.</p>
+                <div class="blog-card-meta"><span>📅 Feb 27, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="why-your-ai-workflow-builder-needs-approval-gates.html" class="blog-card" data-thread="AI Agent Architecture">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">AI Agent Architecture</span>
+                <h2>Why Your AI Workflow Builder Needs Approval Gates (And No One Has Them)</h2>
+                <p>Every AI workflow platform lets agents run wild with zero checkpoints. Here's why approval gates are the missing primitive.</p>
+                <div class="blog-card-meta"><span>📅 Feb 26, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="why-ai-agents-should-never-grade-their-own-homework.html" class="blog-card" data-thread="AI Agent Architecture">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">AI Agent Architecture</span>
+                <h2>Why AI Agents Should Never Grade Their Own Homework</h2>
+                <p>The generator ≠ grader principle: why every AI platform's self-evaluation is broken, how independent QA agents fix it.</p>
+                <div class="blog-card-meta"><span>📅 Feb 26, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="12-ai-workflow-templates-that-ship-good-work.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>12 AI Workflow Templates That Actually Ship Good Work</h2>
+                <p>Not 7,000 templates with zero quality control. 12 production-ready AI workflow templates with approval gates.</p>
+                <div class="blog-card-meta"><span>📅 Feb 26, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="make-vs-n8n-vs-ienable-comparison-2026.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>Make.com vs n8n vs iEnable: The AI Workflow Builder Comparison You Need in 2026</h2>
+                <p>An honest, detailed comparison of Make.com, n8n, and iEnable for AI workflow automation in 2026.</p>
+                <div class="blog-card-meta"><span>📅 Feb 26, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+        <a href="the-brief-first-approach.html" class="blog-card" data-thread="Enterprise AI">
+            <div class="blog-card-body">
+                <span class="blog-card-tag">Enterprise AI</span>
+                <h2>The Brief-First Approach: How to Stop Wasting Money on AI-Generated Content</h2>
+                <p>The AI industry wastes billions generating content before approving the concept. The brief-first approach saves 50% of wasted cycles.</p>
+                <div class="blog-card-meta"><span>📅 Feb 26, 2026</span><span>⏱ 10 min</span></div>
+            </div>
+        </a>
+
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 iEnable. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const threadBtns = document.querySelectorAll('.thread-btn');
+        const cards = document.querySelectorAll('.blog-card');
+        
+        threadBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const thread = btn.dataset.thread;
+                threadBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                cards.forEach(card => {
+                    if (thread === 'All' || card.dataset.thread === thread) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
