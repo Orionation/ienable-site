@@ -4,835 +4,430 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="robots" content="noindex, nofollow">
-<title>Agent Report Cards</title>
+<title>Agent Command Center</title>
 <style>
-  :root {
-    --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
-    --gray-300: #d1d5db; --gray-400: #9ca3af; --gray-500: #6b7280;
-    --gray-600: #4b5563; --gray-700: #374151; --gray-800: #1f2937; --gray-900: #111827;
-    --green-50: #f0fdf4; --green-100: #dcfce7; --green-500: #22c55e; --green-600: #16a34a; --green-700: #15803d;
-    --blue-50: #eff6ff; --blue-100: #dbeafe; --blue-500: #3b82f6; --blue-600: #2563eb;
-    --amber-50: #fffbeb; --amber-100: #fef3c7; --amber-500: #f59e0b; --amber-600: #d97706;
-    --red-50: #fef2f2; --red-100: #fee2e2; --red-500: #ef4444; --red-600: #dc2626;
-    --purple-50: #faf5ff; --purple-500: #8b5cf6; --purple-600: #7c3aed;
-    --pink-50: #fdf2f8; --pink-500: #ec4899; --pink-600: #db2777;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
-    background: var(--gray-100);
-    color: var(--gray-800);
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-  }
-
-  .header {
-    text-align: center;
-    padding: 20px 16px 12px;
-    background: white;
-    border-bottom: 1px solid var(--gray-200);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-
-  .header-date {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--gray-400);
-  }
-
-  .header-title {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--gray-900);
-    margin-top: 2px;
-  }
-
-  .header-subtitle {
-    font-size: 13px;
-    color: var(--gray-500);
-    margin-top: 2px;
-  }
-
-  /* Swipe container */
-  .cards-container {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    padding: 16px;
-    gap: 12px;
-    scrollbar-width: none;
-  }
-
-  .cards-container::-webkit-scrollbar { display: none; }
-
-  /* Dots indicator */
-  .dots {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    padding: 8px 0 16px;
-  }
-
-  .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--gray-300);
-    transition: all 0.2s ease;
-  }
-
-  .dot.active {
-    background: var(--gray-800);
-    width: 20px;
-    border-radius: 4px;
-  }
-
-  /* Agent Card */
-  .agent-card {
-    flex: 0 0 calc(100vw - 40px);
-    max-width: 400px;
-    scroll-snap-align: center;
-    background: white;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  }
-
-  .agent-header {
-    padding: 20px;
-    color: white;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .agent-header::after {
-    content: '';
-    position: absolute;
-    right: -20px;
-    top: -20px;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.1);
-  }
-
-  .agent-emoji {
-    font-size: 36px;
-    margin-bottom: 8px;
-  }
-
-  .agent-name {
-    font-size: 20px;
-    font-weight: 800;
-  }
-
-  .agent-role {
-    font-size: 12px;
-    opacity: 0.8;
-    font-weight: 500;
-  }
-
-  .agent-grade {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    font-weight: 800;
-    backdrop-filter: blur(4px);
-    border: 2px solid rgba(255,255,255,0.3);
-  }
-
-  /* Stats row */
-  .agent-stats {
-    display: flex;
-    padding: 12px 20px;
-    gap: 8px;
-    border-bottom: 1px solid var(--gray-100);
-  }
-
-  .stat {
-    flex: 1;
-    text-align: center;
-  }
-
-  .stat-value {
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--gray-800);
-  }
-
-  .stat-label {
-    font-size: 10px;
-    color: var(--gray-400);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-  }
-
-  /* Accomplishments */
-  .agent-body {
-    padding: 16px 20px;
-  }
-
-  .section-title {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--gray-400);
-    margin-bottom: 8px;
-  }
-
-  .accomplishment {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 10px;
-    align-items: flex-start;
-  }
-
-  .accomplishment:last-child { margin-bottom: 0; }
-
-  .acc-icon {
-    font-size: 14px;
-    margin-top: 1px;
-    flex-shrink: 0;
-  }
-
-  .acc-text {
-    font-size: 13px;
-    color: var(--gray-600);
-    line-height: 1.5;
-  }
-
-  .acc-text strong {
-    color: var(--gray-800);
-  }
-
-  /* Key finding callout */
-  .key-finding {
-    background: var(--green-50);
-    border: 1px solid var(--green-100);
-    border-radius: 12px;
-    padding: 12px;
-    margin-top: 12px;
-  }
-
-  .key-finding.warning {
-    background: var(--amber-50);
-    border-color: var(--amber-100);
-  }
-
-  .key-finding-label {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--green-600);
-    margin-bottom: 4px;
-  }
-
-  .key-finding.warning .key-finding-label {
-    color: var(--amber-600);
-  }
-
-  .key-finding-text {
-    font-size: 13px;
-    color: var(--gray-700);
-    line-height: 1.5;
-  }
-
-  /* Summary card (first card) */
-  .summary-body {
-    padding: 16px 20px 20px;
-  }
-
-  .summary-agent-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--gray-100);
-  }
-
-  .summary-agent-row:last-child { border-bottom: none; }
-
-  .summary-agent-emoji {
-    font-size: 20px;
-    width: 32px;
-    text-align: center;
-  }
-
-  .summary-agent-info {
-    flex: 1;
-  }
-
-  .summary-agent-name {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--gray-800);
-  }
-
-  .summary-agent-headline {
-    font-size: 12px;
-    color: var(--gray-500);
-  }
-
-  .summary-agent-grade {
-    font-size: 16px;
-    font-weight: 800;
-  }
-
-  .summary-status-dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .summary-status-dot.working {
-    background: #22c55e;
-    animation: pulse-dot 2s infinite;
-  }
-  .summary-status-dot.sleeping, .summary-status-dot.idle {
-    background: #9ca3af;
-  }
-  @keyframes pulse-dot {
-    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
-    50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(34,197,94,0); }
-  }
-  .summary-current-task {
-    font-size: 11px;
-    color: #059669;
-    font-style: italic;
-    margin-top: 1px;
-  }
-
-  /* Bottom status */
-  .agent-footer {
-    padding: 12px 20px;
-    border-top: 1px solid var(--gray-100);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-  }
-
-  .status-text {
-    font-size: 12px;
-    color: var(--gray-500);
-  }
-  /* Collapsible Sections - Next Steps & Todo */
-  .collapsible-section {
-    margin: 0 16px 8px;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .collapsible-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 14px;
-    background: #f9fafb;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-    font-size: 14px;
-    font-weight: 700;
-    color: #374151;
-  }
-  .collapsible-header:active { background: #f3f4f6; }
-  .collapsible-arrow {
-    font-size: 11px;
-    color: #9ca3af;
-    transition: transform 0.25s;
-  }
-  .collapsible-section.open .collapsible-arrow { transform: rotate(180deg); }
-  .collapsible-body {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-  }
-  .collapsible-section.open .collapsible-body {
-    max-height: 2000px;
-  }
-  .collapsible-loading {
-    padding: 14px;
-    text-align: center;
-    color: #9ca3af;
-    font-size: 13px;
-  }
-  /* Next Steps items */
-  .ns-item {
-    padding: 10px 14px;
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    border-bottom: 1px solid #f3f4f6;
-  }
-  .ns-item:last-child { border-bottom: none; }
-  .ns-num {
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    font-size: 11px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .ns-text { font-size: 13px; color: #374151; line-height: 1.4; }
-  .ns-empty { padding: 14px; color: #9ca3af; font-size: 13px; text-align: center; }
-  .master-agent-label {
-    font-size: 13px; font-weight: 700; color: #374151;
-    padding: 12px 14px 4px; border-top: 1px solid #e5e7eb;
-  }
-  .master-agent-label:first-child { border-top: none; }
-  /* Todo items */
-  .todo-progress { height: 4px; background: #e5e7eb; border-radius: 2px; margin: 10px 14px 8px; overflow: hidden; }
-  .todo-progress-fill { height: 100%; background: linear-gradient(90deg, #10b981, #059669); border-radius: 2px; transition: width 0.5s; }
-  .todo-group { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #6b7280; padding: 8px 14px 4px; }
-  .todo-item {
-    padding: 8px 14px;
-    cursor: pointer;
-    border-left: 3px solid transparent;
-    transition: background 0.15s;
-  }
-  .todo-item:active { opacity: 0.85; }
-  .todo-item.s-working { border-left-color: #10b981; background: #f0fdf4; }
-  .todo-item.s-queued { border-left-color: #d1d5db; background: #f9fafb; }
-  .todo-item.s-complete { border-left-color: #86efac; background: #fafafa; }
-  .todo-item.s-failed { border-left-color: #ef4444; background: #fef2f2; }
-  .todo-item-row {
-    display: flex; align-items: center; gap: 8px;
-  }
-  .todo-icon { font-size: 13px; flex-shrink: 0; }
-  .todo-name { flex: 1; font-size: 13px; font-weight: 600; color: #1f2937; line-height: 1.3; }
-  .todo-item.s-complete .todo-name { text-decoration: line-through; color: #9ca3af; }
-  .todo-chevron { font-size: 12px; color: #9ca3af; transition: transform 0.2s; }
-  .todo-item.detail-open .todo-chevron { transform: rotate(90deg); }
-  .todo-time { font-size: 11px; color: #6b7280; padding: 2px 0 0 25px; }
-  .todo-detail-box {
-    display: none;
-    margin: 6px 0 2px 25px;
-    padding: 8px 10px;
-    background: rgba(0,0,0,0.03);
-    border-radius: 8px;
-  }
-  .todo-item.detail-open .todo-detail-box { display: block; }
-  .todo-detail-text { font-size: 12px; color: #4b5563; line-height: 1.4; }
-  .todo-result-text { font-size: 11px; color: #059669; font-style: italic; margin-top: 4px; }
-  .todo-summary { text-align: center; font-size: 12px; font-weight: 600; color: #9ca3af; padding: 8px 0; }
+:root{--g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;--g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;--g700:#374151;--g800:#1f2937;--g900:#111827;--gn50:#f0fdf4;--gn100:#dcfce7;--gn500:#22c55e;--gn600:#16a34a;--gn700:#15803d;--b50:#eff6ff;--b100:#dbeafe;--b500:#3b82f6;--b600:#2563eb;--am50:#fffbeb;--am100:#fef3c7;--am500:#f59e0b;--am600:#d97706;--r50:#fef2f2;--r100:#fee2e2;--r500:#ef4444;--r600:#dc2626}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro',system-ui,sans-serif;background:var(--g100);color:var(--g800);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.header{text-align:center;padding:16px 16px 0;background:#fff;border-bottom:1px solid var(--g200);position:sticky;top:0;z-index:10}
+.header-title{font-size:20px;font-weight:800;color:var(--g900)}
+.header-sub{font-size:12px;color:var(--g500);margin-top:2px}
+.date-nav{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px 14px;background:#fff;user-select:none}
+.dn-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--g200);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--g600);transition:all .15s;-webkit-tap-highlight-color:transparent}
+.dn-btn:active{background:var(--g100);transform:scale(.95)}.dn-btn:disabled{opacity:.3;cursor:default}.dn-btn:disabled:active{background:#fff;transform:none}
+.dd{flex:1;text-align:center;min-width:0}
+.dd-main{font-size:17px;font-weight:700;color:var(--g900);line-height:1.2}
+.dd-sub{font-size:11px;color:var(--g400);font-weight:500;margin-top:1px}
+.today-btn{font-size:12px;font-weight:700;color:var(--b600);background:var(--b50);border:1px solid var(--b100);border-radius:20px;padding:5px 14px;cursor:pointer;display:none;-webkit-tap-highlight-color:transparent}
+.today-btn.vis{display:block}
+.cards-container{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:16px;gap:12px;scrollbar-width:none}
+.cards-container::-webkit-scrollbar{display:none}
+.dots{display:flex;justify-content:center;gap:6px;padding:8px 0 16px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--g300);transition:all .2s}
+.dot.active{background:var(--g800);width:20px;border-radius:4px}
+.agent-card{flex:0 0 calc(100vw - 40px);max-width:400px;scroll-snap-align:center;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.ag-hd{padding:20px;color:#fff;position:relative;overflow:hidden}
+.ag-hd::after{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.1)}
+.ag-emoji{font-size:36px;margin-bottom:8px}
+.ag-name{font-size:20px;font-weight:800}
+.ag-role{font-size:12px;opacity:.8;font-weight:500}
+.ag-grade-box{position:absolute;top:16px;right:16px;text-align:center}
+.ag-grade{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;backdrop-filter:blur(4px);border:2px solid rgba(255,255,255,.3)}
+.gt{font-size:11px;font-weight:700;margin-top:3px;opacity:.9}
+.gt.up{color:#bbf7d0}.gt.down{color:#fecaca}.gt.same{color:rgba(255,255,255,.5)}
+.ot{margin:0 16px 12px;padding:14px 16px;background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:14px;position:relative;overflow:hidden}
+.ot::before{content:'';position:absolute;right:-10px;top:-10px;width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.05)}
+.ot-hdr{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.ot-icon{font-size:16px}
+.ot-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#c4b5fd}
+.ot-txt{font-size:13px;color:#e0e7ff;line-height:1.6;white-space:pre-wrap}
+.wb{color:#fbbf24;font-weight:700;background:rgba(251,191,36,.15);padding:2px 6px;border-radius:4px}
+.ag-stats{display:flex;padding:12px 20px;gap:8px;border-bottom:1px solid var(--g100)}
+.stat{flex:1;text-align:center}
+.stat-v{font-size:18px;font-weight:800;color:var(--g800)}
+.stat-l{font-size:10px;color:var(--g400);font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+.ag-body{padding:16px 20px}
+.sec-t{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--g400);margin-bottom:8px}
+.acc{display:flex;gap:8px;margin-bottom:10px;align-items:flex-start}
+.acc:last-child{margin-bottom:0}
+.acc-i{font-size:14px;margin-top:1px;flex-shrink:0}
+.acc-t{font-size:13px;color:var(--g600);line-height:1.5}
+.acc-t strong{color:var(--g800)}
+.kf{background:var(--gn50);border:1px solid var(--gn100);border-radius:12px;padding:12px;margin-top:12px}
+.kf.warn{background:var(--am50);border-color:var(--am100)}
+.kf-l{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--gn600);margin-bottom:4px}
+.kf.warn .kf-l{color:var(--am600)}
+.kf-t{font-size:13px;color:var(--g700);line-height:1.5}
+.vd{display:flex;align-items:center;justify-content:center;gap:6px;padding:14px 20px;border-top:1px solid var(--g100);font-size:14px;font-weight:700;color:var(--b600);text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.vd:active{background:var(--b50)}
+.sum-body{padding:16px 20px 20px}
+.sum-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--g100);text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent}
+.sum-row:last-child{border-bottom:none}
+.sum-row:active{opacity:.7}
+.sum-emoji{font-size:20px;width:32px;text-align:center}
+.sum-info{flex:1;min-width:0}
+.sum-name{font-size:14px;font-weight:700;color:var(--g800)}
+.sum-hl{font-size:12px;color:var(--g500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sum-grade{font-size:16px;font-weight:800}
+.sum-gt{font-size:11px;font-weight:700;margin-left:2px}
+.sum-gt.up{color:var(--gn600)}.sum-gt.down{color:var(--r500)}.sum-gt.same{color:var(--g400)}
+.sum-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.sum-dot.working{background:#22c55e;animation:pd 2s infinite}
+.sum-dot.sleeping,.sum-dot.idle{background:#9ca3af}
+@keyframes pd{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,197,94,.5)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(34,197,94,0)}}
+.sum-task{font-size:11px;color:#059669;font-style:italic;margin-top:1px}
+.ag-ft{padding:12px 20px;border-top:1px solid var(--g100);display:flex;align-items:center;gap:6px}
+.st-dot{width:8px;height:8px;border-radius:50%}
+.st-txt{font-size:12px;color:var(--g500)}
+.coll{margin:0 16px 8px;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden}
+.coll-h{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:#f9fafb;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;font-size:14px;font-weight:700;color:#374151}
+.coll-h:active{background:#f3f4f6}
+.coll-a{font-size:11px;color:#9ca3af;transition:transform .25s}
+.coll.open .coll-a{transform:rotate(180deg)}
+.coll-b{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.coll.open .coll-b{max-height:2000px}
+.ns-item{padding:10px 14px;display:flex;gap:10px;align-items:flex-start;border-bottom:1px solid #f3f4f6}
+.ns-item:last-child{border-bottom:none}
+.ns-num{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ns-text{font-size:13px;color:#374151;line-height:1.4}
+.ns-empty{padding:14px;color:#9ca3af;font-size:13px;text-align:center}
+.ma-label{font-size:13px;font-weight:700;color:#374151;padding:12px 14px 4px;border-top:1px solid #e5e7eb}
+.ma-label:first-child{border-top:none}
+.td-prog{height:4px;background:#e5e7eb;border-radius:2px;margin:10px 14px 8px;overflow:hidden}
+.td-fill{height:100%;background:linear-gradient(90deg,#10b981,#059669);border-radius:2px;transition:width .5s}
+.td-grp{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#6b7280;padding:8px 14px 4px}
+.td-item{padding:8px 14px;cursor:pointer;border-left:3px solid transparent;transition:background .15s}
+.td-item:active{opacity:.85}
+.td-item.s-working{border-left-color:#10b981;background:#f0fdf4}
+.td-item.s-queued{border-left-color:#d1d5db;background:#f9fafb}
+.td-item.s-complete{border-left-color:#86efac;background:#fafafa}
+.td-item.s-failed{border-left-color:#ef4444;background:#fef2f2}
+.td-row{display:flex;align-items:center;gap:8px}
+.td-icon{font-size:13px;flex-shrink:0}
+.td-name{flex:1;font-size:13px;font-weight:600;color:#1f2937;line-height:1.3}
+.td-item.s-complete .td-name{text-decoration:line-through;color:#9ca3af}
+.td-chev{font-size:12px;color:#9ca3af;transition:transform .2s}
+.td-item.dopen .td-chev{transform:rotate(90deg)}
+.td-time{font-size:11px;color:#6b7280;padding:2px 0 0 25px}
+.td-det{display:none;margin:6px 0 2px 25px;padding:8px 10px;background:rgba(0,0,0,.03);border-radius:8px}
+.td-item.dopen .td-det{display:block}
+.td-det-t{font-size:12px;color:#4b5563;line-height:1.4}
+.td-res-t{font-size:11px;color:#059669;font-style:italic;margin-top:4px}
+.td-sum{text-align:center;font-size:12px;font-weight:600;color:#9ca3af;padding:8px 0}
+.sb{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:12px;margin-top:4px}
+.sb.pos{background:rgba(34,197,94,.15);color:#15803d}
+.sb.neg{background:rgba(239,68,68,.15);color:#dc2626}
+.sb.neu{background:rgba(107,114,128,.12);color:#6b7280}
+.lo{position:fixed;inset:0;background:rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;z-index:100;opacity:0;pointer-events:none;transition:opacity .2s}
+.lo.active{opacity:1;pointer-events:auto}
+.ls{width:32px;height:32px;border:3px solid var(--g200);border-top-color:var(--g800);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.nd{flex:0 0 calc(100vw - 40px);max-width:400px;scroll-snap-align:center;background:#fff;border-radius:20px;padding:60px 24px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.nd-emoji{font-size:48px;margin-bottom:12px}
+.nd-title{font-size:18px;font-weight:700;color:var(--g800);margin-bottom:6px}
+.nd-text{font-size:14px;color:var(--g500);line-height:1.5}
 </style>
 </head>
 <body>
-
 <div class="header">
-  <div class="header-date" id="headerDate"></div>
   <div class="header-title">🎯 Agent Command Center</div>
-  <div class="header-subtitle">Live data · Auto-refreshes every 60s</div>
+  <div class="header-sub">Live data · Auto-refreshes every 60s</div>
 </div>
-
+<div class="date-nav">
+  <button class="dn-btn" id="prevDay" onclick="navDay(-1)">‹</button>
+  <div class="dd">
+    <div class="dd-main" id="dateMain">Loading...</div>
+    <div class="dd-sub" id="dateSub"></div>
+  </div>
+  <button class="today-btn" id="todayBtn" onclick="goToday()">Today</button>
+  <button class="dn-btn" id="nextDay" onclick="navDay(1)">›</button>
+</div>
 <div class="dots" id="dots"></div>
-
 <div class="cards-container" id="cards"></div>
-
+<div class="lo" id="lo"><div class="ls"></div></div>
 <script>
-const API = 'https://ienable-admin-app-hqtw2.ondigitalocean.app/api/v1';
+const API='https://ienable-admin-app-hqtw2.ondigitalocean.app/api/v1';
 
-// Agent display config — colors only, everything else from API
-const AGENT_COLORS = {
-  adaline:  'linear-gradient(135deg, #7c3aed, #6366f1)',
-  muse:     'linear-gradient(135deg, #ec4899, #f43f5e)',
-  ienable:  'linear-gradient(135deg, #3b82f6, #2563eb)',
-  orion:    'linear-gradient(135deg, #1f2937, #374151)',
-  tom:      'linear-gradient(135deg, #059669, #10b981)',
-  apollo:   'linear-gradient(135deg, #f59e0b, #d97706)',
-};
-const AGENT_ORDER = ['adaline', 'tom', 'muse', 'apollo', 'ienable', 'orion'];
-// Override display names if API uses different ones
-const DISPLAY_NAMES = { ienable: 'Dev Team' };
-const REPORT_URLS = {};
+/* ═══ Aliasing ═══ */
+const AL={'tom':'hodl','Tom':'hodl','Tom V17':'hodl','tom v17':'hodl','apollo':'content','Apollo':'content','reel':'content','Reel':'content','orion':'main','Orion':'main','adaline':'adaline','Adaline':'adaline','lyndsay-ads':'adaline','muse':'muse','Muse':'muse','ienable':'ienable','iEnable':'ienable','ienable-seo':'ienable','hodl':'hodl','main':'main','content':'content','fullstack-dev':'fullstack-dev','qa':'qa','deployment':'deployment'};
+const TEST_SET=new Set(['test-agent','test_delete','test2_delete','test_probe','test-schema','test-schema-probe','test-schema-probe2','test-orion-analysis']);
+function isTest(n){if(!n)return true;const l=n.toLowerCase();return l.startsWith('test')||l.includes('delete')||TEST_SET.has(l)}
+function canon(n){if(!n)return null;return AL[n]||AL[n.toLowerCase()]||n.toLowerCase()}
 
-let reportCards = [];
-let agentStatuses = [];
-let allTasks = [];
+/* ═══ Config ═══ */
+const COLORS={adaline:'linear-gradient(135deg,#7c3aed,#6366f1)',muse:'linear-gradient(135deg,#ec4899,#f43f5e)',ienable:'linear-gradient(135deg,#3b82f6,#2563eb)',main:'linear-gradient(135deg,#1f2937,#374151)',hodl:'linear-gradient(135deg,#059669,#10b981)',content:'linear-gradient(135deg,#f59e0b,#d97706)','fullstack-dev':'linear-gradient(135deg,#8b5cf6,#6d28d9)',qa:'linear-gradient(135deg,#14b8a6,#0d9488)',deployment:'linear-gradient(135deg,#f97316,#ea580c)'};
+const ORDER=['adaline','hodl','muse','content','ienable','main','fullstack-dev','qa','deployment'];
+const NAMES={hodl:'Tom',adaline:'Adaline',content:'Apollo',main:'Orion',muse:'Muse',ienable:'iEnable','fullstack-dev':'Alex',qa:'QA',deployment:'Deploy'};
+const LINKS={hodl:'/r/tom/',adaline:'/r/adaline/',muse:'/blog/journals/muse/',content:'/blog/journals/',ienable:'/r/ienable/',main:'/r/orion/','fullstack-dev':'/r/fullstack-dev/',qa:'/r/qa/',deployment:'/r/deployment/'};
 
-async function fetchAll() {
-  try {
-    const [rcRes, statusRes, tasksRes] = await Promise.all([
-      fetch(`${API}/report-cards/latest`),
-      fetch(`${API}/agent-status`),
-      fetch(`${API}/agent-tasks/active`)
-    ]);
-    const rcJson = await rcRes.json();
-    const statusJson = await statusRes.json();
-    const tasksJson = await tasksRes.json();
-    reportCards = rcJson.data || rcJson || [];
-    agentStatuses = statusJson.data || statusJson || [];
-    allTasks = tasksJson.data || tasksJson || [];
+/* ═══ Grade ═══ */
+const GR={'A+':12,A:11,'A-':10,'B+':9,B:8,'B-':7,'C+':6,C:5,'C-':4,'D+':3,D:2,'D-':1,F:0};
+function gv(g){return GR[g]!==undefined?GR[g]:-1}
+function gTrend(cur,prev){
+  if(!cur||!prev||cur==='N/A'||prev==='N/A')return null;
+  const d=gv(cur)-gv(prev);
+  if(d>0)return{dir:'up',arr:'↑',txt:prev+' → '+cur};
+  if(d<0)return{dir:'down',arr:'↓',txt:prev+' → '+cur};
+  return{dir:'same',arr:'→',txt:'Holding at '+cur};
+}
+
+/* ═══ State ═══ */
+let cDate=new Date(),tDate=new Date();
+let MC={},PC={},AS=[],AT=[];
+
+function fk(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function fd(d){return d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
+function sd(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate()}
+function navDay(d){cDate.setDate(cDate.getDate()+d);fetchAll(true)}
+function goToday(){cDate=new Date();fetchAll(true)}
+
+/* ═══ Merge ═══ */
+function merge(cards){
+  const m={};
+  for(const c of cards){
+    if(isTest(c.agent_name))continue;
+    const k=canon(c.agent_name);if(!k)continue;
+    if(!m[k]){m[k]=c;continue}
+    const ea=(m[k].accomplishments||[]).length,ca=(c.accomplishments||[]).length;
+    if(ca>ea||(ca===ea&&(c.updated_at||'')>(m[k].updated_at||'')))m[k]=c;
+  }
+  return m;
+}
+
+/* ═══ Fetch ═══ */
+async function fetchAll(loading){
+  if(loading)document.getElementById('lo').classList.add('active');
+  try{
+    const isT=sd(cDate,tDate),dk=fk(cDate);
+    const pd=new Date(cDate);pd.setDate(pd.getDate()-1);
+    const pk=fk(pd);
+    const f=[fetch(API+'/report-cards?date='+dk).then(r=>r.json()),fetch(API+'/report-cards?date='+pk).then(r=>r.json())];
+    if(isT){f.push(fetch(API+'/agent-status').then(r=>r.json()));f.push(fetch(API+'/agent-tasks/active').then(r=>r.json()))}
+    const R=await Promise.all(f);
+    MC=merge(R[0].data||R[0]||[]);PC=merge(R[1].data||R[1]||[]);
+    if(isT){AS=R[2].data||R[2]||[];AT=R[3].data||R[3]||[]}else{AS=[];AT=[]}
     renderAll();
-  } catch(e) {
-    console.error('Fetch failed:', e);
-    document.getElementById('cards').innerHTML = '<div style="padding:40px;text-align:center;color:#666;">Failed to load — pull to refresh</div>';
-  }
+  }catch(e){
+    console.error('Fetch:',e);
+    document.getElementById('cards').innerHTML='<div style="padding:40px;text-align:center;color:#666">Failed to load</div>';
+  }finally{document.getElementById('lo').classList.remove('active')}
 }
 
-function getRC(key) {
-  return reportCards.find(r => (r.agent_name||'').toLowerCase() === key || (r.agent||'').toLowerCase() === key) || {};
+/* ═══ Helpers ═══ */
+function gRC(k){return MC[k]||{}}
+function gPC(k){return PC[k]||{}}
+function gSt(k){return AS.find(a=>canon(a.agent)===k)||{}}
+function gTk(k){return AT.filter(t=>canon(t.agent)===k)}
+function nP(p){if(Array.isArray(p))return p;if(typeof p==='string')return p.includes('\n')?p.split('\n').filter(s=>s.trim()):[p];return[]}
+function nS(s){
+  if(Array.isArray(s))return s;
+  if(s&&typeof s==='object')return Object.entries(s).filter(([k])=>!['created_at','updated_at','id','agent_name','company_id','date','orion_analysis'].includes(k)).map(([k,v])=>({label:k.replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase()),value:String(v)})).slice(0,4);
+  return[];
 }
-function getStatus(key) {
-  return agentStatuses.find(a => (a.agent||'').toLowerCase() === key) || {};
+function aT(a){if(!a)return'';if(typeof a==='string')return a;if(typeof a==='object')return a.text||a.name||'';return String(a)}
+function aI(a){return(a&&typeof a==='object'&&a.icon)?a.icon:'•'}
+function hw(t){return(t||'').replace(/(WAITING ON HUMAN)/gi,'<span class="wb">$1</span>')}
+
+/* ═══ Render ═══ */
+function renderAll(){
+  try{
+    const C=document.getElementById('cards');C.innerHTML='';
+    updNav();
+    const active=ORDER.filter(k=>MC[k]);
+    if(!active.length){
+      C.innerHTML='<div class="nd"><div class="nd-emoji">📭</div><div class="nd-title">No Reports This Day</div><div class="nd-text">No agent report cards for '+fd(cDate)+'. Try another day.</div></div>';
+      rDots(1);return;
+    }
+    C.innerHTML+=rSum(active);
+    active.forEach(k=>{C.innerHTML+=rCard(k)});
+    rDots(active.length+1);sScroll();
+  }catch(e){console.error('Render:',e);document.getElementById('cards').innerHTML='<div style="padding:40px;text-align:center;color:#ef4444">Error: '+e.message+'</div>'}
 }
-function getTasks(key) {
-  return allTasks.filter(t => t.agent.toLowerCase() === key);
+function updNav(){
+  const isT=sd(cDate,tDate);
+  document.getElementById('dateMain').textContent=fd(cDate);
+  document.getElementById('dateSub').textContent=isT?'Today':'';
+  document.getElementById('todayBtn').classList.toggle('vis',!isT);
+  document.getElementById('nextDay').disabled=isT;
 }
-
-// Defensive data normalization helpers
-function normalizePlan(plan) {
-  if (Array.isArray(plan)) return plan;
-  if (typeof plan === 'string') {
-    // Split by newline if it contains newlines, otherwise wrap in array
-    return plan.includes('\n') ? plan.split('\n').filter(s => s.trim()) : [plan];
-  }
-  return [];
+function sScroll(){
+  const c=document.getElementById('cards');
+  c.onscroll=function(){
+    const w=c.firstElementChild.offsetWidth+12;
+    const i=Math.round(c.scrollLeft/w);
+    document.querySelectorAll('.dot').forEach((d,j)=>d.classList.toggle('active',j===i));
+  };
 }
+function rDots(n){document.getElementById('dots').innerHTML=Array.from({length:n},(_,i)=>'<div class="dot'+(i===0?' active':'')+'"></div>').join('')}
 
-function normalizeStats(stats) {
-  if (Array.isArray(stats)) return stats;
-  if (stats && typeof stats === 'object') {
-    // Convert object to array format
-    return Object.entries(stats)
-      .filter(([k, v]) => k !== 'created_at' && k !== 'updated_at' && k !== 'id' && k !== 'agent_name' && k !== 'company_id' && k !== 'date')
-      .map(([k, v]) => ({
-        label: k.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-        value: String(v)
-      }))
-      .slice(0, 4); // Limit to 4 stats for display
-  }
-  return [];
-}
-
-// Extract text from accomplishment (string or object format)
-function getAccomplishmentText(a) {
-  if (!a) return '';
-  if (typeof a === 'string') return a;
-  if (typeof a === 'object') return a.text || a.name || JSON.stringify(a);
-  return String(a || '');
-}
-
-// Extract icon from accomplishment (object format only)
-function getAccomplishmentIcon(a) {
-  if (!a) return '•';
-  if (typeof a === 'object' && a.icon) return a.icon;
-  return '•';
-}
-
-function renderAll() {
-  try {
-  const container = document.getElementById('cards');
-  container.innerHTML = '';
-
-  // Update header date
-  const today = new Date();
-  const dateStr = today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-  document.querySelector('.header-date').textContent = dateStr;
-
-  // Card 1: Summary
-  container.innerHTML += renderSummaryCard();
-
-  // Agent cards
-  AGENT_ORDER.forEach(key => {
-    container.innerHTML += renderAgentCard(key);
-  });
-
-  renderDots();
-
-  // Scroll listener for dots
-  container.addEventListener('scroll', () => {
-    const cardWidth = container.firstElementChild.offsetWidth + 12;
-    const activeIndex = Math.round(container.scrollLeft / cardWidth);
-    document.querySelectorAll('.dot').forEach((d, i) => {
-      d.classList.toggle('active', i === activeIndex);
-    });
-  });
-  } catch (err) {
-    console.error('Render error:', err);
-    document.getElementById('cards').innerHTML = '<div style="padding:40px;text-align:center;color:#ef4444;">Render error: ' + err.message + '<br><small>Check console for details</small></div>';
-  }
-}
-
-function renderSummaryCard() {
-  try {
-  const totalTasks = allTasks.length;
-  const doneTasks = allTasks.filter(t => t.status === 'complete').length;
-  const workingTasks = allTasks.filter(t => t.status === 'working').length;
-
-  const agentRows = AGENT_ORDER.map(key => {
-    const rc = getRC(key);
-    const st = getStatus(key);
-    const tasks = getTasks(key);
-    const status = st.status || 'sleeping';
-    const name = DISPLAY_NAMES[key] || rc.agent_name || key;
-    const emoji = rc.emoji || '•';
-    const grade = rc.grade || 'N/A';
-    const gradeColor = rc.grade_color || '#6b7280';
-    const currentTask = st.current_task;
-    const workingTask = tasks.find(t => t.status === 'working');
-    const taskLine = status === 'working' && (currentTask || workingTask)
-      ? `<div class="summary-current-task">▸ ${currentTask || workingTask.task_name}</div>`
-      : '';
-    const headline = rc.accomplishments && rc.accomplishments[0]
-      ? getAccomplishmentText(rc.accomplishments[0]).replace(/<[^>]*>/g, '').substring(0, 60) + '...'
-      : 'No report card data';
-
-    const rowUrl = REPORT_URLS[key] || `/r/${key}/`;
-    return `<div class="summary-agent-row" style="cursor:pointer;" onclick="window.location.href='${rowUrl}'">
-      <span class="summary-status-dot ${status}"></span>
-      <span class="summary-agent-emoji">${emoji}</span>
-      <div class="summary-agent-info">
-        <div class="summary-agent-name">${name}</div>
-        <div class="summary-agent-headline">${headline}</div>
-        ${taskLine}
-      </div>
-      <span class="summary-agent-grade" style="color:${gradeColor}">${grade}</span>
-    </div>`;
+/* ═══ Summary Card ═══ */
+function rSum(active){
+  try{
+  const tT=AT.length,dT=AT.filter(t=>t.status==='complete').length,wT=AT.filter(t=>t.status==='working').length;
+  const isT=sd(cDate,tDate);
+  let rows=active.map(k=>{
+    const rc=gRC(k),st=gSt(k),tasks=gTk(k);
+    const status=st.status||'sleeping';
+    const name=NAMES[k]||rc.agent_name||k;
+    const emoji=rc.emoji||'•';
+    const grade=rc.grade||'N/A';
+    const gc=rc.grade_color||'#6b7280';
+    const prevGrade=(gPC(k).grade);
+    const trend=gTrend(grade,prevGrade);
+    const trendHtml=trend?'<span class="sum-gt '+trend.dir+'">'+trend.arr+'</span>':'';
+    const ct=st.current_task;
+    const wt=tasks.find(t=>t.status==='working');
+    const taskLine=status==='working'&&(ct||wt)?'<div class="sum-task">▸ '+(ct||wt.task_name)+'</div>':'';
+    const hl=rc.accomplishments&&rc.accomplishments[0]?aT(rc.accomplishments[0]).replace(/<[^>]*>/g,'').substring(0,55)+'...':'No report card data';
+    const url=LINKS[k]||('/r/'+k+'/');
+    return '<a class="sum-row" href="'+url+'"><span class="sum-dot '+status+'"></span><span class="sum-emoji">'+emoji+'</span><div class="sum-info"><div class="sum-name">'+name+'</div><div class="sum-hl">'+hl+'</div>'+taskLine+'</div><span class="sum-grade" style="color:'+gc+'">'+grade+'</span>'+trendHtml+'</a>';
   }).join('');
 
-  // Master Next Steps
-  let masterNS = '';
-  AGENT_ORDER.forEach(key => {
-    const rc = getRC(key);
-    const plan = normalizePlan(rc.tonight_plan);
-    if (plan.length > 0) {
-      const name = DISPLAY_NAMES[key] || rc.agent_name || key;
-      masterNS += `<div class="master-agent-label">${rc.emoji || '•'} ${name}</div>`;
-      masterNS += plan.map((s, idx) => `<div class="ns-item"><span class="ns-num">${idx+1}</span><span class="ns-text">${s}</span></div>`).join('');
+  // Master next steps
+  let mns='';
+  active.forEach(k=>{
+    const rc=gRC(k),plan=nP(rc.tonight_plan);
+    if(plan.length){
+      mns+='<div class="ma-label">'+(rc.emoji||'•')+' '+(NAMES[k]||k)+'</div>';
+      mns+=plan.map((s,i)=>'<div class="ns-item"><span class="ns-num">'+(i+1)+'</span><span class="ns-text">'+s+'</span></div>').join('');
     }
   });
 
-  // Master Todo
-  const masterTodoHtml = renderMasterTodo();
-
-  return `<div class="agent-card">
-    <div class="agent-header" style="background:linear-gradient(135deg, #111827, #1f2937)">
-      <div class="agent-emoji">📊</div>
-      <div class="agent-name">Team Summary</div>
-      <div class="agent-role">${doneTasks}/${totalTasks} tasks done · ${workingTasks} in progress</div>
-    </div>
-    <div class="summary-body">
-      <div class="section-title">Agent Status</div>
-      ${agentRows}
-    </div>
-
-    <div class="collapsible-section">
-      <div class="collapsible-header" onclick="this.parentElement.classList.toggle('open')">
-        <span>🚀 All Next Steps</span>
-        <span class="collapsible-arrow">▼</span>
-      </div>
-      <div class="collapsible-body">${masterNS || '<div class="ns-empty">No action plans yet</div>'}</div>
-    </div>
-
-    <div class="collapsible-section">
-      <div class="collapsible-header" onclick="this.parentElement.classList.toggle('open')">
-        <span>📋 All Todos (${doneTasks}/${totalTasks})</span>
-        <span class="collapsible-arrow">▼</span>
-      </div>
-      <div class="collapsible-body">${masterTodoHtml}</div>
-    </div>
-
-    <div class="agent-footer">
-      <div class="status-dot" style="background:#22c55e"></div>
-      <span class="status-text">Swipe → for individual cards · Auto-refreshes</span>
-    </div>
-  </div>`;
-  } catch (err) {
-    console.error('Summary card render error:', err);
-    return `<div class="agent-card"><div style="padding:40px;text-align:center;color:#ef4444;">Error rendering summary<br><small>${err.message}</small></div></div>`;
+  // Master todo
+  let mtd='';
+  if(isT&&AT.length){
+    const working=AT.filter(t=>t.status==='working'),queued=AT.filter(t=>t.status==='queued'),complete=AT.filter(t=>t.status==='complete'),failed=AT.filter(t=>t.status==='failed');
+    mtd='<div class="td-prog"><div class="td-fill" style="width:'+((dT/tT)*100)+'%"></div></div>';
+    if(working.length)mtd+='<div class="td-grp">🔄 In Progress ('+working.length+')</div>'+working.map(t=>rTodo(t,1)).join('');
+    if(queued.length)mtd+='<div class="td-grp">⏳ Up Next ('+queued.length+')</div>'+queued.map(t=>rTodo(t,1)).join('');
+    if(complete.length)mtd+='<div class="td-grp">✅ Done ('+complete.length+')</div>'+complete.map(t=>rTodo(t,1)).join('');
+    if(failed.length)mtd+='<div class="td-grp">❌ Failed ('+failed.length+')</div>'+failed.map(t=>rTodo(t,1)).join('');
+    mtd+='<div class="td-sum">'+dT+' of '+tT+' complete</div>';
   }
+
+  const taskInfo=isT?dT+'/'+tT+' tasks done · '+wT+' in progress':fd(cDate);
+
+  return '<div class="agent-card"><div class="ag-hd" style="background:linear-gradient(135deg,#111827,#1f2937)"><div class="ag-emoji">📊</div><div class="ag-name">Team Summary</div><div class="ag-role">'+taskInfo+'</div></div><div class="sum-body"><div class="sec-t">Agent Status</div>'+rows+'</div>'
+    +(mns?'<div class="coll"><div class="coll-h" onclick="this.parentElement.classList.toggle(\'open\')"><span>🚀 All Next Steps</span><span class="coll-a">▼</span></div><div class="coll-b">'+mns+'</div></div>':'')
+    +(mtd?'<div class="coll"><div class="coll-h" onclick="this.parentElement.classList.toggle(\'open\')"><span>📋 All Todos ('+dT+'/'+tT+')</span><span class="coll-a">▼</span></div><div class="coll-b">'+mtd+'</div></div>':'')
+    +'<div class="ag-ft"><div class="st-dot" style="background:#22c55e"></div><span class="st-txt">Swipe → for individual cards</span></div></div>';
+  }catch(e){console.error('Sum err:',e);return '<div class="agent-card"><div style="padding:40px;text-align:center;color:#ef4444">Error: '+e.message+'</div></div>'}
 }
 
-function renderMasterTodo() {
-  const working = allTasks.filter(t => t.status === 'working');
-  const queued = allTasks.filter(t => t.status === 'queued');
-  const complete = allTasks.filter(t => t.status === 'complete');
-  const failed = allTasks.filter(t => t.status === 'failed');
-  const doneCount = complete.length;
-  const totalCount = allTasks.length;
-  if (totalCount === 0) return '<div class="ns-empty">No tasks</div>';
+/* ═══ Agent Card ═══ */
+function rCard(key){
+  try{
+  const rc=gRC(key),st=gSt(key),tasks=gTk(key);
+  const name=NAMES[key]||rc.agent_name||key;
+  const emoji=rc.emoji||'•';
+  const role=rc.role||'';
+  const grade=rc.grade||'N/A';
+  const gc=rc.grade_color||'#6b7280';
+  const color=COLORS[key]||'linear-gradient(135deg,#667eea,#764ba2)';
+  const accs=rc.accomplishments||[];
+  const kf=rc.key_finding;
+  const plan=nP(rc.tonight_plan);
+  const stats=nS(rc.stats);
+  const hardRules=rc.hard_rules||[];
+  const vl=rc.validated_learnings||[];
+  const ah=rc.active_hypotheses||[];
+  const trend=rc.trend||{};
+  const oa=rc.orion_analysis||(rc.stats&&rc.stats.orion_analysis)||'';
+  const jurl=rc.journal_url||'';
 
-  let html = `<div class="todo-progress"><div class="todo-progress-fill" style="width:${(doneCount/totalCount)*100}%"></div></div>`;
-  if (working.length) html += `<div class="todo-group">🔄 In Progress (${working.length})</div>` + working.map(t => renderTodoItem(t, true)).join('');
-  if (queued.length) html += `<div class="todo-group">⏳ Up Next (${queued.length})</div>` + queued.map(t => renderTodoItem(t, true)).join('');
-  if (complete.length) html += `<div class="todo-group">✅ Done (${complete.length})</div>` + complete.map(t => renderTodoItem(t, true)).join('');
-  if (failed.length) html += `<div class="todo-group">❌ Failed (${failed.length})</div>` + failed.map(t => renderTodoItem(t, true)).join('');
-  html += `<div class="todo-summary">${doneCount} of ${totalCount} complete</div>`;
-  return html;
-}
+  // Grade trend
+  const prevGrade=(gPC(key).grade);
+  const gt=gTrend(grade,prevGrade);
+  let gtHtml='';
+  if(gt)gtHtml='<div class="gt '+gt.dir+'">'+gt.arr+' '+gt.txt+'</div>';
 
-function renderAgentCard(key) {
-  try {
-  const rc = getRC(key);
-  const st = getStatus(key);
-  const tasks = getTasks(key);
-  const name = DISPLAY_NAMES[key] || rc.agent_name || key;
-  const emoji = rc.emoji || '•';
-  const role = rc.role || '';
-  const grade = rc.grade || 'N/A';
-  const gradeColor = rc.grade_color || '#6b7280';
-  const color = AGENT_COLORS[key] || 'linear-gradient(135deg, #667eea, #764ba2)';
-  const accomplishments = rc.accomplishments || [];
-  const keyFinding = rc.key_finding;
-  const plan = normalizePlan(rc.tonight_plan);
-  const stats = normalizeStats(rc.stats);
+  // Stats
+  const statsH=stats.length?'<div class="ag-stats">'+stats.map(s=>'<div class="stat"><div class="stat-v">'+s.value+'</div><div class="stat-l">'+s.label+'</div></div>').join('')+'</div>':'';
 
-  // Stats row
-  const statsHtml = stats.length > 0 ? `<div class="agent-stats">${stats.map(s => `
-    <div class="stat"><div class="stat-value">${s.value}</div><div class="stat-label">${s.label}</div></div>
-  `).join('')}</div>` : '';
+  // Orion's Take — PROMINENT, right after grade
+  let otH='';
+  if(oa){
+    otH='<div class="ot"><div class="ot-hdr"><span class="ot-icon">🌟</span><span class="ot-lbl">Orion\'s Take</span></div><div class="ot-txt">'+hw(oa)+'</div></div>';
+  }
 
   // Accomplishments
-  const accsHtml = accomplishments.map(a => `
-    <div class="accomplishment">
-      <span class="acc-icon">${getAccomplishmentIcon(a)}</span>
-      <span class="acc-text">${getAccomplishmentText(a)}</span>
-    </div>
-  `).join('');
+  const accsH=accs.map(a=>'<div class="acc"><span class="acc-i">'+aI(a)+'</span><span class="acc-t">'+aT(a)+'</span></div>').join('');
 
   // Key finding
-  const kfHtml = keyFinding ? `
-    <div class="key-finding">
-      <div class="key-finding-label">${keyFinding.label || '💡 Key Finding'}</div>
-      <div class="key-finding-text">${keyFinding.text}</div>
-    </div>
-  ` : '';
+  const kfH=kf?'<div class="kf"><div class="kf-l">'+(kf.label||'💡 Key Finding')+'</div><div class="kf-t">'+kf.text+'</div></div>':'';
 
-  // Next Steps section
-  const nsBody = plan.length > 0
-    ? plan.map((s, idx) => `<div class="ns-item"><span class="ns-num">${idx+1}</span><span class="ns-text">${s}</span></div>`).join('')
-    : '<div class="ns-empty">No action plan yet</div>';
+  // Next Steps
+  const nsB=plan.length?plan.map((s,i)=>'<div class="ns-item"><span class="ns-num">'+(i+1)+'</span><span class="ns-text">'+s+'</span></div>').join(''):'<div class="ns-empty">No action plan yet</div>';
 
-  // Todo section
-  const working = tasks.filter(t => t.status === 'working');
-  const queued = tasks.filter(t => t.status === 'queued');
-  const complete = tasks.filter(t => t.status === 'complete');
-  const failed = tasks.filter(t => t.status === 'failed');
-  const doneCount = complete.length;
-  const totalCount = tasks.length;
-
-  let todoBody = '';
-  if (totalCount === 0) {
-    todoBody = '<div class="ns-empty">No tasks in database</div>';
-  } else {
-    todoBody = `<div class="todo-progress"><div class="todo-progress-fill" style="width:${totalCount>0?(doneCount/totalCount)*100:0}%"></div></div>`;
-    if (working.length) todoBody += `<div class="todo-group">🔄 In Progress</div>` + working.map(t => renderTodoItem(t)).join('');
-    if (queued.length) todoBody += `<div class="todo-group">⏳ Up Next</div>` + queued.map(t => renderTodoItem(t)).join('');
-    if (complete.length) todoBody += `<div class="todo-group">✅ Done</div>` + complete.map(t => renderTodoItem(t)).join('');
-    if (failed.length) todoBody += `<div class="todo-group">❌ Failed</div>` + failed.map(t => renderTodoItem(t)).join('');
-    todoBody += `<div class="todo-summary">${doneCount} of ${totalCount} complete</div>`;
+  // Todos
+  const working=tasks.filter(t=>t.status==='working'),queued=tasks.filter(t=>t.status==='queued'),complete=tasks.filter(t=>t.status==='complete'),failed=tasks.filter(t=>t.status==='failed');
+  const dc=complete.length,tc=tasks.length;
+  let tdB='';
+  if(!tc){tdB='<div class="ns-empty">No tasks</div>'}
+  else{
+    tdB='<div class="td-prog"><div class="td-fill" style="width:'+(tc?(dc/tc)*100:0)+'%"></div></div>';
+    if(working.length)tdB+='<div class="td-grp">🔄 In Progress</div>'+working.map(t=>rTodo(t)).join('');
+    if(queued.length)tdB+='<div class="td-grp">⏳ Up Next</div>'+queued.map(t=>rTodo(t)).join('');
+    if(complete.length)tdB+='<div class="td-grp">✅ Done</div>'+complete.map(t=>rTodo(t)).join('');
+    if(failed.length)tdB+='<div class="td-grp">❌ Failed</div>'+failed.map(t=>rTodo(t)).join('');
+    tdB+='<div class="td-sum">'+dc+' of '+tc+' complete</div>';
   }
 
-  // Status footer
-  const status = st.status || 'sleeping';
-  const statusColor = status === 'working' ? '#22c55e' : '#9ca3af';
-  const statusText = status === 'working' ? `Working · ${st.current_task || tasks.find(t=>t.status==='working')?.task_name || ''}` : `${status} · ${doneCount}/${totalCount} tasks done`;
+  // Status
+  const status=st.status||'sleeping';
+  const sc=status==='working'?'#22c55e':'#9ca3af';
+  const stxt=status==='working'?'Working · '+(st.current_task||tasks.find(t=>t.status==='working')?.task_name||''):status+' · '+dc+'/'+tc+' tasks done';
 
-  const reportUrl = REPORT_URLS[key] || `/r/${key}/`;
+  // Detail link
+  const detailUrl=jurl||LINKS[key]||('/r/'+key+'/');
 
-  return `<div class="agent-card">
-    <div class="agent-header" style="background:${color};cursor:pointer;" onclick="window.location.href='${reportUrl}'">
-      <div class="agent-emoji">${emoji}</div>
-      <div class="agent-name">${name}</div>
-      <div class="agent-role">${role}</div>
-      <div class="agent-grade" style="color:${gradeColor}">${grade}</div>
-    </div>
-    ${statsHtml}
-    <div class="agent-body">
-      <div class="section-title">What they did</div>
-      ${accsHtml}
-      ${kfHtml}
-    </div>
+  let html='<div class="agent-card">';
+  html+='<div class="ag-hd" style="background:'+color+'"><div class="ag-emoji">'+emoji+'</div><div class="ag-name">'+name+'</div><div class="ag-role">'+role+'</div><div class="ag-grade-box"><div class="ag-grade" style="color:'+gc+'">'+grade+'</div>'+gtHtml+'</div></div>';
+  html+=statsH;
+  // Orion's Take FIRST — before accomplishments
+  html+=otH;
+  html+='<div class="ag-body"><div class="sec-t">What they did</div>'+accsH+kfH+'</div>';
 
-    <div class="collapsible-section">
-      <div class="collapsible-header" onclick="this.parentElement.classList.toggle('open')">
-        <span>🚀 Next Steps (${plan.length})</span>
-        <span class="collapsible-arrow">▼</span>
-      </div>
-      <div class="collapsible-body">${nsBody}</div>
-    </div>
+  // Collapsible sections
+  if(hardRules.length)html+='<div class="coll"><div class="coll-h" onclick="this.parentElement.classList.toggle(\'open\')"><span>🚫 Hard Rules ('+hardRules.length+')</span><span class="coll-a">▼</span></div><div class="coll-b">'+hardRules.map(r=>'<div style="padding:8px 14px;font-size:13px;color:#374151;line-height:1.4;border-bottom:1px solid #f3f4f6">🚫 '+r+'</div>').join('')+'</div></div>';
+  if(vl.length)html+='<div class="coll"><div class="coll-h" onclick="this.parentElement.classList.toggle(\'open\')"><span>✅ Validated ('+vl.length+')</span><span class="coll-a">▼</span></div><div class="coll-b">'+vl.map(v=>'<div style="padding:8px 14px;font-size:13px;color:#374151;line-height:1.4;border-bottom:1px solid #f3f4f6">✅ '+v+'</div>').join('')+'</div></div>';
+  if(ah.length)html+='<div class="coll"><div class="coll-h" onclick="this.parentElement.classList.toggle(\'open\')"><span>🔮 Hypotheses ('+ah.length+')</span><span class="coll-a">▼</span></div><div class="coll-b">'+ah.map(h=>'<div style="padding:8px 14px;font-size:13px;color:#374151;line-height:1.4;border-bottom:1px solid #f3f4f6">🔮 '+h+'</div>').join('')+'</div></div>';
 
-    <div class="collapsible-section">
-      <div class="collapsible-header" onclick="this.parentElement.classList.toggle('open')">
-        <span>📋 Todo List (${doneCount}/${totalCount})</span>
-        <span class="collapsible-arrow">▼</span>
-      </div>
-      <div class="collapsible-body">${todoBody}</div>
-    </div>
-
-    <div class="agent-footer">
-      <div class="status-dot" style="background:${statusColor}"></div>
-      <span class="status-text">${statusText}</span>
-    </div>
-  </div>`;
-  } catch (err) {
-    console.error('Agent card render error for', key, err);
-    return `<div class="agent-card"><div style="padding:40px;text-align:center;color:#ef4444;">Error rendering ${key}<br><small>${err.message}</small></div></div>`;
+  if(trend.north_star){
+    let tb='<div style="padding:12px 14px"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#9ca3af;margin-bottom:4px">North Star</div><div style="font-size:15px;font-weight:800;color:#111827;margin-bottom:8px">'+trend.north_star+'</div>';
+    if(trend.current)tb+='<div style="font-size:13px;color:#6b7280;margin-bottom:8px">'+trend.current+'</div>';
+    if(trend.velocity)tb+='<div style="font-size:13px;color:#059669;font-weight:600;margin-bottom:4px">📈 '+trend.velocity+'</div>';
+    if(trend.milestone_next)tb+='<div style="font-size:13px;color:#d97706;font-weight:600">🎯 Next: '+trend.milestone_next+'</div>';
+    tb+='</div>';
+    html+='<div class="coll"><div class="coll-h" onclick="this.parentElement.classList.toggle(\'open\')"><span>📈 Trend</span><span class="coll-a">▼</span></div><div class="coll-b">'+tb+'</div></div>';
   }
+
+  html+='<div class="coll"><div class="coll-h" onclick="this.parentElement.classList.toggle(\'open\')"><span>🚀 Next Steps ('+plan.length+')</span><span class="coll-a">▼</span></div><div class="coll-b">'+nsB+'</div></div>';
+
+  if(tc)html+='<div class="coll"><div class="coll-h" onclick="this.parentElement.classList.toggle(\'open\')"><span>📋 Todos ('+dc+'/'+tc+')</span><span class="coll-a">▼</span></div><div class="coll-b">'+tdB+'</div></div>';
+
+  // View Details link
+  html+='<a class="vd" href="'+detailUrl+'">View Details <span style="transition:transform .15s">→</span></a>';
+
+  html+='<div class="ag-ft"><div class="st-dot" style="background:'+sc+'"></div><span class="st-txt">'+stxt+'</span></div>';
+  html+='</div>';
+  return html;
+  }catch(e){console.error('Card err:',key,e);return '<div class="agent-card"><div style="padding:40px;text-align:center;color:#ef4444">Error: '+key+' - '+e.message+'</div></div>'}
 }
 
-function renderTodoItem(task, showAgent) {
-  const icons = { working: '🔄', queued: '⏳', complete: '✅', failed: '❌' };
-  const agentEmoji = showAgent ? (getRC(task.agent).emoji || '•') + ' ' : '';
-  let ti = '';
-  if (task.status === 'working' && task.started_at) {
-    const mins = Math.floor((Date.now() - new Date(task.started_at).getTime()) / 60000);
-    ti = mins < 60 ? `⏱ Running ${mins}m` : `⏱ Running ${Math.floor(mins/60)}h ${mins%60}m`;
-  }
-  if (task.status === 'complete' && task.completed_at) {
-    const mins = Math.floor((Date.now() - new Date(task.completed_at).getTime()) / 60000);
-    ti = mins < 60 ? `✓ ${mins}m ago` : mins < 1440 ? `✓ ${Math.floor(mins/60)}h ago` : '✓ Done';
-  }
-  return `<div class="todo-item s-${task.status}" onclick="this.classList.toggle('detail-open');event.stopPropagation()">
-    <div class="todo-item-row">
-      <span class="todo-icon">${icons[task.status]}</span>
-      <span class="todo-name">${agentEmoji}${task.task_name}</span>
-      <span class="todo-chevron">›</span>
-    </div>
-    ${ti ? `<div class="todo-time">${ti}</div>` : ''}
-    <div class="todo-detail-box">
-      ${task.task_detail ? `<div class="todo-detail-text">${task.task_detail}</div>` : ''}
-      ${task.result_summary ? `<div class="todo-result-text">✓ ${task.result_summary}</div>` : ''}
-    </div>
-  </div>`;
+/* ═══ Todo Item ═══ */
+function rTodo(task,showAgent){
+  const icons={working:'🔄',queued:'⏳',complete:'✅',failed:'❌'};
+  const ae=showAgent?((gRC(canon(task.agent)).emoji||'•')+' '):'';
+  let ti='';
+  if(task.status==='working'&&task.started_at){const m=Math.floor((Date.now()-new Date(task.started_at).getTime())/60000);ti=m<60?'⏱ Running '+m+'m':'⏱ Running '+Math.floor(m/60)+'h '+(m%60)+'m'}
+  if(task.status==='complete'&&task.completed_at){const m=Math.floor((Date.now()-new Date(task.completed_at).getTime())/60000);ti=m<60?'✓ '+m+'m ago':m<1440?'✓ '+Math.floor(m/60)+'h ago':'✓ Done'}
+  return '<div class="td-item s-'+task.status+'" onclick="this.classList.toggle(\'dopen\');event.stopPropagation()"><div class="td-row"><span class="td-icon">'+(icons[task.status]||'•')+'</span><span class="td-name">'+ae+task.task_name+'</span><span class="td-chev">›</span></div>'+(ti?'<div class="td-time">'+ti+'</div>':'')+'<div class="td-det">'+(task.task_detail?'<div class="td-det-t">'+task.task_detail+'</div>':'')+(task.result_summary?'<div class="td-res-t">✓ '+task.result_summary+'</div>':'')+'</div></div>';
 }
 
-function renderDots() {
-  const dotsContainer = document.getElementById('dots');
-  const totalCards = AGENT_ORDER.length + 1; // +1 for summary
-  dotsContainer.innerHTML = Array.from({length: totalCards}, (_, i) =>
-    `<div class="dot ${i === 0 ? 'active' : ''}" id="dot-${i}"></div>`
-  ).join('');
-}
-
-// Initial load
-fetchAll();
-// Auto-refresh every 60s
-setInterval(fetchAll, 60000);
-
+/* ═══ Init ═══ */
+fetchAll(true);
+setInterval(()=>{if(sd(cDate,tDate))fetchAll()},60000);
 </script>
 </body>
 </html>
