@@ -235,6 +235,11 @@ function renderAll(){
     updNav();
     const active=ORDER.filter(k=>MC[k]);
     if(!active.length){
+      if(sd(cDate,tDate)){
+        // Today is empty — auto-show yesterday
+        cDate=new Date(cDate);cDate.setDate(cDate.getDate()-1);
+        fetchAll(true);return;
+      }
       C.innerHTML='<div class="nd"><div class="nd-emoji">📭</div><div class="nd-title">No Reports This Day</div><div class="nd-text">No agent report cards for '+fd(cDate)+'. Try another day.</div></div>';
       rDots(1);return;
     }
