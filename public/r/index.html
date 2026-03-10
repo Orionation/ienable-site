@@ -349,10 +349,15 @@ function rCard(key){
   // Stats
   const statsH=stats.length?'<div class="ag-stats">'+stats.map(s=>'<div class="stat"><div class="stat-v">'+s.value+'</div><div class="stat-l">'+s.label+'</div></div>').join('')+'</div>':'';
 
-  // Orion's Take — PROMINENT, right after grade
+  // Orion's Take — collapsible accordion, shows current + previous
   let otH='';
   if(oa){
-    otH='<div class="ot"><div class="ot-hdr"><span class="ot-icon">🌟</span><span class="ot-lbl">Orion\'s Take</span></div><div class="ot-txt">'+hw(oa)+'</div></div>';
+    const prevOa=(gPC(k).orion_analysis||(gPC(k).stats&&gPC(k).stats.orion_analysis)||'');
+    let prevSection='';
+    if(prevOa&&prevOa!==oa){
+      prevSection='<div class="ot-prev" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(139,92,246,0.2)"><div style="font-size:11px;font-weight:700;color:#9ca3af;margin-bottom:4px;text-transform:uppercase;letter-spacing:.03em">Previous Take</div><div class="ot-txt" style="opacity:0.7;font-size:13px">'+hw(prevOa)+'</div></div>';
+    }
+    otH='<div class="ot" style="cursor:pointer" onclick="var b=this.querySelector(\'.ot-body\');b.style.display=b.style.display===\'none\'?\'block\':\'none\';this.querySelector(\'.ot-arrow\').textContent=b.style.display===\'none\'?\'▶\':\'▼\'"><div class="ot-hdr"><span class="ot-icon">🌟</span><span class="ot-lbl">Orion\'s Take</span><span class="ot-arrow" style="float:right;font-size:10px;color:#9ca3af">▼</span></div><div class="ot-body"><div class="ot-txt">'+hw(oa)+'</div>'+prevSection+'</div></div>';
   }
 
   // Accomplishments
