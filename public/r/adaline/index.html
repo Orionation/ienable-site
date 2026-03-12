@@ -164,6 +164,9 @@ const API='https://ienable-admin-app-hqtw2.ondigitalocean.app/api/v1';
 const COLORS={adaline:'linear-gradient(135deg,#7c3aed,#6366f1)',muse:'linear-gradient(135deg,#ec4899,#f43f5e)',ienable:'linear-gradient(135deg,#3b82f6,#2563eb)',orion:'linear-gradient(135deg,#1f2937,#374151)',tom:'linear-gradient(135deg,#059669,#10b981)',apollo:'linear-gradient(135deg,#f59e0b,#d97706)',reel:'linear-gradient(135deg,#06b6d4,#0891b2)',hodl:'linear-gradient(135deg,#059669,#10b981)',main:'linear-gradient(135deg,#1f2937,#374151)','lyndsay-ads':'linear-gradient(135deg,#7c3aed,#6366f1)',content:'linear-gradient(135deg,#f59e0b,#d97706)'};
 const pp=window.location.pathname.replace(/\/+$/,'').split('/');
 const agentKey=pp[pp.length-1].toLowerCase();
+// Alias map: URL key -> possible API agent_names (for historical data)
+const ALIASES={tom:['tom','hodl','Tom','Tom V17'],orion:['orion','main','Orion'],adaline:['adaline','lyndsay-ads','Adaline'],apollo:['apollo','content','Apollo','reel','Reel'],ienable:['ienable','iEnable','ienable-seo'],muse:['muse','Muse'],reel:['reel','Reel','content']};
+function matchesAgent(agentName){const aliases=ALIASES[agentKey]||[agentKey];return aliases.some(a=>a.toLowerCase()===(agentName||'').toLowerCase());}
 const urlP=new URLSearchParams(window.location.search);
 let selectedDate=urlP.get('date')||null;
 let allRC=[];
@@ -175,17 +178,17 @@ function gTxt(a){if(!a)return'';if(typeof a==='string')return a;if(typeof a==='o
 function gIco(a){if(!a)return'•';if(typeof a==='object'&&a.icon)return a.icon;return'•';}
 
 async function fetchHistory(){
-  try{const r=await fetch(API+'/report-cards');const j=await r.json();allRC=(j.data||j||[]).filter(r=>(r.agent_name||'').toLowerCase()===agentKey).sort((a,b)=>b.date.localeCompare(a.date));}catch(e){allRC=[];}
+  try{const r=await fetch(API+'/report-cards');const j=await r.json();allRC=(j.data||j||[]).filter(r=>matchesAgent(r.agent_name)).sort((a,b)=>b.date.localeCompare(a.date));}catch(e){allRC=[];}
 }
 
 async function load(){
   try{
-    const url=selectedDate?API+'/report-cards?agent_name='+encodeURIComponent(agentKey)+'&date='+selectedDate:API+'/report-cards/latest';
+    const url=selectedDate?API+'/report-cards?date='+selectedDate:API+'/report-cards/latest';
     const[rcR,stR,tkR]=await Promise.all([fetch(url),fetch(API+'/agent-status'),fetch(API+'/agent-tasks/active'),fetchHistory()]);
     const rcD=(await rcR.json()).data||[];const stD=(await stR.json()).data||[];const tkD=(await tkR.json()).data||[];
-    const rc=rcD.find(r=>(r.agent_name||'').toLowerCase()===agentKey)||{};
-    const st=stD.find(s=>(s.agent||'').toLowerCase()===agentKey)||{};
-    const tasks=tkD.filter(t=>t.agent.toLowerCase()===agentKey);
+    const rc=rcD.find(r=>matchesAgent(r.agent_name))||{};
+    const st=stD.find(s=>matchesAgent(s.agent))||{};
+    const tasks=tkD.filter(t=>matchesAgent(t.agent));
     document.title=(rc.agent_name||agentKey)+"'s Report Card";
     if(!calMonth){const d=selectedDate?new Date(selectedDate+'T12:00:00'):(rc.date?new Date(rc.date+'T12:00:00'):new Date());calMonth={year:d.getFullYear(),month:d.getMonth()};}
     if(!selectedDate&&rc.date)selectedDate=rc.date;
