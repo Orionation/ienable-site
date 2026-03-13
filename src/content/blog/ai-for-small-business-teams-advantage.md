@@ -6,7 +6,6 @@ tags: ["Article"]
 readTime: "5 min read"
 ---
 
-# AI for Small Business Teams: Why Companies Under 50 Employees Have the Biggest AI Advantage
 
 
 ![AI for Small Business Teams: Why Companies Under 50 Employees Have the Biggest AI Advantage](/blog/images/ai-for-small-business-teams-advantage-hero.jpg)
