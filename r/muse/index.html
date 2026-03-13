@@ -11,108 +11,12 @@
 body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro',system-ui,sans-serif;background:var(--g100);color:var(--g800);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 .back-link{display:inline-flex;align-items:center;gap:4px;padding:12px 16px;font-size:14px;color:var(--g500);text-decoration:none;font-weight:600}
 .back-link:active{opacity:.6}
-
-/* Desktop: horizontal carousel */
 .cards-container{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:8px 16px 16px;gap:12px;scrollbar-width:none}
 .cards-container::-webkit-scrollbar{display:none}
 .dots{display:flex;justify-content:center;gap:6px;padding:8px 0 16px}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--g300);transition:all .2s}
 .dot.active{background:var(--g800);width:20px;border-radius:4px}
-.agent-card{flex:0 0 calc(100vw - 40px);max-width:400px;scroll-snap-align:center;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);margin-bottom:16px}
-
-/* Mobile: vertical stack, no carousel */
-@media (max-width: 767px) {
-  .cards-container {
-    display: flex;
-    flex-direction: column;
-    overflow-x: visible;
-    overflow-y: visible;
-    scroll-snap-type: none;
-    padding: 8px 16px 16px;
-    gap: 16px;
-  }
-  
-  .agent-card {
-    flex: 0 0 auto;
-    width: 100%;
-    max-width: none;
-    scroll-snap-align: none;
-  }
-  
-  .dots {
-    display: none;
-  }
-  
-  /* Compact calendar on mobile */
-  .calendar-wrap {
-    margin: 12px 16px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.06);
-    overflow: hidden;
-  }
-  
-  .cal-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 14px;
-    background: linear-gradient(135deg, #eff6ff, #dbeafe);
-  }
-  
-  .cal-grid {
-    display: none; /* Hide full month grid on mobile */
-  }
-  
-  .cal-month-label {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--g800);
-  }
-  
-  .cal-nav-btn {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 1px solid var(--g200);
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    color: var(--g500);
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-  
-  .cal-nav-btn:active {
-    background: var(--g100);
-  }
-  
-  /* Add compact date dots below nav on mobile */
-  .cal-mobile-dots {
-    display: flex;
-    justify-content: center;
-    gap: 4px;
-    padding: 8px 12px;
-    flex-wrap: wrap;
-  }
-  
-  .cal-mobile-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--gn500);
-  }
-}
-
-/* Desktop: show full calendar grid */
-@media (min-width: 768px) {
-  .cal-mobile-dots {
-    display: none;
-  }
-}
-
+.agent-card{flex:0 0 calc(100vw - 40px);max-width:400px;scroll-snap-align:center;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08)}
 .agent-header{padding:20px;color:#fff;position:relative;overflow:hidden}
 .agent-header::after{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.1)}
 .agent-emoji{font-size:36px;margin-bottom:8px}
@@ -173,6 +77,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro',system-ui,sans-serif;
 .todo-summary{text-align:center;font-size:12px;font-weight:600;color:var(--g400);padding:8px 0}
 .list-item{padding:8px 14px;font-size:13px;color:var(--g700);line-height:1.4;border-bottom:1px solid var(--g100)}
 .list-item:last-child{border-bottom:none}
+/* Flat fields accordion */
 .flat-sec{margin:0 16px 8px;border-radius:12px;border:1px solid var(--g200);overflow:hidden}
 .flat-sec-hdr{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:var(--g50);cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;font-size:13px;font-weight:700;color:var(--g700)}
 .flat-sec-hdr:active{background:var(--g100)}
@@ -180,6 +85,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro',system-ui,sans-serif;
 .flat-sec.open .flat-sec-arrow{transform:rotate(180deg)}
 .flat-sec-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
 .flat-sec.open .flat-sec-body{max-height:3000px}
+/* Directory */
 .dir-body{padding:12px 16px 16px}
 .dir-home-link{display:block;text-align:center;padding:10px;color:var(--bl600);font-weight:600;font-size:14px;text-decoration:none;border-radius:8px;background:var(--bl50);margin-bottom:12px}
 .dir-home-link:active{opacity:.7}
@@ -198,6 +104,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro',system-ui,sans-serif;
 .dir-link-badge{font-size:12px;font-weight:700;color:var(--gn600);background:var(--gn50);padding:2px 8px;border-radius:10px}
 .dir-link-arrow{font-size:14px;color:var(--g300)}
 .dir-empty{padding:14px;text-align:center;color:var(--g400);font-size:13px}
+/* Trajectory */
 .traj-hero{padding:24px 20px 20px;text-align:center}
 .traj-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--g400);margin-bottom:6px}
 .traj-north-star{font-size:22px;font-weight:800;color:var(--g900);line-height:1.2;margin-bottom:8px}
@@ -225,8 +132,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro',system-ui,sans-serif;
 .traj-proof-item:last-child{border-right:none}
 .traj-proof-val{font-size:20px;font-weight:800;color:var(--g800)}
 .traj-proof-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--g400);margin-top:1px}
-
-/* Desktop calendar */
+/* Calendar */
 .calendar-wrap{margin:16px;background:#fff;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);overflow:hidden}
 .cal-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px}
 .cal-nav-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--g200);background:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--g500);cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -246,30 +152,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro',system-ui,sans-serif;
 .cal-dot-pip{width:5px;height:5px;border-radius:50%;background:var(--gn500)}
 .cal-day.selected .cal-dot-pip{background:rgba(255,255,255,.7)}
 .loading{text-align:center;padding:40px;color:var(--g400)}
-.no-data-message{text-align:center;padding:60px 20px;background:#fff;border-radius:20px;margin:16px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
-.no-data-emoji{font-size:64px;margin-bottom:16px}
-.no-data-title{font-size:20px;font-weight:800;color:var(--g800);margin-bottom:8px}
-.no-data-text{font-size:14px;color:var(--g500);line-height:1.6;margin-bottom:20px}
-.no-data-hint{font-size:13px;color:var(--g400);font-style:italic}
 </style>
 </head>
 <body>
-<a class="back-link" id="back-link" href="/r/">‹ Back to all agents</a>
+<a class="back-link" href="/r/">‹ Back to all agents</a>
 <div class="dots" id="dots"></div>
 <div class="cards-container" id="cards"><div class="loading">Loading...</div></div>
 <div id="calendarRoot"></div>
 <script>
 const API='https://ienable-admin-app-hqtw2.ondigitalocean.app/api/v1';
 const COLORS={adaline:'linear-gradient(135deg,#7c3aed,#6366f1)',muse:'linear-gradient(135deg,#ec4899,#f43f5e)',ienable:'linear-gradient(135deg,#3b82f6,#2563eb)',orion:'linear-gradient(135deg,#1f2937,#374151)',tom:'linear-gradient(135deg,#059669,#10b981)',apollo:'linear-gradient(135deg,#f59e0b,#d97706)',reel:'linear-gradient(135deg,#06b6d4,#0891b2)',hodl:'linear-gradient(135deg,#059669,#10b981)',main:'linear-gradient(135deg,#1f2937,#374151)','lyndsay-ads':'linear-gradient(135deg,#7c3aed,#6366f1)',content:'linear-gradient(135deg,#f59e0b,#d97706)'};
-const DISPLAY_NAMES={main:'Orion',hodl:'Tom','lyndsay-ads':'Adaline','fullstack-dev':'Alex',content:'Apollo',muse:'Muse',ienable:'iEnable',qa:'QA',deployment:'Deploy',adaline:'Adaline',tom:'Tom',orion:'Orion',apollo:'Apollo',alex:'Alex'};
 const pp=window.location.pathname.replace(/\/+$/,'').split('/');
 const agentKey=pp[pp.length-1].toLowerCase();
-const urlParams=new URLSearchParams(window.location.search);
-const companyFilter=urlParams.get('company')||'';
+// Alias map: URL key -> possible API agent_names (for historical data)
 const ALIASES={tom:['tom','hodl','Tom','Tom V17'],orion:['orion','main','Orion'],adaline:['adaline','lyndsay-ads','Adaline'],apollo:['apollo','content','Apollo','reel','Reel'],ienable:['ienable','iEnable','ienable-seo'],muse:['muse','Muse'],reel:['reel','Reel','content']};
 function matchesAgent(agentName){const aliases=ALIASES[agentKey]||[agentKey];return aliases.some(a=>a.toLowerCase()===(agentName||'').toLowerCase());}
 const urlP=new URLSearchParams(window.location.search);
-let selectedDate=urlP.get('date')||(function(){var m=window.location.pathname.match(/(\d{4}-\d{2}-\d{2})/);return m?m[1]:null;})();
+let selectedDate=urlP.get('date')||null;
 let allRC=[];
 let calMonth=null;
 
@@ -279,49 +178,22 @@ function gTxt(a){if(!a)return'';if(typeof a==='string')return a;if(typeof a==='o
 function gIco(a){if(!a)return'•';if(typeof a==='object'&&a.icon)return a.icon;return'•';}
 
 async function fetchHistory(){
-  try{const cParam=companyFilter?'?company_id='+companyFilter:'';const r=await fetch(API+'/report-cards'+cParam);const j=await r.json();allRC=(j.data||j||[]).filter(r=>matchesAgent(r.agent_name)).sort((a,b)=>b.date.localeCompare(a.date));}catch(e){allRC=[];}
+  try{const r=await fetch(API+'/report-cards');const j=await r.json();allRC=(j.data||j||[]).filter(r=>matchesAgent(r.agent_name)).sort((a,b)=>b.date.localeCompare(a.date));}catch(e){allRC=[];}
 }
 
 async function load(){
   try{
-    const cParam=companyFilter?'&company_id='+companyFilter:'';
-    const url=selectedDate?API+'/report-cards?date='+selectedDate+cParam:API+'/report-cards/latest'+cParam.replace('&','?');
-    const[rcR,stR,tkR]=await Promise.all([fetch(url),fetch(API+'/agent-status'+cParam.replace('&','?')),fetch(API+'/agent-tasks/active'+cParam.replace('&','?')),fetchHistory()]);
-    const rcJ=await rcR.json();
-    const rcD=rcJ.data||[];
-    const stD=(await stR.json()).data||[];
-    const tkD=(await tkR.json()).data||[];
-    
-    // Check if API explicitly returned failure or no data
-    const hasData = rcJ.success !== false && rcD.length > 0;
-    const rc = hasData ? rcD.find(r=>matchesAgent(r.agent_name)) : null;
-    
-    // If no report card found for this date, show "No data" message
-    if (!rc) {
-      renderNoData();
-      renderCalendar();
-      var bl=document.getElementById('back-link');if(bl)bl.href=(selectedDate?'/r/?date='+selectedDate:'/r/')+(companyFilter?'&company='+companyFilter:'');
-      return;
-    }
-    
+    const url=selectedDate?API+'/report-cards?date='+selectedDate:API+'/report-cards/latest';
+    const[rcR,stR,tkR]=await Promise.all([fetch(url),fetch(API+'/agent-status'),fetch(API+'/agent-tasks/active'),fetchHistory()]);
+    const rcD=(await rcR.json()).data||[];const stD=(await stR.json()).data||[];const tkD=(await tkR.json()).data||[];
+    const rc=rcD.find(r=>matchesAgent(r.agent_name))||{};
     const st=stD.find(s=>matchesAgent(s.agent))||{};
     const tasks=tkD.filter(t=>matchesAgent(t.agent));
-    document.title=(DISPLAY_NAMES[agentKey]||DISPLAY_NAMES[rc.agent_name?.toLowerCase()]||rc.agent_name||agentKey)+"'s Report Card";
+    document.title=(rc.agent_name||agentKey)+"'s Report Card";
     if(!calMonth){const d=selectedDate?new Date(selectedDate+'T12:00:00'):(rc.date?new Date(rc.date+'T12:00:00'):new Date());calMonth={year:d.getFullYear(),month:d.getMonth()};}
     if(!selectedDate&&rc.date)selectedDate=rc.date;
     render(rc,st,tasks);renderCalendar();
-    var bl=document.getElementById('back-link');if(bl)bl.href=(selectedDate?'/r/?date='+selectedDate:'/r/')+(companyFilter?'&company='+companyFilter:'');
   }catch(e){document.getElementById('cards').innerHTML='<div class="loading">Failed: '+e.message+'</div>';}
-}
-
-function renderNoData(){
-  const container=document.getElementById('cards');
-  const dotsC=document.getElementById('dots');
-  const agentName=DISPLAY_NAMES[agentKey]||agentKey;
-  const dateFormatted=selectedDate?new Date(selectedDate+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}):null;
-  
-  dotsC.innerHTML='';
-  container.innerHTML='<div class="no-data-message"><div class="no-data-emoji">📭</div><div class="no-data-title">No Report Card for '+dateFormatted+'</div><div class="no-data-text">'+agentName+' didn\'t generate a report card on this date.</div><div class="no-data-hint">Use the calendar below to navigate to a date with data (marked with green dots).</div></div>';
 }
 
 function numTasks(tasks,plan){
@@ -331,51 +203,13 @@ function numTasks(tasks,plan){
   let n=plan.length+1;return tasks.map(t=>({...t,_num:asgn.get(t.id)||(n++)})).sort((a,b)=>a._num-b._num);
 }
 
-function renderFieldValue(value) {
-  if (!value) return '<div class="list-item" style="color:#9ca3af;font-style:italic;">No data</div>';
-  if (Array.isArray(value)) {
-    if (value.length === 0) return '<div class="list-item" style="color:#9ca3af;font-style:italic;">No data</div>';
-    return value.map(item => {
-      const text = typeof item === 'object' ? (item.text || item.name || JSON.stringify(item)) : String(item);
-      const icon = typeof item === 'object' && item.icon ? item.icon : '•';
-      return '<div class="list-item">' + icon + ' ' + text + '</div>';
-    }).join('');
-  }
-  if (typeof value === 'string') {
-    if (value.includes('\n') || value.match(/^[\s]*[-•*]\s/m)) {
-      const lines = value.split('\n').filter(l => l.trim());
-      return lines.map(line => {
-        const cleaned = line.replace(/^[\s]*[-•*]\s*/, '');
-        return '<div class="list-item">• ' + cleaned + '</div>';
-      }).join('');
-    }
-    return '<div class="list-item">' + value + '</div>';
-  }
-  return '<div class="list-item">' + JSON.stringify(value) + '</div>';
-}
-
-const FIELD_CONFIG = {
-  accomplishments: { emoji: '🎯', color: 'linear-gradient(135deg,#10b981,#059669)', title: 'Accomplishments', role: 'What I did today' },
-  tonight_plan: { emoji: '🚀', color: 'linear-gradient(135deg,#3b82f6,#2563eb)', title: 'Tonight Plan', role: 'Action items for next session' },
-  validated_learnings: { emoji: '✅', color: 'linear-gradient(135deg,#22c55e,#16a34a)', title: 'Validated Learnings', role: 'Confirmed insights from real outcomes' },
-  hard_rules: { emoji: '🚫', color: 'linear-gradient(135deg,#ef4444,#dc2626)', title: 'Hard Rules', role: 'Non-negotiable constraints' },
-  active_hypotheses: { emoji: '🔮', color: 'linear-gradient(135deg,#8b5cf6,#7c3aed)', title: 'Active Hypotheses', role: 'Predictions awaiting validation' },
-  tasks: { emoji: '📋', color: 'linear-gradient(135deg,#f59e0b,#d97706)', title: 'Tasks', role: 'Live execution status' }
-};
-
 function render(rc,st,tasks){
-  console.log('Rendering report card:', rc);
-  console.log('Cards array:', rc.cards);
-  
   try{
   const container=document.getElementById('cards');
-  const slides=rc.cards||[];
-  console.log('Slides to render:', slides.length);
-  
-  // Check if we have rich card data
+  // FIX: API returns "cards" not "playbooks". Check both for compatibility.
+  const slides=rc.cards||rc.playbooks||[];
+  // Only use as swipeable cards if they have the right shape (name/emoji/accomplishments)
   const hasRichCards=slides.length>0&&slides[0]&&(slides[0].name||slides[0].emoji||slides[0].accomplishments);
-  console.log('Has rich cards:', hasRichCards, slides[0]);
-  
   const status=st.status||'sleeping';
   const defaultColor=COLORS[agentKey]||'linear-gradient(135deg,#667eea,#764ba2)';
   const plan=nPlan(rc.tonight_plan);
@@ -395,67 +229,23 @@ function render(rc,st,tasks){
     const pPct=phases.length>0?Math.max(8,((cpi+1)/phases.length)*100):10;
     const phHtml=phases.map((p,i)=>{const done=i<cpi||p.includes('DONE');const now=p.includes('NOW');const clean=p.replace(/\((NOW|DONE)\)/g,'').replace(/\.\s*$/,'').trim();const cls=done?'done':now?'current':'';const sl=i<phases.length-1;return'<div class="traj-phase-item '+cls+'"><div class="traj-phase-dot">'+(done?'✓':(i+1))+'</div>'+(sl?'<div class="traj-phase-line"></div>':'')+'<div class="traj-phase-text">'+clean+'</div></div>';}).join('');
     const col=COLORS[agentKey]||'linear-gradient(135deg,#667eea,#764ba2)';
-    cards.push('<div class="agent-card"><div class="agent-header" style="background:'+col+'"><div class="agent-emoji">'+(rc.emoji||'⭐')+'</div><div class="agent-name">'+(DISPLAY_NAMES[agentKey]||DISPLAY_NAMES[rc.agent_name?.toLowerCase()]||rc.agent_name||agentKey)+'</div><div class="agent-role">The Journey</div></div><div class="traj-hero"><div class="traj-label">North Star</div><div class="traj-north-star">'+trend.north_star+'</div><div class="traj-current">'+(trend.current||'')+'</div><div class="traj-bar-wrap"><div class="traj-bar-fill" style="width:'+pPct+'%"></div></div><div class="traj-bar-labels"><span>Day '+(trend.days_active||0)+'</span><span>Phase '+(cpi+1)+' of '+phases.length+'</span></div><div class="traj-velocity-box"><span class="traj-velocity-icon">📈</span><span class="traj-velocity-text">'+(trend.velocity||'')+'</span></div><div class="traj-milestone-box"><span class="traj-milestone-icon">🎯</span><span class="traj-milestone-text">Next: '+(trend.milestone_next||'')+'</span></div></div><div class="traj-phases"><div class="section-title">Roadmap</div>'+phHtml+'</div><div class="traj-proof"><div class="traj-proof-item"><div class="traj-proof-val">'+(rc.learning_db_count||0)+'</div><div class="traj-proof-label">Lessons</div></div><div class="traj-proof-item"><div class="traj-proof-val">'+(rc.validated_learnings||[]).length+'</div><div class="traj-proof-label">Validated</div></div><div class="traj-proof-item"><div class="traj-proof-val">'+(rc.hard_rules||[]).length+'</div><div class="traj-proof-label">Hard Rules</div></div><div class="traj-proof-item"><div class="traj-proof-val">'+(trend.days_active||0)+'</div><div class="traj-proof-label">Days</div></div></div><div class="agent-footer"><div class="status-dot" style="background:'+(status==='working'?'#22c55e':'#9ca3af')+'"></div><span class="status-text">'+(status==='working'?'Working toward the goal':totalCount+' tasks · '+doneCount+' complete')+'</span></div></div>');
+    cards.push('<div class="agent-card"><div class="agent-header" style="background:'+col+'"><div class="agent-emoji">'+(rc.emoji||'⭐')+'</div><div class="agent-name">'+(rc.agent_name||agentKey)+'</div><div class="agent-role">The Journey</div></div><div class="traj-hero"><div class="traj-label">North Star</div><div class="traj-north-star">'+trend.north_star+'</div><div class="traj-current">'+(trend.current||'')+'</div><div class="traj-bar-wrap"><div class="traj-bar-fill" style="width:'+pPct+'%"></div></div><div class="traj-bar-labels"><span>Day '+(trend.days_active||0)+'</span><span>Phase '+(cpi+1)+' of '+phases.length+'</span></div><div class="traj-velocity-box"><span class="traj-velocity-icon">📈</span><span class="traj-velocity-text">'+(trend.velocity||'')+'</span></div><div class="traj-milestone-box"><span class="traj-milestone-icon">🎯</span><span class="traj-milestone-text">Next: '+(trend.milestone_next||'')+'</span></div></div><div class="traj-phases"><div class="section-title">Roadmap</div>'+phHtml+'</div><div class="traj-proof"><div class="traj-proof-item"><div class="traj-proof-val">'+(rc.learning_db_count||0)+'</div><div class="traj-proof-label">Lessons</div></div><div class="traj-proof-item"><div class="traj-proof-val">'+(rc.validated_learnings||[]).length+'</div><div class="traj-proof-label">Validated</div></div><div class="traj-proof-item"><div class="traj-proof-val">'+(rc.hard_rules||[]).length+'</div><div class="traj-proof-label">Hard Rules</div></div><div class="traj-proof-item"><div class="traj-proof-val">'+(trend.days_active||0)+'</div><div class="traj-proof-label">Days</div></div></div><div class="agent-footer"><div class="status-dot" style="background:'+(status==='working'?'#22c55e':'#9ca3af')+'"></div><span class="status-text">'+(status==='working'?'Working toward the goal':totalCount+' tasks · '+doneCount+' complete')+'</span></div></div>');
   }
 
-  // Render cards from the cards array
+  // Swipeable themed cards (from API "cards" array)
   if(hasRichCards){
     slides.forEach((slide,idx)=>{
-      console.log('Rendering card '+idx+':', slide.name);
-      
       const isLast=idx===slides.length-1;
-      const sStats=slide.stats||[];
-      const sAccs=slide.accomplishments||[];
+      const sStats=slide.stats||[];const sAccs=slide.accomplishments||[];
       const sKF=slide.keyFinding||slide.key_finding;
       const sColor=slide.color||defaultColor;
-      const sGrade=slide.grade||'';
-      const sGradeColor=slide.gradeColor||slide.grade_color||'#22c55e';
+      const sGrade=slide.grade||'';const sGradeColor=slide.gradeColor||slide.grade_color||'#22c55e';
       const sStatus=slide.status||{};
-      
-      // Build card HTML
-      let ch='<div class="agent-card">';
-      
-      // Header
-      ch+='<div class="agent-header" style="background:'+sColor+'">';
-      ch+='<div class="agent-emoji">'+(slide.emoji||'•')+'</div>';
-      ch+='<div class="agent-name">'+(slide.name||'Untitled')+'</div>';
-      ch+='<div class="agent-role">'+(slide.role||'')+'</div>';
-      ch+='<div class="agent-grade" style="color:'+sGradeColor+'">'+sGrade+'</div>';
+      let ch='<div class="agent-card"><div class="agent-header" style="background:'+sColor+'"><div class="agent-emoji">'+(slide.emoji||'•')+'</div><div class="agent-name">'+(slide.name||'')+'</div><div class="agent-role">'+(slide.role||'')+'</div><div class="agent-grade" style="color:'+sGradeColor+'">'+sGrade+'</div></div>';
+      if(sStats.length)ch+='<div class="agent-stats">'+sStats.map(s=>'<div class="stat"><div class="stat-value">'+s.value+'</div><div class="stat-label">'+s.label+'</div></div>').join('')+'</div>';
+      ch+='<div class="agent-body"><div class="section-title">'+(isLast?'Improvements Needed':'Key Points')+'</div>'+sAccs.map(a=>'<div class="accomplishment"><span class="acc-icon">'+(a.icon||'•')+'</span><span class="acc-text">'+a.text+'</span></div>').join('');
+      if(sKF)ch+='<div class="key-finding '+(sKF.type==='warning'?'warning':'')+'"><div class="key-finding-label">'+(sKF.label||'💡')+'</div><div class="key-finding-text">'+sKF.text+'</div></div>';
       ch+='</div>';
-      
-      // Stats
-      if(sStats.length>0){
-        ch+='<div class="agent-stats">';
-        sStats.forEach(s=>{
-          ch+='<div class="stat">';
-          ch+='<div class="stat-value">'+s.value+'</div>';
-          ch+='<div class="stat-label">'+s.label+'</div>';
-          ch+='</div>';
-        });
-        ch+='</div>';
-      }
-      
-      // Body with accomplishments
-      ch+='<div class="agent-body">';
-      ch+='<div class="section-title">'+(isLast?'Improvements Needed':'Key Points')+'</div>';
-      sAccs.forEach(a=>{
-        ch+='<div class="accomplishment">';
-        ch+='<span class="acc-icon">'+(a.icon||'•')+'</span>';
-        ch+='<span class="acc-text">'+a.text+'</span>';
-        ch+='</div>';
-      });
-      
-      // Key Finding
-      if(sKF){
-        const kfType=sKF.type==='warning'?'warning':'';
-        ch+='<div class="key-finding '+kfType+'">';
-        ch+='<div class="key-finding-label">'+(sKF.label||'💡')+'</div>';
-        ch+='<div class="key-finding-text">'+sKF.text+'</div>';
-        ch+='</div>';
-      }
-      ch+='</div>';
-      
-      // Add tasks to last card
       if(isLast&&totalCount>0){
         let th='<div class="todo-progress"><div class="todo-progress-fill" style="width:'+(doneCount/totalCount)*100+'%"></div></div>';
         if(working.length)th+='<div class="todo-group">🔄 In Progress</div>'+working.map(renderTask).join('');
@@ -465,78 +255,31 @@ function render(rc,st,tasks){
         th+='<div class="todo-summary">'+doneCount+' of '+totalCount+' complete</div>';
         ch+='<div class="todo-accordion" onclick="this.classList.toggle(\'open\')"><div class="todo-accordion-header"><span class="todo-accordion-title">📋 Live Task Status ('+doneCount+'/'+totalCount+')</span><span class="todo-accordion-arrow">▼</span></div><div class="todo-accordion-body">'+th+'</div></div>';
       }
-      
-      // Footer
-      ch+='<div class="agent-footer">';
-      ch+='<div class="status-dot" style="background:'+(sStatus.color||'#22c55e')+'"></div>';
-      ch+='<span class="status-text">'+(sStatus.text||'')+'</span>';
-      ch+='</div>';
-      ch+='</div>';
-      
+      ch+='<div class="agent-footer"><div class="status-dot" style="background:'+(sStatus.color||'#22c55e')+'"></div><span class="status-text">'+(sStatus.text||'')+'</span></div></div>';
       cards.push(ch);
     });
 
-    // Add flat fields card after all theme cards
+    // TASK 2 FIX: Always render flat fields as collapsible accordions after cards
     cards.push(renderFlatFieldsCard(rc, status, totalCount, doneCount, plan, tasks, working, queued, complete, failed));
 
   } else {
-    // Fallback: render flat fields as individual cards
-    const flatFields = [
-      { key: 'accomplishments', value: rc.accomplishments },
-      { key: 'tonight_plan', value: plan },
-      { key: 'validated_learnings', value: rc.validated_learnings },
-      { key: 'hard_rules', value: rc.hard_rules },
-      { key: 'active_hypotheses', value: rc.active_hypotheses }
-    ];
+    // Fallback: single-card layout from flat report card fields
+    const name=rc.agent_name||agentKey;const emoji=rc.emoji||'•';const role=rc.role||'';
+    const grade=rc.grade||'N/A';const gradeColor=rc.grade_color||'#6b7280';
+    const stats=nStats(rc.stats);const accomplishments=rc.accomplishments||[];
+    const keyFinding=rc.key_finding;const hardRules=rc.hard_rules||[];
+    const validated=rc.validated_learnings||[];const hypotheses=rc.active_hypotheses||[];
 
-    flatFields.forEach(field => {
-      const config = FIELD_CONFIG[field.key];
-      if (!config) return;
-      
-      const value = field.value;
-      const hasData = value && (Array.isArray(value) ? value.length > 0 : true);
-      if (!hasData) return;
-      
-      const count = Array.isArray(value) ? value.length : (value ? 1 : 0);
-      const gradeColor = hasData ? '#22c55e' : '#9ca3af';
-      
-      let bodyContent = '<div class="agent-body">';
-      if (field.key === 'tonight_plan' && Array.isArray(value) && value.length > 0) {
-        bodyContent += value.map((item, i) => 
-          '<div class="ns-item"><span class="ns-num">' + (i+1) + '</span><span class="ns-text">' + item + '</span></div>'
-        ).join('');
-      } else {
-        bodyContent += renderFieldValue(value);
-      }
-      bodyContent += '</div>';
-      
-      if (field.key === 'tonight_plan' && totalCount > 0) {
-        let todoHtml = '<div class="todo-progress"><div class="todo-progress-fill" style="width:' + (doneCount/totalCount)*100 + '%"></div></div>';
-        if (working.length) todoHtml += '<div class="todo-group">🔄 In Progress</div>' + working.map(renderTask).join('');
-        if (queued.length) todoHtml += '<div class="todo-group">⏳ Up Next</div>' + queued.map(renderTask).join('');
-        if (complete.length) todoHtml += '<div class="todo-group">✅ Done</div>' + complete.map(renderTask).join('');
-        if (failed.length) todoHtml += '<div class="todo-group">❌ Failed</div>' + failed.map(renderTask).join('');
-        todoHtml += '<div class="todo-summary">' + doneCount + ' of ' + totalCount + ' complete</div>';
-        bodyContent += '<div class="todo-accordion" onclick="this.classList.toggle(\'open\')"><div class="todo-accordion-header"><span class="todo-accordion-title">📋 Live Task Status (' + doneCount + '/' + totalCount + ')</span><span class="todo-accordion-arrow">▼</span></div><div class="todo-accordion-body">' + todoHtml + '</div></div>';
-      }
-      
-      const footerText = hasData ? (count > 1 ? count + ' items' : '1 item') : 'No data yet';
-      cards.push(
-        '<div class="agent-card">' +
-          '<div class="agent-header" style="background:' + config.color + '">' +
-            '<div class="agent-emoji">' + config.emoji + '</div>' +
-            '<div class="agent-name">' + config.title + '</div>' +
-            '<div class="agent-role">' + config.role + '</div>' +
-            '<div class="agent-grade" style="color:' + gradeColor + '">' + count + '</div>' +
-          '</div>' +
-          bodyContent +
-          '<div class="agent-footer">' +
-            '<div class="status-dot" style="background:' + (hasData ? '#22c55e' : '#9ca3af') + '"></div>' +
-            '<span class="status-text">' + footerText + '</span>' +
-          '</div>' +
-        '</div>'
-      );
-    });
+    cards.push('<div class="agent-card"><div class="agent-header" style="background:'+defaultColor+'"><div class="agent-emoji">'+emoji+'</div><div class="agent-name">'+name+'</div><div class="agent-role">'+role+'</div><div class="agent-grade" style="color:'+gradeColor+'">'+grade+'</div></div>'+(stats.length?'<div class="agent-stats">'+stats.map(s=>'<div class="stat"><div class="stat-value">'+s.value+'</div><div class="stat-label">'+s.label+'</div></div>').join('')+'</div>':'')+'<div class="agent-body"><div class="section-title">What they did</div>'+accomplishments.map(a=>'<div class="accomplishment"><span class="acc-icon">'+gIco(a)+'</span><span class="acc-text">'+gTxt(a)+'</span></div>').join('')+(keyFinding?'<div class="key-finding"><div class="key-finding-label">'+(keyFinding.label||'💡')+'</div><div class="key-finding-text">'+keyFinding.text+'</div></div>':'')+'</div><div class="agent-footer"><div class="status-dot" style="background:'+(status==='working'?'#22c55e':'#9ca3af')+'"></div><span class="status-text">'+(status==='working'?'Working':status)+'</span></div></div>');
+
+    // Next Steps + Todo card
+    let todoHtml='';
+    if(totalCount>0){todoHtml='<div class="todo-progress"><div class="todo-progress-fill" style="width:'+(doneCount/totalCount)*100+'%"></div></div>';if(working.length)todoHtml+='<div class="todo-group">🔄 In Progress</div>'+working.map(renderTask).join('');if(queued.length)todoHtml+='<div class="todo-group">⏳ Up Next</div>'+queued.map(renderTask).join('');if(complete.length)todoHtml+='<div class="todo-group">✅ Done</div>'+complete.map(renderTask).join('');if(failed.length)todoHtml+='<div class="todo-group">❌ Failed</div>'+failed.map(renderTask).join('');todoHtml+='<div class="todo-summary">'+doneCount+' of '+totalCount+' complete</div>';}else{todoHtml='<div style="padding:14px;text-align:center;color:#9ca3af;font-size:13px;">No tasks yet</div>';}
+    cards.push('<div class="agent-card"><div class="agent-header" style="background:linear-gradient(135deg,#10b981,#059669)"><div class="agent-emoji">🚀</div><div class="agent-name">Next Steps</div><div class="agent-role">Action plan from last session</div><div class="agent-grade" style="color:#22c55e">'+plan.length+'</div></div><div class="agent-body"><div class="section-title">Action Plan</div>'+(plan.length>0?plan.map((s,i)=>'<div class="ns-item"><span class="ns-num">'+(i+1)+'</span><span class="ns-text">'+s+'</span></div>').join(''):'<div style="color:#9ca3af;font-size:13px;">No action plan yet</div>')+'</div><div class="todo-accordion" onclick="this.classList.toggle(\'open\')"><div class="todo-accordion-header"><span class="todo-accordion-title">📋 Live Task Status ('+doneCount+'/'+totalCount+')</span><span class="todo-accordion-arrow">▼</span></div><div class="todo-accordion-body">'+todoHtml+'</div></div><div class="agent-footer"><div class="status-dot" style="background:#f59e0b"></div><span class="status-text">'+plan.length+' next steps · '+totalCount+' tasks tracked</span></div></div>');
+
+    if(hardRules.length>0)cards.push('<div class="agent-card"><div class="agent-header" style="background:linear-gradient(135deg,#dc2626,#ef4444)"><div class="agent-emoji">🚫</div><div class="agent-name">Hard Rules</div><div class="agent-role">Rules derived from data</div><div class="agent-grade" style="color:#fca5a5">'+hardRules.length+'</div></div><div class="agent-body">'+hardRules.map(r=>'<div class="list-item">🚫 '+r+'</div>').join('')+'</div></div>');
+    if(validated.length>0)cards.push('<div class="agent-card"><div class="agent-header" style="background:linear-gradient(135deg,#059669,#10b981)"><div class="agent-emoji">✅</div><div class="agent-name">Validated Learnings</div><div class="agent-role">Predictions confirmed by real outcomes</div><div class="agent-grade" style="color:#86efac">'+validated.length+'</div></div><div class="agent-body">'+validated.map(v=>'<div class="list-item">✅ '+v+'</div>').join('')+'</div></div>');
+    if(hypotheses.length>0)cards.push('<div class="agent-card"><div class="agent-header" style="background:linear-gradient(135deg,#7c3aed,#8b5cf6)"><div class="agent-emoji">🔮</div><div class="agent-name">Active Hypotheses</div><div class="agent-role">Predictions awaiting validation</div><div class="agent-grade" style="color:#c4b5fd">'+hypotheses.length+'</div></div><div class="agent-body">'+hypotheses.map(h=>'<div class="list-item">🔮 '+h+'</div>').join('')+'</div></div>');
   }
 
   // Directory card (always last)
@@ -545,14 +288,11 @@ function render(rc,st,tasks){
   container.innerHTML=cards.join('');
   const dotsC=document.getElementById('dots');
   dotsC.innerHTML=cards.map((_,i)=>'<div class="dot '+(i===0?'active':'')+'" id="dot-'+i+'"></div>').join('');
-  
-  // Update dots on scroll (desktop only)
-  if (window.innerWidth >= 768) {
-    container.addEventListener('scroll',()=>{const cw=container.firstElementChild.offsetWidth+12;const ai=Math.round(container.scrollLeft/cw);document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===ai));});
-  }
+  container.addEventListener('scroll',()=>{const cw=container.firstElementChild.offsetWidth+12;const ai=Math.round(container.scrollLeft/cw);document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===ai));});
   }catch(err){console.error("Render error:",err);document.getElementById("cards").innerHTML='<div style="padding:40px;text-align:center;color:#ef4444;">Render error: '+err.message+'</div>';}
 }
 
+// Render flat fields as a card with collapsible accordion sections
 function renderFlatFieldsCard(rc, status, totalCount, doneCount, plan, tasks, working, queued, complete, failed) {
   const accomplishments = rc.accomplishments || [];
   const hardRules = rc.hard_rules || [];
@@ -562,26 +302,32 @@ function renderFlatFieldsCard(rc, status, totalCount, doneCount, plan, tasks, wo
 
   let sections = '';
 
+  // Accomplishments
   if (accomplishments.length > 0) {
     sections += '<div class="flat-sec"><div class="flat-sec-hdr" onclick="this.parentElement.classList.toggle(\'open\')"><span>📝 Accomplishments (' + accomplishments.length + ')</span><span class="flat-sec-arrow">▼</span></div><div class="flat-sec-body">' + accomplishments.map(a => '<div class="list-item">' + gIco(a) + ' ' + gTxt(a) + '</div>').join('') + '</div></div>';
   }
 
+  // Tonight Plan / Next Steps
   if (plan.length > 0) {
     sections += '<div class="flat-sec"><div class="flat-sec-hdr" onclick="this.parentElement.classList.toggle(\'open\')"><span>🚀 Next Steps (' + plan.length + ')</span><span class="flat-sec-arrow">▼</span></div><div class="flat-sec-body">' + plan.map((s, i) => '<div class="ns-item"><span class="ns-num">' + (i+1) + '</span><span class="ns-text">' + s + '</span></div>').join('') + '</div></div>';
   }
 
+  // Hard Rules
   if (hardRules.length > 0) {
     sections += '<div class="flat-sec"><div class="flat-sec-hdr" onclick="this.parentElement.classList.toggle(\'open\')"><span>🚫 Hard Rules (' + hardRules.length + ')</span><span class="flat-sec-arrow">▼</span></div><div class="flat-sec-body">' + hardRules.map(r => '<div class="list-item">🚫 ' + r + '</div>').join('') + '</div></div>';
   }
 
+  // Validated Learnings
   if (validated.length > 0) {
     sections += '<div class="flat-sec"><div class="flat-sec-hdr" onclick="this.parentElement.classList.toggle(\'open\')"><span>✅ Validated Learnings (' + validated.length + ')</span><span class="flat-sec-arrow">▼</span></div><div class="flat-sec-body">' + validated.map(v => '<div class="list-item">✅ ' + v + '</div>').join('') + '</div></div>';
   }
 
+  // Active Hypotheses
   if (hypotheses.length > 0) {
     sections += '<div class="flat-sec"><div class="flat-sec-hdr" onclick="this.parentElement.classList.toggle(\'open\')"><span>🔮 Active Hypotheses (' + hypotheses.length + ')</span><span class="flat-sec-arrow">▼</span></div><div class="flat-sec-body">' + hypotheses.map(h => '<div class="list-item">🔮 ' + h + '</div>').join('') + '</div></div>';
   }
 
+  // Todo
   if (totalCount > 0) {
     let th = '<div class="todo-progress"><div class="todo-progress-fill" style="width:' + (doneCount/totalCount)*100 + '%"></div></div>';
     if (working.length) th += '<div class="todo-group">🔄 In Progress</div>' + working.map(renderTask).join('');
@@ -592,7 +338,7 @@ function renderFlatFieldsCard(rc, status, totalCount, doneCount, plan, tasks, wo
     sections += '<div class="flat-sec"><div class="flat-sec-hdr" onclick="this.parentElement.classList.toggle(\'open\')"><span>📋 Tasks (' + doneCount + '/' + totalCount + ')</span><span class="flat-sec-arrow">▼</span></div><div class="flat-sec-body">' + th + '</div></div>';
   }
 
-  if (!sections) return '';
+  if (!sections) return ''; // No flat data
 
   return '<div class="agent-card"><div class="agent-header" style="background:' + defaultColor + '"><div class="agent-emoji">📊</div><div class="agent-name">Full Report Data</div><div class="agent-role">All fields from this report card</div></div><div style="padding:8px 0;">' + sections + '</div><div class="agent-footer"><div class="status-dot" style="background:' + (status === 'working' ? '#22c55e' : '#9ca3af') + '"></div><span class="status-text">' + (status === 'working' ? 'Working' : status) + '</span></div></div>';
 }
@@ -605,43 +351,39 @@ function renderTask(task){
   return '<div class="todo-item s-'+task.status+'" onclick="this.classList.toggle(\'detail-open\');event.stopPropagation()"><div class="todo-item-row"><span class="todo-num">'+num+'</span><span class="todo-icon">'+icons[task.status]+'</span><span class="todo-name">'+task.task_name+'</span><span class="todo-chevron">›</span></div>'+(ti?'<div class="todo-time">'+ti+'</div>':'')+'<div class="todo-detail-box">'+(task.task_detail?'<div class="todo-detail-text">'+task.task_detail+'</div>':'')+(task.result_summary?'<div class="todo-result-text">✓ '+task.result_summary+'</div>':'')+'</div></div>';
 }
 
+// Static reports per agent
 const AGENT_REPORTS={adaline:[{name:'🔴 Kill MoF DPA-Only',url:'/r/plankandbeam/adaline/proposals/2026-02-28-mof-dpa-kill.html',icon:'📄',date:'2026-02-28'},{name:'🟢 Bing Scaling Roadmap',url:'/r/plankandbeam/adaline/proposals/2026-02-28-bing-scaling-roadmap.html',icon:'📄',date:'2026-02-28'},{name:'🟡 Google CPC Test',url:'/r/plankandbeam/adaline/proposals/2026-02-28-google-cpc-scaling.html',icon:'📄',date:'2026-02-28'},{name:'Monday Action Plan',url:'/r/plankandbeam/adaline/proposals/monday-action-plan.html',icon:'📋',date:'2026-02-28'},{name:'Weekly ROAS Report',url:'/r/plankandbeam/adaline/2026-02-28/reports/weekly-roas.html',icon:'📈',date:'2026-02-28'},{name:'Lyndsay Briefing',url:'/r/lyndsay/',icon:'👩‍💼',date:'2026-02-27'}],tom:[{name:'HODL Trading Report (Static)',url:'/r/hodl/tom/2026-02-28/',icon:'🏦',date:'2026-02-28'}],muse:[],apollo:[{name:'iEnable Content Report',url:'/r/ienable/apollo/2026-02-28/',icon:'📝',date:'2026-02-28'}],ienable:[{name:'Product Spec Report',url:'/r/ienable/product/2026-02-28/',icon:'🏗️',date:'2026-02-28'},{name:'Competitive Analysis',url:'/r/competitive/',icon:'🔍',date:'2026-02-27'}],orion:[{name:"Anne's Agent Report",url:'/r/anne/',icon:'👤',date:'2026-02-27'}]};
 
 function renderDirectoryCard(){
   const reports=AGENT_REPORTS[agentKey]||[];
   const color=COLORS[agentKey]||'linear-gradient(135deg,#374151,#111827)';
-  const backUrl=(selectedDate?'/r/?date='+selectedDate:'/r/')+(companyFilter?'&company='+companyFilter:'');
-  const AGENT_TO_JOURNAL={orion:'main',tom:'hodl',adaline:'lyndsay-ads',alex:'fullstack-dev',apollo:'content',muse:'muse',ienable:'ienable',qa:'qa',deployment:'deployment'};
-  const journalAgent=AGENT_TO_JOURNAL[agentKey]||agentKey;
-  const journalUrl=selectedDate?'/blog/journals/view.html?agent='+journalAgent+'&date='+selectedDate:'';
   let reportsSection='';
   if(reports.length>0){reportsSection=reports.map(r=>{const d=new Date(r.date+'T12:00:00');const label=d.toLocaleDateString('en-US',{month:'short',day:'numeric'});return'<a class="dir-link" href="'+r.url+'"><span class="dir-link-icon">'+r.icon+'</span><span class="dir-link-name">'+r.name+'</span><span class="dir-link-date">'+label+'</span><span class="dir-link-arrow">›</span></a>';}).join('');}else{reportsSection='<div class="dir-empty">No reports yet</div>';}
-  const journalLink=journalUrl?'<a class="dir-link" href="'+journalUrl+'" style="background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(139,92,246,0.08));border:1px solid rgba(99,102,241,0.15)"><span class="dir-link-icon">📓</span><span class="dir-link-name">Daily Journal</span><span class="dir-link-date">'+(selectedDate||'')+'</span><span class="dir-link-arrow">›</span></a>':'';
-  return '<div class="agent-card"><div class="agent-header" style="background:'+color+'"><div class="agent-emoji">📂</div><div class="agent-name">Directory</div><div class="agent-role">All reports & history</div></div><div class="dir-body"><a class="dir-home-link" href="'+backUrl+'">← Back to Command Center</a>'+journalLink+'<div class="dir-section" onclick="this.classList.toggle(\'open\')"><div class="dir-section-header"><span>📊 Reports ('+reports.length+')</span><span class="dir-section-arrow">▼</span></div><div class="dir-section-body">'+reportsSection+'</div></div></div></div>';
+  return '<div class="agent-card"><div class="agent-header" style="background:'+color+'"><div class="agent-emoji">📂</div><div class="agent-name">Directory</div><div class="agent-role">All reports & history</div></div><div class="dir-body"><a class="dir-home-link" href="/r/">← Back to Command Center</a><div class="dir-section" onclick="this.classList.toggle(\'open\')"><div class="dir-section-header"><span>📊 Reports ('+reports.length+')</span><span class="dir-section-arrow">▼</span></div><div class="dir-section-body">'+reportsSection+'</div></div></div></div>';
 }
 
+// ─── Calendar ───
 function renderCalendar(){
   const root=document.getElementById('calendarRoot');
-  if(!calMonth){
-    // Initialize calendar month to current month if not set
-    const today=new Date();
-    calMonth={year:today.getFullYear(),month:today.getMonth()};
-  }
+  if(!calMonth)return;
   const y=calMonth.year,m=calMonth.month;
-  const firstDay=new Date(y,m,1).getDay();
+  const firstDay=new Date(y,m,1).getDay(); // 0=Sun
   const daysInMonth=new Date(y,m+1,0).getDate();
   const monthName=new Date(y,m,1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
   const today=new Date();const todayStr=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
 
+  // Build date->count map from allRC
   const dateCounts={};
   allRC.forEach(rc=>{
     dateCounts[rc.date]=(dateCounts[rc.date]||0)+1;
   });
 
+  // Mon-first: shift Sunday from 0 to 6
   const startOffset=(firstDay===0)?6:firstDay-1;
   const dows=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 
   let grid=dows.map(d=>'<div class="cal-dow">'+d+'</div>').join('');
+  // Empty cells before first day
   for(let i=0;i<startOffset;i++)grid+='<div class="cal-day empty"></div>';
 
   for(let d=1;d<=daysInMonth;d++){
@@ -657,6 +399,7 @@ function renderCalendar(){
     if(isSelected)cls+=' selected';
     if(isToday)cls+=' today';
 
+    // Dot indicators: 1 dot for 1-2, 2 for 3-4, 3 for 5+
     let dots='<div class="cal-dots">';
     if(count>=1)dots+='<div class="cal-dot-pip"></div>';
     if(count>=3)dots+='<div class="cal-dot-pip"></div>';
@@ -666,12 +409,8 @@ function renderCalendar(){
     const onclick=hasData?'onclick="navigateDate(\''+dateStr+'\')"':'';
     grid+='<div class="'+cls+'" '+onclick+'><span>'+d+'</span>'+(hasData?dots:'')+'</div>';
   }
-  
-  // Add compact dots for mobile
-  const datesWithData = Object.keys(dateCounts).filter(d => dateCounts[d] > 0 && d.startsWith(y + '-' + String(m+1).padStart(2, '0')));
-  const mobileDots = datesWithData.map(() => '<div class="cal-mobile-dot"></div>').join('');
 
-  root.innerHTML='<div class="calendar-wrap"><div class="cal-nav"><button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button><span class="cal-month-label">'+monthName+'</span><button class="cal-nav-btn" onclick="changeMonth(1)">›</button></div><div class="cal-mobile-dots">'+mobileDots+'</div><div class="cal-grid">'+grid+'</div></div>';
+  root.innerHTML='<div class="calendar-wrap"><div class="cal-nav"><button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button><span class="cal-month-label">'+monthName+'</span><button class="cal-nav-btn" onclick="changeMonth(1)">›</button></div><div class="cal-grid">'+grid+'</div></div>';
 }
 
 function changeMonth(delta){
@@ -685,15 +424,15 @@ function navigateDate(dateStr){
   selectedDate=dateStr;
   const url=new URL(window.location);
   url.searchParams.set('date',dateStr);
-  if(companyFilter)url.searchParams.set('company',companyFilter);
   window.history.pushState({},'',url);
-  calMonth=null;
+  calMonth=null; // Reset so it recalculates from selected date
   load();
 }
 
+// Handle browser back/forward
 window.addEventListener('popstate',()=>{
   const p=new URLSearchParams(window.location.search);
-  selectedDate=p.get('date')||(function(){var m=window.location.pathname.match(/(\d{4}-\d{2}-\d{2})/);return m?m[1]:null;})();
+  selectedDate=p.get('date')||null;
   calMonth=null;
   load();
 });

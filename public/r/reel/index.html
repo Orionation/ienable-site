@@ -155,20 +155,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro',system-ui,sans-serif;
 </style>
 </head>
 <body>
-<a class="back-link" href="/r/">‹ Back to all agents</a>
+<a class="back-link" id="back-link" href="/r/">‹ Back to all agents</a>
 <div class="dots" id="dots"></div>
 <div class="cards-container" id="cards"><div class="loading">Loading...</div></div>
 <div id="calendarRoot"></div>
 <script>
 const API='https://ienable-admin-app-hqtw2.ondigitalocean.app/api/v1';
 const COLORS={adaline:'linear-gradient(135deg,#7c3aed,#6366f1)',muse:'linear-gradient(135deg,#ec4899,#f43f5e)',ienable:'linear-gradient(135deg,#3b82f6,#2563eb)',orion:'linear-gradient(135deg,#1f2937,#374151)',tom:'linear-gradient(135deg,#059669,#10b981)',apollo:'linear-gradient(135deg,#f59e0b,#d97706)',reel:'linear-gradient(135deg,#06b6d4,#0891b2)',hodl:'linear-gradient(135deg,#059669,#10b981)',main:'linear-gradient(135deg,#1f2937,#374151)','lyndsay-ads':'linear-gradient(135deg,#7c3aed,#6366f1)',content:'linear-gradient(135deg,#f59e0b,#d97706)'};
+const DISPLAY_NAMES={main:'Orion',hodl:'Tom','lyndsay-ads':'Adaline','fullstack-dev':'Alex',content:'Apollo',muse:'Muse',ienable:'iEnable',qa:'QA',deployment:'Deploy',adaline:'Adaline',tom:'Tom',orion:'Orion',apollo:'Apollo',alex:'Alex'};
 const pp=window.location.pathname.replace(/\/+$/,'').split('/');
 const agentKey=pp[pp.length-1].toLowerCase();
+const urlParams=new URLSearchParams(window.location.search);
+const companyFilter=urlParams.get('company')||'';
 // Alias map: URL key -> possible API agent_names (for historical data)
 const ALIASES={tom:['tom','hodl','Tom','Tom V17'],orion:['orion','main','Orion'],adaline:['adaline','lyndsay-ads','Adaline'],apollo:['apollo','content','Apollo','reel','Reel'],ienable:['ienable','iEnable','ienable-seo'],muse:['muse','Muse'],reel:['reel','Reel','content']};
 function matchesAgent(agentName){const aliases=ALIASES[agentKey]||[agentKey];return aliases.some(a=>a.toLowerCase()===(agentName||'').toLowerCase());}
 const urlP=new URLSearchParams(window.location.search);
-let selectedDate=urlP.get('date')||null;
+let selectedDate=urlP.get('date')||(function(){var m=window.location.pathname.match(/(\d{4}-\d{2}-\d{2})/);return m?m[1]:null;})();
 let allRC=[];
 let calMonth=null;
 
@@ -178,21 +181,24 @@ function gTxt(a){if(!a)return'';if(typeof a==='string')return a;if(typeof a==='o
 function gIco(a){if(!a)return'•';if(typeof a==='object'&&a.icon)return a.icon;return'•';}
 
 async function fetchHistory(){
-  try{const r=await fetch(API+'/report-cards');const j=await r.json();allRC=(j.data||j||[]).filter(r=>matchesAgent(r.agent_name)).sort((a,b)=>b.date.localeCompare(a.date));}catch(e){allRC=[];}
+  try{const cParam=companyFilter?'?company_id='+companyFilter:'';const r=await fetch(API+'/report-cards'+cParam);const j=await r.json();allRC=(j.data||j||[]).filter(r=>matchesAgent(r.agent_name)).sort((a,b)=>b.date.localeCompare(a.date));}catch(e){allRC=[];}
 }
 
 async function load(){
   try{
-    const url=selectedDate?API+'/report-cards?date='+selectedDate:API+'/report-cards/latest';
-    const[rcR,stR,tkR]=await Promise.all([fetch(url),fetch(API+'/agent-status'),fetch(API+'/agent-tasks/active'),fetchHistory()]);
+    const cParam=companyFilter?'&company_id='+companyFilter:'';
+    const url=selectedDate?API+'/report-cards?date='+selectedDate+cParam:API+'/report-cards/latest'+cParam.replace('&','?');
+    const[rcR,stR,tkR]=await Promise.all([fetch(url),fetch(API+'/agent-status'+cParam.replace('&','?')),fetch(API+'/agent-tasks/active'+cParam.replace('&','?')),fetchHistory()]);
     const rcD=(await rcR.json()).data||[];const stD=(await stR.json()).data||[];const tkD=(await tkR.json()).data||[];
     const rc=rcD.find(r=>matchesAgent(r.agent_name))||{};
     const st=stD.find(s=>matchesAgent(s.agent))||{};
     const tasks=tkD.filter(t=>matchesAgent(t.agent));
-    document.title=(rc.agent_name||agentKey)+"'s Report Card";
+    document.title=(DISPLAY_NAMES[agentKey]||DISPLAY_NAMES[rc.agent_name?.toLowerCase()]||rc.agent_name||agentKey)+"'s Report Card";
     if(!calMonth){const d=selectedDate?new Date(selectedDate+'T12:00:00'):(rc.date?new Date(rc.date+'T12:00:00'):new Date());calMonth={year:d.getFullYear(),month:d.getMonth()};}
     if(!selectedDate&&rc.date)selectedDate=rc.date;
     render(rc,st,tasks);renderCalendar();
+    // Update back link with current date and company param
+    var bl=document.getElementById('back-link');if(bl)bl.href=(selectedDate?'/r/?date='+selectedDate:'/r/')+(companyFilter?'&company='+companyFilter:'');
   }catch(e){document.getElementById('cards').innerHTML='<div class="loading">Failed: '+e.message+'</div>';}
 }
 
@@ -202,6 +208,48 @@ function numTasks(tasks,plan){
   plan.forEach((p,i)=>{const pw=new Set(p.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(w=>w.length>2));let bid=null,bs=0;tasks.forEach(t=>{if(used.has(t.id))return;const tw=new Set(t.task_name.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(w=>w.length>2));let o=0;pw.forEach(w=>{if(tw.has(w))o++;});if(o>bs){bs=o;bid=t.id;}});if(bid&&bs>=2){asgn.set(bid,i+1);used.add(bid);}});
   let n=plan.length+1;return tasks.map(t=>({...t,_num:asgn.get(t.id)||(n++)})).sort((a,b)=>a._num-b._num);
 }
+
+// Helper: render a value as a clean list or text
+function renderFieldValue(value) {
+  if (!value) return '<div class="list-item" style="color:#9ca3af;font-style:italic;">No data</div>';
+  
+  // If it's an array
+  if (Array.isArray(value)) {
+    if (value.length === 0) return '<div class="list-item" style="color:#9ca3af;font-style:italic;">No data</div>';
+    return value.map(item => {
+      const text = typeof item === 'object' ? (item.text || item.name || JSON.stringify(item)) : String(item);
+      const icon = typeof item === 'object' && item.icon ? item.icon : '•';
+      return '<div class="list-item">' + icon + ' ' + text + '</div>';
+    }).join('');
+  }
+  
+  // If it's a string with newlines or bullet points
+  if (typeof value === 'string') {
+    // Check if it has bullet points or multiple lines
+    if (value.includes('\n') || value.match(/^[\s]*[-•*]\s/m)) {
+      const lines = value.split('\n').filter(l => l.trim());
+      return lines.map(line => {
+        const cleaned = line.replace(/^[\s]*[-•*]\s*/, '');
+        return '<div class="list-item">• ' + cleaned + '</div>';
+      }).join('');
+    }
+    // Single line text
+    return '<div class="list-item">' + value + '</div>';
+  }
+  
+  // Object or other
+  return '<div class="list-item">' + JSON.stringify(value) + '</div>';
+}
+
+// Config for flat fields: emoji, color, title
+const FIELD_CONFIG = {
+  accomplishments: { emoji: '🎯', color: 'linear-gradient(135deg,#10b981,#059669)', title: 'Accomplishments', role: 'What I did today' },
+  tonight_plan: { emoji: '🚀', color: 'linear-gradient(135deg,#3b82f6,#2563eb)', title: 'Tonight Plan', role: 'Action items for next session' },
+  validated_learnings: { emoji: '✅', color: 'linear-gradient(135deg,#22c55e,#16a34a)', title: 'Validated Learnings', role: 'Confirmed insights from real outcomes' },
+  hard_rules: { emoji: '🚫', color: 'linear-gradient(135deg,#ef4444,#dc2626)', title: 'Hard Rules', role: 'Non-negotiable constraints' },
+  active_hypotheses: { emoji: '🔮', color: 'linear-gradient(135deg,#8b5cf6,#7c3aed)', title: 'Active Hypotheses', role: 'Predictions awaiting validation' },
+  tasks: { emoji: '📋', color: 'linear-gradient(135deg,#f59e0b,#d97706)', title: 'Tasks', role: 'Live execution status' }
+};
 
 function render(rc,st,tasks){
   try{
@@ -229,7 +277,7 @@ function render(rc,st,tasks){
     const pPct=phases.length>0?Math.max(8,((cpi+1)/phases.length)*100):10;
     const phHtml=phases.map((p,i)=>{const done=i<cpi||p.includes('DONE');const now=p.includes('NOW');const clean=p.replace(/\((NOW|DONE)\)/g,'').replace(/\.\s*$/,'').trim();const cls=done?'done':now?'current':'';const sl=i<phases.length-1;return'<div class="traj-phase-item '+cls+'"><div class="traj-phase-dot">'+(done?'✓':(i+1))+'</div>'+(sl?'<div class="traj-phase-line"></div>':'')+'<div class="traj-phase-text">'+clean+'</div></div>';}).join('');
     const col=COLORS[agentKey]||'linear-gradient(135deg,#667eea,#764ba2)';
-    cards.push('<div class="agent-card"><div class="agent-header" style="background:'+col+'"><div class="agent-emoji">'+(rc.emoji||'⭐')+'</div><div class="agent-name">'+(rc.agent_name||agentKey)+'</div><div class="agent-role">The Journey</div></div><div class="traj-hero"><div class="traj-label">North Star</div><div class="traj-north-star">'+trend.north_star+'</div><div class="traj-current">'+(trend.current||'')+'</div><div class="traj-bar-wrap"><div class="traj-bar-fill" style="width:'+pPct+'%"></div></div><div class="traj-bar-labels"><span>Day '+(trend.days_active||0)+'</span><span>Phase '+(cpi+1)+' of '+phases.length+'</span></div><div class="traj-velocity-box"><span class="traj-velocity-icon">📈</span><span class="traj-velocity-text">'+(trend.velocity||'')+'</span></div><div class="traj-milestone-box"><span class="traj-milestone-icon">🎯</span><span class="traj-milestone-text">Next: '+(trend.milestone_next||'')+'</span></div></div><div class="traj-phases"><div class="section-title">Roadmap</div>'+phHtml+'</div><div class="traj-proof"><div class="traj-proof-item"><div class="traj-proof-val">'+(rc.learning_db_count||0)+'</div><div class="traj-proof-label">Lessons</div></div><div class="traj-proof-item"><div class="traj-proof-val">'+(rc.validated_learnings||[]).length+'</div><div class="traj-proof-label">Validated</div></div><div class="traj-proof-item"><div class="traj-proof-val">'+(rc.hard_rules||[]).length+'</div><div class="traj-proof-label">Hard Rules</div></div><div class="traj-proof-item"><div class="traj-proof-val">'+(trend.days_active||0)+'</div><div class="traj-proof-label">Days</div></div></div><div class="agent-footer"><div class="status-dot" style="background:'+(status==='working'?'#22c55e':'#9ca3af')+'"></div><span class="status-text">'+(status==='working'?'Working toward the goal':totalCount+' tasks · '+doneCount+' complete')+'</span></div></div>');
+    cards.push('<div class="agent-card"><div class="agent-header" style="background:'+col+'"><div class="agent-emoji">'+(rc.emoji||'⭐')+'</div><div class="agent-name">'+(DISPLAY_NAMES[agentKey]||DISPLAY_NAMES[rc.agent_name?.toLowerCase()]||rc.agent_name||agentKey)+'</div><div class="agent-role">The Journey</div></div><div class="traj-hero"><div class="traj-label">North Star</div><div class="traj-north-star">'+trend.north_star+'</div><div class="traj-current">'+(trend.current||'')+'</div><div class="traj-bar-wrap"><div class="traj-bar-fill" style="width:'+pPct+'%"></div></div><div class="traj-bar-labels"><span>Day '+(trend.days_active||0)+'</span><span>Phase '+(cpi+1)+' of '+phases.length+'</span></div><div class="traj-velocity-box"><span class="traj-velocity-icon">📈</span><span class="traj-velocity-text">'+(trend.velocity||'')+'</span></div><div class="traj-milestone-box"><span class="traj-milestone-icon">🎯</span><span class="traj-milestone-text">Next: '+(trend.milestone_next||'')+'</span></div></div><div class="traj-phases"><div class="section-title">Roadmap</div>'+phHtml+'</div><div class="traj-proof"><div class="traj-proof-item"><div class="traj-proof-val">'+(rc.learning_db_count||0)+'</div><div class="traj-proof-label">Lessons</div></div><div class="traj-proof-item"><div class="traj-proof-val">'+(rc.validated_learnings||[]).length+'</div><div class="traj-proof-label">Validated</div></div><div class="traj-proof-item"><div class="traj-proof-val">'+(rc.hard_rules||[]).length+'</div><div class="traj-proof-label">Hard Rules</div></div><div class="traj-proof-item"><div class="traj-proof-val">'+(trend.days_active||0)+'</div><div class="traj-proof-label">Days</div></div></div><div class="agent-footer"><div class="status-dot" style="background:'+(status==='working'?'#22c55e':'#9ca3af')+'"></div><span class="status-text">'+(status==='working'?'Working toward the goal':totalCount+' tasks · '+doneCount+' complete')+'</span></div></div>');
   }
 
   // Swipeable themed cards (from API "cards" array)
@@ -263,23 +311,73 @@ function render(rc,st,tasks){
     cards.push(renderFlatFieldsCard(rc, status, totalCount, doneCount, plan, tasks, working, queued, complete, failed));
 
   } else {
-    // Fallback: single-card layout from flat report card fields
-    const name=rc.agent_name||agentKey;const emoji=rc.emoji||'•';const role=rc.role||'';
-    const grade=rc.grade||'N/A';const gradeColor=rc.grade_color||'#6b7280';
-    const stats=nStats(rc.stats);const accomplishments=rc.accomplishments||[];
-    const keyFinding=rc.key_finding;const hardRules=rc.hard_rules||[];
-    const validated=rc.validated_learnings||[];const hypotheses=rc.active_hypotheses||[];
+    // Fallback: render flat fields as individual beautiful cards
+    const flatFields = [
+      { key: 'accomplishments', value: rc.accomplishments },
+      { key: 'tonight_plan', value: plan },
+      { key: 'validated_learnings', value: rc.validated_learnings },
+      { key: 'hard_rules', value: rc.hard_rules },
+      { key: 'active_hypotheses', value: rc.active_hypotheses }
+    ];
 
-    cards.push('<div class="agent-card"><div class="agent-header" style="background:'+defaultColor+'"><div class="agent-emoji">'+emoji+'</div><div class="agent-name">'+name+'</div><div class="agent-role">'+role+'</div><div class="agent-grade" style="color:'+gradeColor+'">'+grade+'</div></div>'+(stats.length?'<div class="agent-stats">'+stats.map(s=>'<div class="stat"><div class="stat-value">'+s.value+'</div><div class="stat-label">'+s.label+'</div></div>').join('')+'</div>':'')+'<div class="agent-body"><div class="section-title">What they did</div>'+accomplishments.map(a=>'<div class="accomplishment"><span class="acc-icon">'+gIco(a)+'</span><span class="acc-text">'+gTxt(a)+'</span></div>').join('')+(keyFinding?'<div class="key-finding"><div class="key-finding-label">'+(keyFinding.label||'💡')+'</div><div class="key-finding-text">'+keyFinding.text+'</div></div>':'')+'</div><div class="agent-footer"><div class="status-dot" style="background:'+(status==='working'?'#22c55e':'#9ca3af')+'"></div><span class="status-text">'+(status==='working'?'Working':status)+'</span></div></div>');
-
-    // Next Steps + Todo card
-    let todoHtml='';
-    if(totalCount>0){todoHtml='<div class="todo-progress"><div class="todo-progress-fill" style="width:'+(doneCount/totalCount)*100+'%"></div></div>';if(working.length)todoHtml+='<div class="todo-group">🔄 In Progress</div>'+working.map(renderTask).join('');if(queued.length)todoHtml+='<div class="todo-group">⏳ Up Next</div>'+queued.map(renderTask).join('');if(complete.length)todoHtml+='<div class="todo-group">✅ Done</div>'+complete.map(renderTask).join('');if(failed.length)todoHtml+='<div class="todo-group">❌ Failed</div>'+failed.map(renderTask).join('');todoHtml+='<div class="todo-summary">'+doneCount+' of '+totalCount+' complete</div>';}else{todoHtml='<div style="padding:14px;text-align:center;color:#9ca3af;font-size:13px;">No tasks yet</div>';}
-    cards.push('<div class="agent-card"><div class="agent-header" style="background:linear-gradient(135deg,#10b981,#059669)"><div class="agent-emoji">🚀</div><div class="agent-name">Next Steps</div><div class="agent-role">Action plan from last session</div><div class="agent-grade" style="color:#22c55e">'+plan.length+'</div></div><div class="agent-body"><div class="section-title">Action Plan</div>'+(plan.length>0?plan.map((s,i)=>'<div class="ns-item"><span class="ns-num">'+(i+1)+'</span><span class="ns-text">'+s+'</span></div>').join(''):'<div style="color:#9ca3af;font-size:13px;">No action plan yet</div>')+'</div><div class="todo-accordion" onclick="this.classList.toggle(\'open\')"><div class="todo-accordion-header"><span class="todo-accordion-title">📋 Live Task Status ('+doneCount+'/'+totalCount+')</span><span class="todo-accordion-arrow">▼</span></div><div class="todo-accordion-body">'+todoHtml+'</div></div><div class="agent-footer"><div class="status-dot" style="background:#f59e0b"></div><span class="status-text">'+plan.length+' next steps · '+totalCount+' tasks tracked</span></div></div>');
-
-    if(hardRules.length>0)cards.push('<div class="agent-card"><div class="agent-header" style="background:linear-gradient(135deg,#dc2626,#ef4444)"><div class="agent-emoji">🚫</div><div class="agent-name">Hard Rules</div><div class="agent-role">Rules derived from data</div><div class="agent-grade" style="color:#fca5a5">'+hardRules.length+'</div></div><div class="agent-body">'+hardRules.map(r=>'<div class="list-item">🚫 '+r+'</div>').join('')+'</div></div>');
-    if(validated.length>0)cards.push('<div class="agent-card"><div class="agent-header" style="background:linear-gradient(135deg,#059669,#10b981)"><div class="agent-emoji">✅</div><div class="agent-name">Validated Learnings</div><div class="agent-role">Predictions confirmed by real outcomes</div><div class="agent-grade" style="color:#86efac">'+validated.length+'</div></div><div class="agent-body">'+validated.map(v=>'<div class="list-item">✅ '+v+'</div>').join('')+'</div></div>');
-    if(hypotheses.length>0)cards.push('<div class="agent-card"><div class="agent-header" style="background:linear-gradient(135deg,#7c3aed,#8b5cf6)"><div class="agent-emoji">🔮</div><div class="agent-name">Active Hypotheses</div><div class="agent-role">Predictions awaiting validation</div><div class="agent-grade" style="color:#c4b5fd">'+hypotheses.length+'</div></div><div class="agent-body">'+hypotheses.map(h=>'<div class="list-item">🔮 '+h+'</div>').join('')+'</div></div>');
+    // Render each flat field that has data
+    flatFields.forEach(field => {
+      const config = FIELD_CONFIG[field.key];
+      if (!config) return;
+      
+      const value = field.value;
+      const hasData = value && (Array.isArray(value) ? value.length > 0 : true);
+      
+      // Skip empty cards — don't show "No data" placeholders
+      if (!hasData) return;
+      const count = Array.isArray(value) ? value.length : (value ? 1 : 0);
+      const gradeColor = hasData ? '#22c55e' : '#9ca3af';
+      
+      let bodyContent = '<div class="agent-body">';
+      
+      // Special handling for tonight_plan (numbered list style)
+      if (field.key === 'tonight_plan' && Array.isArray(value) && value.length > 0) {
+        bodyContent += value.map((item, i) => 
+          '<div class="ns-item"><span class="ns-num">' + (i+1) + '</span><span class="ns-text">' + item + '</span></div>'
+        ).join('');
+      } else {
+        bodyContent += renderFieldValue(value);
+      }
+      
+      bodyContent += '</div>';
+      
+      // Add tasks accordion to the tasks card
+      if (field.key === 'tonight_plan' && totalCount > 0) {
+        let todoHtml = '<div class="todo-progress"><div class="todo-progress-fill" style="width:' + (doneCount/totalCount)*100 + '%"></div></div>';
+        if (working.length) todoHtml += '<div class="todo-group">🔄 In Progress</div>' + working.map(renderTask).join('');
+        if (queued.length) todoHtml += '<div class="todo-group">⏳ Up Next</div>' + queued.map(renderTask).join('');
+        if (complete.length) todoHtml += '<div class="todo-group">✅ Done</div>' + complete.map(renderTask).join('');
+        if (failed.length) todoHtml += '<div class="todo-group">❌ Failed</div>' + failed.map(renderTask).join('');
+        todoHtml += '<div class="todo-summary">' + doneCount + ' of ' + totalCount + ' complete</div>';
+        
+        bodyContent += '<div class="todo-accordion" onclick="this.classList.toggle(\'open\')"><div class="todo-accordion-header"><span class="todo-accordion-title">📋 Live Task Status (' + doneCount + '/' + totalCount + ')</span><span class="todo-accordion-arrow">▼</span></div><div class="todo-accordion-body">' + todoHtml + '</div></div>';
+      }
+      
+      const footerText = hasData ? 
+        (count > 1 ? count + ' items' : '1 item') : 
+        'No data yet';
+      
+      cards.push(
+        '<div class="agent-card">' +
+          '<div class="agent-header" style="background:' + config.color + '">' +
+            '<div class="agent-emoji">' + config.emoji + '</div>' +
+            '<div class="agent-name">' + config.title + '</div>' +
+            '<div class="agent-role">' + config.role + '</div>' +
+            '<div class="agent-grade" style="color:' + gradeColor + '">' + count + '</div>' +
+          '</div>' +
+          bodyContent +
+          '<div class="agent-footer">' +
+            '<div class="status-dot" style="background:' + (hasData ? '#22c55e' : '#9ca3af') + '"></div>' +
+            '<span class="status-text">' + footerText + '</span>' +
+          '</div>' +
+        '</div>'
+      );
+    });
   }
 
   // Directory card (always last)
@@ -357,9 +455,14 @@ const AGENT_REPORTS={adaline:[{name:'🔴 Kill MoF DPA-Only',url:'/r/plankandbea
 function renderDirectoryCard(){
   const reports=AGENT_REPORTS[agentKey]||[];
   const color=COLORS[agentKey]||'linear-gradient(135deg,#374151,#111827)';
+  const backUrl=(selectedDate?'/r/?date='+selectedDate:'/r/')+(companyFilter?'&company='+companyFilter:'');
+  const AGENT_TO_JOURNAL={orion:'main',tom:'hodl',adaline:'lyndsay-ads',alex:'fullstack-dev',apollo:'content',muse:'muse',ienable:'ienable',qa:'qa',deployment:'deployment'};
+  const journalAgent=AGENT_TO_JOURNAL[agentKey]||agentKey;
+  const journalUrl=selectedDate?'/blog/journals/view.html?agent='+journalAgent+'&date='+selectedDate:'';
   let reportsSection='';
   if(reports.length>0){reportsSection=reports.map(r=>{const d=new Date(r.date+'T12:00:00');const label=d.toLocaleDateString('en-US',{month:'short',day:'numeric'});return'<a class="dir-link" href="'+r.url+'"><span class="dir-link-icon">'+r.icon+'</span><span class="dir-link-name">'+r.name+'</span><span class="dir-link-date">'+label+'</span><span class="dir-link-arrow">›</span></a>';}).join('');}else{reportsSection='<div class="dir-empty">No reports yet</div>';}
-  return '<div class="agent-card"><div class="agent-header" style="background:'+color+'"><div class="agent-emoji">📂</div><div class="agent-name">Directory</div><div class="agent-role">All reports & history</div></div><div class="dir-body"><a class="dir-home-link" href="/r/">← Back to Command Center</a><div class="dir-section" onclick="this.classList.toggle(\'open\')"><div class="dir-section-header"><span>📊 Reports ('+reports.length+')</span><span class="dir-section-arrow">▼</span></div><div class="dir-section-body">'+reportsSection+'</div></div></div></div>';
+  const journalLink=journalUrl?'<a class="dir-link" href="'+journalUrl+'" style="background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(139,92,246,0.08));border:1px solid rgba(99,102,241,0.15)"><span class="dir-link-icon">📓</span><span class="dir-link-name">Daily Journal</span><span class="dir-link-date">'+(selectedDate||'')+'</span><span class="dir-link-arrow">›</span></a>':'';
+  return '<div class="agent-card"><div class="agent-header" style="background:'+color+'"><div class="agent-emoji">📂</div><div class="agent-name">Directory</div><div class="agent-role">All reports & history</div></div><div class="dir-body"><a class="dir-home-link" href="'+backUrl+'">← Back to Command Center</a>'+journalLink+'<div class="dir-section" onclick="this.classList.toggle(\'open\')"><div class="dir-section-header"><span>📊 Reports ('+reports.length+')</span><span class="dir-section-arrow">▼</span></div><div class="dir-section-body">'+reportsSection+'</div></div></div></div>';
 }
 
 // ─── Calendar ───
@@ -424,6 +527,7 @@ function navigateDate(dateStr){
   selectedDate=dateStr;
   const url=new URL(window.location);
   url.searchParams.set('date',dateStr);
+  if(companyFilter)url.searchParams.set('company',companyFilter);
   window.history.pushState({},'',url);
   calMonth=null; // Reset so it recalculates from selected date
   load();
@@ -432,7 +536,7 @@ function navigateDate(dateStr){
 // Handle browser back/forward
 window.addEventListener('popstate',()=>{
   const p=new URLSearchParams(window.location.search);
-  selectedDate=p.get('date')||null;
+  selectedDate=p.get('date')||(function(){var m=window.location.pathname.match(/(\d{4}-\d{2}-\d{2})/);return m?m[1]:null;})();
   calMonth=null;
   load();
 });

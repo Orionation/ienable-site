@@ -1,2 +1,17 @@
 Options -Indexes
-Header set X-Robots-Tag "noindex, nofollow"
+<IfModule mod_headers.c>
+    Header set X-Robots-Tag "noindex, nofollow"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /r/
+    
+    # If the request is for a real file or directory, serve it
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+    
+    # For /r/AGENT/YYYY-MM-DD paths, rewrite to /r/AGENT/index.html
+    RewriteRule ^([a-z-]+)/(\d{4}-\d{2}-\d{2})/?$ $1/index.html [L]
+</IfModule>

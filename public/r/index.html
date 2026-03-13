@@ -170,7 +170,7 @@ const COLORS={adaline:'linear-gradient(135deg,#7c3aed,#6366f1)',muse:'linear-gra
 const ORDER=['nightly-learnings','adaline','hodl','muse','content','ienable','main','fullstack-dev','qa','deployment'];
 const DISPLAY_NAMES={main:'Orion',hodl:'Tom','lyndsay-ads':'Adaline','fullstack-dev':'Alex',content:'Apollo',muse:'Muse',ienable:'iEnable',qa:'QA',deployment:'Deploy'};
 const NAMES={hodl:'Tom',adaline:'Adaline',content:'Apollo',main:'Orion',muse:'Muse',ienable:'iEnable','fullstack-dev':'Alex',qa:'QA',deployment:'Deploy','nightly-learnings':'Nightly Learnings'};
-const LINKS={hodl:'/r/tom/',adaline:'/r/adaline/',muse:'/r/muse/',content:'/r/content/',ienable:'/r/ienable/',main:'/r/orion/','fullstack-dev':'/r/fullstack-dev/',qa:'/r/qa/',deployment:'/r/deployment/','nightly-learnings':'/r/learning/'};
+const LINKS={hodl:'/r/tom/',adaline:'/r/adaline/',muse:'/blog/journals/muse/',content:'/blog/journals/',ienable:'/r/ienable/',main:'/r/orion/','fullstack-dev':'/r/fullstack-dev/',qa:'/r/qa/',deployment:'/r/deployment/','nightly-learnings':'/r/learning/'};
 
 /* ═══ Grade ═══ */
 const GR={'A+':12,A:11,'A-':10,'B+':9,B:8,'B-':7,'C+':6,C:5,'C-':4,'D+':3,D:2,'D-':1,F:0};
@@ -300,8 +300,7 @@ function rSum(active){
     const wt=tasks.find(t=>t.status==='working');
     const taskLine=status==='working'&&(ct||wt)?'<div class="sum-task">▸ '+(ct||wt.task_name)+'</div>':'';
     const hl=rc.accomplishments&&rc.accomplishments[0]?aT(rc.accomplishments[0]).replace(/<[^>]*>/g,'').substring(0,55)+'...':'No report card data';
-    const baseUrl=LINKS[k]||('/r/'+k+'/');
-    const url=baseUrl+(baseUrl.includes('?')?'&':'?')+'date='+fk(cDate)+(companyFilter?'&company='+companyFilter:'');
+    const url=(LINKS[k]||('/r/'+k+'/'))+'?date='+fk(cDate)+(companyFilter?'&company='+companyFilter:'');
     return '<a class="sum-row" href="'+url+'"><span class="sum-dot '+status+'"></span><span class="sum-emoji">'+emoji+'</span><div class="sum-info"><div class="sum-name">'+name+'</div><div class="sum-hl">'+hl+'</div>'+taskLine+'</div><span class="sum-grade" style="color:'+gc+'">'+grade+'</span>'+trendHtml+'</a>';
   }).join('');
 
@@ -356,8 +355,7 @@ function rCard(key){
   const trend=rc.trend||{};
   const oa=rc.orion_analysis||(rc.stats&&rc.stats.orion_analysis)||'';
   const jurl=rc.journal_url||'';
-  const baseAgentUrl=LINKS[key]||('/r/'+key+'/');
-  const agentUrl=baseAgentUrl+(baseAgentUrl.includes('?')?'&':'?')+'date='+fk(cDate)+(companyFilter?'&company='+companyFilter:'');
+  const agentUrl=(LINKS[key]||('/r/'+key+'/'))+'?date='+fk(cDate)+(companyFilter?'&company='+companyFilter:'');
 
   // Grade trend
   const prevGrade=(gPC(key).grade);
