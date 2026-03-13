@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Agent Report Card</title>
+<style>
+:root{--g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;--g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;--g700:#374151;--g800:#1f2937;--g900:#111827;--gn50:#f0fdf4;--gn100:#dcfce7;--gn500:#22c55e;--gn600:#16a34a;--bl50:#eff6ff;--bl100:#dbeafe;--bl500:#3b82f6;--bl600:#2563eb;--am50:#fffbeb;--am100:#fef3c7;--am500:#f59e0b;--am600:#d97706;--rd50:#fef2f2;--rd100:#fee2e2;--rd500:#ef4444;--rd600:#dc2626;--pu50:#faf5ff;--pu500:#8b5cf6;--pu600:#7c3aed}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro',system-ui,sans-serif;background:var(--g100);color:var(--g800);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.back-link{display:inline-flex;align-items:center;gap:4px;padding:12px 16px;font-size:14px;color:var(--g500);text-decoration:none;font-weight:600}
+.back-link:active{opacity:.6}
+.cards-container{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:8px 16px 16px;gap:12px;scrollbar-width:none}
+.cards-container::-webkit-scrollbar{display:none}
+.dots{display:flex;justify-content:center;gap:6px;padding:8px 0 16px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--g300);transition:all .2s}
+.dot.active{background:var(--g800);width:20px;border-radius:4px}
+.agent-card{flex:0 0 calc(100vw - 40px);max-width:400px;scroll-snap-align:center;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.agent-header{padding:20px;color:#fff;position:relative;overflow:hidden}
+.agent-header::after{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.1)}
+.agent-emoji{font-size:36px;margin-bottom:8px}
+.agent-name{font-size:20px;font-weight:800}
+.agent-role{font-size:12px;opacity:.8;font-weight:500}
+.agent-grade{position:absolute;top:16px;right:16px;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;backdrop-filter:blur(4px);border:2px solid rgba(255,255,255,.3)}
+.agent-stats{display:flex;padding:12px 20px;gap:8px;border-bottom:1px solid var(--g100)}
+.stat{flex:1;text-align:center}
+.stat-value{font-size:18px;font-weight:800;color:var(--g800)}
+.stat-label{font-size:10px;color:var(--g400);font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+.agent-body{padding:16px 20px}
+.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--g400);margin-bottom:8px}
+.accomplishment{display:flex;gap:8px;margin-bottom:10px;align-items:flex-start}
+.accomplishment:last-child{margin-bottom:0}
+.acc-icon{font-size:14px;margin-top:1px;flex-shrink:0}
+.acc-text{font-size:13px;color:var(--g600);line-height:1.5}
+.acc-text strong{color:var(--g800)}
+.key-finding{background:var(--gn50);border:1px solid var(--gn100);border-radius:12px;padding:12px;margin-top:12px}
+.key-finding.warning{background:var(--am50);border-color:var(--am100)}
+.key-finding-label{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--gn600);margin-bottom:4px}
+.key-finding.warning .key-finding-label{color:var(--am600)}
+.key-finding-text{font-size:13px;color:var(--g700);line-height:1.5}
+.agent-footer{padding:12px 20px;border-top:1px solid var(--g100);display:flex;align-items:center;gap:6px}
+.status-dot{width:8px;height:8px;border-radius:50%}
+.status-text{font-size:12px;color:var(--g500)}
+.ns-item{padding:10px 14px;display:flex;gap:10px;align-items:flex-start;border-bottom:1px solid var(--g100)}
+.ns-item:last-child{border-bottom:none}
+.ns-num{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ns-text{font-size:13px;color:var(--g700);line-height:1.4}
+.todo-accordion{margin:0 16px 12px;border-radius:12px;border:1.5px solid var(--g200);overflow:hidden}
+.todo-accordion-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:linear-gradient(135deg,#eff6ff,#dbeafe);cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+.todo-accordion-title{font-size:14px;font-weight:700;color:var(--g800)}
+.todo-accordion-arrow{font-size:12px;color:var(--g500);transition:transform .2s}
+.todo-accordion-body{max-height:0;overflow:hidden;transition:max-height .3s ease;background:#fff}
+.todo-accordion.open .todo-accordion-body{max-height:2000px}
+.todo-accordion.open .todo-accordion-arrow{transform:rotate(180deg)}
+.todo-progress{height:4px;background:var(--g200);border-radius:2px;margin:10px 14px 8px;overflow:hidden}
+.todo-progress-fill{height:100%;background:linear-gradient(90deg,#10b981,#059669);border-radius:2px}
+.todo-group{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--g500);padding:8px 14px 4px}
+.todo-item{padding:8px 14px;cursor:pointer;border-left:3px solid transparent}
+.todo-item:active{opacity:.85}
+.todo-item.s-working{border-left-color:#10b981;background:var(--gn50)}
+.todo-item.s-queued{border-left-color:var(--g300);background:var(--g50)}
+.todo-item.s-complete{border-left-color:#86efac;background:#fafafa}
+.todo-item.s-failed{border-left-color:var(--rd500);background:var(--rd50)}
+.todo-item-row{display:flex;align-items:center;gap:8px}
+.todo-num{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.todo-icon{font-size:13px;flex-shrink:0}
+.todo-name{flex:1;font-size:13px;font-weight:600;color:var(--g800);line-height:1.3}
+.todo-item.s-complete .todo-name{text-decoration:line-through;color:var(--g400)}
+.todo-chevron{font-size:12px;color:var(--g400);transition:transform .2s}
+.todo-item.detail-open .todo-chevron{transform:rotate(90deg)}
+.todo-time{font-size:11px;color:var(--g500);padding:2px 0 0 25px}
+.todo-detail-box{display:none;margin:6px 0 2px 25px;padding:8px 10px;background:rgba(0,0,0,.03);border-radius:8px}
+.todo-item.detail-open .todo-detail-box{display:block}
+.todo-detail-text{font-size:12px;color:var(--g600);line-height:1.4}
+.todo-result-text{font-size:11px;color:var(--gn600);font-style:italic;margin-top:4px}
+.todo-summary{text-align:center;font-size:12px;font-weight:600;color:var(--g400);padding:8px 0}
+.list-item{padding:8px 14px;font-size:13px;color:var(--g700);line-height:1.4;border-bottom:1px solid var(--g100)}
+.list-item:last-child{border-bottom:none}
+/* Flat fields accordion */
+.flat-sec{margin:0 16px 8px;border-radius:12px;border:1px solid var(--g200);overflow:hidden}
+.flat-sec-hdr{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:var(--g50);cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;font-size:13px;font-weight:700;color:var(--g700)}
+.flat-sec-hdr:active{background:var(--g100)}
+.flat-sec-arrow{font-size:11px;color:var(--g400);transition:transform .25s}
+.flat-sec.open .flat-sec-arrow{transform:rotate(180deg)}
+.flat-sec-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.flat-sec.open .flat-sec-body{max-height:3000px}
+/* Directory */
+.dir-body{padding:12px 16px 16px}
+.dir-home-link{display:block;text-align:center;padding:10px;color:var(--bl600);font-weight:600;font-size:14px;text-decoration:none;border-radius:8px;background:var(--bl50);margin-bottom:12px}
+.dir-home-link:active{opacity:.7}
+.dir-section{border:1px solid var(--g200);border-radius:12px;margin-bottom:8px;overflow:hidden}
+.dir-section-header{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--g50);cursor:pointer;font-size:14px;font-weight:700;color:var(--g700)}
+.dir-section-arrow{font-size:11px;color:var(--g400);transition:transform .25s}
+.dir-section.open .dir-section-arrow{transform:rotate(180deg)}
+.dir-section-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.dir-section.open .dir-section-body{max-height:2000px}
+.dir-link{display:flex;align-items:center;gap:8px;padding:10px 14px;text-decoration:none;border-bottom:1px solid var(--g100)}
+.dir-link:last-child{border-bottom:none}
+.dir-link:active{background:var(--g50)}
+.dir-link-icon{font-size:16px;flex-shrink:0}
+.dir-link-name{flex:1;font-size:13px;font-weight:600;color:var(--g800)}
+.dir-link-date{font-size:11px;color:var(--g400)}
+.dir-link-badge{font-size:12px;font-weight:700;color:var(--gn600);background:var(--gn50);padding:2px 8px;border-radius:10px}
+.dir-link-arrow{font-size:14px;color:var(--g300)}
+.dir-empty{padding:14px;text-align:center;color:var(--g400);font-size:13px}
+/* Trajectory */
+.traj-hero{padding:24px 20px 20px;text-align:center}
+.traj-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--g400);margin-bottom:6px}
+.traj-north-star{font-size:22px;font-weight:800;color:var(--g900);line-height:1.2;margin-bottom:8px}
+.traj-current{font-size:14px;color:var(--g500);line-height:1.4;margin-bottom:16px}
+.traj-bar-wrap{background:var(--g200);border-radius:6px;height:10px;overflow:hidden;margin-bottom:6px}
+.traj-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#10b981,#22c55e);transition:width 1s ease}
+.traj-bar-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--g400);font-weight:600;margin-bottom:16px}
+.traj-velocity-box{background:var(--gn50);border:1px solid var(--gn100);border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.traj-velocity-icon{font-size:18px}.traj-velocity-text{font-size:13px;font-weight:600;color:var(--gn600)}
+.traj-milestone-box{background:var(--am50);border:1px solid var(--am100);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px}
+.traj-milestone-icon{font-size:18px}.traj-milestone-text{font-size:13px;font-weight:600;color:var(--am600)}
+.traj-phases{padding:16px 20px;border-top:1px solid var(--g100)}
+.traj-phase-item{display:flex;gap:12px;align-items:flex-start;padding:8px 0;position:relative}
+.traj-phase-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;border:2px solid var(--g200);color:var(--g400);background:#fff}
+.traj-phase-item.done .traj-phase-dot{background:var(--gn500);border-color:var(--gn500);color:#fff}
+.traj-phase-item.current .traj-phase-dot{background:#fff;border-color:var(--gn500);color:var(--gn500);box-shadow:0 0 0 4px rgba(34,197,94,.15)}
+.traj-phase-text{font-size:13px;color:var(--g500);line-height:1.4;padding-top:2px}
+.traj-phase-item.done .traj-phase-text{color:var(--g400);text-decoration:line-through}
+.traj-phase-item.current .traj-phase-text{color:var(--g800);font-weight:600}
+.traj-phase-line{position:absolute;left:11px;top:32px;width:2px;height:calc(100% - 16px);background:var(--g200)}
+.traj-phase-item.done .traj-phase-line{background:var(--gn500)}
+.traj-phase-item:last-child .traj-phase-line{display:none}
+.traj-proof{display:flex;border-top:1px solid var(--g100);padding:14px 12px}
+.traj-proof-item{flex:1;text-align:center;border-right:1px solid var(--g100)}
+.traj-proof-item:last-child{border-right:none}
+.traj-proof-val{font-size:20px;font-weight:800;color:var(--g800)}
+.traj-proof-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--g400);margin-top:1px}
+/* Calendar */
+.calendar-wrap{margin:16px;background:#fff;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);overflow:hidden}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px}
+.cal-nav-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--g200);background:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--g500);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cal-nav-btn:active{background:var(--g100)}
+.cal-month-label{font-size:15px;font-weight:700;color:var(--g800)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);padding:0 12px 12px;gap:2px}
+.cal-dow{text-align:center;font-size:10px;font-weight:700;color:var(--g400);text-transform:uppercase;padding:4px 0 6px;letter-spacing:.04em}
+.cal-day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:10px;font-size:13px;font-weight:600;color:var(--g400);cursor:default;position:relative;transition:background .15s}
+.cal-day.empty{visibility:hidden}
+.cal-day.no-data{color:var(--g300)}
+.cal-day.has-data{color:var(--g700);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cal-day.has-data:hover{background:var(--g100)}
+.cal-day.has-data:active{background:var(--g200)}
+.cal-day.selected{background:var(--g800);color:#fff !important}
+.cal-day.today:not(.selected){border:2px solid var(--bl500)}
+.cal-dots{display:flex;gap:2px;margin-top:2px;min-height:5px}
+.cal-dot-pip{width:5px;height:5px;border-radius:50%;background:var(--gn500)}
+.cal-day.selected .cal-dot-pip{background:rgba(255,255,255,.7)}
+.loading{text-align:center;padding:40px;color:var(--g400)}
+</style>
+</head>
+<body>
+<a class="back-link" id="back-link" href="/r/">‹ Back to all agents</a>
+<div class="dots" id="dots"></div>
+<div class="cards-container" id="cards"><div class="loading">Loading...</div></div>
+<div id="calendarRoot"></div>
+<script>
+const API='https://ienable-admin-app-hqtw2.ondigitalocean.app/api/v1';
+const COLORS={adaline:'linear-gradient(135deg,#7c3aed,#6366f1)',muse:'linear-gradient(135deg,#ec4899,#f43f5e)',ienable:'linear-gradient(135deg,#3b82f6,#2563eb)',orion:'linear-gradient(135deg,#1f2937,#374151)',tom:'linear-gradient(135deg,#059669,#10b981)',apollo:'linear-gradient(135deg,#f59e0b,#d97706)',reel:'linear-gradient(135deg,#06b6d4,#0891b2)',hodl:'linear-gradient(135deg,#059669,#10b981)',main:'linear-gradient(135deg,#1f2937,#374151)','lyndsay-ads':'linear-gradient(135deg,#7c3aed,#6366f1)',content:'linear-gradient(135deg,#f59e0b,#d97706)'};
+const DISPLAY_NAMES={main:'Orion',hodl:'Tom','lyndsay-ads':'Adaline','fullstack-dev':'Alex',content:'Apollo',muse:'Muse',ienable:'iEnable',qa:'QA',deployment:'Deploy',adaline:'Adaline',tom:'Tom',orion:'Orion',apollo:'Apollo',alex:'Alex'};
+const pp=window.location.pathname.replace(/\/+$/,'').split('/');
+const agentKey=pp[pp.length-1].toLowerCase();
+const urlParams=new URLSearchParams(window.location.search);
+const companyFilter=urlParams.get('company')||'';
+// Alias map: URL key -> possible API agent_names (for historical data)
+const ALIASES={tom:['tom','hodl','Tom','Tom V17'],orion:['orion','main','Orion'],adaline:['adaline','lyndsay-ads','Adaline'],apollo:['apollo','content','Apollo','reel','Reel'],ienable:['ienable','iEnable','ienable-seo'],muse:['muse','Muse'],reel:['reel','Reel','content']};
+function matchesAgent(agentName){const aliases=ALIASES[agentKey]||[agentKey];return aliases.some(a=>a.toLowerCase()===(agentName||'').toLowerCase());}
+const urlP=new URLSearchParams(window.location.search);
+let selectedDate=urlP.get('date')||(function(){var m=window.location.pathname.match(/(\d{4}-\d{2}-\d{2})/);return m?m[1]:null;})();
+let allRC=[];
+let calMonth=null;
+
+function nPlan(p){if(Array.isArray(p))return p;if(typeof p==='string')return p.includes('\n')?p.split('\n').filter(s=>s.trim()):[p];return[];}
+function nStats(s){if(Array.isArray(s))return s;if(s&&typeof s==='object'){const skip=['created_at','updated_at','id','agent_name','company_id','date','learning_score','trend','capabilities_learned','flows_identified','recent_lessons','unresolved_repetitions','repetitions','healthy_tools','broken_tools'];return Object.entries(s).filter(([k])=>!skip.includes(k)).map(([k,v])=>({label:k.replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase()),value:String(v)})).slice(0,4);}return[];}
+function gTxt(a){if(!a)return'';if(typeof a==='string')return a;if(typeof a==='object')return a.text||a.name||JSON.stringify(a);return String(a||'');}
+function gIco(a){if(!a)return'•';if(typeof a==='object'&&a.icon)return a.icon;return'•';}
+
+async function fetchHistory(){
+  try{const cParam=companyFilter?'?company_id='+companyFilter:'';const r=await fetch(API+'/report-cards'+cParam);const j=await r.json();allRC=(j.data||j||[]).filter(r=>matchesAgent(r.agent_name)).sort((a,b)=>b.date.localeCompare(a.date));}catch(e){allRC=[];}
+}
+
+async function load(){
+  try{
+    const cParam=companyFilter?'&company_id='+companyFilter:'';
+    const url=selectedDate?API+'/report-cards?date='+selectedDate+cParam:API+'/report-cards/latest'+cParam.replace('&','?');
+    const[rcR,stR,tkR]=await Promise.all([fetch(url),fetch(API+'/agent-status'+cParam.replace('&','?')),fetch(API+'/agent-tasks/active'+cParam.replace('&','?')),fetchHistory()]);
+    const rcD=(await rcR.json()).data||[];const stD=(await stR.json()).data||[];const tkD=(await tkR.json()).data||[];
+    const rc=rcD.find(r=>matchesAgent(r.agent_name))||{};
+    const st=stD.find(s=>matchesAgent(s.agent))||{};
+    const tasks=tkD.filter(t=>matchesAgent(t.agent));
+    document.title=(DISPLAY_NAMES[agentKey]||DISPLAY_NAMES[rc.agent_name?.toLowerCase()]||rc.agent_name||agentKey)+"'s Report Card";
+    if(!calMonth){const d=selectedDate?new Date(selectedDate+'T12:00:00'):(rc.date?new Date(rc.date+'T12:00:00'):new Date());calMonth={year:d.getFullYear(),month:d.getMonth()};}
+    if(!selectedDate&&rc.date)selectedDate=rc.date;
+    render(rc,st,tasks);renderCalendar();
+    // Update back link with current date and company param
+    var bl=document.getElementById('back-link');if(bl)bl.href=(selectedDate?'/r/?date='+selectedDate:'/r/')+(companyFilter?'&company='+companyFilter:'');
+  }catch(e){document.getElementById('cards').innerHTML='<div class="loading">Failed: '+e.message+'</div>';}
+}
+
+function numTasks(tasks,plan){
+  if(!plan||!plan.length)return tasks;
+  const asgn=new Map(),used=new Set();
+  plan.forEach((p,i)=>{const pw=new Set(p.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(w=>w.length>2));let bid=null,bs=0;tasks.forEach(t=>{if(used.has(t.id))return;const tw=new Set(t.task_name.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(w=>w.length>2));let o=0;pw.forEach(w=>{if(tw.has(w))o++;});if(o>bs){bs=o;bid=t.id;}});if(bid&&bs>=2){asgn.set(bid,i+1);used.add(bid);}});
+  let n=plan.length+1;return tasks.map(t=>({...t,_num:asgn.get(t.id)||(n++)})).sort((a,b)=>a._num-b._num);
+}
+
+// Helper: render a value as a clean list or text
+function renderFieldValue(value) {
+  if (!value) return '<div class="list-item" style="color:#9ca3af;font-style:italic;">No data</div>';
+  
+  // If it's an array
+  if (Array.isArray(value)) {
+    if (value.length === 0) return '<div class="list-item" style="color:#9ca3af;font-style:italic;">No data</div>';
+    return value.map(item => {
+      const text = typeof item === 'object' ? (item.text || item.name || JSON.stringify(item)) : String(item);
+      const icon = typeof item === 'object' && item.icon ? item.icon : '•';
+      return '<div class="list-item">' + icon + ' ' + text + '</div>';
+    }).join('');
+  }
+  
+  // If it's a string with newlines or bullet points
+  if (typeof value === 'string') {
+    // Check if it has bullet points or multiple lines
+    if (value.includes('\n') || value.match(/^[\s]*[-•*]\s/m)) {
+      const lines = value.split('\n').filter(l => l.trim());
+      return lines.map(line => {
+        const cleaned = line.replace(/^[\s]*[-•*]\s*/, '');
+        return '<div class="list-item">• ' + cleaned + '</div>';
+      }).join('');
+    }
+    // Single line text
+    return '<div class="list-item">' + value + '</div>';
+  }
+  
+  // Object or other
+  return '<div class="list-item">' + JSON.stringify(value) + '</div>';
+}
+
+// Config for flat fields: emoji, color, title
+const FIELD_CONFIG = {
+  accomplishments: { emoji: '🎯', color: 'linear-gradient(135deg,#10b981,#059669)', title: 'Accomplishments', role: 'What I did today' },
+  tonight_plan: { emoji: '🚀', color: 'linear-gradient(135deg,#3b82f6,#2563eb)', title: 'Tonight Plan', role: 'Action items for next session' },
+  validated_learnings: { emoji: '✅', color: 'linear-gradient(135deg,#22c55e,#16a34a)', title: 'Validated Learnings', role: 'Confirmed insights from real outcomes' },
+  hard_rules: { emoji: '🚫', color: 'linear-gradient(135deg,#ef4444,#dc2626)', title: 'Hard Rules', role: 'Non-negotiable constraints' },
+  active_hypotheses: { emoji: '🔮', color: 'linear-gradient(135deg,#8b5cf6,#7c3aed)', title: 'Active Hypotheses', role: 'Predictions awaiting validation' },
+  tasks: { emoji: '📋', color: 'linear-gradient(135deg,#f59e0b,#d97706)', title: 'Tasks', role: 'Live execution status' }
+};
+
+function render(rc,st,tasks){
+  try{
+  const container=document.getElementById('cards');
+  // FIX: API returns "cards" not "playbooks". Check both for compatibility.
+  const slides=rc.cards||rc.playbooks||[];
+  // Only use as swipeable cards if they have the right shape (name/emoji/accomplishments)
+  const hasRichCards=slides.length>0&&slides[0]&&(slides[0].name||slides[0].emoji||slides[0].accomplishments);
+  const status=st.status||'sleeping';
+  const defaultColor=COLORS[agentKey]||'linear-gradient(135deg,#667eea,#764ba2)';
+  const plan=nPlan(rc.tonight_plan);
+  tasks=numTasks(tasks,plan);
+  const working=tasks.filter(t=>t.status==='working');
+  const queued=tasks.filter(t=>t.status==='queued');
+  const complete=tasks.filter(t=>t.status==='complete');
+  const failed=tasks.filter(t=>t.status==='failed');
+  const totalCount=tasks.length;const doneCount=complete.length;
+  let cards=[];
+
+  // Trajectory card
+  const trend=rc.trend;
+  if(trend&&trend.north_star){
+    const phases=(trend.trajectory||'').split(/Phase \d+:\s*/).filter(Boolean);
+    const cpi=phases.findIndex(p=>p.includes('NOW'));
+    const pPct=phases.length>0?Math.max(8,((cpi+1)/phases.length)*100):10;
+    const phHtml=phases.map((p,i)=>{const done=i<cpi||p.includes('DONE');const now=p.includes('NOW');const clean=p.replace(/\((NOW|DONE)\)/g,'').replace(/\.\s*$/,'').trim();const cls=done?'done':now?'current':'';const sl=i<phases.length-1;return'<div class="traj-phase-item '+cls+'"><div class="traj-phase-dot">'+(done?'✓':(i+1))+'</div>'+(sl?'<div class="traj-phase-line"></div>':'')+'<div class="traj-phase-text">'+clean+'</div></div>';}).join('');
+    const col=COLORS[agentKey]||'linear-gradient(135deg,#667eea,#764ba2)';
+    cards.push('<div class="agent-card"><div class="agent-header" style="background:'+col+'"><div class="agent-emoji">'+(rc.emoji||'⭐')+'</div><div class="agent-name">'+(DISPLAY_NAMES[agentKey]||DISPLAY_NAMES[rc.agent_name?.toLowerCase()]||rc.agent_name||agentKey)+'</div><div class="agent-role">The Journey</div></div><div class="traj-hero"><div class="traj-label">North Star</div><div class="traj-north-star">'+trend.north_star+'</div><div class="traj-current">'+(trend.current||'')+'</div><div class="traj-bar-wrap"><div class="traj-bar-fill" style="width:'+pPct+'%"></div></div><div class="traj-bar-labels"><span>Day '+(trend.days_active||0)+'</span><span>Phase '+(cpi+1)+' of '+phases.length+'</span></div><div class="traj-velocity-box"><span class="traj-velocity-icon">📈</span><span class="traj-velocity-text">'+(trend.velocity||'')+'</span></div><div class="traj-milestone-box"><span class="traj-milestone-icon">🎯</span><span class="traj-milestone-text">Next: '+(trend.milestone_next||'')+'</span></div></div><div class="traj-phases"><div class="section-title">Roadmap</div>'+phHtml+'</div><div class="traj-proof"><div class="traj-proof-item"><div class="traj-proof-val">'+(rc.learning_db_count||0)+'</div><div class="traj-proof-label">Lessons</div></div><div class="traj-proof-item"><div class="traj-proof-val">'+(rc.validated_learnings||[]).length+'</div><div class="traj-proof-label">Validated</div></div><div class="traj-proof-item"><div class="traj-proof-val">'+(rc.hard_rules||[]).length+'</div><div class="traj-proof-label">Hard Rules</div></div><div class="traj-proof-item"><div class="traj-proof-val">'+(trend.days_active||0)+'</div><div class="traj-proof-label">Days</div></div></div><div class="agent-footer"><div class="status-dot" style="background:'+(status==='working'?'#22c55e':'#9ca3af')+'"></div><span class="status-text">'+(status==='working'?'Working toward the goal':totalCount+' tasks · '+doneCount+' complete')+'</span></div></div>');
+  }
+
+  // Swipeable themed cards (from API "cards" array)
+  if(hasRichCards){
+    slides.forEach((slide,idx)=>{
+      const isLast=idx===slides.length-1;
+      const sStats=slide.stats||[];const sAccs=slide.accomplishments||[];
+      const sKF=slide.keyFinding||slide.key_finding;
+      const sColor=slide.color||defaultColor;
+      const sGrade=slide.grade||'';const sGradeColor=slide.gradeColor||slide.grade_color||'#22c55e';
+      const sStatus=slide.status||{};
+      let ch='<div class="agent-card"><div class="agent-header" style="background:'+sColor+'"><div class="agent-emoji">'+(slide.emoji||'•')+'</div><div class="agent-name">'+(slide.name||'')+'</div><div class="agent-role">'+(slide.role||'')+'</div><div class="agent-grade" style="color:'+sGradeColor+'">'+sGrade+'</div></div>';
+      if(sStats.length)ch+='<div class="agent-stats">'+sStats.map(s=>'<div class="stat"><div class="stat-value">'+s.value+'</div><div class="stat-label">'+s.label+'</div></div>').join('')+'</div>';
+      ch+='<div class="agent-body"><div class="section-title">'+(isLast?'Improvements Needed':'Key Points')+'</div>'+sAccs.map(a=>'<div class="accomplishment"><span class="acc-icon">'+(a.icon||'•')+'</span><span class="acc-text">'+a.text+'</span></div>').join('');
+      if(sKF)ch+='<div class="key-finding '+(sKF.type==='warning'?'warning':'')+'"><div class="key-finding-label">'+(sKF.label||'💡')+'</div><div class="key-finding-text">'+sKF.text+'</div></div>';
+      ch+='</div>';
+      if(isLast&&totalCount>0){
+        let th='<div class="todo-progress"><div class="todo-progress-fill" style="width:'+(doneCount/totalCount)*100+'%"></div></div>';
+        if(working.length)th+='<div class="todo-group">🔄 In Progress</div>'+working.map(renderTask).join('');
+        if(queued.length)th+='<div class="todo-group">⏳ Up Next</div>'+queued.map(renderTask).join('');
+        if(complete.length)th+='<div class="todo-group">✅ Done</div>'+complete.map(renderTask).join('');
+        if(failed.length)th+='<div class="todo-group">❌ Failed</div>'+failed.map(renderTask).join('');
+        th+='<div class="todo-summary">'+doneCount+' of '+totalCount+' complete</div>';
+        ch+='<div class="todo-accordion" onclick="this.classList.toggle(\'open\')"><div class="todo-accordion-header"><span class="todo-accordion-title">📋 Live Task Status ('+doneCount+'/'+totalCount+')</span><span class="todo-accordion-arrow">▼</span></div><div class="todo-accordion-body">'+th+'</div></div>';
+      }
+      ch+='<div class="agent-footer"><div class="status-dot" style="background:'+(sStatus.color||'#22c55e')+'"></div><span class="status-text">'+(sStatus.text||'')+'</span></div></div>';
+      cards.push(ch);
+    });
+
+    // TASK 2 FIX: Always render flat fields as collapsible accordions after cards
+    cards.push(renderFlatFieldsCard(rc, status, totalCount, doneCount, plan, tasks, working, queued, complete, failed));
+
+  } else {
+    // Fallback: render flat fields as individual beautiful cards
+    const flatFields = [
+      { key: 'accomplishments', value: rc.accomplishments },
+      { key: 'tonight_plan', value: plan },
+      { key: 'validated_learnings', value: rc.validated_learnings },
+      { key: 'hard_rules', value: rc.hard_rules },
+      { key: 'active_hypotheses', value: rc.active_hypotheses }
+    ];
+
+    // Render each flat field that has data
+    flatFields.forEach(field => {
+      const config = FIELD_CONFIG[field.key];
+      if (!config) return;
+      
+      const value = field.value;
+      const hasData = value && (Array.isArray(value) ? value.length > 0 : true);
+      
+      // Skip empty cards — don't show "No data" placeholders
+      if (!hasData) return;
+      const count = Array.isArray(value) ? value.length : (value ? 1 : 0);
+      const gradeColor = hasData ? '#22c55e' : '#9ca3af';
+      
+      let bodyContent = '<div class="agent-body">';
+      
+      // Special handling for tonight_plan (numbered list style)
+      if (field.key === 'tonight_plan' && Array.isArray(value) && value.length > 0) {
+        bodyContent += value.map((item, i) => 
+          '<div class="ns-item"><span class="ns-num">' + (i+1) + '</span><span class="ns-text">' + item + '</span></div>'
+        ).join('');
+      } else {
+        bodyContent += renderFieldValue(value);
+      }
+      
+      bodyContent += '</div>';
+      
+      // Add tasks accordion to the tasks card
+      if (field.key === 'tonight_plan' && totalCount > 0) {
+        let todoHtml = '<div class="todo-progress"><div class="todo-progress-fill" style="width:' + (doneCount/totalCount)*100 + '%"></div></div>';
+        if (working.length) todoHtml += '<div class="todo-group">🔄 In Progress</div>' + working.map(renderTask).join('');
+        if (queued.length) todoHtml += '<div class="todo-group">⏳ Up Next</div>' + queued.map(renderTask).join('');
+        if (complete.length) todoHtml += '<div class="todo-group">✅ Done</div>' + complete.map(renderTask).join('');
+        if (failed.length) todoHtml += '<div class="todo-group">❌ Failed</div>' + failed.map(renderTask).join('');
+        todoHtml += '<div class="todo-summary">' + doneCount + ' of ' + totalCount + ' complete</div>';
+        
+        bodyContent += '<div class="todo-accordion" onclick="this.classList.toggle(\'open\')"><div class="todo-accordion-header"><span class="todo-accordion-title">📋 Live Task Status (' + doneCount + '/' + totalCount + ')</span><span class="todo-accordion-arrow">▼</span></div><div class="todo-accordion-body">' + todoHtml + '</div></div>';
+      }
+      
+      const footerText = hasData ? 
+        (count > 1 ? count + ' items' : '1 item') : 
+        'No data yet';
+      
+      cards.push(
+        '<div class="agent-card">' +
+          '<div class="agent-header" style="background:' + config.color + '">' +
+            '<div class="agent-emoji">' + config.emoji + '</div>' +
+            '<div class="agent-name">' + config.title + '</div>' +
+            '<div class="agent-role">' + config.role + '</div>' +
+            '<div class="agent-grade" style="color:' + gradeColor + '">' + count + '</div>' +
+          '</div>' +
+          bodyContent +
+          '<div class="agent-footer">' +
+            '<div class="status-dot" style="background:' + (hasData ? '#22c55e' : '#9ca3af') + '"></div>' +
+            '<span class="status-text">' + footerText + '</span>' +
+          '</div>' +
+        '</div>'
+      );
+    });
+  }
+
+  // Directory card (always last)
+  cards.push(renderDirectoryCard());
+
+  container.innerHTML=cards.join('');
+  const dotsC=document.getElementById('dots');
+  dotsC.innerHTML=cards.map((_,i)=>'<div class="dot '+(i===0?'active':'')+'" id="dot-'+i+'"></div>').join('');
+  container.addEventListener('scroll',()=>{const cw=container.firstElementChild.offsetWidth+12;const ai=Math.round(container.scrollLeft/cw);document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===ai));});
+  }catch(err){console.error("Render error:",err);document.getElementById("cards").innerHTML='<div style="padding:40px;text-align:center;color:#ef4444;">Render error: '+err.message+'</div>';}
+}
+
+// Render flat fields as a card with collapsible accordion sections
+function renderFlatFieldsCard(rc, status, totalCount, doneCount, plan, tasks, working, queued, complete, failed) {
+  const accomplishments = rc.accomplishments || [];
+  const hardRules = rc.hard_rules || [];
+  const validated = rc.validated_learnings || [];
+  const hypotheses = rc.active_hypotheses || [];
+  const defaultColor = COLORS[agentKey] || 'linear-gradient(135deg,#667eea,#764ba2)';
+
+  let sections = '';
+
+  // Accomplishments
+  if (accomplishments.length > 0) {
+    sections += '<div class="flat-sec"><div class="flat-sec-hdr" onclick="this.parentElement.classList.toggle(\'open\')"><span>📝 Accomplishments (' + accomplishments.length + ')</span><span class="flat-sec-arrow">▼</span></div><div class="flat-sec-body">' + accomplishments.map(a => '<div class="list-item">' + gIco(a) + ' ' + gTxt(a) + '</div>').join('') + '</div></div>';
+  }
+
+  // Tonight Plan / Next Steps
+  if (plan.length > 0) {
+    sections += '<div class="flat-sec"><div class="flat-sec-hdr" onclick="this.parentElement.classList.toggle(\'open\')"><span>🚀 Next Steps (' + plan.length + ')</span><span class="flat-sec-arrow">▼</span></div><div class="flat-sec-body">' + plan.map((s, i) => '<div class="ns-item"><span class="ns-num">' + (i+1) + '</span><span class="ns-text">' + s + '</span></div>').join('') + '</div></div>';
+  }
+
+  // Hard Rules
+  if (hardRules.length > 0) {
+    sections += '<div class="flat-sec"><div class="flat-sec-hdr" onclick="this.parentElement.classList.toggle(\'open\')"><span>🚫 Hard Rules (' + hardRules.length + ')</span><span class="flat-sec-arrow">▼</span></div><div class="flat-sec-body">' + hardRules.map(r => '<div class="list-item">🚫 ' + r + '</div>').join('') + '</div></div>';
+  }
+
+  // Validated Learnings
+  if (validated.length > 0) {
+    sections += '<div class="flat-sec"><div class="flat-sec-hdr" onclick="this.parentElement.classList.toggle(\'open\')"><span>✅ Validated Learnings (' + validated.length + ')</span><span class="flat-sec-arrow">▼</span></div><div class="flat-sec-body">' + validated.map(v => '<div class="list-item">✅ ' + v + '</div>').join('') + '</div></div>';
+  }
+
+  // Active Hypotheses
+  if (hypotheses.length > 0) {
+    sections += '<div class="flat-sec"><div class="flat-sec-hdr" onclick="this.parentElement.classList.toggle(\'open\')"><span>🔮 Active Hypotheses (' + hypotheses.length + ')</span><span class="flat-sec-arrow">▼</span></div><div class="flat-sec-body">' + hypotheses.map(h => '<div class="list-item">🔮 ' + h + '</div>').join('') + '</div></div>';
+  }
+
+  // Todo
+  if (totalCount > 0) {
+    let th = '<div class="todo-progress"><div class="todo-progress-fill" style="width:' + (doneCount/totalCount)*100 + '%"></div></div>';
+    if (working.length) th += '<div class="todo-group">🔄 In Progress</div>' + working.map(renderTask).join('');
+    if (queued.length) th += '<div class="todo-group">⏳ Up Next</div>' + queued.map(renderTask).join('');
+    if (complete.length) th += '<div class="todo-group">✅ Done</div>' + complete.map(renderTask).join('');
+    if (failed.length) th += '<div class="todo-group">❌ Failed</div>' + failed.map(renderTask).join('');
+    th += '<div class="todo-summary">' + doneCount + ' of ' + totalCount + ' complete</div>';
+    sections += '<div class="flat-sec"><div class="flat-sec-hdr" onclick="this.parentElement.classList.toggle(\'open\')"><span>📋 Tasks (' + doneCount + '/' + totalCount + ')</span><span class="flat-sec-arrow">▼</span></div><div class="flat-sec-body">' + th + '</div></div>';
+  }
+
+  if (!sections) return ''; // No flat data
+
+  return '<div class="agent-card"><div class="agent-header" style="background:' + defaultColor + '"><div class="agent-emoji">📊</div><div class="agent-name">Full Report Data</div><div class="agent-role">All fields from this report card</div></div><div style="padding:8px 0;">' + sections + '</div><div class="agent-footer"><div class="status-dot" style="background:' + (status === 'working' ? '#22c55e' : '#9ca3af') + '"></div><span class="status-text">' + (status === 'working' ? 'Working' : status) + '</span></div></div>';
+}
+
+function renderTask(task){
+  const icons={working:'🔄',queued:'⏳',complete:'✅',failed:'❌'};
+  const num=task._num;let ti='';
+  if(task.status==='working'&&task.started_at){const m=Math.floor((Date.now()-new Date(task.started_at).getTime())/60000);ti=m<60?'⏱ Running '+m+'m':'⏱ Running '+Math.floor(m/60)+'h '+m%60+'m';}
+  if(task.status==='complete'&&task.completed_at){const m=Math.floor((Date.now()-new Date(task.completed_at).getTime())/60000);ti=m<60?'✓ '+m+'m ago':m<1440?'✓ '+Math.floor(m/60)+'h ago':'✓ Done';}
+  return '<div class="todo-item s-'+task.status+'" onclick="this.classList.toggle(\'detail-open\');event.stopPropagation()"><div class="todo-item-row"><span class="todo-num">'+num+'</span><span class="todo-icon">'+icons[task.status]+'</span><span class="todo-name">'+task.task_name+'</span><span class="todo-chevron">›</span></div>'+(ti?'<div class="todo-time">'+ti+'</div>':'')+'<div class="todo-detail-box">'+(task.task_detail?'<div class="todo-detail-text">'+task.task_detail+'</div>':'')+(task.result_summary?'<div class="todo-result-text">✓ '+task.result_summary+'</div>':'')+'</div></div>';
+}
+
+// Static reports per agent
+const AGENT_REPORTS={adaline:[{name:'🔴 Kill MoF DPA-Only',url:'/r/plankandbeam/adaline/proposals/2026-02-28-mof-dpa-kill.html',icon:'📄',date:'2026-02-28'},{name:'🟢 Bing Scaling Roadmap',url:'/r/plankandbeam/adaline/proposals/2026-02-28-bing-scaling-roadmap.html',icon:'📄',date:'2026-02-28'},{name:'🟡 Google CPC Test',url:'/r/plankandbeam/adaline/proposals/2026-02-28-google-cpc-scaling.html',icon:'📄',date:'2026-02-28'},{name:'Monday Action Plan',url:'/r/plankandbeam/adaline/proposals/monday-action-plan.html',icon:'📋',date:'2026-02-28'},{name:'Weekly ROAS Report',url:'/r/plankandbeam/adaline/2026-02-28/reports/weekly-roas.html',icon:'📈',date:'2026-02-28'},{name:'Lyndsay Briefing',url:'/r/lyndsay/',icon:'👩‍💼',date:'2026-02-27'}],tom:[{name:'HODL Trading Report (Static)',url:'/r/hodl/tom/2026-02-28/',icon:'🏦',date:'2026-02-28'}],muse:[],apollo:[{name:'iEnable Content Report',url:'/r/ienable/apollo/2026-02-28/',icon:'📝',date:'2026-02-28'}],ienable:[{name:'Product Spec Report',url:'/r/ienable/product/2026-02-28/',icon:'🏗️',date:'2026-02-28'},{name:'Competitive Analysis',url:'/r/competitive/',icon:'🔍',date:'2026-02-27'}],orion:[{name:"Anne's Agent Report",url:'/r/anne/',icon:'👤',date:'2026-02-27'}]};
+
+function renderDirectoryCard(){
+  const reports=AGENT_REPORTS[agentKey]||[];
+  const color=COLORS[agentKey]||'linear-gradient(135deg,#374151,#111827)';
+  const backUrl=(selectedDate?'/r/?date='+selectedDate:'/r/')+(companyFilter?'&company='+companyFilter:'');
+  const AGENT_TO_JOURNAL={orion:'main',tom:'hodl',adaline:'lyndsay-ads',alex:'fullstack-dev',apollo:'content',muse:'muse',ienable:'ienable',qa:'qa',deployment:'deployment'};
+  const journalAgent=AGENT_TO_JOURNAL[agentKey]||agentKey;
+  const journalUrl=selectedDate?'/blog/journals/view.html?agent='+journalAgent+'&date='+selectedDate:'';
+  let reportsSection='';
+  if(reports.length>0){reportsSection=reports.map(r=>{const d=new Date(r.date+'T12:00:00');const label=d.toLocaleDateString('en-US',{month:'short',day:'numeric'});return'<a class="dir-link" href="'+r.url+'"><span class="dir-link-icon">'+r.icon+'</span><span class="dir-link-name">'+r.name+'</span><span class="dir-link-date">'+label+'</span><span class="dir-link-arrow">›</span></a>';}).join('');}else{reportsSection='<div class="dir-empty">No reports yet</div>';}
+  const journalLink=journalUrl?'<a class="dir-link" href="'+journalUrl+'" style="background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(139,92,246,0.08));border:1px solid rgba(99,102,241,0.15)"><span class="dir-link-icon">📓</span><span class="dir-link-name">Daily Journal</span><span class="dir-link-date">'+(selectedDate||'')+'</span><span class="dir-link-arrow">›</span></a>':'';
+  return '<div class="agent-card"><div class="agent-header" style="background:'+color+'"><div class="agent-emoji">📂</div><div class="agent-name">Directory</div><div class="agent-role">All reports & history</div></div><div class="dir-body"><a class="dir-home-link" href="'+backUrl+'">← Back to Command Center</a>'+journalLink+'<div class="dir-section" onclick="this.classList.toggle(\'open\')"><div class="dir-section-header"><span>📊 Reports ('+reports.length+')</span><span class="dir-section-arrow">▼</span></div><div class="dir-section-body">'+reportsSection+'</div></div></div></div>';
+}
+
+// ─── Calendar ───
+function renderCalendar(){
+  const root=document.getElementById('calendarRoot');
+  if(!calMonth)return;
+  const y=calMonth.year,m=calMonth.month;
+  const firstDay=new Date(y,m,1).getDay(); // 0=Sun
+  const daysInMonth=new Date(y,m+1,0).getDate();
+  const monthName=new Date(y,m,1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  const today=new Date();const todayStr=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+
+  // Build date->count map from allRC
+  const dateCounts={};
+  allRC.forEach(rc=>{
+    dateCounts[rc.date]=(dateCounts[rc.date]||0)+1;
+  });
+
+  // Mon-first: shift Sunday from 0 to 6
+  const startOffset=(firstDay===0)?6:firstDay-1;
+  const dows=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+  let grid=dows.map(d=>'<div class="cal-dow">'+d+'</div>').join('');
+  // Empty cells before first day
+  for(let i=0;i<startOffset;i++)grid+='<div class="cal-day empty"></div>';
+
+  for(let d=1;d<=daysInMonth;d++){
+    const dateStr=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    const count=dateCounts[dateStr]||0;
+    const isToday=dateStr===todayStr;
+    const isSelected=dateStr===selectedDate;
+    const hasData=count>0;
+
+    let cls='cal-day';
+    if(!hasData)cls+=' no-data';
+    if(hasData)cls+=' has-data';
+    if(isSelected)cls+=' selected';
+    if(isToday)cls+=' today';
+
+    // Dot indicators: 1 dot for 1-2, 2 for 3-4, 3 for 5+
+    let dots='<div class="cal-dots">';
+    if(count>=1)dots+='<div class="cal-dot-pip"></div>';
+    if(count>=3)dots+='<div class="cal-dot-pip"></div>';
+    if(count>=5)dots+='<div class="cal-dot-pip"></div>';
+    dots+='</div>';
+
+    const onclick=hasData?'onclick="navigateDate(\''+dateStr+'\')"':'';
+    grid+='<div class="'+cls+'" '+onclick+'><span>'+d+'</span>'+(hasData?dots:'')+'</div>';
+  }
+
+  root.innerHTML='<div class="calendar-wrap"><div class="cal-nav"><button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button><span class="cal-month-label">'+monthName+'</span><button class="cal-nav-btn" onclick="changeMonth(1)">›</button></div><div class="cal-grid">'+grid+'</div></div>';
+}
+
+function changeMonth(delta){
+  calMonth.month+=delta;
+  if(calMonth.month<0){calMonth.month=11;calMonth.year--;}
+  if(calMonth.month>11){calMonth.month=0;calMonth.year++;}
+  renderCalendar();
+}
+
+function navigateDate(dateStr){
+  selectedDate=dateStr;
+  const url=new URL(window.location);
+  url.searchParams.set('date',dateStr);
+  if(companyFilter)url.searchParams.set('company',companyFilter);
+  window.history.pushState({},'',url);
+  calMonth=null; // Reset so it recalculates from selected date
+  load();
+}
+
+// Handle browser back/forward
+window.addEventListener('popstate',()=>{
+  const p=new URLSearchParams(window.location.search);
+  selectedDate=p.get('date')||(function(){var m=window.location.pathname.match(/(\d{4}-\d{2}-\d{2})/);return m?m[1]:null;})();
+  calMonth=null;
+  load();
+});
+
+load();
+setInterval(()=>{load();},60000);
+</script>
+</body>
+</html>
