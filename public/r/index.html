@@ -148,17 +148,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro',system-ui,sans-serif;
 <script>
 const API='https://ienable-admin-app-hqtw2.ondigitalocean.app/api/v1';
 
+/* ═══ Company Filtering ═══ */
+const COMPANY_AGENTS={
+  personal:['main','orion'],
+  hodl:['hodl','tom'],
+  maxwood:['lyndsay-ads','adaline'],
+  ienable:['fullstack-dev','alex','qa','deployment','content','apollo','muse','ienable']
+};
+const urlParams=new URLSearchParams(window.location.search);
+const companyFilter=urlParams.get('company')||'';
+
 /* ═══ Aliasing ═══ */
 const AL={'tom':'hodl','Tom':'hodl','Tom V17':'hodl','tom v17':'hodl','apollo':'content','Apollo':'content','reel':'content','Reel':'content','orion':'main','Orion':'main','adaline':'adaline','Adaline':'adaline','lyndsay-ads':'adaline','muse':'muse','Muse':'muse','ienable':'ienable','iEnable':'ienable','ienable-seo':'ienable','hodl':'hodl','main':'main','content':'content','fullstack-dev':'fullstack-dev','qa':'qa','deployment':'deployment'};
 const TEST_SET=new Set(['test-agent','test_delete','test2_delete','test_probe','test-schema','test-schema-probe','test-schema-probe2','test-orion-analysis']);
 function isTest(n){if(!n)return true;const l=n.toLowerCase();return l.startsWith('test')||l.includes('delete')||TEST_SET.has(l)}
 function canon(n){if(!n)return null;return AL[n]||AL[n.toLowerCase()]||n.toLowerCase()}
+function isInCompany(agentKey){if(!companyFilter)return true;const agents=COMPANY_AGENTS[companyFilter];return agents?agents.includes(agentKey):false}
 
 /* ═══ Config ═══ */
 const COLORS={adaline:'linear-gradient(135deg,#7c3aed,#6366f1)',muse:'linear-gradient(135deg,#ec4899,#f43f5e)',ienable:'linear-gradient(135deg,#3b82f6,#2563eb)',main:'linear-gradient(135deg,#1f2937,#374151)',hodl:'linear-gradient(135deg,#059669,#10b981)',content:'linear-gradient(135deg,#f59e0b,#d97706)','fullstack-dev':'linear-gradient(135deg,#8b5cf6,#6d28d9)',qa:'linear-gradient(135deg,#14b8a6,#0d9488)',deployment:'linear-gradient(135deg,#f97316,#ea580c)'};
 const ORDER=['nightly-learnings','adaline','hodl','muse','content','ienable','main','fullstack-dev','qa','deployment'];
+const DISPLAY_NAMES={main:'Orion',hodl:'Tom','lyndsay-ads':'Adaline','fullstack-dev':'Alex',content:'Apollo',muse:'Muse',ienable:'iEnable',qa:'QA',deployment:'Deploy'};
 const NAMES={hodl:'Tom',adaline:'Adaline',content:'Apollo',main:'Orion',muse:'Muse',ienable:'iEnable','fullstack-dev':'Alex',qa:'QA',deployment:'Deploy','nightly-learnings':'Nightly Learnings'};
-const LINKS={hodl:'/r/tom/',adaline:'/r/adaline/',muse:'/blog/journals/muse/',content:'/blog/journals/',ienable:'/r/ienable/',main:'/r/orion/','fullstack-dev':'/r/fullstack-dev/',qa:'/r/qa/',deployment:'/r/deployment/','nightly-learnings':'/r/learning/'};
+const LINKS={hodl:'/r/tom/',adaline:'/r/adaline/',muse:'/r/muse/',content:'/r/content/',ienable:'/r/ienable/',main:'/r/orion/','fullstack-dev':'/r/fullstack-dev/',qa:'/r/qa/',deployment:'/r/deployment/','nightly-learnings':'/r/learning/'};
 
 /* ═══ Grade ═══ */
 const GR={'A+':12,A:11,'A-':10,'B+':9,B:8,'B-':7,'C+':6,C:5,'C-':4,'D+':3,D:2,'D-':1,F:0};
@@ -172,14 +184,16 @@ function gTrend(cur,prev){
 }
 
 /* ═══ State ═══ */
-let cDate=new Date(),tDate=new Date();
+let tDate=new Date();
+let cDate=(function(){var p=new URLSearchParams(window.location.search).get('date');if(p&&/^\d{4}-\d{2}-\d{2}$/.test(p)){return new Date(p+'T12:00:00');}return new Date();})();
 let MC={},PC={},AS=[],AT=[];
 
 function fk(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function fd(d){return d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
 function sd(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate()}
-function navDay(d){cDate.setDate(cDate.getDate()+d);fetchAll(true)}
-function goToday(){cDate=new Date();fetchAll(true)}
+function syncUrl(){var u=new URL(window.location);if(sd(cDate,tDate)){u.searchParams.delete('date');}else{u.searchParams.set('date',fk(cDate));}if(companyFilter){u.searchParams.set('company',companyFilter);}else{u.searchParams.delete('company');}window.history.replaceState({},'',u);}
+function navDay(d){cDate.setDate(cDate.getDate()+d);syncUrl();fetchAll(true)}
+function goToday(){cDate=new Date();syncUrl();fetchAll(true)}
 
 /* ═══ Merge ═══ */
 function merge(cards){
@@ -187,6 +201,7 @@ function merge(cards){
   for(const c of cards){
     if(isTest(c.agent_name))continue;
     const k=canon(c.agent_name);if(!k)continue;
+    if(!isInCompany(k))continue;
     if(!m[k]){m[k]=c;continue}
     const ea=(m[k].accomplishments||[]).length,ca=(c.accomplishments||[]).length;
     if(ca>ea||(ca===ea&&(c.updated_at||'')>(m[k].updated_at||'')))m[k]=c;
@@ -201,8 +216,9 @@ async function fetchAll(loading){
     const isT=sd(cDate,tDate),dk=fk(cDate);
     const pd=new Date(cDate);pd.setDate(pd.getDate()-1);
     const pk=fk(pd);
-    const f=[fetch(API+'/report-cards?date='+dk).then(r=>r.json()),fetch(API+'/report-cards?date='+pk).then(r=>r.json())];
-    if(isT){f.push(fetch(API+'/agent-status').then(r=>r.json()));f.push(fetch(API+'/agent-tasks/active').then(r=>r.json()))}
+    const cParam=companyFilter?'&company_id='+companyFilter:'';
+    const f=[fetch(API+'/report-cards?date='+dk+cParam).then(r=>r.json()),fetch(API+'/report-cards?date='+pk+cParam).then(r=>r.json())];
+    if(isT){f.push(fetch(API+'/agent-status'+cParam.replace('&','?')).then(r=>r.json()));f.push(fetch(API+'/agent-tasks/active'+cParam.replace('&','?')).then(r=>r.json()))}
     const R=await Promise.all(f);
     MC=merge(R[0].data||R[0]||[]);PC=merge(R[1].data||R[1]||[]);
     if(isT){AS=R[2].data||R[2]||[];AT=R[3].data||R[3]||[]}else{AS=[];AT=[]}
@@ -273,7 +289,7 @@ function rSum(active){
   let rows=active.map(k=>{
     const rc=gRC(k),st=gSt(k),tasks=gTk(k);
     const status=st.status||'sleeping';
-    const name=NAMES[k]||rc.agent_name||k;
+    const name=DISPLAY_NAMES[k]||NAMES[k]||rc.agent_name||k;
     const emoji=rc.emoji||'•';
     const grade=rc.grade||'N/A';
     const gc=rc.grade_color||'#6b7280';
@@ -284,7 +300,8 @@ function rSum(active){
     const wt=tasks.find(t=>t.status==='working');
     const taskLine=status==='working'&&(ct||wt)?'<div class="sum-task">▸ '+(ct||wt.task_name)+'</div>':'';
     const hl=rc.accomplishments&&rc.accomplishments[0]?aT(rc.accomplishments[0]).replace(/<[^>]*>/g,'').substring(0,55)+'...':'No report card data';
-    const url=LINKS[k]||('/r/'+k+'/');
+    const baseUrl=LINKS[k]||('/r/'+k+'/');
+    const url=baseUrl+(baseUrl.includes('?')?'&':'?')+'date='+fk(cDate)+(companyFilter?'&company='+companyFilter:'');
     return '<a class="sum-row" href="'+url+'"><span class="sum-dot '+status+'"></span><span class="sum-emoji">'+emoji+'</span><div class="sum-info"><div class="sum-name">'+name+'</div><div class="sum-hl">'+hl+'</div>'+taskLine+'</div><span class="sum-grade" style="color:'+gc+'">'+grade+'</span>'+trendHtml+'</a>';
   }).join('');
 
@@ -293,7 +310,7 @@ function rSum(active){
   active.forEach(k=>{
     const rc=gRC(k),plan=nP(rc.tonight_plan);
     if(plan.length){
-      mns+='<div class="ma-label">'+(rc.emoji||'•')+' '+(NAMES[k]||k)+'</div>';
+      mns+='<div class="ma-label">'+(rc.emoji||'•')+' '+(DISPLAY_NAMES[k]||NAMES[k]||k)+'</div>';
       mns+=plan.map((s,i)=>'<div class="ns-item"><span class="ns-num">'+(i+1)+'</span><span class="ns-text">'+s+'</span></div>').join('');
     }
   });
@@ -323,7 +340,7 @@ function rSum(active){
 function rCard(key){
   try{
   const rc=gRC(key),st=gSt(key),tasks=gTk(key);
-  const name=NAMES[key]||rc.agent_name||key;
+  const name=DISPLAY_NAMES[key]||NAMES[key]||rc.agent_name||key;
   const emoji=rc.emoji||'•';
   const role=rc.role||'';
   const grade=rc.grade||'N/A';
@@ -339,6 +356,8 @@ function rCard(key){
   const trend=rc.trend||{};
   const oa=rc.orion_analysis||(rc.stats&&rc.stats.orion_analysis)||'';
   const jurl=rc.journal_url||'';
+  const baseAgentUrl=LINKS[key]||('/r/'+key+'/');
+  const agentUrl=baseAgentUrl+(baseAgentUrl.includes('?')?'&':'?')+'date='+fk(cDate)+(companyFilter?'&company='+companyFilter:'');
 
   // Grade trend
   const prevGrade=(gPC(key).grade);
@@ -352,7 +371,7 @@ function rCard(key){
   // Orion's Take — collapsible accordion, shows current + previous
   let otH='';
   if(oa){
-    const prevOa=(gPC(k).orion_analysis||(gPC(k).stats&&gPC(k).stats.orion_analysis)||'');
+    const prevOa=(gPC(key).orion_analysis||(gPC(key).stats&&gPC(key).stats.orion_analysis)||'');
     let prevSection='';
     if(prevOa&&prevOa!==oa){
       prevSection='<div class="ot-prev" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(139,92,246,0.2)"><div style="font-size:11px;font-weight:700;color:#9ca3af;margin-bottom:4px;text-transform:uppercase;letter-spacing:.03em">Previous Take</div><div class="ot-txt" style="opacity:0.7;font-size:13px">'+hw(prevOa)+'</div></div>';
@@ -392,7 +411,7 @@ function rCard(key){
   const detailUrl=jurl||LINKS[key]||('/r/'+key+'/');
 
   let html='<div class="agent-card">';
-  html+='<div class="ag-hd" style="background:'+color+'"><div class="ag-emoji">'+emoji+'</div><div class="ag-name">'+name+'</div><div class="ag-role">'+role+'</div><div class="ag-grade-box"><div class="ag-grade" style="color:'+gc+'">'+grade+'</div>'+gtHtml+'</div></div>';
+  html+='<div class="ag-hd" style="background:'+color+'"><div class="ag-emoji">'+emoji+'</div><a class="ag-name" href="'+agentUrl+'" style="color:inherit;text-decoration:none;display:inline-block">'+name+'</a><div class="ag-role">'+role+'</div><div class="ag-grade-box"><div class="ag-grade" style="color:'+gc+'">'+grade+'</div>'+gtHtml+'</div></div>';
   html+=statsH;
   // Orion's Take FIRST — before accomplishments
   html+=otH;
