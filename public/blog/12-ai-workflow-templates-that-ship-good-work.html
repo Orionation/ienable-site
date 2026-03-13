@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12 AI Workflow Templates That Actually Ship Good Work | iEnable Blog</title>
+    <meta name="description" content="Not 7,000 templates with zero quality control. 12 production-ready AI workflow templates with approval gates, independent QA, and learning agents built in. Import and start shipping.">
+    <meta name="keywords" content="AI Agent Architecture">
+    <link rel="canonical" href="https://ienable.ai/blog/12-ai-workflow-templates-that-ship-good-work.html">
+    <meta property="og:title" content="12 AI Workflow Templates That Actually Ship Good Work">
+    <meta property="og:description" content="Not 7,000 templates with zero quality control. 12 production-ready AI workflow templates with approval gates, independent QA, and learning agents built in. Import and start shipping.">
+    <meta property="og:url" content="https://ienable.ai/blog/12-ai-workflow-templates-that-ship-good-work.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://ienable.ai/blog/images/12-ai-workflow-templates-that-ship-good-work-hero.jpg">
+    <meta property="og:site_name" content="iEnable">
+    <meta property="article:published_time" content="2026-02-26">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M98JCVWXVX"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-M98JCVWXVX');</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"12 AI Workflow Templates That Actually Ship Good Work","description":"Not 7,000 templates with zero quality control. 12 production-ready AI workflow templates with approval gates, independent QA, and learning agents built in. Import and start shipping.","datePublished":"2026-02-26","author":{"@type":"Organization","name":"iEnable"},"publisher":{"@type":"Organization","name":"iEnable","url":"https://ienable.ai"},"mainEntityOfPage":"https://ienable.ai/blog/12-ai-workflow-templates-that-ship-good-work.html"}</script>
+    <style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}:root{--bg-dark:#0a0a0f;--bg-card:#12121a;--text-primary:#f0f0f5;--text-secondary:#9090a0;--text-muted:#606070;--accent:#4f7fff;--accent-hover:#6b93ff;--border:#1e1e2e}body{font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-dark);color:var(--text-primary);line-height:1.7;-webkit-font-smoothing:antialiased}a{color:var(--accent);text-decoration:none}a:hover{color:var(--accent-hover)}.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,15,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}.nav-logo{font-size:1.25rem;font-weight:700;color:var(--text-primary)}.nav-logo span{color:var(--accent)}.nav-links{display:flex;gap:2rem;align-items:center}.nav-links a{font-size:.9rem;font-weight:500;color:var(--text-secondary)}.nav-cta{background:var(--accent)!important;color:#fff!important;padding:.5rem 1.25rem;border-radius:8px;font-weight:600}.article-hero{padding:10rem 2rem 4rem;text-align:center;max-width:800px;margin:0 auto}.article-tag{display:inline-block;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:1.5rem}.article-hero h1{font-size:clamp(2rem,4.5vw,3.25rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:1.5rem}.article-meta{color:var(--text-muted);font-size:.9rem;display:flex;justify-content:center;gap:1.5rem}.article-body{max-width:720px;margin:0 auto;padding:0 2rem 6rem}.article-body h2{font-size:1.75rem;font-weight:700;margin:3rem 0 1.25rem;line-height:1.25}.article-body h3{font-size:1.3rem;font-weight:600;margin:2.5rem 0 1rem}.article-body p{color:var(--text-secondary);font-size:1.05rem;line-height:1.8;margin-bottom:1.5rem}.article-body strong{color:var(--text-primary);font-weight:600}.article-body ul,.article-body ol{color:var(--text-secondary);padding-left:1.5rem;margin-bottom:1.5rem}.article-body li{margin-bottom:.75rem;font-size:1.05rem;line-height:1.7}.article-body blockquote{border-left:3px solid var(--accent);padding:1rem 1.5rem;margin:2rem 0;background:var(--bg-card);border-radius:0 12px 12px 0}.article-body blockquote p{color:var(--text-primary);font-style:italic;margin-bottom:0}.article-body table{width:100%;border-collapse:collapse;margin:2rem 0;font-size:.88rem}.article-body th{text-align:left;padding:.6rem .7rem;background:var(--bg-card);border:1px solid var(--border);font-weight:600;color:var(--text-primary);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}.article-body td{padding:.6rem .7rem;border:1px solid var(--border);color:var(--text-secondary)}.article-cta{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid var(--border);border-radius:16px;padding:3rem;text-align:center;margin:3rem 0}.article-cta h3{font-size:1.5rem;font-weight:700;margin:0 0 1rem;color:var(--text-primary)}.article-cta p{color:var(--text-secondary);margin-bottom:1.5rem}.article-cta .btn{display:inline-block;background:var(--accent);color:#fff;padding:.75rem 2rem;border-radius:10px;font-weight:600}.back-link{display:inline-flex;align-items:center;gap:.5rem;color:var(--text-muted);font-size:.9rem;margin-bottom:2rem}.back-link:hover{color:var(--accent)}.footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;color:var(--text-muted);font-size:.85rem}@media(max-width:768px){.nav-links{display:none}.article-hero{padding:8rem 1.5rem 3rem}.article-body{padding:0 1.5rem 4rem}.article-body table{font-size:.75rem;display:block;overflow-x:auto}}</style>
+</head>
+<body>
+    <nav class="nav"><a href="https://ienable.ai" class="nav-logo">i<span>Enable</span></a><div class="nav-links"><a href="https://ienable.ai">Home</a><a href="https://ienable.ai/manifesto/">Manifesto</a><a href="https://ienable.ai/blog/">Blog</a><a href="https://ienable.ai" class="nav-cta">Get Started</a></div></nav>
+    <article>
+        <header class="article-hero">
+            <span class="article-tag">AI Agent Architecture</span>
+            <h1>12 AI Workflow Templates That Actually Ship Good Work</h1>
+            <div class="article-meta"><span>📅 February 26, 2026</span><span>⏱ 20 min</span></div>
+        </header>
+        <div class="article-body">
+            <a href="index.html" class="back-link">← Back to Blog</a>
+            <h1>12 AI Workflow Templates That Actually Ship Good Work</h1>
+            <p>Make.com has 7,000+ templates. Zapier has 8,000+. That&#39;s a lot of templates.</p>
+            <p>It&#39;s also a lot of templates with zero quality control.</p>
+            <p>Browse Make&#39;s template library and you&#39;ll find hundreds of AI workflows: &quot;Generate blog posts with GPT-4,&quot; &quot;Create social media content automatically,&quot; &quot;AI product descriptions from Shopify data.&quot; They all follow the same pattern:</p>
+            <p><strong>Trigger → AI generates something → Output goes somewhere.</strong></p>
+            <p>No approval step. No quality check. No evaluation. No learning. Just raw AI output pushed directly to your customers, your social feeds, your product listings.</p>
+            <p>The implicit assumption: the AI will get it right every time.</p>
+            <p>It won&#39;t. And everyone who&#39;s run these templates in production knows it.</p>
+            <hr>
+            <h2>A Different Approach: Quality-Gated Templates</h2>
+            <p>iEnable launches with 12 templates. Not 7,000. Twelve.</p>
+            <p>Each one is production-ready. Each one has <a href="/blog/why-your-ai-workflow-builder-needs-approval-gates">approval gates</a> built into the flow. Each one uses <a href="/blog/why-ai-agents-should-never-grade-their-own-homework">independent QA evaluation</a>. Each one supports the <a href="/blog/the-brief-first-approach">brief-first pattern</a> where applicable.</p>
+            <p>These aren&#39;t demo flows that look good in a screenshot. These are workflows designed to ship content you&#39;re actually proud of.</p>
+            <p>Here they are. Every gate highlighted. Every QA step explained.</p>
+            <hr>
+            <h2>Content Creation Templates</h2>
+            <h3>1. Social Media Content Calendar ⭐</h3>
+            <p><strong>What it does:</strong> Generates a full week of social media posts across platforms with brand voice QA and human approval before anything publishes.</p>
+            <p><strong>The flow:</strong></p>
+            <pre><code>📅 Schedule Trigger (weekly, Monday 9 AM)
+               ↓
+            🟢 Content Strategist Agent
+               Generates the week&#39;s content themes and post concepts
+               ↓
+            🟡 GATE: Content Calendar Approval [Human]
+               Creative director reviews the week&#39;s plan
+               Can reorder, cut, or redirect concepts
+               ↓
+            🟣 For Each Post (Mon-Sun, per platform):
+               ↓
+               🟢 Copywriter Agent
+                  Writes platform-specific copy (different for IG vs TikTok vs LinkedIn)
+                  Has access to brand voice guide, approved examples, prohibited terms
+                  ↓
+               ⚪ QA: Brand Voice Check
+                  Independent agent scores tone, style, banned words
+                  Checks character limits per platform
+                  Verifies hashtag strategy matches brand guidelines
+                  ↓
+               🟢 Image/Video Generator (if visual post)
+                  FLUX Pro for images, Luma Ray3 for video
+                  Uses brand-approved templates and style references
+                  ↓
+               ⚪ QA: Visual Quality Check
+                  Brand color compliance, product visibility, text legibility
+                  ↓
+               🟡 GATE: Final Post Approval [Human → Hybrid → AI QA]
+                  Starts full human review
+                  Evolves to hybrid (AI pre-screens, human handles flags)
+                  Eventually AI QA for proven content types
+                  ↓
+               🟢 Publish to Platform
+                  Instagram, TikTok, LinkedIn, X — platform-specific formatting
+               ↓
+            🟢 Weekly Performance Report
+               Tracks engagement per post, feeds insights back to strategist agent
+            </code></pre>
+            <p><strong>Why it&#39;s better than Make&#39;s social media templates:</strong> Make&#39;s templates post immediately after generation. One bad post goes live at 2 AM and your community manager is doing damage control by 8 AM. This flow ensures every post is reviewed before publishing — and the review gets faster over time as the gates evolve.</p>
+            <p><strong>Gates:</strong> 2 (calendar approval + per-post final approval)<br><strong>QA steps:</strong> 2 per post (brand voice + visual quality)<br><strong>Time to set up:</strong> 10 minutes (import, connect accounts, configure brand guidelines)</p>
+            <hr>
+            <h3>2. Product Video Ad Pipeline ⭐</h3>
+            <p><strong>What it does:</strong> Takes a product URL or data, generates video ads for every platform, with brief approval, concept approval, and creative quality gates.</p>
+            <p><strong>The flow:</strong></p>
+            <pre><code>🔵 Product URL/Data Trigger
+               ↓
+            🟢 Product Data Extractor
+               Scrapes specs, images, price, category from URL
+               ↓
+            🟤 BRIEF: Creative Brief Generator
+               Creates structured brief: hook, visual direction, camera style,
+               duration, music mood, CTA, estimated generation cost
+               ↓
+            🟡 GATE: Brief Approval [Human]
+               Creative director reviews concept BEFORE generation spend
+               Reject with structured feedback → brief regenerates
+               ↓
+            🟢 Concept Agent
+               Generates storyboard, shot list, camera direction details
+               Based on the approved brief
+               ↓
+            🟡 GATE: Concept Approval [Human → Hybrid]
+               More detailed review of the execution plan
+               ↓
+            🟣 For Each Platform [TikTok 9:16, YouTube 16:9, IG 1:1]:
+               ↓
+               🟢 Image Generation (keyframe from product photo)
+                  Product photo → lifestyle scene via Claid.ai or FLUX Pro
+                  ↓
+               🟢 Video Generation (Luma Ray3 from keyframe)
+                  15-second video from the approved concept
+                  ↓
+               ⚪ QA: Visual Quality + Brand Compliance
+                  Product visibility timing, brand colors, aspect ratio,
+                  lighting consistency, no artifacts
+                  ↓
+               🟢 Audio Generation
+                  Voiceover via ElevenLabs or background music
+                  ↓
+               🟢 Post-Production (ffmpeg)
+                  Platform-specific encoding, audio mixing, captions
+               ↓
+            🟡 GATE: Final Creative Approval [Human → AI QA]
+               Reviews all platform variants together
+               ↓
+            🟢 Publish to Platforms
+               ↓
+            🟢 Performance Tracking (7-day automated check)
+               Engagement data feeds back to concept agent
+            </code></pre>
+            <p><strong>The brief-first advantage:</strong> The brief costs $0.01 to generate. The video costs $0.80. Approving the brief before generation means you never spend $0.80 on a video that&#39;s conceptually wrong. At 100 products × 3 platforms = 300 videos, the <a href="/blog/the-brief-first-approach">brief-first approach saves 50%+ in wasted generation costs</a>.</p>
+            <p><strong>Gates:</strong> 3 (brief + concept + final creative)<br><strong>QA steps:</strong> 1 per platform variant (visual quality + brand compliance)<br><strong>Estimated cost per product:</strong> $3-5 for 3 platform variants (after brief-first savings)</p>
+            <hr>
+            <h3>3. Blog Post Pipeline</h3>
+            <p><strong>What it does:</strong> Research, outline, write, QA, and publish blog posts with approval checkpoints at the strategy and content stages.</p>
+            <p><strong>The flow:</strong></p>
+            <pre><code>🔵 Topic Trigger (SEO tool webhook, manual input, or scheduled)
+               ↓
+            🟢 Research Agent
+               Competitive analysis, keyword research, SERP analysis
+               Identifies content gaps and unique angles
+               ↓
+            🟤 BRIEF: Outline Agent
+               H1-H3 structure, target keywords per section,
+               unique angle, word count, source recommendations
+               ↓
+            🟡 GATE: Outline Approval [Human]
+               Editor reviews structure and angle
+               ↓
+            🟢 Writer Agent
+               Drafts from approved outline with brand voice context
+               Includes internal links to related posts
+               ↓
+            ⚪ QA: SEO Score Check
+               Keyword density, readability score, heading structure,
+               meta title/description within limits, internal link count
+               ↓
+            ⚪ QA: Factual Accuracy Check
+               Claim verification against cited sources
+               Statistics and data point validation
+               Link checking (all URLs resolve)
+               ↓
+            🟡 GATE: Content Approval [Human → Hybrid]
+               Editor reviews full draft with QA annotations
+               ↓
+            🟢 Format for CMS
+               Shopify blog, WordPress, Webflow — CMS-specific formatting
+               ↓
+            🟢 Publish
+               ↓
+            🟢 Performance Tracking (30-day rank check)
+               SERP position, organic traffic, engagement metrics
+               Feeds insights back to research agent
+            </code></pre>
+            <p><strong>Gates:</strong> 2 (outline + final content)<br><strong>QA steps:</strong> 2 (SEO score + factual accuracy)<br><strong>Time to first published post:</strong> ~30 minutes (most time is human review)</p>
+            <hr>
+            <h3>4. Email Campaign Builder</h3>
+            <p><strong>What it does:</strong> Strategy, copy, design, testing, and sending for email campaigns with approval at the strategic and creative stages.</p>
+            <p><strong>The flow:</strong></p>
+            <pre><code>🔵 Campaign Brief (Form Trigger)
+               Audience, objective, offer, timing, A/B approach
+               ↓
+            🟢 Strategy Agent
+               Audience segmentation, optimal send time,
+               A/B testing plan, expected metrics
+               ↓
+            🟡 GATE: Strategy Approval [Human]
+               Marketing lead reviews approach before any creative work
+               ↓
+            🟢 Copywriter Agent
+               Subject lines (A/B variants), preview text,
+               body copy, CTA text
+               ↓
+            ⚪ QA: Brand Voice + Spam Score Check
+               Tone alignment, spam trigger word detection,
+               CAN-SPAM compliance, unsubscribe link presence
+               ↓
+            🟢 Designer Agent
+               Email template, hero image, product images,
+               responsive layout
+               ↓
+            ⚪ QA: Rendering Check
+               Mobile rendering, dark mode compatibility,
+               image alt text, link functionality
+               ↓
+            🟡 GATE: Final Campaign Approval [Human]
+               Reviews complete email with QA annotations
+               ↓
+            🔴 A/B Split → Send
+               ↓
+            🟢 Performance Report (24h + 7d)
+               Open rates, click rates, conversions, unsubscribes
+            </code></pre>
+            <p><strong>Gates:</strong> 2 (strategy + final campaign)<br><strong>QA steps:</strong> 2 (brand/spam + rendering)<br><strong>Why it matters:</strong> Email has the highest ROI of any marketing channel ($36 for every $1 spent). A single bad email — wrong audience, broken links, spam-flagged — doesn&#39;t just waste the campaign; it damages deliverability for future campaigns.</p>
+            <hr>
+            <h2>E-Commerce Templates</h2>
+            <h3>5. Product Listing Optimizer</h3>
+            <p><strong>What it does:</strong> Automatically generates and updates product listings with SEO-optimized copy and enhanced images, with quality gates before anything goes live on your store.</p>
+            <p><strong>The flow:</strong></p>
+            <pre><code>🔵 Product Catalog Sync Trigger (new product or scheduled refresh)
+               ↓
+            🟣 For Each Product:
+               ↓
+               🟢 Description Agent
+                  SEO-optimized product copy from specs + brand voice
+                  Title, description, bullet points, meta tags
+                  ↓
+               ⚪ QA: Brand Voice + SEO Score
+                  Tone check, keyword integration, spec accuracy,
+                  character limits per platform
+                  ↓
+               🟢 Image Enhancement (Claid.ai)
+                  Product photo → lifestyle scene
+                  Background removal → branded background
+                  ↓
+               ⚪ QA: Image Quality Check
+                  Resolution, brand color compliance,
+                  product clearly visible, no artifacts
+                  ↓
+               🟡 GATE: Listing Approval [Human → AI QA for updates]
+                  New products: full human review
+                  Updates to existing listings: AI QA after trust is built
+                  ↓
+               🟢 Update Shopify / Amazon / WooCommerce
+               ↓
+            🟢 Batch Performance Report
+               Before/after conversion rates per listing
+            </code></pre>
+            <p><strong>Trust Ladder in action:</strong> New product listings always get human review. But when you&#39;re refreshing descriptions for existing products (seasonal keyword updates, minor copy improvements), the gate evolves to AI QA. The system knows what &quot;good&quot; looks like for your brand after hundreds of approvals.</p>
+            <p><strong>Gates:</strong> 1 per product (configurable strictness)<br><strong>QA steps:</strong> 2 per product (copy QA + image QA)<br><strong>Scale:</strong> Process 100+ products in a single run</p>
+            <hr>
+            <h3>6. Review Response Automation</h3>
+            <p><strong>What it does:</strong> Monitors new reviews, classifies sentiment, generates responses with appropriate quality gates based on review sensitivity.</p>
+            <p><strong>The flow:</strong></p>
+            <pre><code>🔵 New Review Webhook (Shopify, Amazon, Google)
+               ↓
+            🟢 Sentiment Analysis Agent
+               Classification: positive, neutral, negative, urgent
+               ↓
+            🔴 Branch by Sentiment:
+               ↓
+               ⭐⭐⭐⭐⭐ 5-Star:
+                  🟢 Thank-You Response Agent → 🟡 GATE: Auto-pass
+                  (Positive reviews auto-respond with audit logging)
+               ↓
+               ⭐⭐⭐-⭐⭐⭐⭐ 3-4 Star:
+                  🟢 Constructive Response Agent
+                  ⚪ QA: Tone Check (empathetic, solution-oriented)
+                  🟡 GATE: Quick Review [Hybrid]
+                  (AI pre-screens, human handles anything sensitive)
+               ↓
+               ⭐-⭐⭐ 1-2 Star:
+                  🟢 Damage Control Response Agent
+                  ⚪ QA: Tone Check + Escalation Check
+                  🟡 GATE: Sensitive Review [Human always]
+                  (Negative reviews always get human eyes)
+               ↓
+            🟢 Post Response
+            🟢 Log for Pattern Analysis
+               Tracks recurring complaints for product improvement
+            </code></pre>
+            <p><strong>Why the gates are different per branch:</strong> Not all content carries the same risk. A thank-you for a 5-star review has near-zero downside if the AI gets it slightly wrong. A response to a 1-star review from an angry customer could go viral for the wrong reasons. The gate strictness matches the risk.</p>
+            <p><strong>Gates:</strong> 1 per review (strictness varies by sentiment)<br><strong>QA steps:</strong> 1 for 3-4 star, 2 for 1-2 star<br><strong>Response time:</strong> &lt; 1 hour for positive, &lt; 4 hours for negative (with human review)</p>
+            <hr>
+            <h3>7. Competitive Price Monitor</h3>
+            <p><strong>What it does:</strong> Tracks competitor pricing daily, analyzes trends, and recommends actions — with human approval before any price changes.</p>
+            <p><strong>The flow:</strong></p>
+            <pre><code>📅 Daily Schedule Trigger (6 AM)
+               ↓
+            🟣 For Each Competitor (configured list):
+               🟢 Price Scraper (configured URLs)
+               ↓
+            🟢 Analysis Agent
+               Price changes, trends, market positioning,
+               recommendations (raise, lower, hold, promote)
+               ↓
+            🔴 Branch:
+               ↓
+               Price Drop Detected (&gt;5%):
+                  🟡 GATE: Alert + Action Recommendation [Human]
+                  &quot;Competitor X dropped Product Y by 12%. Recommend matching.&quot;
+                  Optional: auto-adjust price if approved
+               ↓
+               Minor Fluctuation (1-5%):
+                  🟢 Log + Weekly Digest (no immediate action)
+               ↓
+               No Change:
+                  🟢 Log and continue
+               ↓
+            🟢 Weekly Competitive Pricing Report
+            </code></pre>
+            <p><strong>Gates:</strong> 1 (triggered only when significant changes detected)<br><strong>Why the human gate matters:</strong> Automated price matching without human oversight is how price wars start. The gate ensures a human makes the strategic call.</p>
+            <hr>
+            <h3>8. Inventory Alert &amp; Reorder</h3>
+            <p><strong>What it does:</strong> Monitors inventory levels, predicts demand, and drafts reorder communications — with approval gates calibrated by order value.</p>
+            <p><strong>The flow:</strong></p>
+            <pre><code>🔵 Inventory Level Watch Trigger (daily check)
+               ↓
+            🟢 Demand Prediction Agent
+               Sales velocity, seasonality, trend analysis
+               Calculates optimal reorder point and quantity
+               ↓
+            🔴 Branch by Urgency:
+               ↓
+               🔴 Critical Low (&lt; 1 week supply):
+                  🟢 Urgent Notification (Slack + SMS + Email)
+                  🟢 Reorder Draft Agent (supplier PO or email)
+                  🟡 GATE: Emergency Reorder [Human]
+               ↓
+               🟡 Warning (&lt; 3 weeks supply):
+                  🟢 Reorder Agent (supplier email draft)
+                  ⚪ QA: Order Accuracy (quantities, pricing, supplier match)
+                  🟡 GATE: Reorder Approval [Human for high-value → Auto-pass for replenishment]
+               ↓
+               🟢 Healthy:
+                  🟢 Log and continue
+               ↓
+            🟢 Weekly Inventory Health Report
+            </code></pre>
+            <p><strong>Trust Ladder:</strong> The reorder gate for routine replenishment items (you order the same quantity from the same supplier every month) evolves to auto-pass. But new supplier orders, large quantity changes, or premium inventory always require human approval.</p>
+            <p><strong>Gates:</strong> 1 per reorder (strictness varies by value and novelty)<br><strong>QA steps:</strong> 1 (order accuracy verification)</p>
+            <hr>
+            <h2>Marketing &amp; Operations Templates</h2>
+            <h3>9. Ad Campaign Manager</h3>
+            <p><strong>What it does:</strong> End-to-end ad campaign creation and optimization across Meta, Google, and TikTok — with approval gates at budget, creative, and optimization stages.</p>
+            <p><strong>The flow:</strong></p>
+            <pre><code>🔵 Campaign Brief (Form Trigger)
+               ↓
+            🟢 Budget Allocation Agent
+               Platform budget split, bid strategy,
+               audience targeting recommendations
+               ↓
+            🟡 GATE: Budget Approval [Human]
+               Finance/marketing lead reviews spend plan
+               ↓
+            🟤 BRIEF: Creative Brief Agent (per platform)
+               Platform-specific creative direction
+               ↓
+            🟡 GATE: Creative Direction Approval [Human]
+               ↓
+            🟣 For Each Platform [Meta, Google, TikTok]:
+               ↓
+               🟢 Ad Creative Generation
+                  Copy variants + image/video per platform specs
+                  ↓
+               ⚪ QA: Platform Compliance + Brand Check
+                  Ad policy compliance (no prohibited claims),
+                  brand voice, visual guidelines
+                  ↓
+               🟡 GATE: Ad Approval [Human → Hybrid]
+                  ↓
+               🟢 Launch Campaign (API)
+               ↓
+            🟢 Daily Performance Monitor
+               ↓
+            🟢 Optimization Agent (weekly)
+               Bid adjustments, audience refinements, creative swaps
+               ↓
+            🟡 GATE: Optimization Approval [Auto-pass for minor → Human for major]
+               Budget reallocation &gt; 20%: Human
+               Bid tweak &lt; 10%: Auto-pass with logging
+            </code></pre>
+            <p><strong>Gates:</strong> 4 (budget + creative direction + ad creative + optimization)<br><strong>QA steps:</strong> 1 per platform (compliance + brand)<br><strong>Why 4 gates:</strong> Ad spend is real money. A single wrong audience targeting decision or policy-violating creative can waste thousands. Each gate matches a different risk threshold.</p>
+            <hr>
+            <h3>10. Customer Onboarding Flow</h3>
+            <p><strong>What it does:</strong> Creates and delivers personalized onboarding sequences with approval gates that evolve as sequence effectiveness is proven.</p>
+            <p><strong>The flow:</strong></p>
+            <pre><code>🔵 New Customer Signup Trigger
+               ↓
+            🟢 Welcome Sequence Agent
+               Personalized based on plan, industry, use case
+               ↓
+            🟣 For Each Milestone [Day 1, Day 3, Day 7, Day 14, Day 30]:
+               ↓
+               🟢 Content Agent
+                  Email + in-app message personalized to user behavior
+                  ↓
+               ⚪ QA: Personalization Check
+                  Correct name, plan details, relevant features highlighted,
+                  appropriate tone for lifecycle stage
+                  ↓
+               🟡 GATE: Content Review [Hybrid → Auto-pass]
+                  New sequences: human reviews
+                  Proven sequences: auto-pass after 90%+ completion rates
+                  ↓
+               🟢 Send (email + in-app)
+               ↓
+            🟢 Health Score Check (Day 30)
+               ↓
+            🔴 Branch:
+               ↓
+               Healthy (active, engaged):
+                  🟢 Celebration message + upsell path
+               ↓
+               At Risk (inactive, low engagement):
+                  🟢 Alert customer success team
+                  🟢 Win-back sequence trigger
+            </code></pre>
+            <p><strong>Gates:</strong> 1 per milestone message (5 total per customer)<br><strong>QA steps:</strong> 1 per message (personalization accuracy)<br><strong>Scale note:</strong> At 100 new customers/month with 5 milestones each = 500 messages. The gate evolution from human to auto-pass is essential — you can&#39;t manually review 500 onboarding messages. But you can manually review the first 50 to train the system.</p>
+            <hr>
+            <h3>11. Competitive Intelligence Monitor</h3>
+            <p><strong>What it does:</strong> Daily monitoring of competitor activity with AI analysis and human-reviewed intelligence reports.</p>
+            <p><strong>The flow:</strong></p>
+            <pre><code>📅 Daily Schedule Trigger (7 AM)
+               ↓
+            🟣 For Each Competitor (configured list):
+               ↓
+               🟢 Web Monitor
+                  New blog posts, pricing page changes, feature launches,
+                  job postings (hiring signals), press mentions
+                  ↓
+               🟢 Social Monitor
+                  New campaigns, engagement patterns, content strategy shifts,
+                  community sentiment
+               ↓
+            🟢 Analysis Agent
+               Summarize changes, identify threats and opportunities,
+               flag significant moves, recommend responses
+               ↓
+            ⚪ QA: Source Verification
+               All claims traced to source URLs
+               No hallucinated competitive intelligence
+               ↓
+            🟡 GATE: Intel Review [AI QA for routine → Human for significant]
+               &quot;No changes&quot; reports: auto-pass
+               Significant competitor moves: human review + discussion
+               ↓
+            🟢 Distribute to Team (Slack digest)
+               ↓
+            🟢 Monthly Competitive Report
+               Aggregated trends, strategic implications
+            </code></pre>
+            <p><strong>Gates:</strong> 1 daily (strictness depends on significance of findings)<br><strong>QA steps:</strong> 1 (source verification — critical for competitive intel)<br><strong>Why source QA matters:</strong> AI agents will confidently tell you &quot;Competitor X raised prices by 15%&quot; when it actually misread a promotional page. Factual accuracy QA for competitive intelligence is non-negotiable.</p>
+            <hr>
+            <h3>12. Support Triage &amp; Response</h3>
+            <p><strong>What it does:</strong> Automatically classifies, prioritizes, and drafts responses to support tickets — with gate strictness matching ticket severity.</p>
+            <p><strong>The flow:</strong></p>
+            <pre><code>🔵 Support Ticket Webhook (Zendesk, Intercom, email)
+               ↓
+            🟢 Classification Agent
+               Category, priority (critical/high/medium/low),
+               sentiment, complexity estimate
+               ↓
+            🔴 Branch by Priority:
+               ↓
+               🔴 Critical (outage, security, legal):
+                  🟢 Immediate human routing + alert
+                  No AI response — this goes straight to a human
+                  ↓
+               🟡 High (billing, bug report, frustration):
+                  🟢 Response Agent (empathetic, solution-oriented)
+                  ⚪ QA: Tone Check + Accuracy Check
+                  🟡 GATE: Response Approval [Human]
+                  ↓
+               🟢 Medium (how-to, feature question):
+                  🟢 Response Agent (helpful, detailed)
+                  ⚪ QA: Accuracy Check (verified against docs)
+                  🟡 GATE: Quick Review [Hybrid]
+                  ↓
+               🔵 Low (thanks, simple confirmation):
+                  🟢 Response Agent (brief, friendly)
+                  ⚪ QA: Tone Check
+                  🟡 GATE: Auto-Send [Auto-pass]
+               ↓
+            🟢 Post Response
+            🟢 Log for Pattern Analysis
+               Recurring issues feed into product roadmap
+               ↓
+            🟢 Weekly Support Quality Report
+               CSAT trends, common issues, response time metrics
+            </code></pre>
+            <p><strong>Gates:</strong> 1 per ticket (strictness matches severity)<br><strong>QA steps:</strong> 1-2 per ticket (varies by priority)<br><strong>The philosophy:</strong> Critical tickets bypass AI entirely — a human handles them. High-priority gets AI drafting + human review. Medium gets hybrid review. Low-priority auto-responds. This isn&#39;t about removing humans; it&#39;s about putting human attention where it matters most.</p>
+            <hr>
+            <h2>Why 12 Templates Beat 7,000</h2>
+            <p>Make.com&#39;s 7,000 templates are mostly two-step connections: &quot;When X happens, do Y.&quot; They&#39;re starting points for simple automation. They assume every output is correct.</p>
+            <p>iEnable&#39;s 12 templates are complete production workflows. Each one:</p>
+            <ul>
+            <li><strong>Has approval gates</strong> at every point where quality matters</li>
+            <li><strong>Uses independent QA</strong> to evaluate AI output before humans see it</li>
+            <li><strong>Supports the brief-first pattern</strong> for expensive generation steps</li>
+            <li><strong>Evolves over time</strong> through the Trust Ladder (gates get faster as trust builds)</li>
+            <li><strong>Learns from rejection</strong> (every &quot;no&quot; makes the next run better)</li>
+            <li><strong>Tracks performance</strong> (engagement data feeds back into the agents)</li>
+            </ul>
+            <p>Would you rather have 7,000 uncontrolled pipes or 12 production-ready workflows that actually ship good work?</p>
+            <p>We thought so.</p>
+            <hr>
+            <h2>The Template Advantage: Start in Minutes, Improve for Months</h2>
+            <p>The beautiful thing about quality-gated templates is that they get better the longer you use them.</p>
+            <p><strong>Week 1:</strong> Import a template. Configure your brand guidelines. Every gate is set to Human. You review everything. This feels slow. That&#39;s intentional — you&#39;re building the training dataset.</p>
+            <p><strong>Week 4:</strong> After 100+ decisions, the QA agents calibrate. Some gates suggest promotion to Hybrid. Your review load drops 40%.</p>
+            <p><strong>Month 3:</strong> High-performing gates promote to AI QA. You&#39;re only reviewing edge cases and novel content. Your review load drops 80%.</p>
+            <p><strong>Month 6:</strong> Routine flows auto-pass. You&#39;re spending 30 minutes a week on approvals instead of 10 hours. And the quality is better than month 1 because every rejection made the system smarter.</p>
+            <p><strong>No other template library does this.</strong> Make&#39;s templates run the same way on day 1 as day 365. iEnable&#39;s templates compound quality improvements over time.</p>
+            <hr>
+            <h2>Import These Templates Into iEnable Today</h2>
+            <p><a href="#">Browse the full template library →</a></p>
+            <p>Every template is free to import on any iEnable plan. Approval gates and QA steps are always free — we never charge more for quality control.</p>
+            <p>Pick the template closest to your use case. Connect your accounts. Configure your brand guidelines. Start shipping AI content you&#39;re actually proud of.</p>
+            <p><strong>12 templates. Zero compromises on quality.</strong></p>
+            <hr>
+            <p><em>Related reading:</em></p>
+            <ul>
+            <li><a href="/blog/why-your-ai-workflow-builder-needs-approval-gates">Why Your AI Workflow Builder Needs Approval Gates (And No One Has Them)</a></li>
+            <li><a href="/blog/make-vs-n8n-vs-ienable-comparison-2026">Make.com vs n8n vs iEnable: The AI Workflow Builder Comparison You Need in 2026</a></li>
+            <li><a href="/blog/the-brief-first-approach">The Brief-First Approach: How to Stop Wasting Money on AI-Generated Content</a></li>
+            <li><a href="/blog/why-ai-agents-should-never-grade-their-own-homework">Why AI Agents Should Never Grade Their Own Homework</a></li>
+            </ul>
+
+            <div class="article-cta">
+                <h3>Ready to enable your entire workforce with AI?</h3>
+                <p>iEnable gives every employee an AI enabler that understands your company, your roles, and your goals.</p>
+                <a href="https://ienable.ai" class="btn">Learn More About iEnable →</a>
+            </div>
+        </div>
+    </article>
+    <footer class="footer"><p>© 2026 iEnable. All rights reserved.</p></footer>
+</body>
+</html>
