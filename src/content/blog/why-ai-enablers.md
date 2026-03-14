@@ -6,6 +6,8 @@ tags: ["Vision"]
 readTime: "7 min read"
 ---
 
+![Why Every Employee Needs an AI Enabler](/blog/images/why-ai-enablers-hero.jpg)
+
 In the 1990s, every employee got an email address. Not because email was flashy — because it was **obviously necessary**. The same thing happened with laptops, then Slack, then Zoom. Each wave followed the same pattern: early adopters, skeptics, then universal adoption once the productivity gap became impossible to ignore.
 
 We're at that inflection point with AI. But the industry is building the wrong thing.

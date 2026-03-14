@@ -6,6 +6,8 @@ tags: ["Product"]
 readTime: "5 min read"
 ---
 
+![90 Seconds to Your First AI Teammate](/blog/images/90-seconds-hero.jpg)
+
 Every SaaS product promises easy onboarding. Most of them lie. "Get started in minutes" usually means 45 minutes of form-filling, a 30-minute demo call, and a week of integration work before you see any value.
 
 We built iEnable around a different principle: **value in 90 seconds or we've failed.** Not value eventually. Not value after setup. Value *now*.

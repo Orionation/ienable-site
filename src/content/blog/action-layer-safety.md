@@ -6,6 +6,8 @@ tags: ["Safety"]
 readTime: "6 min read"
 ---
 
+![The Action Layer: Why AI Safety Isn't Optional](/blog/images/action-layer-safety-hero.jpg)
+
 Here's a question nobody is asking loudly enough: **when you give an AI tool access to your Google Ads account, what stops it from spending $50,000 tonight?**
 
 The honest answer, for most AI tools on the market? Nothing. A prompt. A prayer. Maybe a system message that says "don't spend more than the budget." And if the model hallucinates, misinterprets, or simply gets a bad completion? Your money is gone before you wake up.
