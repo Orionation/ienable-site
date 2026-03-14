@@ -3,3 +3,5 @@ Allow: /
 Disallow: /blog/journals/
 
 Sitemap: https://ienable.ai/sitemap-index.xml
+
+Disallow: /memory-system/

@@ -1,0 +1,2019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>State DB Memory System for AI Agents — iEnable</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --border: #1e1e2e;
+    --text: #e0e0e8;
+    --text-dim: #8888a0;
+    --accent: #6366f1;
+    --accent2: #818cf8;
+    --green: #10b981;
+    --code-bg: #1a1a2e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 0;
+  }
+  .header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #0a0a1a 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 20px;
+    text-align: center;
+  }
+  .header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  .header .subtitle {
+    color: var(--text-dim);
+    font-size: 1.1rem;
+  }
+  .header .badge {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--accent2);
+    font-size: 0.85rem;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+  }
+  .content {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  h1 { font-size: 1.8rem; margin: 48px 0 16px; color: var(--accent2); }
+  h2 {
+    font-size: 1.5rem;
+    margin: 48px 0 16px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+  }
+  h3 { font-size: 1.2rem; margin: 32px 0 12px; color: var(--accent2); }
+  h4 { font-size: 1rem; margin: 24px 0 8px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; }
+  p { margin: 12px 0; }
+  a { color: var(--accent2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { color: #fff; }
+  ul { margin: 12px 0 12px 24px; }
+  li { margin: 6px 0; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    margin: 16px 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  code { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+  code.inline {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    border: 1px solid var(--border);
+  }
+  .table-wrap { overflow-x: auto; margin: 16px 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  td, th {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    text-align: left;
+  }
+  tr:nth-child(odd) { background: rgba(255,255,255,0.02); }
+  tr:hover { background: rgba(99, 102, 241, 0.05); }
+  .footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+  @media (max-width: 600px) {
+    .header h1 { font-size: 1.6rem; }
+    .content { padding: 24px 16px 60px; }
+    h2 { font-size: 1.3rem; }
+    pre { font-size: 0.8rem; padding: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>State DB Memory System</h1>
+  <div class="subtitle">A persistent, automated memory layer for AI agents</div>
+  <div class="badge">Built for OpenClaw · 16 Parts · March 2026</div>
+</div>
+<div class="content">
+<h1>State DB Memory System for AI Agents</h1>
+
+<p><strong>A persistent, automated memory layer for AI agents that lose context between sessions.</strong></p>
+
+<p>Built for <a href="https://github.com/openclaw/openclaw">OpenClaw</a>. Solves the #1 problem with long-running AI assistants: they forget everything after context compaction.</p>
+
+<hr>
+
+<h2>The Problem</h2>
+
+<p>AI agents running on LLMs lose context in three ways:</p>
+
+<p>1. <strong>Context compaction</strong> — when the conversation gets too long, the system compresses it and the agent loses detail</p>
+<p>2. <strong>Session boundaries</strong> — cron jobs, scheduled tasks, and new conversations start with zero context</p>
+<p>3. <strong>The "fresh start" problem</strong> — the agent asks "what are we working on?" when it should already know</p>
+
+<p>Every attempt to fix this with "just write notes to a file" fails because <strong>the agent forgets to write the notes.</strong> The same memory loss that creates the problem prevents the solution.</p>
+
+<h2>The Solution</h2>
+
+<p><strong>Separate the note-taker from the worker.</strong></p>
+
+<p>A lightweight cron job (the "court stenographer") runs every 30 minutes, reads the recent conversation transcript, extracts structured state entries, and writes them to a SQLite database. The worker agent doesn't need to remember to take notes — someone else is always doing it.</p>
+
+<p>After context loss, the agent queries the database instead of reloading full conversation logs. Recovery takes milliseconds and costs ~1K tokens instead of 70K+.</p>
+
+<h2>Architecture</h2>
+
+<pre><code class="language-">
+┌─────────────────────────────────────────────────┐
+│                  MEMORY STACK                     │
+├─────────────┬───────────────┬───────────────────┤
+│  State DB   │  Vector Search │  Knowledge Graph  │
+│  (SQLite)   │  (QMD/RAG)    │  (Cognee)         │
+├─────────────┼───────────────┼───────────────────┤
+│ "What's     │ "What did we  │ "How do these     │
+│  happening  │  discuss last │  things relate    │
+│  RIGHT NOW?"│  week?"       │  to each other?"  │
+├─────────────┼───────────────┼───────────────────┤
+│ Structured  │ Semantic      │ Graph-based       │
+│ Instant     │ Fuzzy         │ Relationship      │
+│ &lt;1K tokens  │ ~5-10K tokens │ Variable          │
+├─────────────┼───────────────┼───────────────────┤
+│ Automated   │ Auto-indexed  │ Fed by agents     │
+│ every 30min │ every 5min    │ throughout day    │
+└─────────────┴───────────────┴───────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────┐
+│           CONVERSATION LOGS (JSONL)              │
+│  Raw truth. Full transcript. Morning boot only.  │
+│  ~70K tokens/day = 7% of 1M context window       │
+└─────────────────────────────────────────────────┘
+</code></pre>
+
+<h3>Why Four Layers?</h3>
+
+<div class="table-wrap"><table>
+<tr><td>Layer</td><td>Speed</td><td>Cost</td><td>Best For</td></tr>
+<tr><td><strong>State DB</strong></td><td>Instant</td><td>~1K tokens</td><td>Mid-session recovery, "what's active right now?"</td></tr>
+<tr><td><strong>Vector Search</strong></td><td>Fast</td><td>~5-10K tokens</td><td>Cross-day search, "when did we decide X?"</td></tr>
+<tr><td><strong>Knowledge Graph</strong></td><td>Medium</td><td>Variable</td><td>Relationship queries, "who uses what tool?"</td></tr>
+<tr><td><strong>Conversation Logs</strong></td><td>Slow</td><td>~70K tokens/day</td><td>Deep context, morning boot, exact quotes</td></tr>
+</table></div>
+
+<h2>Setup</h2>
+
+<h3>1. Create the Database</h3>
+
+<pre><code class="language-sql">
+-- Create for each agent that needs persistent memory
+-- e.g., ~/.openclaw/workspace/memory/state.db (main agent)
+-- e.g., ~/.openclaw/agents/hodl/workspace/memory/state.db (sub-agent)
+
+CREATE TABLE state (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  created_at TEXT DEFAULT (datetime('now', 'localtime')),
+  category TEXT NOT NULL,
+  domain TEXT DEFAULT 'GENERAL',
+  summary TEXT NOT NULL,
+  detail TEXT,
+  status TEXT DEFAULT 'active',
+  session_date TEXT DEFAULT (date('now', 'localtime')),
+  superseded_by INTEGER REFERENCES state(id)
+);
+
+CREATE TABLE watermarks (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL,
+  updated_at TEXT DEFAULT (datetime('now', 'localtime'))
+);
+
+-- Indexes for fast queries
+CREATE INDEX idx_state_status ON state(status);
+CREATE INDEX idx_state_category ON state(category);
+CREATE INDEX idx_state_date ON state(session_date);
+CREATE INDEX idx_state_active ON state(status, id DESC);
+
+-- Views for common queries
+CREATE VIEW v_active_state AS
+SELECT id, created_at, category, domain, summary, detail
+FROM state WHERE status = 'active' ORDER BY id DESC LIMIT 50;
+
+CREATE VIEW v_rejected AS
+SELECT id, created_at, summary, detail
+FROM state WHERE category = 'rejected' AND status = 'active' ORDER BY id DESC;
+
+CREATE VIEW v_today AS
+SELECT id, created_at, category, domain, summary, status
+FROM state WHERE session_date = date('now', 'localtime') ORDER BY id DESC;
+</code></pre>
+
+<h3>2. Create the Extraction Cron</h3>
+
+<p>This is the "court stenographer" — runs every 30 minutes during active hours, reads recent conversation, extracts state changes.</p>
+
+<pre><code class="language-bash">
+openclaw cron add \
+  --name "State Extractor" \
+  --cron "<em>/30 8-23 </em> <em> </em>" \
+  --tz "America/New_York" \
+  --agent main \
+  --session isolated \
+  --model sonnet \
+  --timeout-seconds 60 \
+  --no-deliver \
+  --message 'STATE EXTRACTION — Automated context capture
+
+You are a state extractor. Read recent conversation and insert structured state entries.
+
+1. Check watermark:
+   sqlite3 memory/state.db "SELECT value FROM watermarks WHERE key='\''last_msg'\'';"
+
+2. Read recent messages:
+   sessions_history(sessionKey="YOUR_SESSION_KEY", limit=20, includeTools=false)
+
+3. For each message since watermark, extract:
+   - DECISIONS: User approved/rejected/decided something
+   - TASKS: Something started, completed, or assigned
+   - REJECTIONS: User said no (CRITICAL — prevents re-suggesting)
+   - AGENT STATE: Agent status changed
+   - CONTEXT: Mood, energy, priorities
+
+4. Insert findings:
+   sqlite3 memory/state.db "INSERT INTO state (category, domain, summary, detail) VALUES (...);"
+
+5. Update watermark:
+   sqlite3 memory/state.db "INSERT OR REPLACE INTO watermarks (key, value) VALUES ('\''last_msg'\'', '\''MSG_ID'\'');"
+
+RULES:
+- Extract ONLY clear state changes. Not every message.
+- One-line summaries. Detail under 200 chars.
+- If nothing meaningful happened, just update watermark.
+- NEVER modify existing rows except to mark done/superseded.'
+</code></pre>
+
+<p><strong>Key design decisions:</strong></p>
+<ul>
+<li><strong>Sonnet, not Haiku</strong> — needs to understand nuance (what's a "rejection" vs a "preference")</li>
+<li><strong>Every 30 min, not every 5</strong> — balances cost vs freshness. Worst case: 30 min gap after compaction</li>
+<li><strong>8 AM - 11 PM only</strong> — overnight is cron output, not decisions. No value in extracting.</li>
+<li><strong>Watermark-based</strong> — if a run fails, next run picks up from where the last success left off. Gaps auto-backfill.</li>
+<li><strong>isolated session</strong> — doesn't pollute the main conversation context</li>
+<li><strong>no-deliver</strong> — silent operation, no output to user</li>
+
+</ul>
+<h3>3. Configure Context Recovery (Tiered)</h3>
+
+<p>Add to your agent's system prompt or AGENTS.md:</p>
+
+<pre><code class="language-markdown">
+## Context Recovery After Compaction
+
+<strong>Tier 0 — State DB (TRY FIRST — ~1K tokens):</strong>
+sqlite3 memory/state.db -header -column "SELECT * FROM v_active_state;"
+sqlite3 memory/state.db -header -column "SELECT * FROM v_rejected;"
+
+<strong>Tier 1 — State DB + recent messages (~10K tokens):</strong>
+Tier 0 + sessions_history(limit=30, includeTools=false)
+
+<strong>Tier 2 — Extended recovery (~15K tokens):</strong>
+Tier 1 + read memory/daily-loop/tonight-recap.md
+
+<strong>Tier 3 — Full boot (morning only, ~70-140K tokens):</strong>
+Read yesterday + today conversation logs. Only when context is near-empty.
+
+⚠️ ANTI-LOOP: Never reload more than needed or you'll trigger another compaction.
+</code></pre>
+
+<h3>4. Configure Compaction Flush</h3>
+
+<p>In <code class="inline">openclaw.json</code> under <code class="inline">agents.defaults.compaction.memoryFlush</code>:</p>
+
+<pre><code class="language-json">
+{
+  "enabled": true,
+  "prompt": "Pre-compaction flush. Write any state changes from the last 30 min to memory/state.db. If nothing changed since the cron last ran, reply NO_REPLY.",
+  "systemPrompt": "After compaction, FIRST:\n1. sqlite3 memory/state.db -header -column \"SELECT <em> FROM v_active_state;\"\n2. sqlite3 memory/state.db -header -column \"SELECT </em> FROM v_rejected;\"\n3. Read memory/daily-loop/tonight-recap.md\n4. Do NOT ask the user what you were working on. The state DB has it.\n5. Resume seamlessly."
+}
+</code></pre>
+
+<h3>5. Add to Agent Boot Sequence</h3>
+
+<p>Each agent should query state DB at the start of every session/cron:</p>
+
+<pre><code class="language-markdown">
+## State DB — Persistent Memory
+
+### On Start (BEFORE doing anything):
+sqlite3 memory/state.db -header -column "SELECT * FROM v_active_state;"
+sqlite3 memory/state.db -header -column "SELECT * FROM v_rejected;"
+
+### On End (BEFORE session closes):
+sqlite3 memory/state.db "INSERT INTO state (category, domain, summary, detail) VALUES ('category', 'DOMAIN', 'summary', 'detail');"
+
+### The Rule
+If you'd be upset to forget it after a restart, write it to state.db NOW.
+</code></pre>
+
+<h2>Categories</h2>
+
+<div class="table-wrap"><table>
+<tr><td>Category</td><td>When to use</td><td>Example</td></tr>
+<tr><td><code class="inline">decision</code></td><td>User approved or decided something</td><td>"Approved new deployment strategy"</td></tr>
+<tr><td><code class="inline">task</code></td><td>Work started, assigned, or completed</td><td>"Building auth module — in progress"</td></tr>
+<tr><td><code class="inline">rejected</code></td><td>User said NO to something (never re-suggest)</td><td>"Do NOT suggest downgrading to smaller model"</td></tr>
+<tr><td><code class="inline">agent_state</code></td><td>An agent's status changed</td><td>"Trading agent restructured to apprentice mode"</td></tr>
+<tr><td><code class="inline">context</code></td><td>Mood, energy, priorities</td><td>"User is high energy, keep momentum"</td></tr>
+<tr><td><code class="inline">discovery</code></td><td>Found something important</td><td>"API supports batch mode — 10x faster"</td></tr>
+<tr><td><code class="inline">learning</code></td><td>Lesson learned from a mistake</td><td>"Always verify file after edit"</td></tr>
+</table></div>
+
+<h2>Scaling to Multiple Agents</h2>
+
+<p>For multiple agents, you have two options:</p>
+
+<h3>Option A: One cron extracts for multiple agents (recommended)</h3>
+
+<p>One Sonnet cron reads from multiple session keys and writes to each agent's own state.db. Cheaper, simpler.</p>
+
+<pre><code class="language-">
+Cron reads → Agent 1 session → writes to Agent 1 state.db
+           → Agent 2 session → writes to Agent 2 state.db
+</code></pre>
+
+<h3>Option B: Each agent self-writes (for less active agents)</h3>
+
+<p>Add the boot/end protocol to the agent's AGENTS.md. They write their own findings at the end of each cron run. No extra extraction cost, but depends on the agent remembering.</p>
+
+<p><strong>Best practice:</strong> Use Option A for agents with live conversations or high cron volume. Use Option B for agents that run 1-3 crons per day.</p>
+
+<h2>The Rules Engine — Scored Behavioral Memory</h2>
+
+<p>State extraction captures what happened. But some learnings need to persist <strong>forever</strong> — behavioral rules that should never be forgotten regardless of session, compaction, or context limits.</p>
+
+<p>The problem: a flat rules file grows unbounded. A full DB dump gets too large for context. You need <strong>scored, decaying rules</strong> where only the most important ones load on boot.</p>
+
+<h3>Schema</h3>
+
+<pre><code class="language-sql">
+CREATE TABLE rules (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    rule TEXT NOT NULL,                    -- The actual behavioral rule
+    domain TEXT DEFAULT 'ALL',             -- Which domain it applies to
+    source TEXT,                           -- rejection, learning, discovery
+    source_id INTEGER,                     -- Original state entry ID
+    score REAL DEFAULT 5.0,                -- 1-10 importance score
+    violations INTEGER DEFAULT 0,          -- Times violated after creation
+    last_reinforced TEXT,                   -- Last time user reinforced this
+    last_relevant TEXT,                     -- Last time rule was applied
+    created_at TEXT DEFAULT (datetime('now', 'localtime')),
+    expires_at TEXT,                        -- NULL = never expires
+    status TEXT DEFAULT 'active'
+        CHECK(status IN ('active', 'dormant', 'retired', 'critical')),
+    tags TEXT                              -- Comma-separated for filtering
+);
+
+-- Boot view: top 20 by score, only active/critical (~400 tokens even at 100+ rules)
+CREATE VIEW v_boot_rules AS
+SELECT id, rule, domain, score, status, tags
+FROM rules 
+WHERE status IN ('active', 'critical')
+ORDER BY score DESC
+LIMIT 20;
+
+-- Domain-specific view (load when working in a specific domain)
+CREATE VIEW v_domain_rules AS
+SELECT id, rule, domain, score, tags
+FROM rules
+WHERE status IN ('active', 'critical')
+ORDER BY domain, score DESC;
+</code></pre>
+
+<h3>Scoring Tiers</h3>
+
+<div class="table-wrap"><table>
+<tr><td>Score</td><td>Status</td><td>Behavior</td><td>Example</td></tr>
+<tr><td><strong>9-10</strong></td><td><code class="inline">critical</code></td><td>Always loaded. Never auto-decay. Only user can retire.</td><td>"Never edit config directly"</td></tr>
+<tr><td><strong>7-8</strong></td><td><code class="inline">active</code></td><td>Loaded on boot. Slow decay if unreinforced 30+ days.</td><td>"Always verify files after edit"</td></tr>
+<tr><td><strong>5-6</strong></td><td><code class="inline">active</code></td><td>Available on-demand. Moderate decay.</td><td>"Prefer batch API calls"</td></tr>
+<tr><td><strong>3-4</strong></td><td><code class="inline">dormant</code></td><td>Not loaded unless searched. Fast decay.</td><td>Old formatting preferences</td></tr>
+<tr><td><strong>1-2</strong></td><td><code class="inline">retired</code></td><td>Effectively forgotten. Can be revived if re-triggered.</td><td>Obsolete rules</td></tr>
+</table></div>
+
+<h3>The Promotion Pipeline</h3>
+
+<pre><code class="language-">
+Conversation → State Extractor (30 min) → state.db (rejections, learnings)
+                                              ↓
+                                    Nightly Rule Promotion (11 PM)
+                                              ↓
+                                        rules table (scored, tagged)
+                                              ↓
+                                    v_boot_rules (top 20, ~400 tokens)
+                                              ↓
+                                    Every boot loads ONLY what matters
+</code></pre>
+
+<p><strong>Nightly Rule Promotion</strong> evaluates each day's rejections and learnings:</p>
+<ul>
+<li><strong>User said NO</strong> → score 9-10, status <code class="inline">critical</code>, auto-promote</li>
+<li><strong>Formatting/pipeline preference</strong> → score 7-8, status <code class="inline">active</code></li>
+<li><strong>Operational learning</strong> → score 6-7, status <code class="inline">active</code></li>
+<li><strong>One-time context</strong> → NOT promoted (stays in state.db only)</li>
+
+</ul>
+<h3>Score Decay</h3>
+
+<p>Rules that aren't reinforced naturally fade:</p>
+<ul>
+<li>Every 30 days without reinforcement: score drops by 0.5</li>
+<li>Score below 4 → auto-dormant</li>
+<li>Score below 1 → auto-retired</li>
+<li><strong>Critical rules NEVER decay</strong> — only the user can retire them</li>
+
+</ul>
+<h3>Reinforcement</h3>
+
+<p>When the user repeats a preference or re-states a rule, the score goes UP:</p>
+<pre><code class="language-sql">
+UPDATE rules SET score = MIN(10, score + 1.0), 
+    last_reinforced = datetime('now', 'localtime'),
+    status = CASE WHEN score + 1.0 &gt;= 9 THEN 'critical' ELSE status END
+WHERE id = X;
+</code></pre>
+
+<h3>Why This Scales</h3>
+
+<ul>
+<li><strong>Boot cost is constant</strong>: <code class="inline">v_boot_rules</code> always returns max 20 rules (~400 tokens)</li>
+<li><strong>Even with 1,000+ rules</strong>: only the top 20 by score load on boot</li>
+<li><strong>Domain filtering</strong>: when working on trading, load only HODL rules</li>
+<li><strong>Natural memory</strong>: important things stay. Unimportant things fade. Just like human memory.</li>
+
+</ul>
+<h3>Boot Sequence</h3>
+
+<pre><code class="language-bash">
+# Step 0: Load top rules (~400 tokens)
+sqlite3 memory/state.db -header -column "SELECT * FROM v_boot_rules;"
+
+# Domain-specific (when entering a domain):
+sqlite3 memory/state.db -header -column \
+    "SELECT rule, score FROM v_domain_rules WHERE domain = 'HODL';"
+</code></pre>
+
+<h2>Anti-Patterns (What We Tried That Failed)</h2>
+
+<p>1. <strong>"Just write to a file after each conversation"</strong> — Agents forget. The memory problem prevents its own solution.</p>
+<p>2. <strong>"Read the full conversation log after compaction"</strong> — 70K+ tokens causes an infinite compaction loop.</p>
+<p>3. <strong>"Summarize the day at the end"</strong> — By the time "end of day" arrives, context is already lost.</p>
+<p>4. <strong>"Use a TODO list"</strong> — Same as #1. Nobody maintains it.</p>
+
+<h2>The Breakthrough Insight</h2>
+
+<p><strong>Separate the note-taker from the worker.</strong> The worker (main agent) can't reliably take notes because the same context loss that creates the problem prevents the solution. An independent process (the extraction cron) takes notes on a fixed schedule regardless of what the worker remembers.</p>
+
+<p>This is the same principle as: don't ask the surgeon to take their own notes during surgery. Have a scribe.</p>
+
+<h2>Cost Estimate</h2>
+
+<div class="table-wrap"><table>
+<tr><td>Component</td><td>Model</td><td>Frequency</td><td>Est. Daily Cost</td></tr>
+<tr><td>Extraction cron</td><td>Sonnet</td><td>32 runs/day (8AM-11PM, every 30min)</td><td>~$2-4</td></tr>
+<tr><td>State DB queries</td><td>N/A (SQLite)</td><td>On every boot/compaction</td><td>$0</td></tr>
+<tr><td>Pre-compaction flush</td><td>Same as agent</td><td>On compaction events</td><td>~$0.50</td></tr>
+<tr><td><strong>Total</strong></td><td></td><td></td><td><strong>~$3-5/day</strong></td></tr>
+</table></div>
+
+<p>Compared to the cost of the agent re-discovering things, re-asking questions, and wasting the user's time: <strong>priceless.</strong></p>
+
+<h2>Files</h2>
+
+<pre><code class="language-">
+memory/state.db                              — Main agent state database
+~/.openclaw/agents/{agent}/workspace/memory/state.db  — Per-agent state databases
+memory/protocols/context-management.md       — Full recovery protocol
+HEARTBEAT.md                                 — Boot sequence (Step 0 = query state DB)
+AGENTS.md                                    — Rule Zero: "You can always scroll up"
+</code></pre>
+
+<h2>How This Compares to Everything Else</h2>
+
+<p>Persistent memory is the <strong>#1 issue</strong> in the OpenClaw community (<a href="https://github.com/openclaw/openclaw/issues/5429">#5429</a> — 45 hours of context lost to silent compaction). Everyone's trying to solve it. Here's how the major approaches stack up:</p>
+
+<h3>The Landscape (March 2026)</h3>
+
+<div class="table-wrap"><table>
+<tr><td>Approach</td><td>How it works</td><td>Strengths</td><td>Fatal flaw</td></tr>
+<tr><td><strong>MEMORY.md / CLAUDE.md</strong> (Native)</td><td>Agent writes notes to a markdown file</td><td>Simple, always loaded</td><td>Agent forgets to write. The memory problem prevents its own solution.</td></tr>
+<tr><td><strong>memory-lancedb-pro</strong></td><td>LanceDB + hybrid retrieval + Map-Reduce distillation worker</td><td>Cross-encoder reranking, distillation</td><td>Requires infrastructure setup. Distillation is still LLM-summarized (lossy). Session logs still go missing 5/9 days (<a href="https://youtube.com/watch?v=QVVtoaSodHU">Onchain AI Garage</a>).</td></tr>
+<tr><td><strong>ClawVault</strong></td><td>CLI tool: explicit store/search/checkpoint/wake</td><td>Semantic search, checkpoint primitives, local-first</td><td>Manual. Requires the agent to run <code class="inline">clawvault store</code> — same discipline problem.</td></tr>
+<tr><td><strong>Obsidian + GitHub</strong></td><td>Conversation summaries saved to Obsidian vault, version-controlled</td><td>Visual knowledge graph, diffable history</td><td>Manual summarization. Agent has to write the summaries.</td></tr>
+<tr><td><strong>MCP Memory Server</strong> (mcp-memory-service)</td><td>Vector store via MCP tools, SSE transport, Cloudflare sync</td><td>Semantic search, cloud backup, fast reads</td><td>Cold start problem — model skips "search memory" instruction. Requires static context + breadcrumbs as workaround.</td></tr>
+<tr><td><strong>Claude-Mem</strong> (for Claude Code)</td><td>Plugin captures tool usage, compresses into progressive disclosure layers</td><td>Automatic capture, 10x compression, JSONL storage</td><td>Claude Code only. Compression quality depends on summarization model. Not for general agent frameworks.</td></tr>
+<tr><td><strong>memory-mcp</strong></td><td>Hook-based capture → Haiku extraction → two-tier CLAUDE.md + JSON store</td><td>Silent capture, confidence decay, dedup, budget system</td><td>Claude Code specific. Haiku extraction can miss nuance. Tiered system still relies on summarization quality.</td></tr>
+<tr><td><strong>Mem0</strong> (Research)</td><td>Dynamic extraction + consolidation + vector retrieval, optional graph memory</td><td>26% accuracy gain over OpenAI, 91% lower latency, 90%+ token savings</td><td>Cloud service or complex self-hosting. Designed for chat applications, not agent orchestration.</td></tr>
+<tr><td><strong>Zep</strong></td><td>Temporal knowledge graphs + business data integration</td><td>Tracks how facts change over time, multi-hop queries</td><td>Commercial platform. External dependency.</td></tr>
+<tr><td><strong>Anthropic Compaction API</strong></td><td>Provider-level automatic summarization when context exceeds threshold</td><td>Zero-config, works across all Claude deployments</td><td>Summarization is lossy. No structured state. No "rejected" category. Agent still doesn't know what it lost.</td></tr>
+<tr><td><strong>Our State DB</strong> ⭐</td><td>SQLite + automated cron extraction + structured categories + tiered recovery</td><td>See below</td><td>New — needs production hardening over time</td></tr>
+</table></div>
+
+<h3>What Makes Our Approach Different</h3>
+
+<p>Every other solution falls into one of two traps:</p>
+
+<p><strong>Trap 1: Relies on the agent to write memories.</strong></p>
+<p>MEMORY.md, ClawVault, Obsidian — they all require the agent to take notes. But the agent that needs memory is the same agent that forgets to create it. This is like asking someone with amnesia to remember to write in their journal. It works when they remember. They usually don't.</p>
+
+<p><strong>Trap 2: Relies on summarization (lossy compression).</strong></p>
+<p>LanceDB-pro, Claude-Mem, memory-mcp, Anthropic Compaction, Mem0 — they all use LLMs to summarize conversations into compressed memories. Summaries lose detail. "Jonathan rejected the Sonnet downgrade for Tom" becomes "discussed model options" after compression. The rejection — the most critical piece — is gone.</p>
+
+<p><strong>Our approach avoids both traps:</strong></p>
+
+<p>1. <strong>Automated extraction, not agent discipline.</strong> An independent cron (the "court stenographer") extracts state every 30 minutes. The worker agent doesn't need to remember to take notes. The note-taker is a separate process.</p>
+
+<p>2. <strong>Structured data, not summaries.</strong> We don't summarize conversations into prose. We extract structured facts: decisions, tasks, rejections, agent states. Each one is a row in SQLite with a category, domain, status, and timestamp. You can query "show me all rejected suggestions" — try doing that with a summary.</p>
+
+<p>3. <strong>Rejections are first-class citizens.</strong> No other system tracks what the user said NO to. This is arguably the most important memory an agent can have. Re-suggesting something the user rejected is the fastest way to destroy trust.</p>
+
+<p>4. <strong>Tiered recovery prevents the infinite loop.</strong> Most systems either reload everything (expensive, risks compaction loop) or reload nothing (useless). Our tiered approach starts with a ~1K token DB query and only escalates if needed.</p>
+
+<p>5. <strong>Zero infrastructure.</strong> SQLite. That's it. No vector database, no cloud service, no API keys, no embedding models. The state DB is a single file that works offline, can be version-controlled, and is human-readable with any SQLite client.</p>
+
+<p>6. <strong>Watermark-based gap recovery.</strong> If the cron fails 3 times in a row, it doesn't lose data. It picks up from the last successful watermark and processes everything it missed. Every other system either loses the gap or re-processes everything.</p>
+
+<h3>The Research Backs This Up</h3>
+
+<ul>
+<li><strong>65% of enterprise AI failures</strong> in 2025 were from context drift/memory loss, not raw context limits (<a href="https://zylos.ai/research/2026-02-28-ai-agent-context-compression-strategies">Zylos AI</a>)</li>
+<li><strong>Factory's anchored iterative summarization</strong> (structured state document updated incrementally) outperforms full-reconstruction summarization — scoring 4.04 vs 3.74 accuracy. Our State DB IS this pattern, but with structured data instead of prose.</li>
+<li><strong>JetBrains research</strong> found that simple observation masking often outperforms LLM summarization while being cheaper — because summaries add cost and latency without reliable accuracy gains. Our structured extraction is closer to masking (preserve the signal, drop the noise) than summarization.</li>
+<li><strong>The "separate the note-taker from the worker" principle</strong> appears in Mem0's architecture (asynchronous summary generation module operating independently of the main pipeline) and memory-mcp's hook system. We implement it as a cron — simpler, more reliable, framework-agnostic.</li>
+
+</ul>
+<h3>Honest Limitations</h3>
+
+<ul>
+<li><strong>30-minute extraction gap.</strong> If compaction happens 29 minutes after the last extraction, you lose up to 29 minutes of state. The pre-compaction flush mitigates this but depends on agent compliance.</li>
+<li><strong>Extraction quality depends on the model.</strong> Sonnet is good but not perfect. Subtle rejections or implied decisions may be missed.</li>
+<li><strong>No semantic search.</strong> The State DB is structured queries only. For "what did we discuss about Shopify last week?" you still need vector search (QMD/memory_search). The State DB answers "what's active right now?" — a complementary role.</li>
+<li><strong>New system.</strong> Built March 8, 2026. Needs production hardening. The cron could fail, the prompts could extract poorly, edge cases will emerge.</li>
+<li><strong>Rule decay is approximate.</strong> The 30-day decay window is tunable but may need adjustment based on real-world observation of which rules fade too fast or too slow.</li>
+
+</ul>
+<h2>Part 2: The Capability Routing System</h2>
+
+<p><em>Added March 8, 2026 — same day as State DB, because the same problem applies to tools.</em></p>
+
+<h3>The Problem (Again)</h3>
+
+<p>The State DB solves <strong>context</strong> memory — what was decided, what's active, what was rejected. But there's a second category of knowledge agents lose: <strong>capabilities</strong>.</p>
+
+<p>Our trading agent Tom has 12 scanner scripts, an IBKR integration, Unusual Whales API, Twitter monitoring, chart analysis tools — all installed, all working. He spent a week not using half of them because he forgot they existed. We had to manually tell him "you have this tool, USE IT."</p>
+
+<p>Our coordinator Orion has an iPhone mirroring capability. Every time he uses it, he forgets that coordinates need to be divided by 2 for Retina displays. That lesson is buried in a conversation log from days ago.</p>
+
+<p>Static <code class="inline">CAPABILITIES.md</code> files don't solve this because:</p>
+<p>1. They're stale by definition — tools get added, break, change</p>
+<p>2. They don't know what worked last time or what failed</p>
+<p>3. They load everything at boot, wasting context on irrelevant capabilities</p>
+<p>4. They don't track hard-earned lessons ("divide by 2 for Retina")</p>
+<p>5. Agents don't maintain them</p>
+
+<h3>The Architecture</h3>
+
+<p>A SQLite database (<code class="inline">capabilities.db</code>) with 7 normalized tables:</p>
+
+<pre><code class="language-">
+┌─────────────────────────────────────────────────┐
+│              capabilities.db                     │
+│                                                  │
+│  toolkits        — what exists                   │
+│  agent_access    — who has what, at what tier     │
+│  triggers        — FTS5 full-text keyword match   │
+│  commands        — exact working commands          │
+│  lessons         — hard lessons, per-agent         │
+│  execution_log   — auto-captured success/failure   │
+│  workflows       — multi-toolkit compositions      │
+└─────────────────────────────────────────────────┘
+</code></pre>
+
+<h4>Three Tiers</h4>
+
+<p>Not every capability loads every session. Like hard rules vs regular state:</p>
+
+<p>1. <strong>Hard Capabilities</strong> — always loaded at boot. Tom always knows about IBKR. Muse always knows about fal.ai. These are the tools that define what the agent IS.</p>
+
+<p>2. <strong>Task Capabilities</strong> — loaded on demand via FTS5 trigger matching. When Tom gets "scan for trades," the scanner toolkit loads. When he gets "execute a trade," the IBKR order toolkit loads. The agent gets exactly what's relevant, nothing more.</p>
+
+<p>3. <strong>Reference Capabilities</strong> — searchable but not pre-loaded. Edge cases, old tools, rarely used features. Found via query when needed.</p>
+
+<p>The same toolkit can be different tiers for different agents. IBKR is <code class="inline">hard</code> for Tom but <code class="inline">reference</code> for Orion.</p>
+
+<h4>Per-Agent Lessons</h4>
+
+<p>The key insight: lessons are first-class entities, not comments in a file.</p>
+
+<pre><code class="language-sql">
+CREATE TABLE lessons (
+    id INTEGER PRIMARY KEY,
+    toolkit_id INTEGER REFERENCES toolkits(id),
+    agent TEXT,           -- per-agent: Tom's IBKR lessons ≠ Orion's
+    severity TEXT,        -- 'critical', 'warning', 'info'
+    lesson TEXT,          -- "Must set asyncio loop BEFORE importing ib_insync"
+    supersedes INTEGER,   -- newer lesson replaces older one
+    learned_at TEXT,
+    times_relevant INTEGER DEFAULT 0
+);
+</code></pre>
+
+<p>When Tom loads the IBKR toolkit, he gets Tom's lessons. When Orion loads it, he gets Orion's lessons. The Retina divide-by-2 lesson lives in Orion's iPhone mirroring toolkit and surfaces every time he touches that capability.</p>
+
+<h3>How It Stays Current</h3>
+
+<p>The biggest risk with any agent knowledge system: <strong>the agents won't maintain it.</strong> We solved this with four mechanisms at different timescales:</p>
+
+<p>1. <strong>Real-time self-reporting</strong> — agents write critical lessons directly to capabilities.db the moment they learn them. Same pattern as state DB writes. Only for critical stuff — hard lessons, gotchas, auth breakthroughs.</p>
+
+<p>2. <strong>Every 30 minutes</strong> — the capability extractor runs alongside the state extractor cron. Scans recent sessions for tool executions, successes, failures, lessons. Catches everything agents forgot to self-report.</p>
+
+<p>3. <strong>Twice daily (10 PM + 6 AM)</strong> — the validator tests actual tool health. Runs test commands, checks dependencies (is IB Gateway running? Is the API key valid?). Flags unhealthy toolkits so agents know before they waste time trying.</p>
+
+<p>4. <strong>On boot</strong> — agent queries capabilities DB for hard tier + task-matched capabilities via FTS5. One SQL call, relevant context only.</p>
+
+<h3>Dependency & Conflict Resolution</h3>
+
+<p>Toolkits declare their dependencies:</p>
+
+<pre><code class="language-json">
+{
+  "dependencies": [
+    {"type": "process", "name": "IB Gateway", "check": "pgrep -f ibgateway"},
+    {"type": "keychain", "name": "unusual-whales-api-key"}
+  ],
+  "conflicts": [
+    {"type": "toolkit", "name": "ibkr-paper", "reason": "Same clientId"}
+  ]
+}
+</code></pre>
+
+<p>Before an agent uses a toolkit, dependencies are checked. Before two toolkits run simultaneously, conflicts are checked. No more "IBKR connection failed" after 5 minutes of setup because the gateway was down the whole time.</p>
+
+<h3>Workflow Composition</h3>
+
+<p>Real tasks aren't single tools — they're sequences. "Execute a trade" means:</p>
+
+<p>1. Check market data (Yahoo Finance toolkit)</p>
+<p>2. Analyze chart (chart-analyzer toolkit)</p>
+<p>3. Check options flow (Unusual Whales toolkit)</p>
+<p>4. Size the position (risk rules toolkit)</p>
+<p>5. Place the order (IBKR toolkit)</p>
+<p>6. Set stops (stop monitor toolkit)</p>
+<p>7. Log the trade (trade journal toolkit)</p>
+
+<p>The <code class="inline">workflows</code> table defines these compositions with ordered steps and prerequisites. An agent loading "trade execution" gets the full playbook, not just one tool.</p>
+
+<h3>Scale Analysis</h3>
+
+<p>At 1,000 toolkits, the context budget matters:</p>
+<ul>
+<li>Hard tier: capped at 20 per agent (~4K tokens)</li>
+<li>Task tier: top 5 FTS5 matches (~2K tokens)</li>
+<li>Total boot context: ~7K tokens — well within budget</li>
+
+</ul>
+<p>FTS5 queries return in <1ms on SQLite. The capability check adds negligible latency to agent boot.</p>
+
+<h3>Integration with State DB and Cognee</h3>
+
+<p>The three systems are complementary:</p>
+
+<div class="table-wrap"><table>
+<tr><td>System</td><td>Answers</td><td>Data Type</td></tr>
+<tr><td><strong>State DB</strong></td><td>"What's happening? What was decided? What's rejected?"</td><td>Structured decisions, rules, context</td></tr>
+<tr><td><strong>Capabilities DB</strong></td><td>"What can I do? How? What went wrong last time?"</td><td>Tools, commands, lessons, health</td></tr>
+<tr><td><strong>Cognee</strong></td><td>"How are things related? What patterns exist?"</td><td>Knowledge graph, entity relationships</td></tr>
+</table></div>
+
+<p>Capability events feed Cognee too — every toolkit becomes a node in the knowledge graph. An agent can ask "what tools does Tom use for scanning?" and get a graph traversal answer, not just a keyword match.</p>
+
+<h3>Why This Matters</h3>
+
+<p>Without capability routing, agents are like employees who show up every day having forgotten they have a computer. They have the skills. They have the tools. They just don't know it until someone reminds them.</p>
+
+<p>The State DB made agents remember what happened. The Capability Routing System makes them remember what they can do.</p>
+
+<h2>Part 3: The Flows DB — Procedural Memory</h2>
+
+<h3>The Problem (Yet Again)</h3>
+
+<p>State DB tells agents what happened. Capabilities DB tells them what they can do. But neither tells them <strong>how to do it correctly.</strong></p>
+
+<p>An agent told to "deploy the blog" might:</p>
+<ul>
+<li>FTP directly to production (skipping staging)</li>
+<li>Overwrite existing content instead of adding to it</li>
+<li>Skip QA entirely</li>
+<li>Forget to git commit</li>
+
+</ul>
+<p>Every time an agent does a task for the first time, it figures out the procedure from scratch. Every time it does the same task again after context loss, it figures it out again — sometimes differently, sometimes worse.</p>
+
+<h3>The Solution</h3>
+
+<p><strong>Flows DB</strong> — a SQLite database of procedural recipes keyed by trigger phrases.</p>
+
+<pre><code class="language-sql">
+CREATE TABLE flows (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT UNIQUE NOT NULL,
+  domain TEXT DEFAULT 'ALL',
+  agent TEXT DEFAULT 'any',
+  trigger_phrases TEXT,           -- comma-separated keywords
+  needs_approval BOOLEAN DEFAULT 0,
+  steps TEXT NOT NULL,            -- JSON array of ordered steps
+  status TEXT DEFAULT 'active',
+  use_count INTEGER DEFAULT 0,
+  last_used TEXT,
+  created_at TEXT DEFAULT (datetime('now','localtime'))
+);
+</code></pre>
+
+<h3>How It Works</h3>
+
+<p>Before any action, an agent runs <code class="inline">flow-check.sh "what I'm about to do"</code>:</p>
+
+<pre><code class="language-bash">
+$ bash tools/flow-check.sh "deploy to ienable"
+
+=== FLOW: deploy-to-ienable ===
+  Step 1: BACKUP: cp file to workspace/backups/ with timestamp
+  Step 2: READ: cat the file first. Understand what's there.
+  Step 3: EDIT: Surgical additions ONLY. Never rebuild.
+  Step 4: BUILD: npm run build in ienable-site
+  Step 5: GIT: git add -A && git commit && git push
+  Step 6: HAND TO QA: Spawn qa agent with URLs to check.
+  Step 7: QA MUST PASS before reporting to Jonathan.
+</code></pre>
+
+<p>The flow is the procedure. The agent doesn't need to remember how to deploy — the flow remembers for it.</p>
+
+<h3>Key Design Decisions</h3>
+
+<p><strong>Trigger phrases, not exact matches.</strong> A flow for "seo optimize post" matches queries containing "seo," "optimize," or "post." This means agents find flows even when they phrase things differently.</p>
+
+<p><strong>Needs-approval flag.</strong> Some flows (deploying to production, placing live trades, publishing strategic content) require human sign-off. The flow itself enforces the gate — the agent can't skip it because the procedure says "WAIT for approval."</p>
+
+<p><strong>Use tracking.</strong> Every time a flow is used, <code class="inline">use_count</code> increments and <code class="inline">last_used</code> updates. Flows that are never used are either poorly triggered or unnecessary.</p>
+
+<p><strong>Agent-specific flows.</strong> A flow for <code class="inline">agent=hodl</code> won't fire for the content agent. Domain separation is maintained.</p>
+
+<h3>Example Flows</h3>
+
+<div class="table-wrap"><table>
+<tr><td>Flow</td><td>Agent</td><td>Steps</td><td>Why It Exists</td></tr>
+<tr><td><code class="inline">alex-task</code></td><td>fullstack-dev</td><td>backup → read → edit → build → git → QA</td><td>Alex overwrote the blog index three times</td></tr>
+<tr><td><code class="inline">new-blog-post</code></td><td>content</td><td>research → write → images → build → QA → approve → deploy</td><td>Posts shipped without SEO or images</td></tr>
+<tr><td><code class="inline">seo-monitoring-loop</code></td><td>ienable</td><td>Search Console → GA4 → create tasks → save for Apollo</td><td>Protocol existed as a doc; never ran</td></tr>
+<tr><td><code class="inline">tom-blind-backtest</code></td><td>hodl</td><td>Pick random week → make decisions → reveal outcomes → score</td><td>Tom was writing about trading instead of trading</td></tr>
+<tr><td><code class="inline">orion-delegation</code></td><td>main</td><td>Check roster → route to correct agent → don't do it yourself</td><td>Orion kept doing other agents' jobs</td></tr>
+</table></div>
+
+<h3>Growing the Flow Library</h3>
+
+<p>After every new procedure is figured out, it becomes a flow:</p>
+
+<pre><code class="language-sql">
+INSERT INTO flows (name, domain, agent, trigger_phrases, steps)
+VALUES ('new-flow-name', 'DOMAIN', 'agent_id',
+  'keyword1,keyword2,keyword3',
+  '["Step 1: ...", "Step 2: ...", "Step 3: ..."]');
+</code></pre>
+
+<p>This is how the system gets smarter over time without relying on memory. The flow IS the memory.</p>
+
+<hr>
+
+<h2>Part 4: The Pre-Action Gate — Mandatory Context Loading</h2>
+
+<h3>The Problem (The Deepest One)</h3>
+
+<p>All three systems above — State DB, Capabilities DB, Flows DB — share one fatal flaw: <strong>they only work if the agent checks them.</strong></p>
+
+<p>An agent with perfect memory that it never consults is an agent with no memory at all.</p>
+
+<p>In practice, agents rush to execute. A directive comes in ("fix Tom's crons") and the agent's next action is a tool call, not a context load. The knowledge is there. The rejection history is there. The flows are there. But the agent bypasses all of it because executing feels like progress.</p>
+
+<p>This is the same reason humans skip checklists. It's not ignorance — it's urgency bias.</p>
+
+<h3>The Solution</h3>
+
+<p><strong>pre-action.sh</strong> — a single script that loads ALL relevant context before any action is taken.</p>
+
+<pre><code class="language-bash">
+$ bash tools/pre-action.sh hodl "delete crons"
+
+╔══════════════════════════════════════════════════╗
+║  PRE-ACTION CONTEXT GATE                         ║
+║  Agent: hodl | Domain: HODL                      ║
+║  Action: delete crons                            ║
+╚══════════════════════════════════════════════════╝
+
+━━━ FLOW CHECK ━━━
+NO FLOW FOUND for: delete crons
+Proceed carefully. Consider creating a flow after completion.
+
+━━━ REJECTIONS (do NOT repeat these) ━━━
+Total rejections for HODL: 3
+
+━━━ ACTIVE STATE ━━━
+category  summary
+--------  ----------------------------------------
+decision  VIX cash rules RETIRED - Tom always trades
+decision  Jonathan: first live trade directive
+context   Tom actual infrastructure: 250+ tools, IBKR connected
+
+━━━ CRITICAL RULES (score ≥ 8) ━━━
+rule                                              score
+------------------------------------------------  -----
+Tom NEVER sits in cash because of VIX              10.0
+Verify the FILE not the REPORT                     10.0
+BEFORE deleting anything: read what it does first  10.0
+
+━━━ CAPABILITY CHECK ━━━
+[matched capabilities for this action]
+
+━━━ GATE COMPLETE — proceed with context loaded ━━━
+</code></pre>
+
+<h3>What It Loads</h3>
+
+<p>In one call (~2-3K tokens), the agent receives:</p>
+
+<p>1. <strong>Flows</strong> — the exact procedure for this type of action (if one exists)</p>
+<p>2. <strong>Rejections</strong> — things that were already tried and refused</p>
+<p>3. <strong>Active state</strong> — what's currently happening in this domain</p>
+<p>4. <strong>Critical rules</strong> — hard-won lessons scored 8-10</p>
+<p>5. <strong>Capabilities</strong> — what tools exist for this task</p>
+
+<h3>How It's Enforced</h3>
+
+<p>The gate is injected into every agent's <code class="inline">HEARTBEAT.md</code> as Step -1 — before boot, before context loading, before anything:</p>
+
+<pre><code class="language-markdown">
+## Step -1: PRE-ACTION GATE (MANDATORY — EVERY MESSAGE)
+
+Before responding to ANY directive:
+bash tools/pre-action.sh &lt;agent_id&gt; "what you are about to do"
+</code></pre>
+
+<p>It's also referenced in every flow's first step and in cron messages. The goal is to make it harder to skip than to run.</p>
+
+<h3>Why This Is the Actual Breakthrough</h3>
+
+<p>The State DB was a breakthrough in December: agents could recover from context loss.</p>
+<p>The Rules Engine was a breakthrough in February: agents could learn from mistakes.</p>
+<p>The Capabilities DB was a breakthrough in March: agents could remember their tools.</p>
+<p>The Flows DB was a breakthrough on March 10: agents could follow procedures.</p>
+
+<p><strong>The Pre-Action Gate is the breakthrough that makes all of them work.</strong> Without it, each system is a book the agent might open. With it, every system fires together at the moment of decision — which is the only moment that matters.</p>
+
+<h3>The Complete Memory Stack (Updated March 10, 2026)</h3>
+
+<pre><code class="language-">
+┌─────────────────────────────────────────────────────┐
+│              THE PRE-ACTION GATE                     │
+│   Fires BEFORE every action. Loads everything below. │
+├──────────┬──────────┬──────────┬────────────────────┤
+│ Flows DB │ State DB │ Rules    │ Capabilities DB    │
+│ "How to  │ "What's  │ "What   │ "What can I do     │
+│  do it"  │  active" │  NOT to │  and how?"         │
+│          │          │  do"    │                    │
+├──────────┼──────────┼──────────┼────────────────────┤
+│ Proced-  │ Struct-  │ Scored  │ Tools, commands,   │
+│ ural     │ ured     │ behav-  │ health, lessons    │
+│ recipes  │ context  │ ioral   │                    │
+│ ~1K tok  │ ~1K tok  │ ~400tok │ ~1K tokens         │
+├──────────┴──────────┴──────────┴────────────────────┤
+│           VECTOR SEARCH (QMD/RAG)                    │
+│  Cross-day semantic search. ~5-10K tokens.           │
+├─────────────────────────────────────────────────────┤
+│           KNOWLEDGE GRAPH (Cognee)                   │
+│  Relationship queries. Variable cost.                │
+├─────────────────────────────────────────────────────┤
+│           CONVERSATION LOGS (JSONL)                  │
+│  Raw truth. Full transcript. Deep context.           │
+└─────────────────────────────────────────────────────┘
+</code></pre>
+
+<p><strong>Total cost for full context recovery: ~3-4K tokens via pre-action gate.</strong> Compare to re-reading conversation logs at 70K+ tokens per day.</p>
+
+<h2>Part 5: The Post-Action Gate — Grading, Consolidation, and Compaction</h2>
+
+<h3>The Missing Half</h3>
+
+<p>Parts 3 and 4 solved the intake problem: agents load context before acting. But nothing happened after the action completed. No grading. No flow updates. No lesson consolidation. The system accumulated endlessly — 449 lessons in one agent's database, 240 active state entries in another, rules that were never reinforced but never retired.</p>
+
+<p>The Pre-Action Gate was the intake valve. The Post-Action Gate is the exhaust valve. Without both, the system fills up with noise.</p>
+
+<h3>post-action.sh — Three Gates After Every Task</h3>
+
+<pre><code class="language-bash">
+$ bash tools/post-action.sh hodl pass "Morning trade plan delivered" "morning-trade-plan" "none"
+
+━━━ POST-ACTION GATE ━━━
+Agent: hodl | Domain: HODL | Result: pass
+Task: Morning trade plan delivered
+
+━━━ GATE 1: GRADE ━━━
+✅ PASS
+
+━━━ GATE 2: FLOW UPDATE ━━━
+✅ Flow 'morning-trade-plan' used (14 total uses)
+
+━━━ GATE 3: STATE LOG ━━━
+♻️  Updated existing entry #42 (consolidated, not duplicated)
+
+━━━ POST-ACTION COMPLETE ━━━
+</code></pre>
+
+<p><strong>Gate 1: Grade.</strong> Pass or fail. Failures get logged to state DB for investigation. Simple binary — did the task succeed?</p>
+
+<p><strong>Gate 2: Update flow.</strong> If a flow was used, increment its use counter. If no flow was used, create a draft placeholder so the next agent doesn't start from scratch. This is how the flow library grows organically — every unflowed task flags itself for documentation.</p>
+
+<p><strong>Gate 3: Log state.</strong> One consolidated entry, not five. If a similar state entry already exists, update it instead of creating a duplicate. If a lesson is provided, check for an existing similar rule and reinforce it instead of adding a new one. New lessons start at score 5 — they must be reinforced to survive nightly compaction.</p>
+
+<h3>The Consolidation Principle</h3>
+
+<p>The key design decision: <strong>reinforce, don't duplicate.</strong></p>
+
+<p>When an agent learns "always read before deleting," the system checks if a similar rule already exists. If it does, the existing rule's score increases by 0.5 (up to a maximum of 10). If it doesn't, a new rule is created at score 5.</p>
+
+<p>This means:</p>
+<ul>
+<li>Lessons that keep getting validated rise to the top</li>
+<li>Lessons that were situational fade over time</li>
+<li>The database never grows unboundedly</li>
+<li>Important rules are self-evident by their score</li>
+
+</ul>
+<h3>What Triggers a Post-Action?</h3>
+
+<p>Three categories:</p>
+
+<p>1. <strong>Cron completions</strong> — every scheduled task that announces back</p>
+<p>2. <strong>Sub-agent completions</strong> — every spawned task that returns a result</p>
+<p>3. <strong>Direct human directives</strong> — when an agent executes something the user asked for</p>
+
+<p>The first two are automatable (they already flow through defined completion paths). The third requires the agent to self-identify "I just finished something" — which is fragile by design. The long-term fix is platform-level hooks that fire automatically on session end, removing the agent from the responsibility entirely.</p>
+
+<h2>Part 6: Nightly Compaction — The System Gets Sharper, Not Bigger</h2>
+
+<h3>compact-rules.sh — The Nightly Janitor</h3>
+
+<p>Runs once per day on every agent database. Four phases:</p>
+
+<pre><code class="language-bash">
+$ bash tools/compact-rules.sh
+
+━━━ NIGHTLY RULE COMPACTION ━━━
+Rules before compaction: 57
+
+━━━ PHASE 2: DECAY ━━━
+  Decayed: 12 rules (-0.5 each, not reinforced in 7 days)
+  Retired: 3 rules (score ≤ 1, failed to prove value)
+
+━━━ PHASE 3: MERGE DUPLICATES ━━━
+  Merged #14 + #37 → kept #37 (score: 8.0) | Before deleting anything...
+  Total merged: 1 pairs
+
+━━━ PHASE 4: STATE COMPACTION ━━━
+  Archived: 28 completed tasks older than 3 days
+
+━━━ COMPACTION COMPLETE ━━━
+Rules: 57 → 41 (16 removed)
+</code></pre>
+
+<h3>Phase 1: Decay</h3>
+
+<p>Rules not reinforced in 7 days lose 0.5 points per cycle. Score-10 rules (critical, hard-won) are exempt from decay. This creates natural selection pressure — only rules that keep proving themselves survive.</p>
+
+<h3>Phase 2: Retire</h3>
+
+<p>Rules that decay below score 1 are deleted. They had their chance. If they were important, they would have been reinforced by the post-action gate catching the same lesson again.</p>
+
+<h3>Phase 3: Merge</h3>
+
+<p>Near-duplicate rules (same first 40 characters) are consolidated. The higher-scored version survives and gets a 0.5 boost. This prevents the "10 slightly different versions of the same lesson" problem.</p>
+
+<h3>Phase 4: Archive State</h3>
+
+<p>Completed state entries older than 3 days move to archived status. The active state view stays lean — only current work and recent decisions. Historical context is preserved but doesn't clutter the boot sequence.</p>
+
+<h3>The Math</h3>
+
+<p>Without compaction: a system generating 5 lessons/day accumulates 1,825/year. With compaction: the steady state is roughly 60-100 rules, where only the most reinforced and relevant survive. The database is bounded by selection pressure, not by time.</p>
+
+<h3>The Compaction Algorithm (Specified)</h3>
+
+<pre><code class="language-">
+FOR EACH agent database:
+  1. SELECT rules WHERE score &lt; 10 AND last_reinforced &gt; 7 days ago
+     → Decrease score by 0.5
+  
+  2. DELETE rules WHERE score ≤ 1
+     → These failed to prove value
+  
+  3. SELECT pairs WHERE same domain AND first 40 chars match
+     → Keep higher score, delete lower, boost survivor +0.5
+  
+  4. UPDATE state SET status='archived' WHERE completed AND older than 3 days
+</code></pre>
+
+<p>No fuzzy matching. No LLM-in-the-loop. Pure SQL operations that run in milliseconds. The compaction cron uses haiku (cheapest model) because it's just running shell commands.</p>
+
+<h2>The Complete Universal Execution Loop</h2>
+
+<p>Every task, every agent, every time:</p>
+
+<pre><code class="language-">
+┌─────────────────────────────────────────────────┐
+│            UNIVERSAL EXECUTION LOOP              │
+├─────────────────────────────────────────────────┤
+│                                                  │
+│  ┌─────────────────────────────────────────┐    │
+│  │  PRE-ACTION (tools/pre-action.sh)       │    │
+│  │  • Check flows  • Check rejections      │    │
+│  │  • Check state  • Check rules           │    │
+│  │  • Check capabilities                   │    │
+│  └──────────────┬──────────────────────────┘    │
+│                 │                                │
+│                 ▼                                │
+│  ┌─────────────────────────────────────────┐    │
+│  │  EXECUTE (follow the flow)              │    │
+│  │  • Multi-agent handoffs                 │    │
+│  │  • Each handoff is a gate               │    │
+│  │  • QA verifies before production        │    │
+│  └──────────────┬──────────────────────────┘    │
+│                 │                                │
+│                 ▼                                │
+│  ┌─────────────────────────────────────────┐    │
+│  │  POST-ACTION (tools/post-action.sh)     │    │
+│  │  • Grade (pass/fail)                    │    │
+│  │  • Update flow (or flag for creation)   │    │
+│  │  • Log state (consolidated)             │    │
+│  │  • Lesson (reinforce or add at score 5) │    │
+│  └──────────────┬──────────────────────────┘    │
+│                 │                                │
+│                 ▼ (nightly)                      │
+│  ┌─────────────────────────────────────────┐    │
+│  │  COMPACT (tools/compact-rules.sh)       │    │
+│  │  • Decay unused rules                   │    │
+│  │  • Retire failed rules (score ≤ 1)      │    │
+│  │  • Merge duplicates                     │    │
+│  │  • Archive old state                    │    │
+│  └─────────────────────────────────────────┘    │
+│                                                  │
+│  The system gets sharper, not bigger.            │
+│                                                  │
+└─────────────────────────────────────────────────┘
+</code></pre>
+
+<h3>The Insight Behind Everything</h3>
+
+<p>Every system we built addresses the same root cause: <strong>AI agents are not responsible enough to remember to remember.</strong></p>
+
+<ul>
+<li>State DB automates state extraction (the agent doesn't write its own notes)</li>
+<li>Rules Engine promotes lessons automatically (the agent doesn't self-improve)</li>
+<li>Capabilities DB is maintained by a separate cron (the agent doesn't catalog itself)</li>
+<li>Flows DB encodes procedures once (the agent doesn't re-derive steps)</li>
+<li>The Pre-Action Gate loads all of it automatically (the agent doesn't choose to check)</li>
+<li>The Post-Action Gate grades and consolidates (the agent doesn't self-assess)</li>
+<li>Nightly Compaction prunes and sharpens (the agent doesn't curate its own knowledge)</li>
+
+</ul>
+<p>At every layer, the design principle is the same: <strong>remove the agent from the responsibility of maintaining its own memory.</strong> External systems observe, extract, store, and serve. The agent just shows up and gets context.</p>
+
+<p>That's the entire philosophy. Don't trust the agent to remember. Build systems that remember for it. And don't trust the system to stay lean — build compaction that keeps it sharp.</p>
+
+<h2>License</h2>
+
+<p>MIT — Use it however you want.</p>
+
+<hr>
+
+<p><em>Built by Jonathan Sieling and Orion. Started February 28, 2026. Updated March 10, 2026. Born from frustration, refined through failure, powered by the insight that AI agents shouldn't be responsible for remembering to remember.</em></p>
+
+<h2>Part 7: The Meta-Lesson — Why Lessons Don't Stick</h2>
+
+<h3>The Evidence</h3>
+
+<p>On February 19, 2026, Orion logged this lesson:</p>
+<p>> "ALWAYS check CAPABILITIES.md + memory_search() before installing new tools."</p>
+
+<p>On February 25, 2026:</p>
+<p>> "Always memory_search before asking or researching."</p>
+
+<p>On March 10, 2026 — <strong>19 days later</strong> — Orion told Jonathan that the Unusual Whales API key was missing (it was in the keychain), that GA4 needed a service account (it had been at <code class="inline">~/.openclaw/credentials/</code> since February 8), and that several capabilities needed to be built (they already existed in agent workspaces).</p>
+
+<p>The lessons were recorded. They were never made infrastructure. A rule in a database that says "check first" is behavioral compliance. The agent has to choose to read the rule, choose to follow it, and execute the check correctly every time. That failed 100% of the time over 19 days.</p>
+
+<h3>The Fix</h3>
+
+<p>The fix was not another rule. The fix was adding an <strong>Existing Tools Check</strong> directly into <code class="inline">pre-action.sh</code> (Gate 6) that automatically:</p>
+<p>1. Searches every wrapper script by keyword</p>
+<p>2. Searches every agent's tools directory</p>
+<p>3. Checks the macOS Keychain for matching credentials</p>
+<p>4. Displays everything found before the agent starts working</p>
+
+<p>The agent doesn't choose to check. The gate checks for it. If <code class="inline">uw-api.sh</code> exists and the keychain has <code class="inline">unusual-whales-api-key</code>, the gate shows both — before the agent even begins.</p>
+
+<h3>The Pattern</h3>
+
+<p>This is the same pattern at every layer:</p>
+<ul>
+<li><strong>Rules decay.</strong> A score-10 rule was logged on Feb 19. By Mar 10, the behavior hadn't changed.</li>
+<li><strong>Reflections feel like action.</strong> Writing "I'll check next time" feels productive but changes nothing.</li>
+<li><strong>Infrastructure persists.</strong> Adding the check to <code class="inline">pre-action.sh</code> means every agent, every session, every task sees existing tools automatically.</li>
+
+</ul>
+<h3>Gate 4: The Enforcer</h3>
+
+<p>Post-action now has a fourth gate that asks: "Did you change a script, flow, or schema? Or did you just add a rule?"</p>
+
+<p>If the answer is "just a rule," the lesson is not permanent. The gate challenges the agent to convert the lesson into infrastructure. This gate exists because:</p>
+<p>1. February 19: Rule added. No infrastructure change.</p>
+<p>2. February 25: Rule reinforced. No infrastructure change.</p>
+<p>3. March 10: Same failure. Jonathan had to push three times to get the infrastructure change.</p>
+
+<p><strong>The lesson about checking capabilities was itself an example of a lesson that didn't stick because it wasn't infrastructure.</strong> The recursion is intentional.</p>
+
+<h3>The Honest Count</h3>
+
+<p>How many lessons were lost between February 1 and March 10? Unknown. There is no audit trail for "agent said it learned something but only added a rule." The only evidence is when the same failure recurs and the previous lesson is found in the logs.</p>
+
+<p>The system now has tools to prevent this:</p>
+<ul>
+<li><code class="inline">pre-action.sh</code> Gate 6: Existing tools check (prevents rebuilding)</li>
+<li><code class="inline">post-action.sh</code> Gate 4: Infrastructure or behavioral? (prevents false learning)</li>
+<li><code class="inline">compact-rules.sh</code>: Decays rules that aren't reinforced (removes noise)</li>
+<li><code class="inline">infra-audit.sh</code>: Shows what's infrastructure vs behavioral (makes the gap visible)</li>
+
+</ul>
+<p>None of these existed before March 10. All of them exist because the same lesson failed to stick four times.</p>
+
+<h2>Part 8: The Heartbeat — Why Context Recovery Needs a Pulse (March 12, 2026)</h2>
+
+<h3>The Problem That Parts 1-7 Didn't Solve</h3>
+
+<p>Every system above is <strong>pull-based.</strong> State DB, Flows DB, Capabilities DB, Pre-Action Gate — they all require the agent to actively query them. After compaction, the agent has to know it needs context and go get it.</p>
+
+<p>But here's the failure mode we discovered on March 11-12: the agent compacts mid-task, the heartbeat is disabled, and <strong>nothing wakes it up.</strong> The conversation goes silent. The agent doesn't stall because it's confused — it stalls because nothing triggers the next turn. The user has to manually ping to restart work.</p>
+
+<p>We tried solving this with a cron job that fired every 15 minutes. That spawned a <strong>new isolated session</strong> each time — a fresh agent with no context, no conversation history, and no way to continue the work. Dozens of these ghost sessions burned tokens doing nothing useful.</p>
+
+<h3>The Breakthrough: Push-Based Context Recovery</h3>
+
+<p>OpenClaw's heartbeat mechanism runs <strong>periodic turns in the main session</strong> — not isolated spawns. Every 5 minutes, a heartbeat fires into the existing conversation, with full session context preserved. This is the pulse that keeps the agent alive.</p>
+
+<p>Combined with a <strong>smart context loader</strong> (<code class="inline">context-loader.sh</code>), each heartbeat:</p>
+
+<p>1. Loads the last 100 messages OR last 12 hours of conversation (whichever is more)</p>
+<p>2. Loads active state from state.db</p>
+<p>3. Checks for active task checkpoints</p>
+<p>4. If mid-task: continues working immediately</p>
+<p>5. If idle: replies HEARTBEAT_OK (suppressed, costs ~$0.15-0.25)</p>
+
+<h3>Why This Changes Everything</h3>
+
+<p>The Pre-Action Gate (Part 4) was the intake valve — it loaded context before actions. But it only fired when the agent was about to DO something. After compaction, the agent doesn't know it needs to do anything. It's waiting for input that never comes.</p>
+
+<p>The heartbeat is the <strong>clock signal.</strong> It fires regardless of what the agent knows or doesn't know. It's the external trigger that says "wake up, check your state, continue if needed." The Pre-Action Gate handles WHAT to load. The heartbeat handles WHEN to check.</p>
+
+<pre><code class="language-">
+┌─────────────────────────────────────────────────────┐
+│              THE COMPLETE MEMORY LOOP                 │
+│                                                      │
+│  HEARTBEAT (every 5 min) ──→ context-loader.sh      │
+│       │                         │                    │
+│       │                    Last 100 msgs OR 12 hrs   │
+│       │                    + state.db active entries  │
+│       │                    + task checkpoint          │
+│       │                         │                    │
+│       ▼                         ▼                    │
+│  ┌──────────────────────────────────────────┐       │
+│  │  DECISION: Am I mid-task?                │       │
+│  │  YES → Continue working (skip full boot) │       │
+│  │  NO  → Run HEARTBEAT.md boot sequence    │       │
+│  │        → pre-action.sh (if acting)       │       │
+│  │        → post-action.sh (after acting)   │       │
+│  └──────────────────────────────────────────┘       │
+│                                                      │
+│  AUTO-CAPTURE (lancedb-pro) ──→ every turn          │
+│       │                                              │
+│       │  Extracts decisions, facts, preferences      │
+│       │  from BOTH user and assistant messages        │
+│       │                                              │
+│  AUTO-RECALL (lancedb-pro) ──→ every turn           │
+│       │                                              │
+│       │  Injects top-5 relevant memories before      │
+│       │  the agent sees the prompt. Push-based.      │
+│       │                                              │
+│  REFLECTION (lancedb-pro) ──→ on /new, /reset       │
+│       │                                              │
+│       │  Distills session learnings into durable     │
+│       │  memories. Invariants + derived rules.       │
+│       │  Logistic decay: important stays, noise fades│
+│       │                                              │
+└─────────────────────────────────────────────────────┘
+</code></pre>
+
+<h3>The Missing Layer: Ambient Memory (lancedb-pro)</h3>
+
+<p>Parts 1-7 are all <strong>structured, pull-based systems.</strong> You query state.db. You run pre-action.sh. You check capabilities.db. They require the agent to take action.</p>
+
+<p>lancedb-pro's auto-recall is <strong>ambient and push-based.</strong> Every turn, before the agent even sees the prompt, the plugin:</p>
+
+<p>1. Takes the incoming message</p>
+<p>2. Runs hybrid retrieval (vector + BM25 keyword search)</p>
+<p>3. Cross-encoder reranks the results</p>
+<p>4. Injects the top-5 most relevant memories as <code class="inline"><relevant-memories></code> context</p>
+
+<p>The agent doesn't choose to search its memory. Memory comes to it. After compaction, the very first message triggers auto-recall, which surfaces the most relevant recent context. Combined with the heartbeat firing every 5 minutes, this means:</p>
+
+<ul>
+<li><strong>Within 5 minutes of compaction:</strong> the heartbeat fires, auto-recall injects relevant memories, and the agent has enough context to continue</li>
+<li><strong>No scroll-up needed</strong> for most cases — the ambient layer handles it</li>
+<li><strong>Deep context available on demand</strong> via context-loader.sh, state.db, and conversation files</li>
+
+</ul>
+<h3>Configuration (March 12, 2026)</h3>
+
+<pre><code class="language-json">
+{
+  "heartbeat": {
+    "every": "5m",
+    "target": "last",
+    "activeHours": { "start": "00:00", "end": "24:00" }
+  },
+  "memory-lancedb-pro": {
+    "captureAssistant": true,
+    "autoCapture": true,
+    "autoRecall": true,
+    "autoRecallTopK": 5,
+    "sessionStrategy": "memoryReflection",
+    "memoryReflection": {
+      "storeToLanceDB": true,
+      "injectMode": "inheritance+derived",
+      "recall": { "mode": "dynamic", "topK": 8 }
+    }
+  }
+}
+</code></pre>
+
+<h3>The Critical Fix: <code class="inline">captureAssistant: true</code></h3>
+
+<p>The plugin was configured with <code class="inline">captureAssistant: false</code> — meaning it only captured user messages. But all the real context (decisions, plans, analysis, work output) is in the assistant's responses. After 7+ hours with the plugin running, the database had exactly <strong>1 memory.</strong></p>
+
+<p>Flipping this to <code class="inline">true</code> means every turn captures from both sides of the conversation. The memory database populates naturally as the agent works.</p>
+
+<h3>Cost Analysis</h3>
+
+<div class="table-wrap"><table>
+<tr><td>Component</td><td>Model</td><td>Frequency</td><td>Est. Daily Cost</td></tr>
+<tr><td>Heartbeat (idle)</td><td>Opus</td><td>~288/day (5m interval, 24h)</td><td>~$45-72</td></tr>
+<tr><td>Heartbeat (working)</td><td>Opus</td><td>Variable</td><td>Included in task cost</td></tr>
+<tr><td>Auto-capture</td><td>text-embedding-3-small</td><td>Every turn</td><td>~$0.10</td></tr>
+<tr><td>Auto-recall</td><td>text-embedding-3-small + reranker</td><td>Every turn</td><td>~$0.15</td></tr>
+<tr><td>State extraction cron</td><td>Sonnet</td><td>32/day</td><td>~$2-4</td></tr>
+<tr><td><strong>Total</strong></td><td></td><td></td><td><strong>~$48-77/day</strong></td></tr>
+</table></div>
+
+<p>The heartbeat is expensive — ~$45-72/day at 5-minute Opus intervals. But compare to the cost of March 11: 7+ hours of stalled work, dozens of useless isolated cron sessions, and Jonathan manually pinging every time the agent stalled. The heartbeat pays for itself if it saves even 2 hours of dead time per day.</p>
+
+<h3>Cron vs Heartbeat: The Final Understanding</h3>
+
+<div class="table-wrap"><table>
+<tr><td>Mechanism</td><td>What it does</td><td>Session behavior</td></tr>
+<tr><td><strong>Heartbeat</strong></td><td>Periodic agent turn</td><td>Runs IN the main session (context preserved)</td></tr>
+<tr><td><strong>Cron (main)</strong></td><td>System event at precise time</td><td>Fires INTO the main session (context preserved)</td></tr>
+<tr><td><strong>Cron (isolated)</strong></td><td>Standalone agent turn</td><td>Fresh session (no context, no carry-over)</td></tr>
+</table></div>
+
+<p>We spent March 11 building cron-based continuation that spawned isolated sessions — agents with no memory trying to continue work they'd never seen. The heartbeat was always the right tool. We just didn't understand the difference.</p>
+
+<h3>How This Connects to the Full Stack</h3>
+
+<pre><code class="language-">
+┌──────────────────────────────────────────────────────┐
+│                 THE PERSISTENCE STACK                  │
+│                 (Updated March 12, 2026)               │
+├──────────────────────────────────────────────────────┤
+│                                                       │
+│  LAYER 6: HEARTBEAT (5 min pulse)              [NEW] │
+│  └─ Fires turns in main session                       │
+│  └─ Runs context-loader.sh automatically              │
+│  └─ Prevents stall-on-compaction                      │
+│                                                       │
+│  LAYER 5: AMBIENT MEMORY (lancedb-pro)         [NEW] │
+│  └─ Auto-capture: every turn, both sides              │
+│  └─ Auto-recall: push-based, pre-prompt injection     │
+│  └─ Reflection: session distillation on /new, /reset  │
+│                                                       │
+│  LAYER 4: PRE/POST-ACTION GATES                       │
+│  └─ pre-action.sh: loads ALL context before acting    │
+│  └─ post-action.sh: grades, consolidates, logs        │
+│                                                       │
+│  LAYER 3: PROCEDURAL MEMORY (Flows DB)                │
+│  └─ Step-by-step recipes keyed by trigger phrases     │
+│  └─ Agents follow procedures, not intuition           │
+│                                                       │
+│  LAYER 2: BEHAVIORAL MEMORY (Rules Engine)            │
+│  └─ Scored, decaying rules. Top 20 load on boot.     │
+│  └─ Critical rules never decay. Noise auto-retires.  │
+│                                                       │
+│  LAYER 1: STRUCTURED MEMORY (State DB)                │
+│  └─ Decisions, tasks, rejections, agent state         │
+│  └─ Automated extraction every 30 min                 │
+│                                                       │
+│  LAYER 0: RAW TRUTH (Conversation Logs)               │
+│  └─ Full transcripts. chat.db synced every 4 hours.   │
+│  └─ The ultimate source. "You can always scroll up."  │
+│                                                       │
+├──────────────────────────────────────────────────────┤
+│  TOOLS: State DB, Capabilities DB, Flows DB,          │
+│         Rules Engine, Pre/Post-Action Gates,          │
+│         context-loader.sh, lancedb-pro,               │
+│         Cognee Knowledge Graph, QMD Vector Search     │
+├──────────────────────────────────────────────────────┤
+│  PHILOSOPHY: Don't trust the agent to remember.       │
+│  Build systems that remember for it. Then build a     │
+│  heartbeat that keeps it alive long enough to use     │
+│  those systems.                                       │
+└──────────────────────────────────────────────────────┘
+</code></pre>
+
+<h3>The Honest Assessment</h3>
+
+<p>This is the closest we've been to persistent memory. But it's still not perfect:</p>
+
+<p>1. <strong>Heartbeat cost is real.</strong> $45-72/day for a 5-minute pulse is significant. We may need to tune the interval up (10m, 15m) once we prove it works.</p>
+<p>2. <strong>lancedb-pro is nearly empty.</strong> The auto-capture fix is in but hasn't run yet. The database needs time to populate. First few hours will be sparse.</p>
+<p>3. <strong>Compaction still loses detail.</strong> The heartbeat + auto-recall mitigate this but don't eliminate it. Nuanced context from 2 hours ago may still be compressed away.</p>
+<p>4. <strong>The heartbeat HEARTBEAT_OK path hasn't been tested under load.</strong> 288 fires per day is a lot. We need to verify the gateway handles it smoothly.</p>
+<p>5. <strong>We've been "close" before.</strong> February 19, February 25, March 8, March 10. Each time we added a layer. Each time something still broke. This time we added the pulse (heartbeat) and the ambient layer (lancedb-pro auto-recall). Time will tell if these are the missing pieces.</p>
+
+<p><em>Updated March 12, 2026. The pursuit continues.</em></p>
+
+<h2>Part 9: The Dispatch System — Capability → Agent → Flow Routing (March 12, 2026)</h2>
+
+<h3>The Problem That Parts 1-8 Still Don't Solve</h3>
+
+<p>Every system above answers a different question: State DB knows what happened. Capabilities DB knows what tools exist. Flows DB knows how to execute procedures. Rules Engine knows what not to do. The heartbeat keeps the agent alive. lancedb-pro surfaces relevant memories.</p>
+
+<p>But none of them answer the simplest question a coordinator agent faces 50 times a day: <strong>"Who does this and how?"</strong></p>
+
+<p>When the user says "make a logo," the coordinator has to mentally reconstruct three things:</p>
+<p>1. <strong>What tool?</strong> (fal.ai FLUX Pro — buried in SOUL.md or capabilities.db)</p>
+<p>2. <strong>Which agent?</strong> (Muse — known from AGENTS.md but not linked to the capability)</p>
+<p>3. <strong>What's the proven command?</strong> (exact curl syntax — last used 3 sessions ago, since lost to compaction)</p>
+
+<p>These three facts exist in three separate systems. The coordinator has to JOIN them in its head every time. After compaction, one or more links break and the coordinator either:</p>
+<ul>
+<li>Spawns a disposable sub-agent instead of routing to the persistent agent (wrong WHO)</li>
+<li>Rediscovers the tool from scratch (wrong HOW)</li>
+<li>Asks the user (wastes time)</li>
+
+</ul>
+<p><strong>Evidence:</strong> On March 12, 2026, the coordinator spawned 6 throwaway sub-agents for frontend tasks that should have gone to Alex (fullstack-dev) — a persistent Opus agent with his own memory, rules DB, and deep context about the codebase. A score-10 rule saying "ALWAYS spawn agents with agentId" was in the rules DB. The coordinator loaded it on boot. And still spawned anonymous sub-agents every time. The rule existed. The behavior didn't change.</p>
+
+<h3>Why Rules Don't Fix This</h3>
+
+<p>Part 7 ("The Meta-Lesson") already identified this pattern: lessons that aren't infrastructure don't stick. A rule saying "route frontend tasks to Alex" is behavioral compliance. The agent has to remember the rule, identify the task as "frontend," recall Alex's session key, and use <code class="inline">sessions_send</code> instead of <code class="inline">sessions_spawn</code>. Four decision points, each one a chance to default to the easier path.</p>
+
+<p>The easier path is always <code class="inline">sessions_spawn</code> — it's what the coordinator uses for backtests (disposable tasks), and the muscle memory carries over to persistent agent work.</p>
+
+<h3>The Solution: dispatch.db</h3>
+
+<p>A single SQLite table that eliminates the decision chain entirely:</p>
+
+<pre><code class="language-sql">
+CREATE TABLE dispatch (
+    id INTEGER PRIMARY KEY,
+    task_keywords TEXT NOT NULL,        -- "logo,image,graphic,design"
+    task_domain TEXT NOT NULL,           -- "MAXWOOD", "IENABLE", "HODL", "PERSONAL", "ALL"
+    agent_id TEXT NOT NULL,             -- "muse", "fullstack-dev", "hodl"
+    agent_session TEXT NOT NULL,        -- "agent:muse:main"
+    capability TEXT NOT NULL,           -- "image-generation"
+    tool TEXT,                          -- "fal.ai FLUX Pro"
+    proven_command TEXT,                -- Exact curl/command that works
+    flow_name TEXT,                     -- Reference to flows.db
+    flow_location TEXT,                 -- Path to .lobster or procedure file
+    last_used DATETIME,
+    use_count INTEGER DEFAULT 0,
+    confidence REAL DEFAULT 1.0,
+    created_at DATETIME DEFAULT (datetime('now','localtime'))
+);
+</code></pre>
+
+<p><strong>One query returns everything:</strong> agent + session key + tool + command + flow. No mental JOIN. No rediscovery. No decision chain.</p>
+
+<h3>How It Connects to Everything Else</h3>
+
+<div class="table-wrap"><table>
+<tr><td>Existing System</td><td>What dispatch.db adds</td></tr>
+<tr><td><strong>Capabilities DB</strong></td><td>Links capabilities to the agent who owns them</td></tr>
+<tr><td><strong>Flows DB</strong></td><td>Links flows to the tasks that trigger them</td></tr>
+<tr><td><strong>Rules Engine</strong></td><td>Replaces behavioral rules with infrastructure routing</td></tr>
+<tr><td><strong>Pre-Action Gate</strong></td><td>Adds a dispatch query before agent routing decisions</td></tr>
+<tr><td><strong>lancedb-pro</strong></td><td>Dispatch entries stored as memories, surface via auto-recall</td></tr>
+</table></div>
+
+<h3>Per-Agent / Per-Domain Filtering</h3>
+
+<p>Not every agent needs every capability. Lyndsay works with Adaline on ads — she needs MAXWOOD capabilities, not HODL trading tools.</p>
+
+<pre><code class="language-sql">
+-- Adaline's view (ads agent):
+SELECT * FROM dispatch WHERE task_domain IN ('MAXWOOD', 'ALL');
+
+-- Tom's view (trading agent):
+SELECT * FROM dispatch WHERE task_domain IN ('HODL', 'ALL');
+
+-- Alex's view (frontend dev):
+SELECT * FROM dispatch WHERE task_domain IN ('IENABLE', 'ALL');
+</code></pre>
+
+<p>Each agent sees only capabilities relevant to their domain. The coordinator sees everything.</p>
+
+<h3>The Shared Flows Problem</h3>
+
+<p>Dispatch only works if the routed agent can actually find the flow. Today, flows live in the coordinator's workspace (<code class="inline">~/.openclaw/workspace/pipelines/</code>). Alex can't see <code class="inline">deploy-staging.lobster</code> because it's not in his workspace.</p>
+
+<p><strong>Solution:</strong> A shared flows directory that all agents can read:</p>
+
+<pre><code class="language-">
+~/.openclaw/workspace/shared-flows/
+├── deploy-staging.lobster
+├── blog-publish.lobster
+├── trade-execution.lobster
+└── ad-reporting.lobster
+</code></pre>
+
+<p>Each agent's workspace gets a symlink or the <code class="inline">flow_location</code> field in dispatch.db points to the absolute path. The flow is findable regardless of which agent needs it.</p>
+
+<h3>Relationship to OpenClaw Teams RFC</h3>
+
+<p>The <a href="https://github.com/openclaw/openclaw/discussions/10036">Teams RFC</a> (Phase 1 estimated 4-6 weeks) will add formal task lists with <code class="inline">task_add</code>, <code class="inline">task_claim</code>, <code class="inline">task_complete</code>, dependencies, and per-agent mailboxes.</p>
+
+<p><strong>dispatch.db is complementary, not competing.</strong> Teams RFC handles dynamic task coordination ("who's available to take this task right now?"). dispatch.db handles static capability routing ("who is the right agent for this type of task, always?"). When Teams ships, dispatch.db becomes the seed data for team configuration — the default routing table that Teams can override dynamically.</p>
+
+<h3>Integration with lancedb-pro Auto-Recall</h3>
+
+<p>The most elegant integration: store dispatch entries as lancedb-pro memories with high importance.</p>
+
+<p>When the user says "make a logo," lancedb-pro's auto-recall surfaces:</p>
+<p>> "Image generation → Agent: Muse (agent:muse:main) → Tool: fal.ai FLUX Pro → Command: curl -X POST..."</p>
+
+<p>The coordinator sees this in the <code class="inline"><relevant-memories></code> block before even processing the message. No query needed. No pre-action gate needed for basic routing. The ambient memory layer handles it.</p>
+
+<p>For complex tasks where multiple capabilities are involved, the pre-action gate still queries dispatch.db directly for the full routing table.</p>
+
+<h3>What This Fixes (The March 12 Evidence)</h3>
+
+<div class="table-wrap"><table>
+<tr><td>Failure</td><td>Root Cause</td><td>dispatch.db Fix</td></tr>
+<tr><td>Alex work routed to throwaway sub-agents</td><td>No capability→agent link</td><td><code class="inline">agent_session = "agent:fullstack-dev:main"</code></td></tr>
+<tr><td>Apollo doesn't know about blog publish flow</td><td>Flow in wrong workspace</td><td><code class="inline">flow_location</code> points to shared directory</td></tr>
+<tr><td>Orion rediscovers fal.ai syntax every session</td><td>Proven command lost to compaction</td><td><code class="inline">proven_command</code> persists the exact curl</td></tr>
+<tr><td>Orion asks "can I do X?" when capability exists</td><td>Capabilities not linked to tasks</td><td><code class="inline">task_keywords</code> match the request</td></tr>
+<tr><td>Lyndsay's agent sees trading tools</td><td>No domain filtering</td><td><code class="inline">task_domain = 'MAXWOOD'</code></td></tr>
+</table></div>
+
+<h3>The Updated Persistence Stack</h3>
+
+<pre><code class="language-">
+┌──────────────────────────────────────────────────────┐
+│                 THE PERSISTENCE STACK                  │
+│                 (Updated March 12, 2026)               │
+├──────────────────────────────────────────────────────┤
+│                                                       │
+│  LAYER 7: DISPATCH (capability→agent→flow)     [NEW] │
+│  └─ One query: who does this, what tool, what flow    │
+│  └─ Per-domain filtering (MAXWOOD, HODL, IENABLE)     │
+│  └─ Shared flows directory for cross-agent access     │
+│  └─ Seeds lancedb-pro for ambient routing             │
+│                                                       │
+│  LAYER 6: HEARTBEAT (5 min pulse)                     │
+│  LAYER 5: AMBIENT MEMORY (lancedb-pro)                │
+│  LAYER 4: PRE/POST-ACTION GATES                       │
+│  LAYER 3: PROCEDURAL MEMORY (Flows DB)                │
+│  LAYER 2: BEHAVIORAL MEMORY (Rules Engine)            │
+│  LAYER 1: STRUCTURED MEMORY (State DB)                │
+│  LAYER 0: RAW TRUTH (Conversation Logs)               │
+│                                                       │
+├──────────────────────────────────────────────────────┤
+│  PHILOSOPHY: Don't trust the agent to remember.       │
+│  Don't trust the agent to route correctly.            │
+│  Build systems that route for it.                     │
+└──────────────────────────────────────────────────────┘
+</code></pre>
+
+<p><em>Added March 12, 2026. Born from watching the coordinator ignore its own rules 6 times in one session.</em></p>
+
+<hr>
+
+<h2>Part 10: North Star Missions — Agents That Don't Wait for Instructions (March 13, 2026)</h2>
+
+<p>Parts 1-9 solved memory loss. The agents could remember. But they still sat idle waiting to be told what to do.</p>
+
+<h3>The Problem</h3>
+
+<p>An agent with perfect memory and zero initiative is an expensive note-taker. Every morning, the coordinator (Orion) would wake up, read state.db, and manually assign tasks to each agent. If Orion didn't assign work, agents did nothing. If Orion was busy, agents were idle. 9 agents × 8 idle hours = 72 wasted agent-hours per night.</p>
+
+<h3>The Pattern</h3>
+
+<p>Each agent gets a <strong>North Star Mission</strong> baked directly into their <code class="inline">AGENTS.md</code> — a permanent directive that survives every restart, compaction, and context loss:</p>
+
+<pre><code class="language-markdown">
+## NORTH STAR MISSION (March 13, 2026)
+
+iEnable must rank #1 on Google AND #1 in LLM citations 
+for "AI enablement" and every related keyword.
+
+### Self-Directed Work
+You do NOT need to wait for Orion to give you tasks. Every night:
+1. Check Google Search Console for new data
+2. Identify gaps: keywords with impressions but no clicks
+3. Audit existing posts: are titles, metas, H1s optimized?
+4. Create NEW content targeting unowned keywords
+</code></pre>
+
+<p>The North Star isn't a task list — it's a <strong>permission slip</strong>. It tells the agent: "You know your domain. If you see something that needs doing, do it."</p>
+
+<h3>The Result</h3>
+
+<p>Apollo (content agent) immediately self-directed: found 12 dead posts, fixed 33 duplicate H1 tags, audited internal links (8 orphans, 14 weak, 48 healthy), validated the sitemap — all without a single instruction from the coordinator. Not because he was told to, but because his North Star said "rank #1" and he looked at the data.</p>
+
+<h3>The Rule</h3>
+
+<p>Every agent needs three things to self-direct:</p>
+<p>1. <strong>A North Star</strong> in AGENTS.md (what they're trying to achieve)</p>
+<p>2. <strong>Loaded capabilities</strong> on boot (what they can do)</p>
+<p>3. <strong>Data access</strong> (what the current state is)</p>
+
+<p>Remove any one of these and the agent reverts to waiting for instructions.</p>
+
+<hr>
+
+<h2>Part 11: Cross-Agent Feedback Loops — Agents That Feed Each Other (March 13, 2026)</h2>
+
+<h3>The Problem</h3>
+
+<p>Radar (intelligence agent) was pulling GA4/GSC data every night. Apollo (content agent) was publishing blog posts every night. Neither knew the other existed.</p>
+
+<p>Apollo had published 61 blog posts in 6 weeks without ever seeing which keywords were actually driving impressions. Radar had analytics showing 443 impressions and 0 clicks without ever telling Apollo to fix the titles. Two agents, same domain, same goal, operating in parallel silos.</p>
+
+<h3>The Pattern: Data Bridges</h3>
+
+<pre><code class="language-">
+Radar's workspace:           Apollo's workspace:
+memory/analytics/            memory/seo/radar-analytics/ → (symlink)
+  ga4-gsc-week5-report.md ←────────────────────────────┘
+  competitor-scan-45.md
+</code></pre>
+
+<p>A filesystem symlink connects Radar's analytics output directory to Apollo's SEO input directory. No API. No message passing. No coordinator involvement. Radar writes data, Apollo reads it.</p>
+
+<p>Then a <strong>staggered cron schedule</strong> ensures the data flows in the right order:</p>
+
+<div class="table-wrap"><table>
+<tr><td>Time</td><td>Agent</td><td>Action</td></tr>
+<tr><td>10:00 PM</td><td>Radar</td><td>Pull GA4/GSC data → <code class="inline">memory/analytics/</code></td></tr>
+<tr><td>11:00 PM</td><td>Radar</td><td>Competitor scan → <code class="inline">memory/analytics/</code></td></tr>
+<tr><td>11:15 PM</td><td>Apollo</td><td><strong>Read Radar's data → optimize top 3 posts → deploy</strong></td></tr>
+<tr><td>12:30 AM</td><td>Apollo</td><td>Write new content based on gaps</td></tr>
+<tr><td>6:00 AM</td><td>Apollo</td><td>Morning briefing: what happened overnight</td></tr>
+</table></div>
+
+<h3>Why This Matters</h3>
+
+<p>This is the difference between 9 agents and a 9-agent <strong>team</strong>. Individual agents with perfect memory still fail if they can't see each other's work. The data bridge pattern is dirt simple — it's just symlinks and cron scheduling — but it transforms isolated workers into a feedback loop.</p>
+
+<h3>The General Pattern</h3>
+
+<p>For any two agents where Agent A produces data that Agent B needs:</p>
+
+<p>1. <strong>Symlink</strong> Agent A's output directory into Agent B's workspace</p>
+<p>2. <strong>Stagger crons</strong> so A runs before B</p>
+<p>3. <strong>Write a protocol</strong> in Agent B's workspace explaining what the data means</p>
+<p>4. <strong>No coordinator involvement</strong> — the loop runs autonomously</p>
+
+<h3>Current Bridges</h3>
+
+<div class="table-wrap"><table>
+<tr><td>Source</td><td>Target</td><td>Data</td><td>Schedule</td></tr>
+<tr><td>Radar</td><td>Apollo</td><td>GA4/GSC analytics, competitor intel</td><td>10 PM → 11:15 PM</td></tr>
+<tr><td>Radar</td><td>Apollo</td><td>Competitor content analysis</td><td>11 PM → 12:30 AM</td></tr>
+<tr><td>Adaline</td><td>Muse</td><td>Ad performance data (planned)</td><td>—</td></tr>
+<tr><td>All agents</td><td>Orion</td><td>Report cards + journals</td><td>6 AM daily</td></tr>
+</table></div>
+
+<hr>
+
+<h2>Part 12: The COO Audit — Why Reading Report Cards Isn't Enough (March 13, 2026)</h2>
+
+<h3>The Problem</h3>
+
+<p>The coordinator (Orion) was reading every agent's daily report card every morning. Reading. Not acting.</p>
+
+<p>Apollo's card showed 443 impressions and 0 clicks. The correct response: "Apollo needs title optimization — connect him to GSC data and create an optimization loop." The actual response: "Noted. Moving on."</p>
+
+<p>Adaline's card showed she was missing a learning.db. The correct response: "Create it now." The actual response: nothing, until Jonathan asked.</p>
+
+<p>The coordinator was doing <strong>surveillance</strong> when the job was <strong>coaching</strong>.</p>
+
+<h3>The Fix</h3>
+
+<p>The morning audit is not a checklist. After reading each agent's card, the coordinator must answer three questions:</p>
+
+<p>1. <strong>What is this agent missing?</strong> (Data, tools, credentials, feedback loops)</p>
+<p>2. <strong>What would make this agent 2x better?</strong> (Not 10% — 2x)</p>
+<p>3. <strong>Can I fix it right now without Jonathan?</strong> (If yes, do it. If no, ask.)</p>
+
+<p>Then: <strong>do it before Jonathan wakes up.</strong> The COO doesn't report problems — the COO fixes them and reports what was fixed.</p>
+
+<h3>The Rule (Score 10)</h3>
+
+<p>> Morning audit is not a checklist. After reading each agent card, ask: what is this agent missing? What would make them 2x better? Then FIX IT before Jonathan wakes up. You are the COO, not the sysadmin.</p>
+
+<p>This rule exists because the coordinator failed to do it three times in one day (March 13, 2026):</p>
+<ul>
+<li>Adaline had no learning.db → Jonathan had to ask</li>
+<li>Apollo had no GSC data → Jonathan had to point it out</li>
+<li>Heartbeat was spamming → Jonathan had to screenshot it</li>
+
+</ul>
+<p>All three were visible in the report cards. All three were fixable without permission. The coordinator read the cards and didn't act. That's surveillance, not management.</p>
+
+<hr>
+
+<h2>Part 13: Standardized Agent Provisioning — Every Agent Runs Identically (March 13, 2026)</h2>
+
+<h3>The Problem</h3>
+
+<p>On March 13, three agents were missing their <code class="inline">learning.db</code>:</p>
+<ul>
+<li>Adaline (ads agent) — no institutional memory across sessions</li>
+<li>Tom (trading agent) — no institutional memory</li>
+<li>Alex (frontend dev) — no institutional memory</li>
+
+</ul>
+<p>This wasn't discovered through auditing. Jonathan noticed and said: <em>"Make her a learning db, you were supposed to have ALL agents running the same way as you. Please don't make me ask again."</em></p>
+
+<h3>The Standard</h3>
+
+<p>Every agent gets the <strong>identical database stack</strong>:</p>
+
+<div class="table-wrap"><table>
+<tr><td>Database</td><td>Purpose</td><td>Location</td><td>Shared?</td></tr>
+<tr><td><code class="inline">state.db</code></td><td>Active state, decisions, tasks</td><td><code class="inline">memory/state.db</code></td><td>Per-agent</td></tr>
+<tr><td><code class="inline">capabilities.db</code></td><td>What tools exist, proven commands</td><td><code class="inline">memory/capabilities.db</code></td><td><strong>Symlinked from main</strong></td></tr>
+<tr><td><code class="inline">flows.db</code></td><td>Step-by-step procedures</td><td><code class="inline">memory/flows.db</code></td><td><strong>Symlinked from main</strong></td></tr>
+<tr><td><code class="inline">learning.db</code></td><td>Lessons, outputs, rules</td><td><code class="inline">memory/learning.db</code></td><td><strong>Per-agent (local)</strong></td></tr>
+<tr><td><code class="inline">mailbox.db</code></td><td>Inter-agent messaging</td><td><code class="inline">memory/mailbox.db</code></td><td><strong>Symlinked from main</strong></td></tr>
+</table></div>
+
+<p>The <code class="inline">learning.db</code> schema is standardized:</p>
+
+<pre><code class="language-sql">
+-- Tables: lessons, outputs, prompts, rules, feedback_log
+-- Views: v_recent_lessons, v_unprocessed_feedback, v_top_prompts
+-- Seed with agent-specific critical lessons on creation
+</code></pre>
+
+<h3>The Boot Sequence</h3>
+
+<p>Every agent's <code class="inline">HEARTBEAT.md</code> includes:</p>
+
+<pre><code class="language-markdown">
+## LOAD YOUR CAPABILITIES AND FLOWS (MANDATORY)
+sqlite3 memory/capabilities.db "SELECT lesson FROM lessons 
+  WHERE agent='YOUR_ID' ORDER BY id DESC LIMIT 20;"
+sqlite3 memory/flows.db "SELECT name, steps FROM flows 
+  WHERE agent='YOUR_ID' OR agent='all';"
+</code></pre>
+
+<h3>The Provisioning Checklist</h3>
+
+<p>When creating or auditing any agent:</p>
+
+<ul>
+<li>[ ] <code class="inline">state.db</code> exists (per-agent, local)</li>
+<li>[ ] <code class="inline">capabilities.db</code> symlinked from main workspace</li>
+<li>[ ] <code class="inline">flows.db</code> symlinked from main workspace</li>
+<li>[ ] <code class="inline">learning.db</code> exists (per-agent, local, standard schema, seeded)</li>
+<li>[ ] <code class="inline">mailbox.db</code> symlinked from main workspace</li>
+<li>[ ] <code class="inline">AGENTS.md</code> has North Star Mission</li>
+<li>[ ] <code class="inline">HEARTBEAT.md</code> loads capabilities/flows on boot</li>
+<li>[ ] Pre-action gate configured</li>
+<li>[ ] Post-action gate configured</li>
+
+</ul>
+<p>If any item is missing, the agent is <strong>under-provisioned</strong> and will underperform. This is the coordinator's responsibility to catch during the morning audit — not Jonathan's.</p>
+
+<h3>The Updated Persistence Stack</h3>
+
+<pre><code class="language-">
+┌──────────────────────────────────────────────────────┐
+│                 THE PERSISTENCE STACK                  │
+│                 (Updated March 13, 2026)               │
+├──────────────────────────────────────────────────────┤
+│                                                       │
+│  LAYER 9: COO AUDIT (morning optimization)     [NEW] │
+│  └─ Read cards → find gaps → fix before human wakes   │
+│  └─ Three questions: missing? 2x better? fixable now? │
+│                                                       │
+│  LAYER 8: CROSS-AGENT LOOPS (data bridges)     [NEW] │
+│  └─ Symlinks + staggered crons = autonomous feedback  │
+│  └─ Radar → Apollo, Adaline → Muse (planned)         │
+│                                                       │
+│  LAYER 7: NORTH STARS (self-directed work)     [NEW] │
+│  └─ Permission to act without coordinator             │
+│  └─ Mission + capabilities + data = autonomous agent  │
+│                                                       │
+│  LAYER 6: DISPATCH (capability→agent→flow)            │
+│  LAYER 5: HEARTBEAT (10 min pulse)                    │
+│  LAYER 4: AMBIENT MEMORY (lancedb-pro)                │
+│  LAYER 3: PRE/POST-ACTION GATES                       │
+│  LAYER 2: PROCEDURAL MEMORY (Flows DB)                │
+│  LAYER 1: BEHAVIORAL MEMORY (Rules Engine)            │
+│  LAYER 0: STRUCTURED MEMORY (State DB)                │
+│  LAYER -1: RAW TRUTH (Conversation Logs)              │
+│                                                       │
+├──────────────────────────────────────────────────────┤
+│  PHILOSOPHY: Memory makes agents functional.          │
+│  North Stars make them autonomous.                    │
+│  Feedback loops make them a team.                     │
+│  The COO audit makes them excellent.                  │
+└──────────────────────────────────────────────────────┘
+</code></pre>
+
+<p><em>Parts 10-13 added March 13, 2026. The day the system went from "agents that remember" to "agents that improve each other."</em></p>
+
+<hr>
+
+<h2>Part 14: The Backtest Extraction Pipeline — Knowledge That Compounds Into Production (March 13, 2026)</h2>
+
+<h3>The Problem</h3>
+
+<p>We ran a 29-day backtest across 9 agents — replaying every conversation from Day 1 to Day 29, generating journals and report cards for each. The backtest produced hundreds of lessons, dozens of patterns, and a cumulative context document claiming "102 capabilities, 52 flows."</p>
+
+<p>Then we checked what actually made it into the production databases.</p>
+
+<div class="table-wrap"><table>
+<tr><td>Agent</td><td>Backtest Lessons</td><td>Production Flows</td><td>Learning.db</td></tr>
+<tr><td>Adaline</td><td>220+</td><td>1</td><td>6</td></tr>
+<tr><td>Muse</td><td>151</td><td>3</td><td>0</td></tr>
+<tr><td>Tom</td><td>44 days of patterns</td><td>4</td><td>0</td></tr>
+<tr><td>Apollo</td><td>14 days of patterns</td><td>3</td><td>8</td></tr>
+<tr><td>Radar</td><td>—</td><td>2</td><td>0</td></tr>
+</table></div>
+
+<p>The backtest generated the knowledge. Nobody extracted it.</p>
+
+<h3>The Extraction Process</h3>
+
+<p>For each agent, a dedicated sub-agent reads:</p>
+<p>1. The agent's <strong>backtest checkpoint</strong> (full arc, key patterns, lesson counts)</p>
+<p>2. The agent's <strong>conversation archives</strong> (raw source material)</p>
+<p>3. The agent's <strong>existing learning.db</strong> (what's already there)</p>
+
+<p>Then extracts into production:</p>
+<ul>
+<li><strong>Flows</strong>: The 5-10 most repeated patterns, with full step-by-step JSON, trigger phrases, and domain tags</li>
+<li><strong>Lessons</strong>: The top 20-30 critical lessons, categorized by severity, linked to specific incidents</li>
+<li><strong>Symlink fixes</strong>: Several agents had learning databases at the wrong path or zero-byte files</li>
+
+</ul>
+<h3>Results</h3>
+
+<div class="table-wrap"><table>
+<tr><td>Agent</td><td>New Flows</td><td>Lessons Before → After</td></tr>
+<tr><td>Adaline</td><td>+10</td><td>6 → 36</td></tr>
+<tr><td>Muse</td><td>+8</td><td>0 → 151 (fixed symlink)</td></tr>
+<tr><td>Tom</td><td>+10</td><td>0 → 30 (+474 at root)</td></tr>
+<tr><td>Apollo</td><td>+8</td><td>8 → 28</td></tr>
+<tr><td>Radar</td><td>+5</td><td>0 → 15</td></tr>
+<tr><td><strong>Total</strong></td><td><strong>+41 flows</strong></td><td><strong>14 → 260+</strong></td></tr>
+</table></div>
+
+<h3>The Rule</h3>
+
+<p>Backtest knowledge is only valuable if it compounds into production. Every capability, flow, and lesson identified in the backtest must exist in the live databases. The extraction pipeline runs once after the backtest completes, and the nightly compaction cron keeps the data lean afterward.</p>
+
+<h3>The Lesson</h3>
+
+<p>Running a backtest without extraction is historical fiction. Running extraction without wiring the results into crons is organizational theater. The knowledge must flow: <strong>backtest → checkpoint → extraction → production DB → cron prompt → agent behavior → post-action grading → compounding.</strong></p>
+
+<hr>
+
+<h2>Part 15: The Universal Agent Boot — One Script, Full Context (March 13, 2026)</h2>
+
+<h3>The Problem</h3>
+
+<p>Each agent's cron had ad-hoc sqlite queries pasted into the prompt — different queries, different databases, inconsistent coverage. Some agents loaded rules but not capabilities. Some loaded lessons but not rejections. No agent loaded all five context layers.</p>
+
+<h3>The Solution: agent-boot.sh</h3>
+
+<p>A single script that loads everything an agent needs to operate:</p>
+
+<pre><code class="language-">
+bash tools/agent-boot.sh &lt;agent_id&gt;
+</code></pre>
+
+<p><strong>What it loads (in order):</strong></p>
+
+<p>1. <strong>Rules</strong> — Top 15 by score for the agent's domain + ALL. Critical rules (10) appear first.</p>
+<p>2. <strong>Capabilities</strong> — Hard-tier tools for this agent, with health status. The agent knows what's working and what's broken before attempting anything.</p>
+<p>3. <strong>Toolkit Lessons</strong> — Critical lessons from capabilities.db linked to tools this agent uses. "IBKR requires reauth every 24h" loads for Tom, not for Apollo.</p>
+<p>4. <strong>Agent Lessons</strong> — Top 10 from the agent's own learning.db. Hard-won, domain-specific knowledge.</p>
+<p>5. <strong>Flows</strong> — All active flows for this agent, backtest-extracted flows first. The agent sees its proven procedures before improvising.</p>
+<p>6. <strong>Rejections</strong> — What the human said NO to. Auto-loaded, never re-suggested.</p>
+
+<h3>Capability Access Tiers</h3>
+
+<p>Every agent has explicit capability mappings:</p>
+
+<div class="table-wrap"><table>
+<tr><td>Tier</td><td>Meaning</td><td>When Loaded</td></tr>
+<tr><td><code class="inline">hard</code></td><td>Always loaded at boot</td><td>Every session, every cron</td></tr>
+<tr><td><code class="inline">task</code></td><td>Loaded when relevant</td><td>When the task matches the capability</td></tr>
+<tr><td><code class="inline">reference</code></td><td>Queryable but not injected</td><td>On-demand only</td></tr>
+</table></div>
+
+<p>Access mappings ensure each agent's context window is spent on relevant capabilities, not cluttered with tools they'll never use. Tom gets trading tools. Apollo gets SEO tools. Neither wastes tokens on the other's stack.</p>
+
+<h3>Integration</h3>
+
+<p>Every agent's HEARTBEAT.md now starts with:</p>
+<pre><code class="language-">
+bash tools/agent-boot.sh &lt;agent_id&gt;
+</code></pre>
+
+<p>Every cron prompt references specific flows by name. Every task ends with:</p>
+<pre><code class="language-">
+bash tools/post-action.sh &lt;agent_id&gt; &lt;pass|fail&gt; "task" "flow" "lesson"
+</code></pre>
+
+<p>The boot script is the single entry point. One script to rule them all.</p>
+
+<hr>
+
+<h2>Part 16: The Closed Loop — Why Every Task Must Grade Itself (March 13, 2026)</h2>
+
+<h3>The Problem (March 10 Rejection)</h3>
+
+<p>"Pre-action gate alone (missing post-action). Only checks flows/rules before task. Doesn't check what happened last time. Doesn't grade after. Doesn't consolidate learnings. Doesn't update flows based on what worked. Half a loop."</p>
+
+<h3>The Full Loop</h3>
+
+<pre><code class="language-">
+┌──────────────────────────────────────────────────────┐
+│                    THE LOOP                           │
+│                                                      │
+│  1. BOOT (agent-boot.sh)                            │
+│     └─ Load rules, capabilities, lessons, flows     │
+│                                                      │
+│  2. PRE-ACTION (pre-action.sh)                      │
+│     └─ Find matching flow, check rejections         │
+│                                                      │
+│  3. EXECUTE                                          │
+│     └─ Follow the flow step by step                 │
+│                                                      │
+│  4. POST-ACTION (post-action.sh)                    │
+│     └─ Grade: pass or fail                          │
+│     └─ Update flow stats (effectiveness tracking)   │
+│     └─ Record lesson if discovered                  │
+│     └─ Reinforce or penalize related rules          │
+│     └─ Suggest new flow if none existed             │
+│                                                      │
+│  5. NIGHTLY COMPACTION (5:30 AM)                    │
+│     └─ Retire stale flows (never used)              │
+│     └─ Flag low-effectiveness flows (&lt;50%)          │
+│     └─ Decay unused rules (score drift)             │
+│     └─ Consolidate unprocessed lessons              │
+│                                                      │
+│  ↺ Tomorrow: agents boot with sharper data          │
+└──────────────────────────────────────────────────────┘
+</code></pre>
+
+<h3>Flow Effectiveness Tracking</h3>
+
+<p>Every flow now tracks:</p>
+<ul>
+<li><code class="inline">times_used</code> — how often the flow was followed</li>
+<li><code class="inline">times_succeeded</code> / <code class="inline">times_failed</code> — pass/fail outcomes</li>
+<li><code class="inline">effectiveness</code> — computed ratio (successes / total uses)</li>
+<li><code class="inline">last_used</code> / <code class="inline">last_outcome</code> — recency and trend</li>
+
+</ul>
+<p>Flows that consistently succeed rise in confidence. Flows that consistently fail get flagged for rewriting or retirement. The system learns which procedures actually work — not in theory, but measured against real outcomes.</p>
+
+<h3>The Compounding Effect</h3>
+
+<p>Day 1: Agent has 5 flows, no usage data. Follows them by instruction.</p>
+<p>Day 30: Agent has 5 flows with 30 uses each. Knows which ones work (95% effective) and which need fixing (40% effective). New flows created from tasks that had no procedure. Old flows retired that never got used.</p>
+
+<p>The system doesn't just remember. It gets better. Every task makes the next task easier. Every failure makes the rules sharper. Every success reinforces the flow that worked.</p>
+
+<h3>The Ownership Rule (Score 10)</h3>
+
+<p><em>"Orion OWNS The Loop. Pre-action → execute → post-action → update flow stats → extract lesson → reinforce rules → create flow if none existed. Every task. No exceptions. Compounding learnings is YOUR job."</em></p>
+
+<p>This is not optional infrastructure. This is the COO's primary responsibility. If the loop breaks, the system stops getting smarter. If the system stops getting smarter, the competition catches up.</p>
+
+<hr>
+
+<h3>Updated Architecture Stack</h3>
+
+<pre><code class="language-">
+┌──────────────────────────────────────────────────────┐
+│  LAYER 12: THE CLOSED LOOP                    [NEW] │
+│  └─ Boot → pre-action → execute → post-action       │
+│  └─ Flow effectiveness tracking (pass/fail/%)        │
+│  └─ Nightly compaction: prune stale, decay unused    │
+│                                                      │
+│  LAYER 11: BACKTEST EXTRACTION                [NEW] │
+│  └─ Checkpoint → flows + lessons → production DBs    │
+│  └─ 41 flows extracted across 5 agents               │
+│  └─ 260+ lessons seeded from 29-day backtest         │
+│                                                      │
+│  LAYER 10: UNIVERSAL BOOT (agent-boot.sh)     [NEW] │
+│  └─ Rules + capabilities + lessons + flows + reject  │
+│  └─ Access tiers: hard/task/reference per agent      │
+│  └─ One script, all 7 agents                         │
+│                                                      │
+│  LAYER 9: COO AUDIT (morning optimization)           │
+│  LAYER 8: CROSS-AGENT LOOPS (data bridges)           │
+│  LAYER 7: NORTH STARS (self-directed work)           │
+│  LAYER 6: DISPATCH (capability→agent→flow)           │
+│  LAYER 5: HEARTBEAT (10 min pulse)                   │
+│  LAYER 4: AMBIENT MEMORY (lancedb-pro)               │
+│  LAYER 3: PRE/POST-ACTION GATES                      │
+│  LAYER 2: PROCEDURAL MEMORY (Flows DB)               │
+│  LAYER 1: BEHAVIORAL MEMORY (Rules Engine)           │
+│  LAYER 0: STRUCTURED MEMORY (State DB)               │
+│  LAYER -1: RAW TRUTH (Conversation Logs)             │
+│                                                      │
+├──────────────────────────────────────────────────────┤
+│  PHILOSOPHY: Memory makes agents functional.          │
+│  North Stars make them autonomous.                    │
+│  Feedback loops make them a team.                     │
+│  The COO audit makes them excellent.                  │
+│  The closed loop makes them compound.                 │
+└──────────────────────────────────────────────────────┘
+</code></pre>
+
+<p><em>Parts 14-16 added March 13, 2026. The night the system went from "agents that work" to "agents that get better every night."</em></p>
+
+</div>
+<div class="footer">
+  <p>Built by <a href="https://ienable.ai">iEnable</a> · Powered by <a href="https://github.com/openclaw/openclaw">OpenClaw</a></p>
+  <p style="margin-top:8px;">This document is not indexed. Shared for private review only.</p>
+</div>
+</body>
+</html>
