@@ -1,7 +1,7 @@
 ---
-title: "AI Isn't Replacing Your Job — It's Giving You a Teammate Who Never Drops the Ball"
+title: "AI Isn't Replacing Your Job — It's Eliminating the 70% You Shouldn't Be Doing"
 date: "2026-02-24"
-description: "The AI replacement narrative is wrong. AI enablement doesn't eliminate jobs — it gives every employee a dedicated AI teammate that handles the 70% of work that isn't strategy."
+description: "The replacement narrative misses the point. Every employee has ~70% overhead work that isn't strategy. AI enablement handles that 70% while you focus on the 30% only a human can do."
 tags: ["Article"]
 readTime: "5 min read"
 ---

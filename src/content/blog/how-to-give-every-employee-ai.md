@@ -1,7 +1,7 @@
 ---
-title: "How to Give Every Employee AI: A Practical Guide for Teams of 5 to 5,000"
+title: "How to Give Every Employee AI (Without the 6-Month IT Project) — 2026 Playbook"
 date: "2026-02-24"
-description: "A step-by-step guide to rolling out AI enablement across your entire organization — from the first 90-second scan to compound intelligence at scale."
+description: "The 6-step rollout that takes any team from zero to 94% AI auto-approval in 12 months. No committees, no governance boards, no 40-page policies. Teams of 5 and 5,000 use the same framework."
 tags: ["Article"]
 readTime: "5 min read"
 ---
@@ -18,7 +18,7 @@ Implementation
 
 Here's a thought experiment. Imagine walking into your company tomorrow morning and handing every single employee — from the CEO to the most recent hire — a tool that immediately makes them 30% more productive. Not in six months after training. Not after a consulting engagement. *Tomorrow.*
 
-In the 1990s, that tool was email. In the 2010s, it was Slack. In 2026, it's an [AI enabler](https://ienable.ai/blog/ai-enablement-new-category.html).
+In the 1990s, that tool was email. In the 2010s, it was Slack. In 2026, it's an [AI enabler](/blog/ai-enablement-new-category.html). (New to the concept? Start with [What Is AI Enablement?](/blog/what-is-ai-enablement-guide.html))
 
 The difference between companies that successfully adopt AI and those that fumble it isn't budget or technical sophistication. It's approach. **Most companies try to "add AI" to their existing workflow. The ones that win give every employee their own AI and let the workflow evolve around it.**
 
@@ -125,7 +125,7 @@ The numbers tell the story:
 
 By month six, the auto-approval rate hits 80%+. By year one, it's 94%. At that point, your team's daily workflow becomes: review the morning batch, approve, and spend the rest of the day on the strategic work that actually requires human judgment.
 
-This is **compound intelligence** — and it's the single most powerful competitive advantage AI enablement creates. Because this institutional knowledge can't be copied. It can't be fast-tracked. A competitor who starts six months after you will always be six months behind, and that gap only widens.
+This is **compound intelligence** — and it's the single most powerful competitive advantage AI enablement creates. Because this institutional knowledge can't be copied. It can't be fast-tracked. A competitor who starts six months after you will always be six months behind, and that gap only widens. (See where your company is on the journey: [AI Enablement Maturity Model](/blog/ai-enablement-maturity-model.html).)
 
 
 ## The Five Pitfalls That Kill AI Rollouts
@@ -161,7 +161,7 @@ AI enablement isn't an IT project. It's a productivity upgrade. The moment you r
 ### 5\. Forgetting the "Every Employee" Part
 
 
-The whole point of [AI enablement is that nobody gets left behind](https://ienable.ai/blog/ai-not-replacing-jobs-enabling-employees.html). Rolling out to marketing but not customer service. Giving it to managers but not individual contributors. These half-measures kill the network effect. The value of AI enablers is exponential — it multiplies when *everyone* has one. Half-adoption gets you half the tools and none of the network intelligence.
+The whole point of [AI enablement is that nobody gets left behind](/blog/ai-not-replacing-jobs-enabling-employees.html). Rolling out to marketing but not customer service. Giving it to managers but not individual contributors. These half-measures kill the network effect. The value of AI enablers is exponential — it multiplies when *everyone* has one. Half-adoption gets you half the tools and none of the network intelligence.
 
 
 ## The Rollout Timeline: What to Expect
@@ -183,7 +183,7 @@ For a 5-person team, this timeline compresses — one department might *be* the 
 ## The Only Shortcut Is Starting
 
 
-Here's the uncomfortable math. Every day you spend evaluating, comparing, committee-meeting, and roadmapping is a day your [competitor's enablers are learning](https://ienable.ai/blog/small-business-ai-enablement.html). There is no way to compress twelve months of compound intelligence into two. There is no shortcut to institutional knowledge. The only hack is starting sooner.
+Here's the uncomfortable math. Every day you spend evaluating, comparing, committee-meeting, and roadmapping is a day your [competitor's enablers are learning](/blog/small-business-ai-enablement.html). (Not sure what's costing you more — the AI investment or the delay? [Calculate the Cost of Not Using AI](/blog/cost-of-not-using-ai-2026.html).) There is no way to compress twelve months of compound intelligence into two. There is no shortcut to institutional knowledge. The only hack is starting sooner.
 
 The companies that will dominate the next decade aren't the ones with the biggest AI budgets. They're the ones whose enablers have been learning the longest. **And the clock started for some of them last month.**
 
