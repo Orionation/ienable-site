@@ -256,6 +256,13 @@ Your AI doesn't have a knowledge problem. It has a context problem. Fix that, an
 -The W3C Context Graphs Community Group was proposed February 23, 2026. Gartner Data & Analytics Summit 2026 references are based on published reports. Glean Spring '26 announcements based on public blog posts.*
 
 
+### Related Reading
+
+- [Gartner Declares 2026 the Year of Context — But Which Context?](/blog/gartner-year-of-context-which-context) — Six vendors launched context platforms in one week. All solve data context. None address organizational context.
+- [The Context Gradient: A Framework for Evaluating Any Enterprise AI Tool](/blog/the-context-gradient-enterprise-ai-evaluation-framework)
+- [Governance Certified, Context Absent: Enterprise AI in 2026](/blog/governance-certified-context-absent-enterprise-ai-2026)
+
+
 ### Build Your Context Layer
 
 

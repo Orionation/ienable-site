@@ -231,3 +231,5 @@ Enterprises should add five Layer 3 questions to their governance assessments: W
 ---
 
 *This post was published at 12:05 PM EST on March 10, 2026, reacting to live announcements from Enterprise Connect 2026 Day 1. For iEnable's pre-event analysis predicting these patterns, see [What Enterprise Connect Won't Solve](/blog/enterprise-connect-2026-what-enterprise-ai-wont-solve).*
+
+**Update (March 14):** Four days after this post, Gartner's D&A Summit confirmed the pattern at industry scale. See [Gartner Declares 2026 the Year of Context — But Which Context?](/blog/gartner-year-of-context-which-context) for our analysis of how IBM, Glean, K2view, and three other vendors all launched context platforms in one week — all Layer 1-2, zero Layer 3.
