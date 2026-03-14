@@ -259,7 +259,7 @@ The Context Gradient shows that AI tools work where they don't require organizat
 ### 3\. The "good writing assistant, mediocre analyst, poor strategist" characterization applies to ALL enterprise AI
 
 
-This isn't a Copilot problem. It's a structural reality of deploying AI without organizational context. ChatGPT Enterprise, Gemini for Google Workspace, Claude for Work — they all follow the same Context Gradient. The tool that needs organizational context and doesn't have it will be used for tasks that don't require organizational context. Every time.
+This isn't a Copilot problem. It's a structural reality of deploying AI without organizational context. [ChatGPT Enterprise](/blog/chatgpt-enterprise-vs-ai-enablement), Gemini for Google Workspace, Claude for Work — they all follow the same Context Gradient. The tool that needs organizational context and doesn't have it will be used for tasks that don't require organizational context. Every time.
 
 
 ### 4\. Quick wins create a false sense of readiness

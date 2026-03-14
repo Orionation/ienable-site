@@ -133,7 +133,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ienable.ai/blog/chatgpt-enterprise-vs-ai-enablement.html</loc>
+    <loc>https://ienable.ai/blog/chatgpt-enterprise-vs-ai-enablement</loc>
     <lastmod>2026-03-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -452,6 +452,12 @@
   </url>
   <url>
     <loc>https://ienable.ai/blog/gartner-year-of-context-which-context</loc>
+    <lastmod>2026-03-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ienable.ai/blog/ai-vendor-lock-in-single-point-of-failure-enterprise</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>

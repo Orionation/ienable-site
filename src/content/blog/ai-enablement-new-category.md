@@ -37,7 +37,7 @@ The same pattern repeated with laptops. Then smartphones. Then collaboration too
 4.  **Universal adoption.** Every employee gets one. It becomes part of onboarding.
 5.  **Invisible infrastructure.** You stop noticing it's there. You only notice when it's missing.
 
-Right now, AI in most companies is stuck between stages 1 and 2. A few executives have ChatGPT Plus subscriptions. Marketing is experimenting with AI copywriting. Engineering uses GitHub Copilot. But there's no *system*. No *strategy*. No moment where someone says, "Wait — why doesn't **every** employee have one of these?"
+Right now, AI in most companies is stuck between stages 1 and 2. A few executives have [ChatGPT Plus or Enterprise subscriptions](/blog/chatgpt-enterprise-vs-ai-enablement). Marketing is experimenting with AI copywriting. Engineering uses GitHub Copilot. But there's no *system*. No *strategy*. No moment where someone says, "Wait — why doesn't **every** employee have one of these?"
 
 That moment is now. And the category it creates has a name: **AI enablement**.
 
