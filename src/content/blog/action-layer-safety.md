@@ -109,3 +109,10 @@ Every action your enabler takes — including the ones that don't require approv
 This isn't just for compliance. It's how your enabler gets smarter. Every approval teaches it what "good" looks like. Every rejection teaches it what to avoid. The audit trail is the training data for your company's AI judgment — and it belongs to you, not us.
 
 <div class="cta-box"><h3>See the Action Layer in action</h3><p>Enter your website and watch your enabler work — with full previews, approvals, and audit trails from minute one.</p><a href="/#early-access" class="cta-btn">Get Early Access →</a></div>
+
+### Related Reading
+
+-   [What Is AI Enablement? The Complete 2026 Guide](/blog/what-is-ai-enablement-guide.html)
+-   [AI Agent Governance Framework: The Missing Layer](/blog/ai-agent-governance-framework-missing-layer)
+-   [Why AI Agents Should Never Grade Their Own Homework](/blog/why-ai-agents-should-never-grade-their-own-homework.html)
+-   [AI Enablement vs AI Copilot: What's the Difference?](/blog/ai-enablement-vs-ai-copilot.html)

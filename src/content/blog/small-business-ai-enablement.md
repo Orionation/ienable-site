@@ -1,7 +1,8 @@
 ---
-title: "Why Small Businesses Will Win the AI Race — And Enterprise Will Struggle to Catch Up"
+title: "Small Business AI Enablement: Why SMBs Are Outpacing Enterprise in 2026"
 date: "2026-02-24"
-description: "Small businesses have structural advantages in AI adoption that enterprise can't replicate. Speed, simplicity, and unified decision-making will define the next decade's winners."
+dateModified: "2026-03-15"
+description: "Small businesses have structural AI advantages enterprise can't replicate: speed, simplicity, and unified decision-making. Here's how SMBs go from zero to AI-enabled in days, not quarters."
 tags: ["Article"]
 readTime: "5 min read"
 ---

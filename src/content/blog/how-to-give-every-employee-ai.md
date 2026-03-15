@@ -1,7 +1,8 @@
 ---
-title: "How to Give Every Employee AI (Without the 6-Month IT Project) — 2026 Playbook"
+title: "How to Give Every Employee AI: The 6-Step 2026 Playbook"
 date: "2026-02-24"
-description: "The 6-step rollout that takes any team from zero to 94% AI auto-approval in 12 months. No committees, no governance boards, no 40-page policies. Teams of 5 and 5,000 use the same framework."
+dateModified: "2026-03-15"
+description: "From zero to 94% AI auto-approval in 12 months — no committees, no 40-page policies. The same framework works for teams of 5 and teams of 5,000. Here's exactly how."
 tags: ["Article"]
 readTime: "5 min read"
 ---

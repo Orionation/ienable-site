@@ -85,3 +85,10 @@ By morning, there's work waiting in the inbox. Not vague suggestions. Actual del
 That's not the future. That's what we're shipping today.
 
 <div class="cta-box"><h3>Ready to meet your enabler?</h3><p>Enter your website. In 90 seconds, we'll show you every opportunity your AI team would tackle on day one.</p><a href="/#early-access" class="cta-btn">Get Early Access →</a></div>
+
+### Related Reading
+
+-   [What Is AI Enablement? The Complete 2026 Guide](/blog/what-is-ai-enablement-guide.html)
+-   [How to Give Every Employee AI: The 6-Step Playbook](/blog/how-to-give-every-employee-ai.html)
+-   [AI Isn't Replacing Jobs — It's Eliminating the 70% You Shouldn't Do](/blog/ai-not-replacing-jobs-enabling-employees.html)
+-   [The Action Layer: Why AI Safety Isn't Optional](/blog/action-layer-safety.html)

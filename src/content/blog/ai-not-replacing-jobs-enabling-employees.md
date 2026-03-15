@@ -1,7 +1,8 @@
 ---
-title: "AI Isn't Replacing Your Job — It's Eliminating the 70% You Shouldn't Be Doing"
+title: "AI Isn't Replacing Jobs — It's Eliminating the 70% You Shouldn't Do"
 date: "2026-02-24"
-description: "The replacement narrative misses the point. Every employee has ~70% overhead work that isn't strategy. AI enablement handles that 70% while you focus on the 30% only a human can do."
+dateModified: "2026-03-15"
+description: "Every employee spends ~70% of their time on overhead that isn't strategy. AI enablement handles that 70% so you can focus on the 30% only a human can do. Here's the proof."
 tags: ["Article"]
 readTime: "5 min read"
 ---

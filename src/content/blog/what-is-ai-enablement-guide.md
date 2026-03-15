@@ -282,5 +282,21 @@ A step-by-step playbook for rolling out AI enablers across your entire organizat
 
 Every governance framework covers six dimensions. None address the seventh: whether agents actually understand your organization. The framework that closes the gap.
 
-](/blog/ai-agent-governance-framework-missing-layer)
+](/blog/ai-agent-governance-framework-missing-layer)[
+
+
+#### The Action Layer: Why AI Safety Isn't Optional
+
+
+Most AI tools give AI unlimited access to your accounts. That's insane. Here's how the Action Layer makes it physically impossible for AI to go rogue.
+
+](/blog/action-layer-safety.html)[
+
+
+#### Why Every Employee Needs an AI Enabler
+
+
+The future isn't AI replacing workers — it's every worker getting an AI partner. Here's why the enabler model changes everything.
+
+](/blog/why-ai-enablers.html)
 

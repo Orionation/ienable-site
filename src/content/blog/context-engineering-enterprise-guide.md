@@ -365,6 +365,8 @@ And it starts with the first three days of writing down what your AI needs to kn
 -   [AI Agent Governance Framework for 2026](/blog/ai-agent-governance-framework)
 -   [Copilot Tasks vs. AI Enablement](/blog/copilot-tasks-vs-ai-enablement)
 -   [7 Best Glean Alternatives for AI Enablement](/blog/glean-alternatives-ai-enablement)
+-   [The First Academic Paper on Context Engineering Proves Our Point](/blog/context-engineering-academic-paper-missing-layer)
+-   [The Action Layer: Why AI Safety Isn't Optional](/blog/action-layer-safety.html)
 
 
 ### Ready to govern your AI agents?
