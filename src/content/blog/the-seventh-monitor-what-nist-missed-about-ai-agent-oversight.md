@@ -217,3 +217,5 @@ That's the Seventh Monitor. And it's the only one you have to build yourself.
 - Udit.co, ["Federal AI Regulation Deadline Looms: March 11 Deadlines,"](https://udit.co/blog/federal-ai-regulation-march-deadline-state-law-preemption) March 8, 2026
 - Patrick Debois, Sonar Summit, March 4, 2026 — "Context doesn't commoditize. That's the moat."
 - BCG / Harvard Business Review, ["AI Brain Fry" study](/blog/ai-brain-fry-cognitive-cost-managing-ai-agents) — 1,488 workers, 14% cognitive exhaustion, 39% higher error rate
+
+**Related:** [AI Agent Governance Framework: The Missing Layer Every Checklist Skips](/blog/ai-agent-governance-framework-missing-layer) — the full seven-layer framework expanding on the Seventh Monitor concept.
