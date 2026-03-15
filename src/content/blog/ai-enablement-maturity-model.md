@@ -35,7 +35,7 @@ Here's the AI enablement maturity model: five stages that define how companies a
 -   IT has no visibility into what AI tools employees are using
 -   No budget allocated to AI initiatives
 -   Competitors are moving faster and you're not sure why
--*The Risk:** Shadow AI is rampant. Employees are copy-pasting sensitive company data into free AI tools with zero security oversight. Your competitors are building institutional knowledge while you're still debating whether AI is "just hype."
+-*The Risk:** [Shadow AI is rampant](/blog/shadow-ai-enterprise-risk-symptom-not-disease.html). Employees are copy-pasting sensitive company data into free AI tools with zero security oversight. Your competitors are building institutional knowledge while you're still debating whether AI is "just hype."
 -*Time at This Level:** Companies can't stay here long. Market pressure forces movement within 6-12 months — either forward to experimentation, or backward into irrelevance.
 
 
@@ -50,7 +50,7 @@ Here's the AI enablement maturity model: five stages that define how companies a
 -   ROI is measured anecdotally ("it saves me time") but not systematically
 -   Legal and compliance teams are nervous but haven't been formally engaged
 -*The Risk:** Pilot purgatory. You're experimenting forever without committing. Meanwhile, every day of scattered AI adoption builds technical debt and makes eventual coordination harder.
--*Why Companies Get Stuck Here:** Fear of commitment. Leadership wants proof before investing, but refuses to invest enough to generate proof. It's the classic chicken-and-egg problem — and it kills momentum.
+-*Why Companies Get Stuck Here:** Fear of commitment. Leadership wants proof before investing, but refuses to invest enough to generate proof. It's the classic chicken-and-egg problem — and it [kills momentum](/blog/stuck-in-ai-phase-1.html). See also: [why 90% of AI pilots never reach production](/blog/why-90-percent-ai-pilots-never-reach-production.html).
 -*Time at This Level:** 6-18 months. Either you commit to scaling or the pilots quietly die and you slip back to Level 0.
 
 
@@ -64,8 +64,8 @@ Here's the AI enablement maturity model: five stages that define how companies a
 -   Success metrics being tracked (time saved, tasks automated)
 -   Executive sponsorship and quarterly reviews of AI initiatives
 -   Still department-by-department adoption rather than universal
--*The Problem:** Tool sprawl. Marketing has one AI, sales has another, operations has a third. Each tool has its own login, its own training requirement, and its own security review. Nothing talks to each other. The promise of "AI-powered collaboration" remains theoretical.
--*What's Missing:** The insight that AI creates exponentially more value when every employee has a personal AI enabler that's connected to every other enabler in the company. You're treating AI like software subscriptions when you should be treating it like infrastructure.
+-*The Problem:** Tool sprawl. Marketing has one AI, sales has another, operations has a third. Each tool has its own login, its own training requirement, and its own security review. Nothing talks to each other. The promise of "AI-powered collaboration" remains theoretical. This is [the AI fragmentation paradox](/blog/ai-fragmentation-paradox-every-vendor-solution-makes-it-worse.html) — every new vendor solution makes it worse.
+-*What's Missing:** The insight that AI creates exponentially more value when every employee has a personal AI enabler that's connected to every other enabler in the company. You're treating AI like software subscriptions when you should be treating it like infrastructure. This is why [engineering-only approaches miss 80% of the value](/blog/engineering-only-ai-misses-80-percent.html).
 -*Time at This Level:** 12-24 months. This is where most companies are in early 2026. The question is whether they consolidate around a platform approach (Level 3) or stay stuck managing a dozen AI subscriptions forever.
 
 
@@ -216,29 +216,12 @@ Enter your website. In 90 seconds, you'll see every growth opportunity — and t
 
 ### Continue Reading
 
-
-[
-
-
-#### What Is AI Enablement? The Definitive Guide for 2026
-
-
-Learn what sets AI enablement apart from copilots, agents, and chatbots.
-
-](what-is-ai-enablement-guide.html)[
-
-
-#### 10 Signs Your Company Needs an AI Enablement Strategy
-
-
-From shadow AI to stalled pilots, these signs reveal when you need a real strategy.
-
-](signs-company-needs-ai-enablement.html)[
-
-
-#### AI Enablement Is a New Category
-
-
-The pattern is unmistakable — and the next wave is here.
-
-](ai-enablement-new-category.html)
+- [**What Is AI Enablement? The Definitive Guide for 2026**](/blog/what-is-ai-enablement-guide.html) — Learn what sets AI enablement apart from copilots, agents, and chatbots.
+- [**The Readiness Illusion: Why "AI-Ready" Enterprises Aren't Ready at All**](/blog/the-readiness-illusion-enterprise-ai-2026.html) — Most readiness assessments measure infrastructure, not organizational maturity. Here's what they miss.
+- [**The AI Adoption Gap Is Real — And It's Getting Wider**](/blog/the-ai-adoption-gap-is-real.html) — The data behind why 90% of companies stall between Level 1 and Level 2.
+- [**Stuck in AI Phase 1? Here's Why (And How to Break Out)**](/blog/stuck-in-ai-phase-1.html) — If your maturity score hasn't budged in 6 months, the problem isn't technology.
+- [**The Cost of NOT Using AI in 2026**](/blog/cost-of-not-using-ai-2026.html) — Every month at Level 0-1 is a month of compounding advantage your competitors accumulate.
+- [**Deloitte's State of AI 2026: The Readiness Deception**](/blog/deloitte-state-of-ai-2026-readiness-deception.html) — 74% of enterprises want AI revenue. Only 20% are getting it. 3,235 leaders surveyed.
+- [**Why 90% of AI Pilots Never Reach Production**](/blog/why-90-percent-ai-pilots-never-reach-production.html) — The maturity gap between pilot and production is where most AI investments die.
+- [**AI Enablement Is a New Category**](/blog/ai-enablement-new-category.html) — The pattern is unmistakable — and the next wave is here.
+- [**10 Signs Your Company Needs an AI Enablement Strategy**](/blog/signs-company-needs-ai-enablement.html) — From shadow AI to stalled pilots, these signs reveal when you need a real strategy.

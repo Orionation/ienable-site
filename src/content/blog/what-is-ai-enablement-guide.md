@@ -298,5 +298,45 @@ Most AI tools give AI unlimited access to your accounts. That's insane. Here's h
 
 The future isn't AI replacing workers — it's every worker getting an AI partner. Here's why the enabler model changes everything.
 
-](/blog/why-ai-enablers.html)
+](/blog/why-ai-enablers.html)[
+
+
+#### Build vs. Rent Your AI Department
+
+
+The real cost analysis of building your own AI enablement layer vs. renting one. Spoiler: most companies should rent first.
+
+](/blog/build-vs-rent-ai-department.html)[
+
+
+#### The Context Gradient: A Framework for Evaluating Enterprise AI
+
+
+Not all AI implementations are equal. The Context Gradient measures how deeply AI understands your organization — from zero context to full enablement.
+
+](/blog/the-context-gradient-enterprise-ai-evaluation-framework.html)[
+
+
+#### The 3.3% Problem: Microsoft Copilot's Adoption Crisis
+
+
+Microsoft's own data reveals the challenge: enterprise AI adoption stalls without enablement. Here's why Copilot's usage rate matters for every AI buyer.
+
+](/blog/the-3-3-percent-problem-microsoft-copilot-adoption-crisis.html)[
+
+
+#### The Copilot Paradox: Revenue Up, Users Down
+
+
+Microsoft reports record AI revenue — while actual usage flatlines. What this paradox reveals about the state of enterprise AI.
+
+](/blog/copilot-paradox-revenue-up-users-down.html)[
+
+
+#### The Network Effect of AI Enablement
+
+
+When every employee has an AI enabler, the value isn't additive — it's multiplicative. Here's the math behind the network effect.
+
+](/blog/network-effect-ai-enablement.html)
 
