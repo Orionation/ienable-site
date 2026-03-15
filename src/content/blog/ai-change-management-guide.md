@@ -6,6 +6,9 @@ tags: ["Article"]
 readTime: "5 min read"
 ---
 
+![AI Change Management: How to Get Your Entire Team Excited (Not Terrified) About AI](/blog/images/ai-change-management-guide-hero.jpg)
+
+
 There's a phenomenon happening in companies right now. IT buys the AI tools. HR designs the training. Leadership makes the announcement. And then… crickets.
 
 Usage sits at 12%. The pilot stalls. Six months later, someone quietly cancels the subscription. "Our team just wasn't ready for AI," they say.

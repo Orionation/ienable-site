@@ -6,6 +6,9 @@ tags: ["Article"]
 readTime: "5 min read"
 ---
 
+![Agent Sandbox vs Context Window: The False Choice Killing Enterprise AI](/blog/images/agent-sandbox-vs-context-window-enterprise-ai-hero.jpg)
+
+
 📊 Strategy
 
 

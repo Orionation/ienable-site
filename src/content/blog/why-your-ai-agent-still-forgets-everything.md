@@ -7,6 +7,9 @@ readTime: "5 min read"
 featured: true
 ---
 
+![Why Your AI Agent Still Forgets Everything (And the 4-Layer Architecture That Actually Fixes It)](/blog/images/why-your-ai-agent-still-forgets-everything-hero.jpg)
+
+
 📝 Engineering
 
 

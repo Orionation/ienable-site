@@ -6,6 +6,9 @@ tags: ["Article"]
 readTime: "5 min read"
 ---
 
+![iEnable Blog](/blog/images/context-engineering-for-marketing-teams-hero.jpg)
+
+
 📝 Blog
 
 

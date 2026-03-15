@@ -9,6 +9,9 @@ emoji: "🧠"
 author: "iEnable Team"
 ---
 
+![How We Built Persistent Memory for AI Agents (And What Failed First)](/blog/images/persistent-memory-for-ai-agents-hero.jpg)
+
+
 **TL;DR:** AI agents forget everything after context compaction. Every solution that asks the agent to "write notes" fails because the memory problem prevents its own solution. We built a 12-layer persistence stack using SQLite, automated cron extraction, scored behavioral rules, procedural flows, and a heartbeat pulse — all driven by one design principle: *separate the note-taker from the worker.* The system runs 9 agents autonomously, costs ~$5/day for memory infrastructure, and has survived 6 weeks of production use. Here's every layer, every failure, and every line of SQL.
 
 ---

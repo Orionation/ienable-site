@@ -6,4 +6,7 @@ tags: ["Article"]
 readTime: "5 min read"
 ---
 
+![AI Enabler vs. Microsoft Copilot: Why Generic AI Assistants Fall Short for Real Work](/blog/images/ai-enabler-vs-microsoft-copilot-hero.jpg)
+
+
 

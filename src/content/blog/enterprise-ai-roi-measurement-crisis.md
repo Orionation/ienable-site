@@ -6,6 +6,9 @@ tags: ["Article"]
 readTime: "5 min read"
 ---
 
+![How to Measure Enterprise AI ROI: The 79/29 Gap Is Killing Your AI Strategy](/blog/images/enterprise-ai-roi-measurement-crisis-hero.jpg)
+
+
 🔧 Implementation
 
 

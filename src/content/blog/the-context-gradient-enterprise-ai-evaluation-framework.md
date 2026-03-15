@@ -6,6 +6,9 @@ tags: ["Article"]
 readTime: "5 min read"
 ---
 
+![The Context Gradient: A Framework for Evaluating Any Enterprise AI Tool](/blog/images/the-context-gradient-enterprise-ai-evaluation-framework-hero.jpg)
+
+
 📊 Strategy
 
 

@@ -6,6 +6,9 @@ tags: ["Article"]
 readTime: "5 min read"
 ---
 
+![The Copilot Paradox: Microsoft's AI Revenue Is Growing While Users Are Leaving](/blog/images/copilot-paradox-revenue-up-users-down-hero.jpg)
+
+
 📊 Strategy
 
 

@@ -6,6 +6,9 @@ tags: ["Article"]
 readTime: "5 min read"
 ---
 
+![Context Engineering for HR Teams: How to Make AI Actually Transform Talent Management](/blog/images/context-engineering-for-hr-teams-hero.jpg)
+
+
 🔧 Implementation
 
 
