@@ -1,7 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /blog/journals/
-
-Sitemap: https://ienable.ai/sitemap-index.xml
-
 Disallow: /memory-system/
+
+Sitemap: https://ienable.ai/sitemap.xml
