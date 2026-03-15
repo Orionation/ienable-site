@@ -1,7 +1,8 @@
 ---
-title: "AI Enablement Maturity Model: 5 Stages from AI Unaware to AI Native (Self-Assessment)"
+title: "AI Enablement Maturity Model: Where Does Your Organization Stand? [Free Assessment]"
 date: "2026-02-25"
-description: "93% of companies are stuck at Stage 1 or 2. Use this 5-stage maturity model to find where you stand — and the exact steps to reach AI Native before your competitors do."
+dateModified: "2026-03-15"
+description: "93% of companies are stuck at Stage 1 or 2 of AI maturity. Use this 5-stage model with self-assessment to find where you stand — and the exact steps to reach AI Native before your competitors."
 tags: ["Article"]
 readTime: "9 min read"
 ---
