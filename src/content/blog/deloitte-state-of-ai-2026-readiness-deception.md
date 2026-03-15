@@ -421,3 +421,9 @@ Choose accordingly.
   ]
 }
 </script>
+
+### Related Reading
+
+- [Shadow AI Is a Symptom, Not the Disease](/blog/shadow-ai-enterprise-risk-symptom-not-disease) — How the 93/7 problem drives 68% of employees to unauthorized AI tools
+- [AI Agent Governance Framework: The Missing Layer](/blog/ai-agent-governance-framework-missing-layer) — The seven-layer governance framework CISOs need
+- [What Is AI Enablement? The Complete 2026 Guide](/blog/what-is-ai-enablement-guide) — The foundational guide to organizational AI enablement

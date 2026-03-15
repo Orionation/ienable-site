@@ -118,7 +118,7 @@ But ask *why* employees seek shadow AI, and the answer inverts the problem:
 
 When ChatGPT Enterprise can't answer "How do we handle customer escalations for the EMEA region?" — an employee will find (or build) a tool that can. When Copilot doesn't know your team's actual approval workflow (as opposed to the documented one), someone will paste the real process into a personal AI tool.
 
-Shadow AI isn't a security failure. It's a **demand signal for organizational context**.
+Shadow AI isn't a security failure. It's a **demand signal for organizational context**. (We explore this thesis in depth in [Shadow AI Is a Symptom, Not the Disease](/blog/shadow-ai-enterprise-risk-symptom-not-disease).)
 
 Every dollar spent blocking shadow AI without improving organizational context in sanctioned tools is treating the symptom while feeding the disease. We estimated this costs enterprises [$400,000 annually](https://www.secondtalent.com/resources/shadow-ai-stats/) in security overhead — for a problem that better context would largely eliminate.
 
