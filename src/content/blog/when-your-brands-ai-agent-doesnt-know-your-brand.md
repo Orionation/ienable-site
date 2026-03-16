@@ -4,6 +4,7 @@ date: "2026-03-08"
 description: "Harvard Business Review warns brands aren't ready for agentic commerce. McKinsey projects $3-5 trillion in agent-mediated transactions by 2030. The fatal flaw: AI agents transacting on your behalf don't understand your brand. Context engineering is the missing layer between brand strategy and agent capability."
 tags: ["Article"]
 readTime: "15 min read"
+heroImage: "/blog/images/when-your-brands-ai-agent-doesnt-know-your-brand-hero.jpg"
 ---
 
 🏷️ Strategy

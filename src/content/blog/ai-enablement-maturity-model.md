@@ -5,6 +5,7 @@ dateModified: "2026-03-15"
 description: "93% of companies are stuck at Stage 1 or 2 of AI maturity. Use this 5-stage model with self-assessment to find where you stand — and the exact steps to reach AI Native before your competitors."
 tags: ["Article"]
 readTime: "9 min read"
+heroImage: "/blog/images/ai-enablement-maturity-model-hero.jpg"
 ---
 
 🎯 Thought Leadership 📅 Feb 25, 2026 ⏱ 9 min read

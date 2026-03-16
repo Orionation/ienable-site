@@ -5,6 +5,7 @@ dateModified: "2026-03-15"
 description: "AI enablement means giving every employee an AI teammate that learns your organization — not just your data. The complete guide: 4 pillars, maturity model, 93/7 budget problem, and the framework 79% of AI pilots missed."
 tags: ["Article"]
 readTime: "10 min read"
+heroImage: "/blog/images/what-is-ai-enablement-guide-hero.jpg"
 ---
 
 

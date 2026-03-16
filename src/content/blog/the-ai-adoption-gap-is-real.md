@@ -4,6 +4,7 @@ date: "2026-02-28"
 description: "Only 10% of organizations achieve significant AI ROI. The problem isn't technology — it's the adoption gap. Here's how to close it."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/the-ai-adoption-gap-is-real-hero.jpg"
 ---
 
 Strategy

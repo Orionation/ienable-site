@@ -5,6 +5,7 @@ dateModified: "2026-03-15"
 description: "From zero to 94% AI auto-approval in 12 months — no committees, no 40-page policies. The same framework works for teams of 5 and teams of 5,000. Here's exactly how."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/how-to-give-every-employee-ai-hero.jpg"
 ---
 
 Implementation

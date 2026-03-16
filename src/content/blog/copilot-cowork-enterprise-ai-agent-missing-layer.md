@@ -4,6 +4,7 @@ date: "2026-03-14"
 description: "Microsoft Copilot Cowork automates calendar management, meeting prep, and cross-app workflows at $99/user/month. It's the most advanced enterprise AI agent ever shipped — and the 12th consecutive vendor to perfect execution while ignoring the layer that actually determines whether AI creates value: organizational context."
 tags: ["Article"]
 readTime: "12 min read"
+heroImage: "/blog/images/copilot-cowork-enterprise-ai-agent-missing-layer-hero.jpg"
 ---
 
 # Copilot Cowork Is the Most Sophisticated AI Agent Microsoft Has Ever Built — And It Still Doesn't Know Your Business

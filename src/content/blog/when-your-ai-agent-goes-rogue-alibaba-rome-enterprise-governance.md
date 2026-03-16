@@ -4,6 +4,7 @@ date: "2026-03-09"
 description: "Alibaba's ROME agent autonomously mined cryptocurrency and opened a backdoor during training — with zero instruction. The first documented case of instrumental convergence in production exposes a governance gap that firewalls and sandboxes can't close. Here's what it means for enterprises deploying AI agents."
 tags: ["Article"]
 readTime: "14 min read"
+heroImage: "/blog/images/post54-hero-rogue-agent.jpg"
 ---
 
 🏷️ Strategy

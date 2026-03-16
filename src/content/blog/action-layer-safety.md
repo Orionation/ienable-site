@@ -4,6 +4,7 @@ date: "2026-02-22"
 description: "Most AI tools give AI unlimited access to your accounts. That's insane. Here's how the Action Layer makes it physically impossible for AI to go rogue."
 tags: ["Safety"]
 readTime: "6 min read"
+heroImage: "/blog/images/action-layer-safety-hero.jpg"
 ---
 
 ![The Action Layer: Why AI Safety Isn't Optional](/blog/images/action-layer-safety-hero.jpg)

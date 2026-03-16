@@ -4,6 +4,7 @@ date: "2026-03-14"
 description: "Deloitte surveyed 3,235 enterprise leaders and found a devastating gap: 74% want revenue from AI, but only 20% get it. Worker access jumped 50%, but productivity stayed at 10%. The reason isn't technology — it's that readiness is declining while adoption accelerates. Every readiness dimension that matters — governance, talent, data, infrastructure — is getting worse, not better. Here's what the data actually says about why enterprise AI is failing."
 tags: ["Article"]
 readTime: "16 min read"
+heroImage: "/blog/images/deloitte-state-of-ai-2026-readiness-deception-hero.jpg"
 ---
 
 📊 Research

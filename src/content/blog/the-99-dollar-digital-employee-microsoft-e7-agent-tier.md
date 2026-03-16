@@ -4,6 +4,7 @@ date: "2026-03-08"
 description: "Microsoft's reported E7 tier at $99/month gives AI agents identity, compliance, and security — but not organizational context. Analysis of the Agent Factory gap."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/the-99-dollar-digital-employee-microsoft-e7-agent-tier-hero.jpg"
 ---
 
 📊 Strategy

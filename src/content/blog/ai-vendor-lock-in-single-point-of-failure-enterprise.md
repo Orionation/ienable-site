@@ -4,6 +4,7 @@ date: "2026-03-14"
 description: "Anthropic banned from government. AI chip export rules withdrawn then rewritten. NVIDIA's GTC reshuffling the model stack. 94% of IT leaders fear AI vendor lock-in. If your AI strategy depends on one vendor's survival, you don't have a strategy — you have a prayer."
 tags: ["Article"]
 readTime: "14 min read"
+heroImage: "/blog/images/ai-vendor-lock-in-single-point-of-failure-hero.jpg"
 ---
 
 # Your AI Strategy Has a Single Point of Failure — And This Week Proved It

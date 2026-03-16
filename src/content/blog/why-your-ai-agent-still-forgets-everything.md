@@ -5,6 +5,7 @@ description: "Basic memory isn't enough. Most AI agent memory solutions handle i
 tags: ["Article"]
 readTime: "5 min read"
 featured: true
+heroImage: "/blog/images/why-your-ai-agent-still-forgets-everything-hero.jpg"
 ---
 
 ![Why Your AI Agent Still Forgets Everything (And the 4-Layer Architecture That Actually Fixes It)](/blog/images/why-your-ai-agent-still-forgets-everything-hero.jpg)

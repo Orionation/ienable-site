@@ -5,6 +5,7 @@ dateModified: "2026-03-15"
 description: "Every employee spends ~70% of their time on overhead that isn't strategy. AI enablement handles that 70% so you can focus on the 30% only a human can do. Here's the proof."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/ai-not-replacing-jobs-enabling-employees-hero.jpg"
 ---
 
 AI & Work

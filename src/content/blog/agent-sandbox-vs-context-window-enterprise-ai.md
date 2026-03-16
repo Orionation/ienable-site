@@ -4,6 +4,7 @@ date: "2026-03-04"
 description: "Glean launched agent sandboxes. Context windows hit 1M tokens. Neither solves the real problem. Here's the missing third layer enterprises keep ignoring — and why 70% of sandboxed agents still fail."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/agent-sandbox-vs-context-window-enterprise-ai-hero.jpg"
 ---
 
 ![Agent Sandbox vs Context Window: The False Choice Killing Enterprise AI](/blog/images/agent-sandbox-vs-context-window-enterprise-ai-hero.jpg)

@@ -4,6 +4,7 @@ date: ""
 description: "Small teams adopt AI faster without bureaucracy. Discover why companies under 50 employees have an unfair advantage with AI enablement and how to leverage it."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/ai-for-small-business-teams-advantage-hero.jpg"
 ---
 
 

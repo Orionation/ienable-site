@@ -4,6 +4,7 @@ date: "2026-03-06"
 description: "Only 7% of enterprises have data ready for AI. 47% believe agentic AI will fix their data quality problems. This is the Readiness Illusion — and it's costing enterprises billions."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/the-readiness-illusion-enterprise-ai-2026-hero.jpg"
 ---
 
 📝 Strategy / Research Analysis

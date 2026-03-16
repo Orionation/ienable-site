@@ -4,6 +4,7 @@ date: "2026-02-22"
 description: "The future isn't AI replacing workers — it's every worker getting an AI partner. Here's why the enabler model changes everything."
 tags: ["Vision"]
 readTime: "7 min read"
+heroImage: "/blog/images/why-ai-enablers-hero.jpg"
 ---
 
 ![Why Every Employee Needs an AI Enabler](/blog/images/why-ai-enablers-hero.jpg)

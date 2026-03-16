@@ -4,6 +4,7 @@ date: "2026-03-01"
 description: "G42 just opened formal job applications for AI agents — with probation periods, performance reviews, and compensation. This isn't science fiction. Here's what it means for every company."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/g42-hiring-ai-agents-what-it-means-hero.jpg"
 ---
 
 🚀 Thought Leadership

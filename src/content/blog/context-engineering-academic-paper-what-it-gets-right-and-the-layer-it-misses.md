@@ -4,6 +4,7 @@ date: "2026-03-11"
 description: "ArXiv 2603.09619 formalizes context engineering as an academic discipline with a four-level maturity pyramid. It correctly identifies that controlling context controls agent behavior. But it treats organizational knowledge as something you encode into agents — not something agents need to understand. That distinction is the difference between automation and enablement."
 tags: ["Article"]
 readTime: "16 min read"
+heroImage: "/blog/images/context-engineering-academic-paper-hero.jpg"
 ---
 
 📊 Research Analysis

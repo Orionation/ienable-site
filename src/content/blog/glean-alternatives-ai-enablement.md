@@ -4,6 +4,7 @@ date: "2026-02-28"
 description: "Looking for Glean alternatives? Compare 7 enterprise AI platforms across features, pricing, deployment time, and AI enablement capabilities. Find the right fit for your company size."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/glean-alternatives-ai-enablement-hero.jpg"
 ---
 
 Comparison

@@ -4,6 +4,7 @@ date: "2026-03-02"
 description: "Enterprise AI spending hits $2 trillion in 2026 while 95% of pilots deliver zero ROI. Here's why the trough of disillusionment is an opportunity, not a threat—and how to navigate it."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/ai-trough-of-disillusionment-2026-hero.jpg"
 ---
 
 💡 Thought Leadership

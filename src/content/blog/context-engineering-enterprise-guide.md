@@ -4,6 +4,7 @@ date: "2026-03-01"
 description: ""
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/context-engineering-enterprise-guide-hero.jpg"
 ---
 
 📝 Blog

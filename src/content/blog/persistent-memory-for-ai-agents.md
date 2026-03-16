@@ -7,6 +7,7 @@ readTime: "18 min read"
 featured: true
 emoji: "🧠"
 author: "iEnable Team"
+heroImage: "/blog/images/persistent-memory-for-ai-agents-hero.jpg"
 ---
 
 ![How We Built Persistent Memory for AI Agents (And What Failed First)](/blog/images/persistent-memory-for-ai-agents-hero.jpg)

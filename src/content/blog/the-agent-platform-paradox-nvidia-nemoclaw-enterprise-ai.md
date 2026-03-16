@@ -4,6 +4,7 @@ date: "2026-03-10"
 description: "In one week: Nvidia launches NemoClaw, Microsoft ships Copilot Cowork, OpenAI acquires Promptfoo, Lyzr hits $250M, and Karpathy's agents improve themselves overnight. Every platform solves what agents CAN do. None address what agents SHOULD do in your organization. The enterprise AI agent platform market just became the most crowded — and least differentiated — space in technology."
 tags: ["Article"]
 readTime: "14 min read"
+heroImage: "/blog/images/post57-hero-agent-platform-paradox.jpg"
 ---
 
 🏷️ Strategy

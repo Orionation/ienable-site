@@ -4,6 +4,7 @@ date: "2026-03-05"
 description: "Microsoft's Agent Control Plane governs what AI agents can do. But nobody governs what agents know. This is the Agent Governance Gap — and it's why 40% of agentic AI projects will be abandoned by 2028."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/agent-control-plane-vs-context-engineering-enterprise-ai-hero.jpg"
 ---
 
 📊 Strategy

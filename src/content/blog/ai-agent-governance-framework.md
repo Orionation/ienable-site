@@ -4,6 +4,7 @@ date: "2026-03-01"
 description: "3 million AI agents are running in enterprises. Only 47% are monitored. NIST just launched standards. Here's the governance framework that separates companies deploying 12x more AI from those getting breached."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/ai-agent-governance-framework-hero.jpg"
 ---
 
 🔧 Implementation

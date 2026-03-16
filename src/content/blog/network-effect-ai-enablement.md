@@ -4,6 +4,7 @@ date: "2026-02-26"
 description: "Discover why siloed AI adoption fails and how enterprise AI platforms create exponential value when every department has interconnected AI enablers. The network effect of AI enablement explained."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/network-effect-ai-enablement-hero.jpg"
 ---
 
 Thought Leadership

@@ -4,6 +4,7 @@ date: "2026-02-28"
 description: "Not all AI platforms are enablement platforms. Use this evaluation framework with 8 critical criteria, comparison tables, and a scoring rubric to choose the right AI enablement solution."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/how-to-choose-ai-enablement-platform-hero.jpg"
 ---
 
 📋 Implementation

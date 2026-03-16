@@ -4,6 +4,7 @@ date: "2026-03-10"
 description: "Boston Consulting Group just coined 'AI Brain Fry' — the cognitive exhaustion from overseeing AI agents. Their Harvard Business Review study of 1,488 workers found 39% higher error rates, 33% more decision fatigue, and 10% higher quit intent. The real question nobody is asking: why are humans spending 14% more mental energy supervising AI? Because AI agents lack organizational context. Every minute spent verifying, correcting, and babysitting AI output is a direct tax on cognitive capacity — a tax that organizational context engineering eliminates."
 tags: ["Article"]
 readTime: "14 min read"
+heroImage: "/blog/images/post59-hero-ai-brain-fry-cognitive-cost.jpg"
 ---
 
 🧠 Workforce

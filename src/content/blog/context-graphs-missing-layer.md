@@ -4,6 +4,7 @@ date: "2026-02-28"
 description: "The W3C just formalized context graphs. Glean calls it the Enterprise Graph. Here's what context graphs mean for your business and why they're the key to AI that actually works."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/context-graphs-missing-layer-hero.jpg"
 ---
 
 Technology

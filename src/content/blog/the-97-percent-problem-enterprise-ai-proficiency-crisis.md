@@ -4,6 +4,7 @@ date: "2026-03-09"
 description: "97% of workers are AI novices or experimenters despite near-universal access. Enterprises invested billions in AI tools and training programs. Neither is working. The proficiency gap isn't a training problem — it's an organizational context problem. When AI tools don't understand your business, your workforce can't either."
 tags: ["Article"]
 readTime: "16 min read"
+heroImage: "/blog/images/post56-hero-97-percent-problem.jpg"
 ---
 
 🏷️ Strategy

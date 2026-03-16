@@ -4,6 +4,7 @@ date: "2026-02-28"
 description: "Not a demo. Not a pilot. We run real ecommerce brands with AI agents handling advertising, content, analytics, and operations. Here's an honest look at what works, what breaks, and what nobody tells you."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/running-business-on-ai-agents-hero.jpg"
 ---
 
 Case Study

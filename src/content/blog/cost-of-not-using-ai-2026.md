@@ -4,6 +4,7 @@ date: ""
 description: "Every month without AI costs your business in time, talent, and competitive advantage. Calculate the real cost of not using AI and what you're losing while competitors pull ahead."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/cost-of-not-using-ai-2026-hero.jpg"
 ---
 
 💰 Thought Leadership

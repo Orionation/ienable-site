@@ -4,6 +4,7 @@ date: "2026-02-27"
 description: "Calculate AI ROI with a proven framework: time saved, quality improvement, and cost reduction. Step-by-step guide with real examples and benchmarks."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/calculate-ai-roi-framework-hero.jpg"
 ---
 
 📊 Implementation • Feb 27, 2026 • 10 min read

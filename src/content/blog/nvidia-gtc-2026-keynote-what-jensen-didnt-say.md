@@ -5,6 +5,7 @@ dateModified: "2026-03-16"
 description: "NVIDIA's GTC 2026 keynote unveiled Vera Rubin, NemoClaw, and the next era of AI infrastructure. But the most important announcement was the one Jensen didn't make: who governs the agents running on all that hardware?"
 tags: ["Article"]
 readTime: "8 min read"
+heroImage: "/blog/images/nvidia-gtc-2026-keynote-what-jensen-didnt-say-hero.jpg"
 ---
 
 🔥 Breaking Analysis 📅 March 16, 2026 ⏱ 8 min read

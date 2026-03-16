@@ -4,6 +4,7 @@ date: "2026-03-14"
 description: "Gartner's D&A Summit made context the biggest buzzword in enterprise AI. IBM, Glean, K2view, and Stack Overflow all launched context platforms. But they're all solving the same layer — and ignoring the one that actually determines whether AI agents succeed or fail."
 tags: ["Article"]
 readTime: "12 min read"
+heroImage: "/blog/images/gartner-year-of-context-hero.jpg"
 ---
 
 Strategy

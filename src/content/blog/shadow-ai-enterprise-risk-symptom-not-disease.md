@@ -4,6 +4,7 @@ date: "2026-03-15"
 description: "68% of employees use unauthorized AI tools. RSAC 2026 will frame shadow agents as a security crisis. They're wrong — shadow AI is a demand signal. Employees don't seek rogue tools because they want to bypass security. They seek them because sanctioned tools don't know the organization. Here's the data, the real root cause, and the only fix that works."
 tags: ["Article"]
 readTime: "14 min read"
+heroImage: "/blog/images/shadow-ai-enterprise-risk-hero.jpg"
 ---
 
 📊 Enterprise Analysis

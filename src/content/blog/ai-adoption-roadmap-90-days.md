@@ -4,6 +4,7 @@ date: ""
 description: "A practical 90-day AI adoption roadmap to enable every employee with AI. Step-by-step guide for audit, pilot, expansion, and full rollout with proven frameworks."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/ai-adoption-roadmap-90-days-hero.jpg"
 ---
 
 Implementation 📅 Feb 25, 2026 ⏱ 10 min read

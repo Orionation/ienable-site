@@ -4,6 +4,7 @@ date: "2026-03-07"
 description: "Glean identified 'context rot' as AI performance degradation over time. They're right about the symptom. They're wrong about the cause. The disease isn't growing context windows — it's organizational knowledge that was never captured in the first place."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/context-rot-symptom-not-disease-enterprise-ai-hero.jpg"
 ---
 
 📊 Strategy

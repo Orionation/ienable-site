@@ -4,6 +4,7 @@ date: "2026-02-28"
 description: "Microsoft's Copilot Tasks promises AI that works for you — but enterprises need governance, not just automation. Compare Copilot Tasks to AI enablement platforms and learn what's actually enterprise-ready."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/copilot-tasks-vs-ai-enablement-hero.jpg"
 ---
 
 Comparison

@@ -4,6 +4,7 @@ date: "2026-02-22"
 description: "Enter a URL. Get a full business analysis. Meet your enabler. The entire onboarding takes less time than making coffee."
 tags: ["Product"]
 readTime: "5 min read"
+heroImage: "/blog/images/90-seconds-hero.jpg"
 ---
 
 ![90 Seconds to Your First AI Teammate](/blog/images/90-seconds-hero.jpg)

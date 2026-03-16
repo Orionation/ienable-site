@@ -4,6 +4,7 @@ date: "2026-03-01"
 description: ""
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/the-3-3-percent-problem-microsoft-copilot-adoption-crisis-hero.jpg"
 ---
 
 📝 Blog

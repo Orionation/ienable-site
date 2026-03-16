@@ -4,6 +4,7 @@ date: "2026-03-08"
 description: "Why enterprise AI tools excel at meeting summaries but fail at strategic analysis. The Context Gradient framework maps AI features against organizational context requirements."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/the-context-gradient-enterprise-ai-evaluation-framework-hero.jpg"
 ---
 
 ![The Context Gradient: A Framework for Evaluating Any Enterprise AI Tool](/blog/images/the-context-gradient-enterprise-ai-evaluation-framework-hero.jpg)

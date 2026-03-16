@@ -4,6 +4,7 @@ date: "2026-03-06"
 description: "Enterprises are investing in multi-model AI orchestration — routing tasks to the best model for each job. But 78% of agentic pilots fail because orchestration without organizational context is just efficiently wrong at scale."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/the-orchestration-illusion-enterprise-multi-agent-ai-hero.jpg"
 ---
 
 📊 Strategy

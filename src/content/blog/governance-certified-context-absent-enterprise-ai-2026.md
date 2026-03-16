@@ -4,6 +4,7 @@ date: "2026-03-10"
 description: "In 48 hours: UiPath earns AIUC-1 certification. OpenAI acquires Promptfoo. Zoom, NiCE, and Dialpad launch agentic platforms at Enterprise Connect. Every announcement solves how AI agents behave. None address whether AI agents understand your business. We now have the first enterprise AI governance certifications — and they certify everything except the thing that determines whether AI actually works."
 tags: ["Article"]
 readTime: "13 min read"
+heroImage: "/blog/images/post58-hero-governance-certified-context-absent.jpg"
 ---
 
 🏷️ Governance

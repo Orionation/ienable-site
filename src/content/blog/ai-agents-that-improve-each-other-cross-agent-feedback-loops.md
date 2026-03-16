@@ -4,6 +4,7 @@ date: "2026-03-13"
 description: "We gave 9 AI agents persistent memory. Then we gave them missions. Then we connected them to each other. Here's what happened when agents stopped waiting for instructions and started feeding each other data."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/ai-agents-that-improve-each-other-cross-agent-feedback-loops-hero.jpg"
 ---
 
 ![AI Agents That Improve Each Other: How Cross-Agent Feedback Loops Changed Everything](/blog/images/ai-agents-that-improve-each-other-cross-agent-feedback-loops-hero.jpg)

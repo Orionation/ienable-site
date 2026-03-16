@@ -4,6 +4,7 @@ date: "2026-03-11"
 description: "A new arXiv paper formalizes context engineering as an academic discipline with a four-level maturity pyramid. It's rigorous, well-sourced, and missing the one layer that actually matters: organizational context."
 tags: ["Article"]
 readTime: "12 min read"
+heroImage: "/blog/images/context-engineering-academic-paper-hero.jpg"
 ---
 
 📊 Research Analysis

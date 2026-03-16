@@ -4,6 +4,7 @@ date: "2026-03-01"
 description: ""
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/context-engineering-for-marketing-teams-hero.jpg"
 ---
 
 ![iEnable Blog](/blog/images/context-engineering-for-marketing-teams-hero.jpg)

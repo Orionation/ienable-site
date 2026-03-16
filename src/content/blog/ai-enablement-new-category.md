@@ -4,6 +4,7 @@ date: "2026-02-23"
 description: "AI enablement is the next great productivity category after email, laptops, and Slack. Learn why every employee getting an AI enabler isn't a trend — it's an inevitability."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/ai-enablement-new-category-hero.jpg"
 ---
 
 Thought Leadership

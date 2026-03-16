@@ -4,6 +4,7 @@ date: "2026-03-11"
 description: "NIST AI 800-4 defines six categories for monitoring AI agents. None measure whether the agent understands your organization. That missing seventh monitor explains why 61% of enterprises can't launch AI despite claiming readiness."
 tags: ["Article"]
 readTime: "14 min read"
+heroImage: "/blog/images/the-seventh-monitor-hero.jpg"
 ---
 
 📊 Research Analysis

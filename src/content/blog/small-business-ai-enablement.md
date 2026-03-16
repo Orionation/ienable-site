@@ -5,6 +5,7 @@ dateModified: "2026-03-15"
 description: "Small businesses have structural AI advantages enterprise can't replicate: speed, simplicity, and unified decision-making. Here's how SMBs go from zero to AI-enabled in days, not quarters."
 tags: ["Article"]
 readTime: "5 min read"
+heroImage: "/blog/images/small-business-ai-enablement-hero.jpg"
 ---
 
 Small Business
