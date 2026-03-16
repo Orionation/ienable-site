@@ -225,3 +225,90 @@ Enter your website. In 90 seconds, you'll see every growth opportunity — and t
 - [**Why 90% of AI Pilots Never Reach Production**](/blog/why-90-percent-ai-pilots-never-reach-production.html) — The maturity gap between pilot and production is where most AI investments die.
 - [**AI Enablement Is a New Category**](/blog/ai-enablement-new-category.html) — The pattern is unmistakable — and the next wave is here.
 - [**10 Signs Your Company Needs an AI Enablement Strategy**](/blog/signs-company-needs-ai-enablement.html) — From shadow AI to stalled pilots, these signs reveal when you need a real strategy.
+
+
+## Frequently Asked Questions
+
+### What is an AI enablement maturity model?
+
+An AI enablement maturity model is a framework that measures how deeply AI is integrated into an organization's operations — from zero AI awareness (Level 0) to full AI-native operations (Level 4) where every employee has a personal AI teammate that learns their role and compounds organizational knowledge over time.
+
+### How do I assess my company's AI maturity level?
+
+Start by asking three diagnostic questions: (1) Do employees have access to AI tools? (2) Are those tools coordinated across departments? (3) Does each employee have a dedicated AI that learns their specific role? If the answer to all three is no, you're at Level 0-1. If only the first, Level 1-2. All three yes: Level 3+.
+
+### What percentage of companies are at each AI maturity level?
+
+According to Deloitte's 2026 State of AI report (3,235 leaders surveyed), 74% of enterprises want AI-driven revenue but only 20% are achieving it. Infosys research shows just 2% of organizations are fully ready across all five AI maturity dimensions. The vast majority — roughly 93% — are stuck at Stage 1 or Stage 2.
+
+### How long does it take to move between AI maturity levels?
+
+Level 0 to Level 1 typically takes 3-6 months (awareness to first tools). Level 1 to Level 2 takes 6-18 months (scattered experiments to coordinated adoption). Level 2 to Level 3 — where every employee gets a personal AI enabler — can happen in 90 days with the right platform. Level 3 to Level 4 requires 12-24 months of compounding organizational knowledge.
+
+### What is the difference between AI enablement and AI adoption?
+
+AI adoption means giving employees access to AI tools. AI enablement means giving every employee a dedicated AI teammate that learns their role, understands organizational context, and compounds in intelligence over time. Adoption is tool-based; enablement is organization-based. This is what iEnable calls the "93/7 Problem" — 93% of AI budgets go to infrastructure (adoption), while only 7% address the organizational layer that determines whether AI actually works.
+
+
+## The Data Behind the Model
+
+| Metric | Source | Finding |
+|--------|--------|---------|
+| AI readiness declining | Deloitte State of AI 2026 (n=3,235) | Infrastructure readiness dropped from 47% to 43%, data readiness from 45% to 40% |
+| Pilot-to-production gap | MIT Sloan / BCG 2025 | 95% of GenAI pilots fail to deliver financial returns |
+| Only 2% fully ready | Infosys AI Radar 2026 | Across 5 dimensions of readiness, just 2% of enterprises qualify as fully prepared |
+| 74% want AI revenue | Deloitte 2026 | 74% of leaders list AI-driven revenue as a top goal; only 20% are getting it |
+| Shadow AI prevalence | ConductorOne 2026 | 68% of enterprises have unauthorized AI tools operating outside IT visibility |
+| Agent governance gap | NIST AI 800-4 | Six monitoring categories defined; none address whether AI understands the business |
+| Copilot adoption crisis | Microsoft internal data | 3.3% active usage rate among licensed Copilot users |
+| Enterprise Connect 2026 | 9 vendor announcements | ALL addressed Layer 1-2 (actions/routing); ZERO addressed Layer 3 (organizational context) |
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is an AI enablement maturity model?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "An AI enablement maturity model is a framework that measures how deeply AI is integrated into an organization's operations — from zero AI awareness (Level 0) to full AI-native operations (Level 4) where every employee has a personal AI teammate that learns their role and compounds organizational knowledge over time."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I assess my company's AI maturity level?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Start by asking three diagnostic questions: (1) Do employees have access to AI tools? (2) Are those tools coordinated across departments? (3) Does each employee have a dedicated AI that learns their specific role? If the answer to all three is no, you're at Level 0-1. If only the first, Level 1-2. All three yes: Level 3+."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What percentage of companies are at each AI maturity level?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "According to Deloitte's 2026 State of AI report (3,235 leaders surveyed), 74% of enterprises want AI-driven revenue but only 20% are achieving it. Infosys research shows just 2% of organizations are fully ready across all five AI maturity dimensions. The vast majority — roughly 93% — are stuck at Stage 1 or Stage 2."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does it take to move between AI maturity levels?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Level 0 to Level 1 typically takes 3-6 months. Level 1 to Level 2 takes 6-18 months. Level 2 to Level 3 — where every employee gets a personal AI enabler — can happen in 90 days with the right platform. Level 3 to Level 4 requires 12-24 months of compounding organizational knowledge."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between AI enablement and AI adoption?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "AI adoption means giving employees access to AI tools. AI enablement means giving every employee a dedicated AI teammate that learns their role, understands organizational context, and compounds in intelligence over time. This is what iEnable calls the 93/7 Problem — 93% of AI budgets go to infrastructure (adoption), while only 7% address the organizational layer."
+      }
+    }
+  ]
+}
+</script>

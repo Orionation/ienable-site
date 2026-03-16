@@ -183,3 +183,64 @@ Enter your website. In 90 seconds, you'll see the AI enabler team that could sta
 - [**The 97% Problem: Enterprise AI Proficiency Crisis**](/blog/the-97-percent-problem-enterprise-ai-proficiency-crisis.html) — Why employees can't use the AI tools they've been given.
 - [**AI Change Management Guide**](/blog/ai-change-management-guide.html) — Getting your team to actually adopt AI, not just tolerate it.
 - [**The AI Manager: The Most Important Role Nobody's Hiring For**](/blog/the-ai-manager-most-important-role.html) — The role that bridges the gap between AI investment and AI adoption.
+
+
+## Frequently Asked Questions
+
+### Is AI replacing jobs in 2026?
+
+No — and the data shows the opposite trend. According to the World Economic Forum's Future of Jobs Report 2025, AI will create 97 million new roles by 2025 while displacing 85 million, for a net gain of 12 million jobs. What's changing isn't the number of jobs — it's the nature of work. Employees with AI enablers handle the strategic, creative, and relational work while their AI teammate handles research, data processing, and drafting.
+
+### What is AI enablement vs AI replacement?
+
+AI replacement means removing humans from a process entirely. AI enablement means giving every human employee a dedicated AI teammate that amplifies their capabilities. The distinction matters: replacement eliminates institutional knowledge and relationships. Enablement compounds them. Companies that enable rather than replace retain their human expertise while scaling their output 5-10x.
+
+### Will AI make my job obsolete?
+
+AI won't make your job obsolete — but employees who use AI enablement will outperform those who don't. A marketing manager with an AI enabler doesn't lose their job; they produce 10x the campaigns, backed by better data, delivered faster. The real risk isn't AI taking jobs — it's competing against AI-enabled employees while refusing to use AI yourself.
+
+### How do employees feel about AI enablement?
+
+Initial skepticism is normal and healthy. Harvard Business Review research shows that employees who are given AI tools without training experience 19% more stress and 39% higher error rates (the "AI Brain Fry" effect). But employees given personal AI enablers — tools that adapt to them rather than requiring them to adapt — report higher job satisfaction because they spend more time on meaningful work.
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is AI replacing jobs in 2026?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. According to the World Economic Forum's Future of Jobs Report 2025, AI will create 97 million new roles while displacing 85 million, for a net gain of 12 million jobs. What's changing is the nature of work, not the number of jobs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is AI enablement vs AI replacement?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "AI replacement means removing humans from a process entirely. AI enablement means giving every human employee a dedicated AI teammate that amplifies their capabilities. Replacement eliminates institutional knowledge. Enablement compounds it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will AI make my job obsolete?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "AI won't make your job obsolete — but employees who use AI enablement will outperform those who don't. The real risk isn't AI taking jobs — it's competing against AI-enabled employees while refusing to use AI yourself."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do employees feel about AI enablement?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Initial skepticism is normal. Harvard Business Review research shows employees given AI tools without training experience 19% more stress. But employees given personal AI enablers report higher job satisfaction because they spend more time on meaningful work."
+      }
+    }
+  ]
+}
+</script>

@@ -200,3 +200,76 @@ The AI enablement wave is moving faster than email ever did. The window to be ea
 Enter your website. See every opportunity across every department. Your AI enabler team can start tonight — and nothing goes live without your approval.
 
 [Try iEnable Free →](https://ienable.ai)
+
+
+## Frequently Asked Questions
+
+### How do you give every employee AI?
+
+Start with a 90-second website scan to identify growth opportunities, then assign each employee a personal AI enabler that learns their role. Roll out department by department — marketing first (highest ROI), then operations, then sales. Each enabler trains on your company's data, processes, and context. Nothing goes live without human approval. Most teams are fully enabled within 90 days.
+
+### How much does it cost to give every employee AI?
+
+Enterprise AI copilot licenses typically cost $30-50/user/month (Microsoft Copilot for M365 is $30/user/month). AI enablement platforms vary but typically cost less per user because one enabler replaces multiple point tools. The real cost comparison: the average enterprise spends 93% of AI budget on tools and only 7% on making those tools effective. The ROI question isn't "how much does AI cost?" — it's "how much does NOT using AI cost?"
+
+### What is the difference between AI enablement and giving employees ChatGPT?
+
+Giving employees ChatGPT is Level 1 maturity — scattered tool access with no coordination. AI enablement is Level 3: every employee gets a dedicated AI teammate that knows your company, learns their specific role, coordinates with other departments' enablers, and operates under governance guardrails. ChatGPT doesn't know your company. An AI enabler does.
+
+### Do employees need technical skills to use AI enablement?
+
+No. AI enablers are designed for business users, not engineers. The enabler asks questions the way a new hire would: "I noticed your Meta Pixel is missing — want me to fix it?" Employees interact through natural conversation, not prompts or code. The 97% proficiency gap identified by Harvard Business Review disappears when AI adapts to the human rather than requiring the human to adapt to AI.
+
+### How long before AI enablement shows ROI?
+
+Week 1: enablers are useful but learning. Month 1: measurable time savings (typically 5-10 hours/employee/month). Month 3: transformative — enablers know your business deeply enough to anticipate needs. Month 6: the compound intelligence effect kicks in — enablers share knowledge across departments, and institutional knowledge no longer leaves when employees do.
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do you give every employee AI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Start with a 90-second website scan to identify growth opportunities, then assign each employee a personal AI enabler that learns their role. Roll out department by department. Each enabler trains on your company's data, processes, and context. Nothing goes live without human approval. Most teams are fully enabled within 90 days."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much does it cost to give every employee AI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Enterprise AI copilot licenses typically cost $30-50/user/month. AI enablement platforms vary but typically cost less per user because one enabler replaces multiple point tools. The real cost question isn't how much does AI cost — it's how much does NOT using AI cost?"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between AI enablement and giving employees ChatGPT?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Giving employees ChatGPT is Level 1 maturity — scattered tool access with no coordination. AI enablement is Level 3: every employee gets a dedicated AI teammate that knows your company, learns their specific role, coordinates with other departments, and operates under governance guardrails."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do employees need technical skills to use AI enablement?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. AI enablers are designed for business users, not engineers. Employees interact through natural conversation, not prompts or code. The 97% proficiency gap identified by Harvard Business Review disappears when AI adapts to the human rather than requiring the human to adapt to AI."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long before AI enablement shows ROI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Week 1: enablers are useful but learning. Month 1: measurable time savings (typically 5-10 hours per employee per month). Month 3: transformative. Month 6: the compound intelligence effect kicks in — enablers share knowledge across departments."
+      }
+    }
+  ]
+}
+</script>
